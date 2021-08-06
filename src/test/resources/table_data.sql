@@ -18,3 +18,28 @@ values (1, 1, '2021-05-08 00:26:13.500'),
        (3, 2, '2021-11-05 11:25:8.260'),
        (1,4, '2021-06-05 10:15:54.280'),
        (3,5, '2021-07-08 07:36:2.420');
+
+use oglasimi_db;
+
+insert into role (name)
+values ('admin'),
+       ('applicant'),
+       ('employer');
+
+insert into user (role_id, approved)
+values (1, true),
+       (2, true),
+       (2, true),
+       (3, true),
+       (3, true);
+
+insert into credentials (user_id, email, password)
+values ('misas@ad.min', 'aeab55bba4162e7a7cde64142532e26955b1d5c8fb251d83ba95a7ba1ffdd238'),
+       ('zika@bacv.anin', '92ded8e40979699983b844c5c10bbefaa0fbcadd12795ee75a535e833bc1e9ca'),
+       ('pera@wuiii.com', 'd32aea39aa588565353ce46716459c77039c06f032ce027519eccf209617cf6e'),
+       ('laza@vass.org', 'be2ac81588a6ef186d73f4738e95a3926c5c88a9d03a7970f1ddd182d9f236cd'),
+       ('mika@yahoo.rs', '657c5f62072faf7bc0a6ead16b3338b109bf8b7ecffdfe1b545bc25503f5199e');
+
+insert into employer (user_id, name, pib, address, picture_base64, phone)
+values (4, 'Lažarus d.o.o', '123456789', 'Keba Kraba, 3', null, '063123456'),
+       (4, 'Perperix', '987654321', 'Lignjoslav, 8/B', null, '065987654');
