@@ -28,3 +28,50 @@ create table credentials
     constraint foreign key (user_email) references user (email)
 );
 
+create table field
+(
+    id int auto_increment,
+    name varchar(30) not null,
+    constraint primary key (id)
+);
+
+create table tag
+(
+    id int auto_increment,
+    field_id int not null,
+    name varchar(30) not null,
+    constraint primary key (id),
+    constraint foreign key (field_id) references field (id)
+);
+
+create table applicant
+(
+    user_id int not null,
+    first_name varchar(30) not null,
+    last_name varchar(30) not null,
+    picture varchar(65000) not null,
+    phone varchar(30) not null,
+    constraint primary key (user_id),
+    constraint foreign key (user_id) references user (id)
+);
+
+create table admin
+(
+    user_id int,
+    name varchar(30) not null,
+    constraint primary key (user_id),
+    constraint foreign key (user_id) references user (id)
+);
+
+create table employer
+(
+    user_id int,
+    name varchar(30) not null,
+    pib varchar(20) not null,
+    address varchar(50) not null,
+    picture varchar(65000) not null,
+    phone varchar(30) not null,
+    constraint primary key (user_id),
+    constraint foreign key (user_id) references user (id)
+);
+
