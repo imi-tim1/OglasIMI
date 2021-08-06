@@ -75,3 +75,34 @@ create table employer
     constraint foreign key (user_id) references user (id)
 );
 
+create table job
+(
+    id int primary key auto_increment,
+    employer_id int not null,
+    field_id int not null,
+    post_date DATETIME not null,
+    title varchar(50) not null,
+    description varchar(510) not null,
+    city varchar(50),
+    salary varchar(50),
+    work_from_home boolean,
+    constraint foreign key (employer_id) references employer (user_id),
+    constraint foreign key (field_id) references field (id)
+);
+
+create table job_application
+(
+    job_id int not null,
+    applicant_id int not null,
+    date DATETIME not null,
+    constraint foreign key (job_id) references job (id),
+    constraint foreign key (applicant_id) references applicant (user_id)
+);
+
+create table job_tag
+(
+    job_id int not null,
+    tag_id int not null ,
+    constraint foreign key (job_id) references job (id),
+    constraint foreign key (tag_id) references tag (id)
+);
