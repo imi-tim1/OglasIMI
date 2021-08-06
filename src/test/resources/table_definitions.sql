@@ -11,9 +11,9 @@ create table role
 create table user
 (
     id int auto_increment,
-    email varchar(300) not null ,
-    role_id int not null ,
-    approved bool not null ,
+    email varchar(300) not null,
+    role_id int not null,
+    approved bool not null,
     constraint primary key (id),
     constraint unique key (email),
     constraint foreign key (role_id) references role (id)
