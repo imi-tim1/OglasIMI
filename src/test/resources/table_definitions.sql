@@ -1,3 +1,5 @@
+use oglasimi_db;
+
 create table role
 (
     id int auto_increment,
