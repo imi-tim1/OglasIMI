@@ -20,7 +20,7 @@ create table user
 create table credentials
 (
     user_id int not null,
-    email varchar(300) not null,
+    email varchar(190) not null,
     password varchar(300) not null,
     constraint primary key (user_id),
     constraint foreign key (user_id) references user (id),
