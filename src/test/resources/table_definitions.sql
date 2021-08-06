@@ -21,7 +21,7 @@ create table credentials
 (
     user_id int not null,
     email varchar(300) not null,
-    password varchar(50) not null,
+    password varchar(300) not null,
     constraint primary key (user_id),
     constraint foreign key (user_id) references user (id),
     constraint unique key (email)
@@ -48,7 +48,7 @@ create table applicant
     user_id int not null,
     first_name varchar(30) not null,
     last_name varchar(30) not null,
-    picture_base64 text(65000) not null,
+    picture_base64 text(65000),
     phone varchar(30) not null,
     constraint primary key (user_id),
     constraint foreign key (user_id) references user (id)
@@ -68,7 +68,7 @@ create table employer
     name varchar(30) not null,
     pib varchar(20) not null,
     address varchar(50) not null,
-    picture_base64 text(65000) not null,
+    picture_base64 text(65000),
     phone varchar(30) not null,
     constraint primary key (user_id),
     constraint foreign key (user_id) references user (id)
@@ -94,6 +94,7 @@ create table job_application
     job_id int not null,
     applicant_id int not null,
     date DATETIME not null,
+    constraint primary key (job_id, applicant_id),
     constraint foreign key (job_id) references job (id),
     constraint foreign key (applicant_id) references applicant (user_id)
 );
@@ -101,7 +102,8 @@ create table job_application
 create table job_tag
 (
     job_id int not null,
-    tag_id int not null ,
+    tag_id int not null,
+    constraint primary key (job_id, tag_id),
     constraint foreign key (job_id) references job (id),
     constraint foreign key (tag_id) references tag (id)
 );
