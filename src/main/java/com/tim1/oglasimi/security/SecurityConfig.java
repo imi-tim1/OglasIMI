@@ -1,5 +1,7 @@
 package com.tim1.oglasimi.security;
 
+import org.springframework.http.HttpStatus;
+
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.MalformedJsonException;
 import io.jsonwebtoken.*;
@@ -9,7 +11,6 @@ import java.security.Key;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import static com.tim1.oglasimi.OglasimiApplication.LOGGER;
 
 public class SecurityConfig {
@@ -20,8 +21,8 @@ public class SecurityConfig {
 
     private static final String roleClaimName = "rol";
 
-    private static final String databaseLocationUrl = "jdbc:mariadb://localhost/prototip_db";
-    private static final String username = "springboot";
+    private static final String databaseLocationUrl = "jdbc:mariadb://localhost/oglasimi_db";
+    private static final String username = "oglasimi";
     private static final String password = "12345";
 
 
