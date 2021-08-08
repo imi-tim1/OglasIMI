@@ -8,7 +8,7 @@ values ('admin'),
 insert into user (role_id, approved)
 values (1, true),
        (2, true),
-       (2, true),
+       (2, false),
        (3, true),
        (3, true);
 
