@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/api/login")
 public class LoginController {
@@ -18,10 +17,9 @@ public class LoginController {
     public LoginController(LoginService loginService) { this.loginService = loginService; }
 
 
+
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginCredentials loginCredentials) {
-        System.out.println(loginCredentials);
-        //loginCredentials.setJwt("");
 
         String jwt = loginCredentials.getJwt();
 
