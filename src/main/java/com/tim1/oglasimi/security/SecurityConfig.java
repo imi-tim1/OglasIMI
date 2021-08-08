@@ -55,7 +55,7 @@ public class SecurityConfig {
 
             resultPair.setClaims( claims );
         }
-        catch ( ExpiredJwtException | SignatureException e ) {
+        catch ( ExpiredJwtException | SecurityException e ) {
             resultPair.setHttpStatus( HttpStatus.UNAUTHORIZED );
         }
         catch ( MalformedJsonException
@@ -91,14 +91,15 @@ public class SecurityConfig {
                 .claim("rol", role)
                 .setExpiration(new Date(nowMillis + timeToLiveMills))
                 .setIssuer(issuer)
-                .signWith(signatureAlgorithm, signingKey);
+                .signWith(signingKey, signatureAlgorithm);
 
         return builder.compact();
     }
 
     public static Claims decodeJWT(String jwt) throws MalformedJsonException, RuntimeException {
-        return Jwts.parser()
+        return Jwts.parserBuilder()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                .build()
                 .parseClaimsJws(jwt).getBody();
     }
 
