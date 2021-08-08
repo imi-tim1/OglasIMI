@@ -15,12 +15,12 @@ import static com.tim1.oglasimi.OglasimiApplication.LOGGER;
 
 public class SecurityConfig {
 
-    public static final String DATABASE_LOCATION_URL = "jdbc:mariadb://localhost/oglasimi_db";
+    public static final String DATABASE_LOCATION_URI = "jdbc:mariadb://localhost/oglasimi_db";
     public static final String DATABASE_USERNAME = "oglasimi";
     public static final String DATABASE_PASSWORD = "12345";
 
     public static final String ISSUER = "http://localhost:8080";
-    public static final long TIME_TO_LIVE_MILLS = 25000L; // 25s // TODO
+    public static final long TIME_TO_LIVE_MILLS = 25000L; // 25s // TODO decide default value; 15min is recommended val
 
     private static final String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8";
 
@@ -38,20 +38,18 @@ public class SecurityConfig {
             if( roleClaim == null ) {
                 throw new MalformedJsonException("missing role claim");
             }
-            Role role = Role.valueOf( (String) roleClaim );
 
-            LOGGER.debug("SecurityConfig.checkAccess | Role: " + role );
+            Role role = null;
 
-            if (role != null) {
+            try {
+                role = Role.valueOf( (String) roleClaim);
                 LOGGER.debug("SecurityConfig.checkAccess | Found role inside JWT token: " + role);
                 resultPair.setHttpStatus( role.checkAuthorization(authorizedRoles) );
             }
-            else {
-                LOGGER.error("SecurityConfig.checkAccess | Role from JWT token is equal to null");
-                throw new Exception("Unknown role");
+            catch ( IllegalArgumentException | NullPointerException e ) {
+                LOGGER.error("SecurityConfig.checkAccess | exception message: " + e.getMessage() );
+                throw new Exception("roleClaim object didn't return expected value");
             }
-
-            // TODO authentification
 
             resultPair.setClaims( claims );
         }
