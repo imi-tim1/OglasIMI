@@ -15,17 +15,16 @@ import static com.tim1.oglasimi.OglasimiApplication.LOGGER;
 
 public class SecurityConfig {
 
-    private static final String ISSUER = "http://localhost:8080";
+    public static final String DATABASE_LOCATION_URL = "jdbc:mariadb://localhost/oglasimi_db";
+    public static final String DATABASE_USERNAME = "oglasimi";
+    public static final String DATABASE_PASSWORD = "12345";
+
+    public static final String ISSUER = "http://localhost:8080";
+    public static final long TIME_TO_LIVE_MILLS = 25000L; // 25s // TODO
+
     private static final String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8";
-    private static final long TIME_TO_LIVE_MILLS = 25000L; // 25s // TODO
 
     private static final String ROLE_CLAIM_NAME = "rol";
-
-    private static final String DATABASE_LOCATION_URL = "jdbc:mariadb://localhost/oglasimi_db";
-    private static final String DATABASE_USERNAME = "oglasimi";
-    private static final String DATABASE_PASSWORD = "12345";
-
-
 
     public static ResultPair checkAccess(String token, List<Role> authorizedRoles) {
         ResultPair resultPair = new ResultPair(null, HttpStatus.OK );
