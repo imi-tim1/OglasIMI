@@ -15,15 +15,15 @@ import static com.tim1.oglasimi.OglasimiApplication.LOGGER;
 
 public class SecurityConfig {
 
-    private static final String issuer = "http://localhost:8080";
+    private static final String ISSUER = "http://localhost:8080";
     private static final String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8";
-    private static final long timeToLiveMills = 25000L; // 25s // TODO
+    private static final long TIME_TO_LIVE_MILLS = 25000L; // 25s // TODO
 
-    private static final String roleClaimName = "rol";
+    private static final String ROLE_CLAIM_NAME = "rol";
 
-    private static final String databaseLocationUrl = "jdbc:mariadb://localhost/oglasimi_db";
-    private static final String username = "oglasimi";
-    private static final String password = "12345";
+    private static final String DATABASE_LOCATION_URL = "jdbc:mariadb://localhost/oglasimi_db";
+    private static final String DATABASE_USERNAME = "oglasimi";
+    private static final String DATABASE_PASSWORD = "12345";
 
 
 
@@ -34,7 +34,7 @@ public class SecurityConfig {
             Claims claims = decodeJWT(token);
             LOGGER.debug("SecurityConfig.checkAccess | Claims: " + claims );
 
-            Object roleClaim = claims.get( roleClaimName );
+            Object roleClaim = claims.get(ROLE_CLAIM_NAME);
 
             if( roleClaim == null ) {
                 throw new MalformedJsonException("missing role claim");
@@ -76,7 +76,7 @@ public class SecurityConfig {
     }
 
     public static String createJWT(int uid, String role) {
-        return createJWT(uid, issuer, timeToLiveMills, role );
+        return createJWT(uid, ISSUER, TIME_TO_LIVE_MILLS, role );
     }
 
     public static String createJWT(int uid, String issuer, long timeToLiveMills, String role) {
