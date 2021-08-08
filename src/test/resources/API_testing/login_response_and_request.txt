@@ -1,0 +1,88 @@
+Request #1 (correct creds, approved)
+{
+    "jwt":"",
+    "email":"misas@ad.min",
+    "hashedPassword":"aeab55bba4162e7a7cde64142532e26955b1d5c8fb251d83ba95a7ba1ffdd238"
+}
+
+
+Response (200 OK):
+{
+    "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsInJvbCI6ImFkbWluIiwiZXhwIjoxNjI4NDM1NzMyLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAifQ.lZMLTH0SV7JSi5MR63MwUu7nAVRbfnRFF9jZvcMmsj4",
+    "userId": 1,
+    "areCredsValid": true,
+    "isApproved": true,
+    "role": "admin"
+}
+--------------------------------------------------------------------------------------------
+
+
+Request #2  (correct creds, approved)
+{
+    "jwt":null,
+    "email":"zika@bacv.anin", 
+    "hashedPassword":"92ded8e40979699983b844c5c10bbefaa0fbcadd12795ee75a535e833bc1e9ca"
+}
+
+
+Fajl sa primerima za request i response api-a api/login
+
+Response (200 OK):
+{
+    "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIsInJvbCI6ImFwcGxpY2FudCIsImV4cCI6MTYyODQzNTc3MywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIn0.XMD3BYCl59goNgFEMNpUAZtg6yOnOQeVF8toVHqgeoQ",
+    "userId": 2,
+    "areCredsValid": true,
+    "isApproved": true,
+    "role": "applicant"
+}
+--------------------------------------------------------------------------------------------
+
+
+Request #3  (correct creds, not approved)
+{
+    "jwt":"",
+    "email":"pera@wuiii.com", 
+    "hashedPassword":"d32aea39aa588565353ce46716459c77039c06f032ce027519eccf209617cf6e"
+}
+
+
+Response (403 Forbidden):
+{
+    "jwt": null,
+    "userId": 3,
+    "areCredsValid": true,
+    "isApproved": false,
+    "role": "applicant"
+}
+--------------------------------------------------------------------------------------------
+
+
+Request #4  (wrong creds)
+{
+    "jwt":"",
+    "email":"laza@vass.org", 
+    "hashedPassword":"8de47d5aa7d61e92c577d8156b966583f6d7d75d714a3b99fca4fb2f8bfe97c6"
+}
+
+
+Response (401 Unauthorized):
+{
+    "jwt": null,
+    "userId": 0,
+    "areCredsValid": false,
+    "isApproved": false,
+    "role": null
+}
+--------------------------------------------------------------------------------------------
+
+
+Request #5
+{
+    "jwt":"123",
+    "email":"mika@yahoo.rs", 
+    "hashedPassword":"657c5f62072faf7bc0a6ead16b3338b109bf8b7ecffdfe1b545bc25503f5199e"
+}
+
+
+Response (403 Forbidden):
+{
