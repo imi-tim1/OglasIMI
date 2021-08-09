@@ -2,7 +2,8 @@ package com.tim1.oglasimi.controller;
 
 import com.tim1.oglasimi.model.City;
 import com.tim1.oglasimi.model.Model;
-import com.tim1.oglasimi.security.*;
+import com.tim1.oglasimi.security.ResultPair;
+import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
@@ -33,16 +32,7 @@ public class CityController
     @GetMapping
     public ResponseEntity<List<City>> getAllCities(@RequestBody Model model)
     {
-        List<Role> authorizedRoles = new ArrayList<>(
-                Arrays.asList(
-                        Role.VISITOR,
-                        Role.APPLICANT,
-                        Role.EMPLOYER,
-                        Role.ADMIN
-                )
-        );
-
-        ResultPair resultPair = checkAccess(model.getJwt(), authorizedRoles);
+        ResultPair resultPair = checkAccess( model.getJwt(), Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
         if(httpStatus == HttpStatus.OK)

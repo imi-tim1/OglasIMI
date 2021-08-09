@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
@@ -34,16 +32,7 @@ public class FieldController
     @GetMapping
     public ResponseEntity<List<Field>> getAllFields(@RequestBody Model model)
     {
-        List<Role> authorizedRoles = new ArrayList<>(
-                Arrays.asList(
-                        Role.VISITOR,
-                        Role.APPLICANT,
-                        Role.EMPLOYER,
-                        Role.ADMIN
-                )
-        );
-
-        ResultPair resultPair = checkAccess(model.getJwt(), authorizedRoles);
+        ResultPair resultPair = checkAccess( model.getJwt(), Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
         if(httpStatus == HttpStatus.OK)
