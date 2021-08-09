@@ -1,19 +1,21 @@
 package com.tim1.oglasimi.security;
 
-import org.springframework.http.HttpStatus;
-
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.MalformedJsonException;
 import io.jsonwebtoken.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
 
-import static com.tim1.oglasimi.OglasimiApplication.LOGGER;
 
 public class SecurityConfig {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 
     public static final String DATABASE_LOCATION_URI = "jdbc:mariadb://localhost/oglasimi_db";
     public static final String DATABASE_USERNAME = "oglasimi";
@@ -58,7 +60,7 @@ public class SecurityConfig {
 
         try {
             Claims claims = decodeJWT(token);
-            LOGGER.debug("SecurityConfig.checkAccess | Claims: " + claims );
+            LOGGER.debug("checkAccess | extracted JWT claims: " + claims);
 
             Object roleClaim = claims.get(ROLE_CLAIM_NAME);
 
@@ -66,32 +68,31 @@ public class SecurityConfig {
                 throw new MalformedJsonException("missing role claim");
             }
 
-            Role role = null;
-
             try {
-                role = Role.valueOf( (String) roleClaim);
-                LOGGER.debug("SecurityConfig.checkAccess | Found role inside JWT token: " + role);
+                Role role = Role.valueOf( (String) roleClaim);
+                LOGGER.debug("checkAccess | found role inside JWT token: " + role);
                 resultPair.setHttpStatus( role.checkAuthorization(authorizedRoles) );
             }
             catch ( IllegalArgumentException | NullPointerException e ) {
-                LOGGER.error("SecurityConfig.checkAccess | exception message: " + e.getMessage() );
-                throw new Exception("roleClaim object didn't return expected value");
+                LOGGER.error("checkAccess | authorization check has failed", e );
+                throw e;
             }
 
             resultPair.setClaims( claims );
         }
-        catch ( ExpiredJwtException | SecurityException e ) {
+        catch ( ExpiredJwtException | SignatureException e ) {
+            LOGGER.warn("checkAccess | received JWT is invalid", e );
             resultPair.setHttpStatus( HttpStatus.UNAUTHORIZED );
         }
         catch ( MalformedJsonException
                         | JsonSyntaxException
                         | IllegalArgumentException
                         | UnsupportedJwtException e ) {
-            LOGGER.error("SecurityConfig.checkAccess | " + e.getMessage() );
+            LOGGER.warn("checkAccess | an error occurred while parsing JWT", e );
             resultPair.setHttpStatus( HttpStatus.BAD_REQUEST );
         }
         catch ( Exception e ) {
-            LOGGER.error("SecurityConfig.checkAccess | Something went wrong: " + e.getMessage() );
+            LOGGER.error("checkAccess | something went wrong", e );
             e.printStackTrace();
             resultPair.setHttpStatus( HttpStatus.INTERNAL_SERVER_ERROR );
         }
@@ -147,7 +148,7 @@ public class SecurityConfig {
      * @return sadrzaj tokena u kome se nalaze informacije o korisniku
      * @throws MalformedJsonException baca se kada se utvrdi da JSON nije ispravan
      * @throws ExpiredJwtException baca se ukoliko je primljeni JSON Web Token istekao
-     * @throws SecurityException baca se ukoliko se header i payload ne poklapaju sa signaturom JSON Web Token-a
+     * @throws SignatureException baca se ukoliko se header i payload ne poklapaju sa signaturom JSON Web Token-a
      * @throws JsonSyntaxException baca se kada se utvrdi da JSON Web Token nije ispravan
      * @throws IllegalArgumentException baca se kada se prosledi neodgovarajuci argument
      * @throws UnsupportedJwtException baca se kada se primi JSON Web Token koji nije ocekivan od strane aplikacije

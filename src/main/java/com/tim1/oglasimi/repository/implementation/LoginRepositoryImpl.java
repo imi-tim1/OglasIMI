@@ -3,17 +3,19 @@ package com.tim1.oglasimi.repository.implementation;
 import com.tim1.oglasimi.model.LoginCredentials;
 import com.tim1.oglasimi.model.LoginResponse;
 import com.tim1.oglasimi.repository.LoginRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.List;
 
-import static com.tim1.oglasimi.OglasimiApplication.LOGGER;
 import static com.tim1.oglasimi.security.SecurityConfig.*;
 
 @Repository
 public class LoginRepositoryImpl implements LoginRepository {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginRepositoryImpl.class);
     private static final String LOGIN_STORED_PROCEDURE = "{call checkCredentials(?,?,?,?,?,?)}";
 
     @Override
@@ -67,8 +69,8 @@ public class LoginRepositoryImpl implements LoginRepository {
                     cstmt.getString("role")
             );
 
-        } catch ( SQLException e) {
-            LOGGER.debug("LoginRepositoryImpl.checkCredentials | exception message: " + e.getMessage() );
+        } catch ( SQLException e ) {
+            LOGGER.debug("checkCredentials | An error occurred while communicating with a database", e );
             e.printStackTrace();
         }
 
