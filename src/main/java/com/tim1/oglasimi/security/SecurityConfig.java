@@ -42,6 +42,8 @@ public class SecurityConfig {
      * Moguci dogadjaji:
      * <ol>
      *     <li>ukoliko je sve ispravno vracaju ce claim-ovi sadrzani unutar tokena i HTTP status kod 200 (OK)</li>
+     *     <li>Ukoliko je korisnik autentifikovan, ali njegov tip naloga nema dozvolu za pristup resursu vraca
+     *     se HTTP status kod 403 (Forbidden)</li>
      *     <li>ukoliko korisnik nema dozvolu da pristupi resursu, ako je token istekao ili ako je izmenjen od strane
      *     korisnika vraca se HTTP status kod 401 (Unauthorized)</li>
      *     <li>ukoliko je zahtev neispravan vraca se HTTP status code 400 (Bad Request)</li>

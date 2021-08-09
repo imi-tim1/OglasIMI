@@ -17,7 +17,7 @@ public enum Role {
     /**
      * Proverava da li se dati tip korisnickog naloga nalazi u listi autorizovanih naloga za pristup odredjenom resursu
      * @param authorizedRoles lista autorizovanih naloga
-     * @return vraca HTTP status kod 200 (OK) ukoliko jeste autorizovan, u suprotnom vraca 401 (Unauthorized)
+     * @return vraca HTTP status kod 200 (OK) ukoliko jeste autorizovan, u suprotnom vraca 403 (Forbidden)
      * @see Role#equalsTo(Object)
      */
     public HttpStatus checkAuthorization(List<Role> authorizedRoles ) {
@@ -29,7 +29,7 @@ public enum Role {
         }
 
         LOGGER.info("checkAuthorization | user is not authorized");
-        return HttpStatus.UNAUTHORIZED;
+        return HttpStatus.FORBIDDEN;
     }
 
     /**
