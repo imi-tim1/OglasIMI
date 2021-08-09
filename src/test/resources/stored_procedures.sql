@@ -73,4 +73,12 @@ select @user_id, @areValid,  @isApproved, @role;
 //
 DELIMITER ;
 -- #######################################################################
+-- Procedure for all Fields selection
 
+DELIMITER // ;
+CREATE PROCEDURE getAllFields ()
+BEGIN
+    SELECT * from field;
+END //
+DELIMITER ;
+-- #######################################################################

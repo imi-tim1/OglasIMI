@@ -2,36 +2,31 @@ package com.tim1.oglasimi.repository.implementation;
 
 import com.tim1.oglasimi.model.Field;
 import com.tim1.oglasimi.repository.FieldRepository;
+import org.springframework.stereotype.Repository;
+import static com.tim1.oglasimi.security.SecurityConfig.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class FieldRepositoryImpl implements FieldRepository
 {
-    private final String databaseLocationUrl;
-    private final String username;
-    private final String password;
-
-    public FieldRepositoryImpl()
-    {
-        this.databaseLocationUrl = "jdbc:mariadb://localhost/oglasimi_db";
-        this.username = "oglasimi";
-        this.password = "12345";
-    }
+    private static final String STORED_PROCEDURE = "{call getAllFields()}";
 
     @Override
     public List<Field> getAll()
     {
-        List<Field> fieldList = new ArrayList<Field>();
+        List<Field> fieldList = new ArrayList<>();
         Field tempField;
 
         String sql = "SELECT * FROM field";
 
-        try (Connection con = DriverManager.getConnection(databaseLocationUrl,username,password);
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery())
+        try (Connection con = DriverManager.getConnection(DATABASE_LOCATION_URI, DATABASE_USERNAME, DATABASE_PASSWORD);
+             CallableStatement cstmt = con.prepareCall( STORED_PROCEDURE ))
         {
+            ResultSet rs = cstmt.executeQuery();
+
             while(rs.next())
             {
                 tempField = new Field();
