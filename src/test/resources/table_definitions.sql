@@ -34,6 +34,13 @@ create table field
     constraint primary key (id)
 );
 
+create table city
+(
+  id int auto_increment,
+  name varchar(30) not null,
+  constraint primary key (id)
+);
+
 create table tag
 (
     id int auto_increment,

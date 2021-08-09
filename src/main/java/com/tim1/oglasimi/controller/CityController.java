@@ -1,10 +1,9 @@
 package com.tim1.oglasimi.controller;
 
-import com.tim1.oglasimi.model.Field;
+import com.tim1.oglasimi.model.City;
 import com.tim1.oglasimi.model.Model;
-import com.tim1.oglasimi.security.ResultPair;
-import com.tim1.oglasimi.security.Role;
-import com.tim1.oglasimi.service.FieldService;
+import com.tim1.oglasimi.security.*;
+import com.tim1.oglasimi.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +19,19 @@ import java.util.List;
 import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
 
 @RestController
-@RequestMapping("/api/fields")
-public class FieldController
+@RequestMapping("/api/cities")
+public class CityController
 {
-    private final FieldService fieldService;
+    private final CityService cityService;
 
     @Autowired
-    public FieldController(FieldService fieldService)
+    public CityController(CityService cityService)
     {
-        this.fieldService = fieldService;
+        this.cityService = cityService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Field>> getAllFields(@RequestBody Model model)
+    public ResponseEntity<List<City>> getAllCities(@RequestBody Model model)
     {
         List<Role> authorizedRoles = new ArrayList<>(
                 Arrays.asList(
@@ -48,7 +47,7 @@ public class FieldController
 
         if(httpStatus == HttpStatus.OK)
         {
-            return ResponseEntity.status(resultPair.getHttpStatus()).body(fieldService.getAllFields());
+            return ResponseEntity.status(resultPair.getHttpStatus()).body(cityService.getAllCities());
         }
 
         return ResponseEntity.status(resultPair.getHttpStatus()).body(null);

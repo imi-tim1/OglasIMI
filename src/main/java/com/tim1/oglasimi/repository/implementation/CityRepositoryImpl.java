@@ -1,24 +1,25 @@
 package com.tim1.oglasimi.repository.implementation;
 
-import com.tim1.oglasimi.model.Field;
-import com.tim1.oglasimi.repository.FieldRepository;
+import com.tim1.oglasimi.model.City;
+import com.tim1.oglasimi.repository.CityRepository;
 import org.springframework.stereotype.Repository;
-import static com.tim1.oglasimi.security.SecurityConfig.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.tim1.oglasimi.security.SecurityConfig.*;
+
 @Repository
-public class FieldRepositoryImpl implements FieldRepository
+public class CityRepositoryImpl implements CityRepository
 {
-    private static final String STORED_PROCEDURE = "{call getAllFields()}";
+    private static final String STORED_PROCEDURE = "{call getAllCities()}";
 
     @Override
-    public List<Field> getAll()
+    public List<City> getAll()
     {
-        List<Field> fieldList = new ArrayList<>();
-        Field tempField;
+        List<City> cityList = new ArrayList<>();
+        City tempCity;
 
         try (Connection con = DriverManager.getConnection(DATABASE_LOCATION_URI, DATABASE_USERNAME, DATABASE_PASSWORD);
              CallableStatement cstmt = con.prepareCall( STORED_PROCEDURE ))
@@ -27,11 +28,11 @@ public class FieldRepositoryImpl implements FieldRepository
 
             while(rs.next())
             {
-                tempField = new Field();
-                tempField.setId(rs.getInt("id"));
-                tempField.setName(rs.getString("name"));
+                tempCity = new City();
+                tempCity.setId(rs.getInt("id"));
+                tempCity.setName(rs.getString("name"));
 
-                fieldList.add(tempField);
+                cityList.add(tempCity);
             }
         }
 
@@ -39,23 +40,23 @@ public class FieldRepositoryImpl implements FieldRepository
             throwables.printStackTrace();
         }
 
-        return fieldList;
+        return cityList;
     }
 
     @Override
-    public boolean create(Field field)
+    public boolean create(City city)
     {
         return false;
     }
 
     @Override
-    public Field get(Integer integer)
+    public City get(Integer integer)
     {
         return null;
     }
 
     @Override
-    public boolean update(Field field, Integer integer)
+    public boolean update(City city, Integer integer)
     {
         return false;
     }
