@@ -6,12 +6,12 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
-import java.util.List;
 
 
 public class SecurityConfig {
@@ -53,35 +53,40 @@ public class SecurityConfig {
      *
      * @param token JSON Web Token (JWT) za koji se proverava pristupa resursu
      * @param authorizedRoles lista svih tipova naloga kojima je dozvoljen pristup datom resursu
-     * @return vraca objekat tipa ResultPair u kome su sadrzani claim-ovi JWT-a i odgovarajuci HTTP status
+     * @return vraca se {@link org.springframework.http.ResponseEntity} sa objekatom tipa Model u kome se
+     * nalazi JWT i odgovarajuci HTTP status
      * @see Claims
      * @see Role
+     * @see ResponseEntity
      */
-    public static ResultPair checkAccess(String token, List<Role> authorizedRoles) {
+    public static ResultPair checkAccess(String token, Role... authorizedRoles) {
         ResultPair resultPair = new ResultPair(null, HttpStatus.OK );
 
         try {
             Claims claims = decodeJWT(token);
             LOGGER.debug("checkAccess | extracted JWT claims: " + claims);
 
-            Object roleClaim = claims.get(ROLE_CLAIM_NAME);
+            Object roleClaim = claims.get( ROLE_CLAIM_NAME );
+            LOGGER.debug("checkAccess | extracted role claims: " + roleClaim);
+
             if( roleClaim == null ) {
                 throw new UnsupportedJwtException("missing role claim");
             }
 
             /* check if endpoint is forbidden for all user types */
-            if( authorizedRoles.isEmpty() ) {
+            if( authorizedRoles.length == 0 ) {
                 resultPair.setHttpStatus( HttpStatus.FORBIDDEN );
                 return resultPair;
             }
 
+            String roleString = (String) roleClaim;
             try {
-                Role role = Role.valueOf( (String) roleClaim);
+                Role role = Role.valueOf( roleString.toUpperCase() );
                 LOGGER.debug("checkAccess | found role inside JWT token: " + role);
                 resultPair.setHttpStatus( role.checkAuthorization(authorizedRoles) );
             }
             catch ( IllegalArgumentException | NullPointerException e ) {
-                LOGGER.error("checkAccess | authorization check has failed", e );
+                LOGGER.error("checkAccess | authorization check has failed" );
                 throw e;
             }
 
@@ -162,7 +167,8 @@ public class SecurityConfig {
      *
      * @see Claims
      */
-    public static Claims decodeJWT(String jwt) throws MalformedJsonException, RuntimeException {
+    public static Claims decodeJWT(String jwt)
+            throws MalformedJsonException, ExpiredJwtException, SignatureException, JsonSyntaxException {
         return Jwts.parserBuilder()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                 .build()

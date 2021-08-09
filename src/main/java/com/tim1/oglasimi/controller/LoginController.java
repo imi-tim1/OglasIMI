@@ -28,7 +28,7 @@ public class LoginController {
      * Postoji nekoliko mogucih dogadjaja prilikom poziva ovog metoda:
      * <ol>
      * <li>korisnik je vec autentifikovan i pokusava da pristupi endpoint-u: zahtev se odbija uz HTTP status kod 403
-     * (Forbidden) i neinicijalizovan LoginResponse</li>
+     * (Forbidden) i neinicijalizovan objekat tipa {@link Model}</li>
      * <li>korisnik nije autentifikovan
      * <ol>
      * <li>uneti podaci nisu ispravni: vraca se HTTP status kod 401 (Unauthorized) i neinicijalizovan objekat
@@ -39,11 +39,13 @@ public class LoginController {
      * (OK), dodeljuje mu se JWT koji se nalazi u objetku tipa {@link Model}</li>
      * </ol></li>
      * </ol>
+     *
      * @param loginCredentials objekat u kome se prihvataju jwt, email i lozinka koji su poslati od strane klijenta
-     * @return JWT, user id, email, informacija o tome da li je korisnik uspesno ulogovan
-     * i status odobrenja registracije
+     * @return vraca se {@link org.springframework.http.ResponseEntity} sa objekatom tipa Model u kome se
+     * nalazi JWT i odgovarajuci HTTP status
      * @see LoginCredentials
      * @see LoginResponse
+     * @see ResponseEntity
      */
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginCredentials loginCredentials) {
@@ -54,11 +56,13 @@ public class LoginController {
         if(  jwt != null && jwt != "" ) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body( new LoginResponse() );
+                    .body( new Model() );
         }
 
         LoginResponse loginResponse = loginService.checkLoginCredentials( loginCredentials );
 
+
+        /* determinate which HTTP status should be returned */
         HttpStatus httpStatus = HttpStatus.OK;
         if( ! loginResponse.getAreCredsValid() ) {
             httpStatus = HttpStatus.UNAUTHORIZED;

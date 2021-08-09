@@ -1,3 +1,5 @@
+Fajl sa primerima za request i response api-a api/login
+
 Request #1 (correct creds, approved)
 {
     "jwt":"",
@@ -8,11 +10,7 @@ Request #1 (correct creds, approved)
 
 Response (200 OK):
 {
-    "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsInJvbCI6ImFkbWluIiwiZXhwIjoxNjI4NDM1NzMyLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAifQ.lZMLTH0SV7JSi5MR63MwUu7nAVRbfnRFF9jZvcMmsj4",
-    "userId": 1,
-    "areCredsValid": true,
-    "isApproved": true,
-    "role": "admin"
+    "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsInJvbCI6ImFkbWluIiwiZXhwIjoxNjI4NTQ5NjU5LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAifQ.5l6RE-T3vulc36bW7_RIAbkKOMWCL-cSWkNJaXTSWjI"
 }
 --------------------------------------------------------------------------------------------
 
@@ -25,15 +23,9 @@ Request #2  (correct creds, approved)
 }
 
 
-Fajl sa primerima za request i response api-a api/login
-
 Response (200 OK):
 {
-    "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIsInJvbCI6ImFwcGxpY2FudCIsImV4cCI6MTYyODQzNTc3MywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIn0.XMD3BYCl59goNgFEMNpUAZtg6yOnOQeVF8toVHqgeoQ",
-    "userId": 2,
-    "areCredsValid": true,
-    "isApproved": true,
-    "role": "applicant"
+    "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIsInJvbCI6ImFwcGxpY2FudCIsImV4cCI6MTYyODU0OTY5MiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIn0.qm3pfD_Dde-EXwVOdkfYIgvUyV5zk-n5PaLg91LCnHg"
 }
 --------------------------------------------------------------------------------------------
 
@@ -48,11 +40,7 @@ Request #3  (correct creds, not approved)
 
 Response (403 Forbidden):
 {
-    "jwt": null,
-    "userId": 3,
-    "areCredsValid": true,
-    "isApproved": false,
-    "role": "applicant"
+    "jwt": null
 }
 --------------------------------------------------------------------------------------------
 
@@ -67,11 +55,7 @@ Request #4  (wrong creds)
 
 Response (401 Unauthorized):
 {
-    "jwt": null,
-    "userId": 0,
-    "areCredsValid": false,
-    "isApproved": false,
-    "role": null
+    "jwt": null
 }
 --------------------------------------------------------------------------------------------
 
@@ -86,3 +70,5 @@ Request #5
 
 Response (403 Forbidden):
 {
+    "jwt": null
+}
