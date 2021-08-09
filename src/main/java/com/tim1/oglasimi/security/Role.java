@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
-import java.util.List;
-
 public enum Role {
-    VISITOR,
     APPLICANT,
     EMPLOYER,
     ADMIN;
@@ -20,7 +17,7 @@ public enum Role {
      * @return vraca HTTP status kod 200 (OK) ukoliko jeste autorizovan, u suprotnom vraca 403 (Forbidden)
      * @see Role#equalsTo(Object)
      */
-    public HttpStatus checkAuthorization(List<Role> authorizedRoles ) {
+    public HttpStatus checkAuthorization( Role[] authorizedRoles ) {
         for (Role role : authorizedRoles) {
             if (this.equalsTo(role)) {
                 LOGGER.info("checkAuthorization | user is authorized");
@@ -42,13 +39,14 @@ public enum Role {
      * @see String
      */
     public boolean equalsTo( Object role ) {
-
         if( role instanceof Role || role instanceof String ) {
-            LOGGER.debug("equalsTo | (roleParam, thisRole) : ({},{})", role,this);
-            LOGGER.debug("equalsTo | result: {}",
-                    0 == this.toString().compareTo(role.toString() ) );
+            String thisRole = this.toString().toLowerCase();
+            String roleParam = role.toString().toLowerCase();
 
-            return 0 == this.toString().compareTo(role.toString() ) ;
+            LOGGER.debug("equalsTo | (thisRole, roleParam) : ({},{})", thisRole, roleParam);
+            LOGGER.debug("equalsTo | result: {}", 0 == thisRole.compareTo( roleParam ) );
+
+            return 0 == thisRole.compareTo( roleParam );
         }
 
         return false;
