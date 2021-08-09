@@ -25,7 +25,7 @@ public class LoginService {
             return new LoginResponse();
         }
 
-        /* if authenticated user is approved return just that information */
+        /* if authenticated user is approved return related information without JWT */
         if( ! loginResponse.getIsApproved() ) {
             loginResponse.setApproved( false );
 
