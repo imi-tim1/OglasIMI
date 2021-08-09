@@ -73,7 +73,7 @@ select @user_id, @areValid,  @isApproved, @role;
 //
 DELIMITER ;
 -- #######################################################################
--- Procedure for all Fields selection
+-- Procedure for all fields selection
 
 DELIMITER // ;
 CREATE PROCEDURE getAllFields ()
@@ -82,3 +82,11 @@ BEGIN
 END //
 DELIMITER ;
 -- #######################################################################
+-- Procedure for all cities selection
+
+DELIMITER // ;
+CREATE PROCEDURE getAllCities ()
+BEGIN
+    SELECT * from city;
+END //
+DELIMITER ;

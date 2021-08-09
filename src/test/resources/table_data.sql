@@ -63,7 +63,13 @@ values (1, 3, '2021-05-08 00:26:13.500'),
        (3, 2, '2021-11-05 11:25:8.260'),
        (3, 3, '2021-07-08 07:36:2.420');
 
-
+insert into city (name)
+values ('Kragujevac'),
+       ('Beograd'),
+       ('Nis'),
+       ('Novi Sad'),
+       ('Vranje'),
+       ('Leskovac');
 
 
 
