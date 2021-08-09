@@ -1,13 +1,23 @@
 package com.tim1.oglasimi.controller;
 
 import com.tim1.oglasimi.model.Field;
+import com.tim1.oglasimi.model.Model;
+import com.tim1.oglasimi.security.ResultPair;
+import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.FieldService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
 
 @RestController
 @RequestMapping("/api/fields")
@@ -22,8 +32,25 @@ public class FieldController
     }
 
     @GetMapping
-    public List<Field> getAllFields()
+    public ResponseEntity<List<Field>> getAllFields(@RequestBody Model model)
     {
-        return fieldService.getAllFields();
+        List<Role> authorizedRoles = new ArrayList<>(
+                Arrays.asList(
+                        Role.VISITOR,
+                        Role.APPLICANT,
+                        Role.EMPLOYER,
+                        Role.ADMIN
+                )
+        );
+
+        ResultPair resultPair = checkAccess(model.getJwt(), authorizedRoles);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        if(httpStatus == HttpStatus.OK)
+        {
+            return ResponseEntity.status(resultPair.getHttpStatus()).body(fieldService.getAllFields());
+        }
+
+        return ResponseEntity.status(resultPair.getHttpStatus()).body(null);
     }
 }
