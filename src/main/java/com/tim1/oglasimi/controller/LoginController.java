@@ -17,7 +17,30 @@ public class LoginController {
     public LoginController(LoginService loginService) { this.loginService = loginService; }
 
 
-
+    /**
+     * Prihvata token, email i lozinku, proverava da li su dati podaci ispravi i da li korisnik sme da pristupi
+     * ovom endpoint-u.
+     * <p>
+     * Postoji nekoliko mogucih dogadjaja prilikom poziva ovog metoda:
+     * <ol>
+     * <li>korisnik je vec autentifikovan i pokusava da pristupi endpoint-u: zahtev se odbija uz HTTP status kod 403
+     * (Forbidden) i neinicijalizovan LoginResponse</li>
+     * <li>korisnik nije autentifikovan
+     * <ol>
+     * <li>uneti podaci nisu ispravni: vraca se HTTP status kod 401 (Unauthorized) i payload u HTTP body-y koji cini
+     * neiniciajlizovan LoginResponse objekat</li>
+     * <li>uneti podaci su ispravni, ali korisnik jos uvek nije potvrdjen od strane administratora: vraca se HTTP
+     * status kod 403 (Forbidden) i payload sa podacima bez JWT-a u body-u </li>
+     * <li>uneti podaci su ispravni i korisnik je potvrdjen od strane administratora: vraca se HTTP status kod 200
+     * (OK), relevantni podaci i dodeljuje mu se JWT</li>
+     * </ol></li>
+     * </ol>
+     * @param loginCredentials objekat u kome se prihvataju jwt, email i lozinka koji su poslati od strane klijenta
+     * @return JWT, user id, email, informacija o tome da li je korisnik uspesno ulogovan
+     * i status odobrenja registracije
+     * @see LoginCredentials
+     * @see LoginResponse
+     */
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginCredentials loginCredentials) {
 
