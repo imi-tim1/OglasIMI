@@ -1,6 +1,6 @@
 package com.tim1.oglasimi.model;
 
-public class City
+public class City extends Model
 {
     private int id;
     private String name;
