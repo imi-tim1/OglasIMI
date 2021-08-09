@@ -41,13 +41,13 @@ public class SecurityConfig {
      * obradjuju se izuzetci i vracaju odgovarajuci HTTP status kodovi.
      * Moguci dogadjaji:
      * <ol>
-     *     <li>ukoliko je sve ispravno vracaju ce claim-ovi sadrzani unutar tokena i HTTP status kod 200 (OK)</li>
-     *     <li>Ukoliko je korisnik autentifikovan, ali njegov tip naloga nema dozvolu za pristup resursu vraca
+     *     <li>ukoliko je sve ispravno vracaju se claim-ovi sadrzani unutar tokena kao i HTTP status kod 200 (OK)</li>
+     *     <li>ukoliko je korisnik autentifikovan, ali njegov tip naloga nema dozvolu za pristup resursu vraca
      *     se HTTP status kod 403 (Forbidden)</li>
      *     <li>ukoliko korisnik nema dozvolu da pristupi resursu, ako je token istekao ili ako je izmenjen od strane
      *     korisnika vraca se HTTP status kod 401 (Unauthorized)</li>
      *     <li>ukoliko je zahtev neispravan vraca se HTTP status code 400 (Bad Request)</li>
-     *     <li>ukoliko se dogodi neka greska nepredvidjena greska ili izuzetak vraca se HTTP status kod 500 (Internal
+     *     <li>ukoliko se dogodi neka nepredvidjena greska ili izuzetak vraca se HTTP status kod 500 (Internal
      *     Server Error)</li>
      * </ol>
      *
@@ -65,9 +65,14 @@ public class SecurityConfig {
             LOGGER.debug("checkAccess | extracted JWT claims: " + claims);
 
             Object roleClaim = claims.get(ROLE_CLAIM_NAME);
-
             if( roleClaim == null ) {
-                throw new MalformedJsonException("missing role claim");
+                throw new UnsupportedJwtException("missing role claim");
+            }
+
+            /* check if endpoint is forbidden for all user types */
+            if( authorizedRoles.isEmpty() ) {
+                resultPair.setHttpStatus( HttpStatus.FORBIDDEN );
+                return resultPair;
             }
 
             try {
@@ -127,15 +132,15 @@ public class SecurityConfig {
     public static String createJWT(int uid, String issuer, long timeToLiveMills, String role) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
-        long nowMillis = System.currentTimeMillis();
-
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         JwtBuilder builder = Jwts.builder()
                 .claim("uid", uid)
                 .claim("rol", role)
-                .setExpiration(new Date(nowMillis + timeToLiveMills))
+                .setExpiration(
+                        new Date( System.currentTimeMillis() + timeToLiveMills )
+                )
                 .setIssuer(issuer)
                 .signWith(signingKey, signatureAlgorithm);
 

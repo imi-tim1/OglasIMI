@@ -4,8 +4,14 @@ public class Model
 {
     public String jwt;
 
-    public String getJwt()
-    {
+    public Model() {
+    }
+
+    public Model(String jwt) {
+        this.jwt = jwt;
+    }
+
+    public String getJwt() {
         return jwt;
     }
 
