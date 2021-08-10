@@ -5,19 +5,19 @@ use oglasimi_db;
 DELIMITER // ;
 CREATE PROCEDURE checkCredentials (
     IN email VARCHAR(190),
-    IN password VARCHAR(300),
+    IN hashed_password VARCHAR(300),
     OUT user_id INT,
-    OUT validCreds BOOLEAN,
+    OUT valid_creds BOOLEAN,
     OUT approved BOOLEAN,
     OUT role VARCHAR(20)
 )
 BEGIN
     DECLARE retval INT;
-SELECT COUNT(c.user_id) INTO retval FROM credentials c WHERE c.email = email and c.password = password;
+SELECT COUNT(c.user_id) INTO retval FROM credentials c WHERE c.email = email and c.hashed_password = hashed_password;
 IF retval != 0 THEN
-        SET validCreds = TRUE;
+        SET valid_creds = TRUE;
 ELSE
-        SET validCreds = FALSE;
+        SET valid_creds = FALSE;
 END IF;
 
 SELECT u.id, u.approved, r.name
@@ -31,47 +31,49 @@ END //
 DELIMITER ;
 --
 
--- test call for procedure checkCredentials #1
+-- test call for procedure checkCredentials #1 valid creds & not approved
 DELIMITER // ;
 call checkCredentials( 'pera@wuiii.com',
                        'd32aea39aa588565353ce46716459c77039c06f032ce027519eccf209617cf6e',
                        @user_id,
-                       @areValid,
-                       @isApproved,
+                       @are_valid,
+                       @is_approved,
                        @role);
 
-select @user_id, @areValid,  @isApproved, @role;
+select @user_id, @are_valid,  @is_approved, @role;
 //
 DELIMITER ;
 
 
--- test call for procedure checkCredentials #2
+-- test call for procedure checkCredentials #2 valid creds & approved
 DELIMITER // ;
 call checkCredentials( 'mika@yahoo.rs',
                        '657c5f62072faf7bc0a6ead16b3338b109bf8b7ecffdfe1b545bc25503f5199e',
                        @user_id,
-                       @areValid,
-                       @isApproved,
+                       @valid_creds,
+                       @is_approved,
                        @role);
 
-select @user_id, @areValid,  @isApproved, @role;
+select @user_id, @valid_creds,  @is_approved, @role;
 //
 DELIMITER ;
 
 
 
--- test call for procedure checkCredentials #3
+-- test call for procedure checkCredentials #3 invalid creds
 DELIMITER // ;
 call checkCredentials( 'mika@yahoo.rs',
                        '0000000000000000000000016b3338b109bf8b7ecffdfe1b545bc25503f5199e',
                        @user_id,
-                       @areValid,
-                       @isApproved,
+                       @valid_creds,
+                       @is_approved,
                        @role);
 
-select @user_id, @areValid,  @isApproved, @role;
+select @user_id, @valid_creds,  @is_approved, @role;
 //
 DELIMITER ;
+
+
 -- #######################################################################
 -- Procedure for all fields selection
 

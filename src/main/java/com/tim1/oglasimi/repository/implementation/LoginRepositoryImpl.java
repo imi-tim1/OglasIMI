@@ -15,7 +15,7 @@ import java.util.List;
 public class LoginRepositoryImpl implements LoginRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginRepositoryImpl.class);
-    private static final String LOGIN_STORED_PROCEDURE = "{call checkCredentials(?,?,?,?,?,?)}";
+    private static final String LOGIN_STORED_PROCEDURE_CALL = "{call checkCredentials(?,?,?,?,?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -58,13 +58,13 @@ public class LoginRepositoryImpl implements LoginRepository {
         try (
                 Connection con = DriverManager.getConnection(
                         databaseSourceUrl, databaseUsername, databasePassword );
-                CallableStatement cstmt = con.prepareCall( LOGIN_STORED_PROCEDURE ) ) {
+                CallableStatement cstmt = con.prepareCall( LOGIN_STORED_PROCEDURE_CALL ) ) {
 
             cstmt.setString("email", loginCredentials.getEmail() );
-            cstmt.setString("password", loginCredentials.getHashedPassword() );
+            cstmt.setString("hashed_password", loginCredentials.getHashedPassword() );
 
             cstmt.registerOutParameter("user_id", Types.INTEGER);
-            cstmt.registerOutParameter("validCreds", Types.BOOLEAN);
+            cstmt.registerOutParameter("valid_creds", Types.BOOLEAN);
             cstmt.registerOutParameter("approved", Types.BOOLEAN);
             cstmt.registerOutParameter("role", Types.VARCHAR);
 
@@ -72,7 +72,7 @@ public class LoginRepositoryImpl implements LoginRepository {
 
             loginResponse = new LoginResponse(
                     cstmt.getInt("user_id"),
-                    cstmt.getBoolean("validCreds"),
+                    cstmt.getBoolean("valid_creds"),
                     cstmt.getBoolean("approved"),
                     cstmt.getString("role")
             );

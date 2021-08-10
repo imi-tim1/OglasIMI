@@ -21,7 +21,7 @@ create table credentials
 (
     user_id int not null,
     email varchar(190) not null,
-    password varchar(300) not null,
+    hashed_password varchar(300) not null,
     constraint primary key (user_id),
     constraint foreign key (user_id) references user (id),
     constraint unique key (email)
@@ -56,7 +56,7 @@ create table applicant
     first_name varchar(30) not null,
     last_name varchar(30) not null,
     picture_base64 text(65000),
-    phone varchar(30) not null,
+    phone_number varchar(30) not null,
     constraint primary key (user_id),
     constraint foreign key (user_id) references user (id)
 );
@@ -73,10 +73,10 @@ create table employer
 (
     user_id int,
     name varchar(30) not null,
-    pib varchar(20) not null,
+    tin varchar(20) not null,
     address varchar(50) not null,
     picture_base64 text(65000),
-    phone varchar(30) not null,
+    phone_number varchar(30) not null,
     constraint primary key (user_id),
     constraint foreign key (user_id) references user (id)
 );
