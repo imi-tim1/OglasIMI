@@ -90,3 +90,12 @@ BEGIN
     SELECT * from city;
 END //
 DELIMITER ;
+-- #######################################################################
+-- Procedure for tag list
+
+DELIMITER // ;
+CREATE PROCEDURE getTagList (IN id int)
+BEGIN
+    SELECT * FROM tag WHERE field_id = id;
+END //
+DELIMITER ;
