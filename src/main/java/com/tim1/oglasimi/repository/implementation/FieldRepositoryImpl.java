@@ -5,7 +5,6 @@ import com.tim1.oglasimi.model.Tag;
 import com.tim1.oglasimi.repository.FieldRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
-import static com.tim1.oglasimi.security.SecurityConfig.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,8 +13,8 @@ import java.util.List;
 @Repository
 public class FieldRepositoryImpl implements FieldRepository
 {
-    private static final String FIELD_STORED_PROCEDURE = "{call getAllFields()}";
-    private static final String TAG_STORED_PROCEDURE = "{call getTagList(?)}";
+    private static final String FIELD_STORED_PROCEDURE = "{call get_all_fields()}";
+    private static final String TAG_STORED_PROCEDURE = "{call get_tag_list(?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;

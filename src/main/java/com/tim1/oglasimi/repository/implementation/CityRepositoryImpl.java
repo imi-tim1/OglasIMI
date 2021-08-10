@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public class CityRepositoryImpl implements CityRepository
 {
-    private static final String STORED_PROCEDURE = "{call getAllCities()}";
+    private static final String STORED_PROCEDURE = "{call get_all_cities()}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;

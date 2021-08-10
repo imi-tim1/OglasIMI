@@ -60,13 +60,13 @@ public class LoginRepositoryImpl implements LoginRepository {
                         databaseSourceUrl, databaseUsername, databasePassword );
                 CallableStatement cstmt = con.prepareCall( LOGIN_STORED_PROCEDURE_CALL ) ) {
 
-            cstmt.setString("email", loginCredentials.getEmail() );
-            cstmt.setString("hashed_password", loginCredentials.getHashedPassword() );
+            cstmt.setString("p_email", loginCredentials.getEmail() );
+            cstmt.setString("p_hashed_password", loginCredentials.getHashedPassword() );
 
-            cstmt.registerOutParameter("user_id", Types.INTEGER);
-            cstmt.registerOutParameter("valid_creds", Types.BOOLEAN);
-            cstmt.registerOutParameter("approved", Types.BOOLEAN);
-            cstmt.registerOutParameter("role", Types.VARCHAR);
+            cstmt.registerOutParameter("p_user_id", Types.INTEGER);
+            cstmt.registerOutParameter("p_valid_creds", Types.BOOLEAN);
+            cstmt.registerOutParameter("p_approved", Types.BOOLEAN);
+            cstmt.registerOutParameter("p_role", Types.VARCHAR);
 
             cstmt.executeUpdate();
 
