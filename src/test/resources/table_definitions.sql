@@ -86,14 +86,15 @@ create table job
     id int primary key auto_increment,
     employer_id int not null,
     field_id int not null,
+    city_id int,
     post_date DATETIME not null,
     title varchar(50) not null,
     description varchar(510) not null,
-    city varchar(50),
     salary varchar(50),
     work_from_home boolean,
     constraint foreign key (employer_id) references employer (user_id),
-    constraint foreign key (field_id) references field (id)
+    constraint foreign key (field_id) references field (id),
+    constraint foreign key (city_id) references city (id)
 );
 
 create table job_application
