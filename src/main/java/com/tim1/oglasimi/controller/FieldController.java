@@ -39,7 +39,7 @@ public class FieldController
             return ResponseEntity.status(resultPair.getHttpStatus()).body(fieldService.getAllFields());
         }
 
-        return ResponseEntity.status(resultPair.getHttpStatus()).body(new ArrayList<>());
+        return ResponseEntity.status(resultPair.getHttpStatus()).body(null);
     }
 
     @GetMapping("{id}/tags")
@@ -53,6 +53,6 @@ public class FieldController
             return ResponseEntity.status(resultPair.getHttpStatus()).body(fieldService.getTagList(id));
         }
 
-        return ResponseEntity.status(resultPair.getHttpStatus()).body(new ArrayList<>());
+        return ResponseEntity.status(resultPair.getHttpStatus()).body(null);
     }
 }
