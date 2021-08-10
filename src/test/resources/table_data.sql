@@ -12,18 +12,18 @@ values (1, true),
        (3, true),
        (3, true);
 
-insert into credentials (user_id, email, password)
+insert into credentials (user_id, email, hashed_password)
 values (1, 'misas@ad.min', 'aeab55bba4162e7a7cde64142532e26955b1d5c8fb251d83ba95a7ba1ffdd238'),
        (2, 'zika@bacv.anin', '92ded8e40979699983b844c5c10bbefaa0fbcadd12795ee75a535e833bc1e9ca'),
        (3, 'pera@wuiii.com', 'd32aea39aa588565353ce46716459c77039c06f032ce027519eccf209617cf6e'),
        (4, 'laza@vass.org', 'be2ac81588a6ef186d73f4738e95a3926c5c88a9d03a7970f1ddd182d9f236cd'),
        (5, 'mika@yahoo.rs', '657c5f62072faf7bc0a6ead16b3338b109bf8b7ecffdfe1b545bc25503f5199e');
 
-insert into employer (user_id, name, pib, address, picture_base64, phone)
+insert into employer (user_id, name, tin, address, picture_base64, phone_number)
 values (4, 'Lažarus d.o.o', '123456789', 'Keba Kraba, 3', null, '063123456'),
        (5, 'Perperix', '987654321', 'Lignjoslav, 8/B', null, '065987654');
 
-insert into applicant (user_id, first_name, last_name, picture_base64, phone)
+insert into applicant (user_id, first_name, last_name, picture_base64, phone_number)
 values (2, 'Pera', 'Peric', null, '060111222'),
        (3, 'Zika', 'Zikic', null, '062454687');
 
