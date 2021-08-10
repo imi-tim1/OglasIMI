@@ -17,10 +17,6 @@ import java.util.Date;
 public class SecurityConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 
-    public static final String DATABASE_LOCATION_URI = "jdbc:mariadb://localhost/oglasimi_db";
-    public static final String DATABASE_USERNAME = "oglasimi";
-    public static final String DATABASE_PASSWORD = "12345";
-
     public static final String ISSUER = "http://localhost:8080";
 
     /**
