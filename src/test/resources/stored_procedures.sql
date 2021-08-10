@@ -99,3 +99,5 @@ BEGIN
     SELECT * FROM tag WHERE field_id = id;
 END //
 DELIMITER ;
+-- #######################################################################
+-- Procedure for tag list
