@@ -3,6 +3,7 @@ package com.tim1.oglasimi.repository.implementation;
 import com.tim1.oglasimi.model.Field;
 import com.tim1.oglasimi.model.Tag;
 import com.tim1.oglasimi.repository.FieldRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import static com.tim1.oglasimi.security.SecurityConfig.*;
 
@@ -16,13 +17,22 @@ public class FieldRepositoryImpl implements FieldRepository
     private static final String FIELD_STORED_PROCEDURE = "{call getAllFields()}";
     private static final String TAG_STORED_PROCEDURE = "{call getTagList(?)}";
 
+    @Value("${spring.datasource.url}")
+    private String databaseSourceUrl;
+
+    @Value("${spring.datasource.username}")
+    private String databaseUsername;
+
+    @Value("${spring.datasource.password}")
+    private String databasePassword;
+
     @Override
     public List<Field> getAll()
     {
         List<Field> fieldList = new ArrayList<>();
         Field tempField;
 
-        try (Connection con = DriverManager.getConnection(DATABASE_LOCATION_URI, DATABASE_USERNAME, DATABASE_PASSWORD);
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl, databaseUsername, databasePassword );
              CallableStatement cstmt = con.prepareCall(FIELD_STORED_PROCEDURE))
         {
             ResultSet rs = cstmt.executeQuery();
@@ -50,7 +60,7 @@ public class FieldRepositoryImpl implements FieldRepository
         List<Tag> tagList = new ArrayList<>();
         Tag tempTag;
 
-        try (Connection con = DriverManager.getConnection(DATABASE_LOCATION_URI, DATABASE_USERNAME, DATABASE_PASSWORD);
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl, databaseUsername, databasePassword );
              CallableStatement cstmt = con.prepareCall(TAG_STORED_PROCEDURE))
         {
             cstmt.setInt("id", id);
