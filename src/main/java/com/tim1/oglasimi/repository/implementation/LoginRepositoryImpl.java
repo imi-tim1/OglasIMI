@@ -5,18 +5,26 @@ import com.tim1.oglasimi.model.LoginResponse;
 import com.tim1.oglasimi.repository.LoginRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.List;
-
-import static com.tim1.oglasimi.security.SecurityConfig.*;
 
 @Repository
 public class LoginRepositoryImpl implements LoginRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginRepositoryImpl.class);
     private static final String LOGIN_STORED_PROCEDURE = "{call checkCredentials(?,?,?,?,?,?)}";
+
+    @Value("${spring.datasource.url}")
+    private String databaseSourceUrl;
+
+    @Value("${spring.datasource.username}")
+    private String databaseUsername;
+
+    @Value("${spring.datasource.password}")
+    private String databasePassword;
 
     @Override
     public List<LoginCredentials> getAll() {
@@ -49,7 +57,7 @@ public class LoginRepositoryImpl implements LoginRepository {
 
         try (
                 Connection con = DriverManager.getConnection(
-                        DATABASE_LOCATION_URI, DATABASE_USERNAME, DATABASE_PASSWORD);
+                        databaseSourceUrl, databaseUsername, databasePassword );
                 CallableStatement cstmt = con.prepareCall( LOGIN_STORED_PROCEDURE ) ) {
 
             cstmt.setString("email", loginCredentials.getEmail() );
