@@ -20,6 +20,10 @@ public class LoginService {
     public LoginResponse checkLoginCredentials(LoginCredentials loginCredentials ) {
         LoginResponse loginResponse = loginRepositoryImpl.checkCredentials( loginCredentials );
 
+        if( loginResponse == null ) {
+            return null;
+        }
+
         /* if provided credentials are not valid return response without info */
         if( ! loginResponse.getAreCredsValid() ) {
             return new LoginResponse();

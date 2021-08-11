@@ -52,29 +52,36 @@ public class LoginController {
     public ResponseEntity<?> login(@RequestBody LoginCredentials loginCredentials) {
 
         String jwt = loginCredentials.getJwt();
+        Model returnModel = new Model();
 
         // check if authenticated user send the request
         if(  jwt != null && jwt != "" ) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body( new Model() );
+                    .body( returnModel );
         }
 
         LoginResponse loginResponse = loginService.checkLoginCredentials( loginCredentials );
 
-
         /* determinate which HTTP status should be returned */
         HttpStatus httpStatus = HttpStatus.OK;
-        if( ! loginResponse.getAreCredsValid() ) {
-            httpStatus = HttpStatus.UNAUTHORIZED;
+        if( loginResponse == null ) {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-        else if( ! loginResponse.getIsApproved() ){
-            httpStatus = HttpStatus.FORBIDDEN;
+        else {
+            returnModel.setJwt( loginResponse.getJwt() );
+
+            if( ! loginResponse.getAreCredsValid() ) {
+                httpStatus = HttpStatus.UNAUTHORIZED;
+            }
+            else if( ! loginResponse.getIsApproved() ){
+                httpStatus = HttpStatus.FORBIDDEN;
+            }
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(new Model(loginResponse.getJwt()));
+                .body( returnModel );
     }
 
 }
