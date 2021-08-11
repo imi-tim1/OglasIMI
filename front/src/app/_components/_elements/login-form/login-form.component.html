@@ -9,25 +9,28 @@
           <form>
             <!-- Email input -->
             <div class="form-outline mb-4">
-              <input type="email" id="form3Example3" class="form-control form-control-lg"
+              <input [(ngModel)]="email" name="email" type="email" id="form3Example3" class="form-control form-control-lg"
                 placeholder="Unesite email adresu ..." />
               <label class="form-label" for="form3Example3">Email adresa</label>
             </div>
   
             <!-- Password input -->
             <div class="form-outline mb-3">
-              <input type="password" id="form3Example4" class="form-control form-control-lg"
+              <input [(ngModel)]="password" name="password" type="password" id="form3Example4" class="form-control form-control-lg"
                 placeholder="Unesite lozinku ..." />
               <label class="form-label" for="form3Example4">Lozinka</label>
             </div>
   
             <div class="text-center text-lg-start mt-4 pt-2">
-              
+                <!-- Text - Pogresna lozinka -->
+                <p *ngIf="loginFailed" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Lozinka ili imejl su pogresni </p>
+                <br>
+
                 <button 
                     type="button" 
                     class="btn btn-primary btn-lg"
                     style="padding-left: 2.5rem; padding-right: 2.5rem;"
-                    (click)="null"> <!-- NG EVENT -->
+                    (click)="onSubmit()"> <!-- NG EVENT -->
                     Login
                 </button>
 

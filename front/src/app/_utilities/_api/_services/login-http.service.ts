@@ -1,5 +1,5 @@
 import { Injectable, Self } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpStatusCode } from '@angular/common/http'
 import { apiProperties } from '../../_constants/api.properties';
 import { Observable } from 'rxjs';
 
@@ -31,3 +31,16 @@ export namespace LoginHttpService
       jwt: string;
     }
 }
+
+/*
+  http status codes
+*/
+
+// pera@wuiii.com
+// d32aea39aa588565353ce46716459c77039c06f032ce027519eccf209617cf6e
+
+// misas@ad.min
+// aeab55bba4162e7a7cde64142532e26955b1d5c8fb251d83ba95a7ba1ffdd238
+
+// zika@bacv.anin
+// 92ded8e40979699983b844c5c10bbefaa0fbcadd12795ee75a535e833bc1e9ca

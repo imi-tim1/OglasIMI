@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -7,7 +9,10 @@ import { LoginPageComponent } from './_components/_pages/login-page/login-page.c
 import { NavbarComponent } from './_components/_elements/navbar/navbar.component';
 import { FooterComponent } from './_components/_elements/footer/footer.component';
 import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
-import { HttpClient } from '@angular/common/http';
+import { RegisterPageComponent } from './_components/_pages/register-page/register-page.component';
+import { ApplicantRegisterFormComponent } from './_components/_elements/applicant-register-form/applicant-register-form.component';
+import { EmployerRegisterFormComponent } from './_components/_elements/employer-register-form/employer-register-form.component';
+import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
 
 @NgModule({
   declarations: [
@@ -15,12 +20,17 @@ import { HttpClient } from '@angular/common/http';
     LoginPageComponent,
     NavbarComponent,
     FooterComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    RegisterPageComponent,
+    ApplicantRegisterFormComponent,
+    EmployerRegisterFormComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClient
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
