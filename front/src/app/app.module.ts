@@ -6,17 +6,21 @@ import { AppComponent } from './app.component';
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
 import { NavbarComponent } from './_components/_elements/navbar/navbar.component';
 import { FooterComponent } from './_components/_elements/footer/footer.component';
+import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
+import { HttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClient
   ],
   providers: [],
   bootstrap: [AppComponent]
