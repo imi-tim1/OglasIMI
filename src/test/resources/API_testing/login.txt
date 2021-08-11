@@ -62,7 +62,7 @@ Response (401 Unauthorized):
 
 Request #5
 {
-    "jwt":"123",
+    "jwt":"eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIsInJvbCI6ImFwcGxpY2FudCIsImV4cCI6MTYyODU0OTY5MiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIn0.qm3pfD_Dde-EXwVOdkfYIgvUyV5zk-n5PaLg91LCnHg",
     "email":"mika@yahoo.rs", 
     "hashedPassword":"657c5f62072faf7bc0a6ead16b3338b109bf8b7ecffdfe1b545bc25503f5199e"
 }
@@ -70,5 +70,5 @@ Request #5
 
 Response (403 Forbidden):
 {
-    "jwt": null
+    "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIsInJvbCI6ImFwcGxpY2FudCIsImV4cCI6MTYyODU0OTY5MiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIn0.qm3pfD_Dde-EXwVOdkfYIgvUyV5zk-n5PaLg91LCnHg"
 }
