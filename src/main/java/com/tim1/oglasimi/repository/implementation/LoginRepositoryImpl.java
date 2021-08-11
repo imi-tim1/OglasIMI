@@ -15,7 +15,7 @@ import java.util.List;
 public class LoginRepositoryImpl implements LoginRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginRepositoryImpl.class);
-    private static final String LOGIN_STORED_PROCEDURE_CALL = "{call checkCredentials(?,?,?,?,?,?)}";
+    private static final String LOGIN_STORED_PROCEDURE_CALL = "{call check_credentials(?,?,?,?,?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -71,14 +71,14 @@ public class LoginRepositoryImpl implements LoginRepository {
             cstmt.executeUpdate();
 
             loginResponse = new LoginResponse(
-                    cstmt.getInt("user_id"),
-                    cstmt.getBoolean("valid_creds"),
-                    cstmt.getBoolean("approved"),
-                    cstmt.getString("role")
+                    cstmt.getInt("p_user_id"),
+                    cstmt.getBoolean("p_valid_creds"),
+                    cstmt.getBoolean("p_approved"),
+                    cstmt.getString("p_role")
             );
 
         } catch ( SQLException e ) {
-            LOGGER.debug("checkCredentials | An error occurred while communicating with a database", e );
+            LOGGER.debug("checkCredentials | An error occurred while communicating with a database" );
             e.printStackTrace();
         }
 

@@ -1,7 +1,7 @@
 # Fajl sa primerima za request i response api-a api/employers (POST)
 
 
-Request #1 (correct creds, approved)
+Request #1 (doesn't exist; will be registered)
 {
     "jwt":"",
     "email":"petar.petrovic@imail.ev",
@@ -12,3 +12,41 @@ Request #1 (correct creds, approved)
     "address":"Radoja Domanovica 12",
     "tin":"123-456-789"
 }
+
+Response (200 OK):
+Successful
+--------------------------------------------------------------------------------------------
+
+
+Request #2 (doesn't exist; will be registered)
+{
+    "jwt":"",
+    "email":"mirko.mirkovic@mir.ko",
+    "hashedPassword":"fe3ff87be21485302c816942c3d4e81702c472d7c3c0028cefd3c10fa5e17a11",
+    "pictureBase64":"slika_mirka",
+    "phoneNumber":"026/555-333",
+    "name":"Mir Company",
+    "address":"Radoja 15",
+    "tin":""
+}
+
+Response (200 OK):
+Successful
+--------------------------------------------------------------------------------------------
+
+
+Request #3 (exists; will not be registered)
+{
+    "jwt":"",
+    "email":"mika@yahoo.rs",
+    "hashedPassword":"657c5f62072faf7bc0a6ead16b3338b109bf8b7ecffdfe1b545bc25503f5199e",
+    "pictureBase64":"fake_pic",
+    "phoneNumber":"026/555-333",
+    "name":"Another Company",
+    "address":"Keba Kraba, 3",
+    "tin":"234567890"
+}
+
+Response (422 Unprocessable Entity):
+This email is already in use.
+--------------------------------------------------------------------------------------------

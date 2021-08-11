@@ -15,13 +15,13 @@ public class EmployerService {
         this.employerRepositoryImpl = employerRepositoryImpl;
     }
 
-    public String registerEmployer(Employer employer ) {
+    public String registerEmployer( Employer employer ) {
         boolean isSuccessful = employerRepositoryImpl.create( employer );
 
         if( isSuccessful ) {
             return "Successful";
         }
 
-        return "User already exists!";
+        return "This email is already in use!";
     }
 }
