@@ -90,7 +90,6 @@ public class EndUser extends User {
                 ", hashedPassword='" + hashedPassword + '\'' +
                 ", pictureBase64='" + pictureBase64 + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", jwt='" + jwt + '\'' +
                 '}';
     }
 }

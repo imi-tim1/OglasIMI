@@ -1,6 +1,6 @@
 package com.tim1.oglasimi.model;
 
-public class Field extends Model
+public class Field 
 {
     private int id;
     private String name;

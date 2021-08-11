@@ -1,10 +1,11 @@
 package com.tim1.oglasimi.model;
 
-public class LoginResponse extends Model {
+public class LoginResponse {
     private int userId;
     private boolean areCredsValid;
     private boolean isApproved;
     private String role;
+    public String jwt;
 
     public LoginResponse() {}
 
@@ -12,9 +13,12 @@ public class LoginResponse extends Model {
         this.isApproved = isApproved;
     }
 
-    public LoginResponse(int userId, boolean areCredsValid, boolean isApproved, String role) {
+    public LoginResponse(
+            int userId,
+            boolean areCredsValid,
+            boolean isApproved,
+            String role) {
         this(isApproved);
-
         this.userId = userId;
         this.areCredsValid = areCredsValid;
         this.role = role;
@@ -38,5 +42,13 @@ public class LoginResponse extends Model {
 
     public void setApproved(boolean approved) {
         isApproved = approved;
+    }
+
+    public String getJwt() {
+        return jwt;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 }

@@ -1,6 +1,6 @@
 package com.tim1.oglasimi.model;
 
-public class Tag extends Model
+public class Tag
 {
     private int id;
     private int fieldId;

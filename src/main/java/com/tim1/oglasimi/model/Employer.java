@@ -65,7 +65,6 @@ public class Employer extends EndUser {
                 "name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", tin='" + tin + '\'' +
-                ", jwt='" + jwt + '\'' +
                 '}';
     }
 }

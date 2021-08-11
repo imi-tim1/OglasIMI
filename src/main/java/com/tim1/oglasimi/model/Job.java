@@ -3,7 +3,7 @@ package com.tim1.oglasimi.model;
 import java.time.LocalDate;
 import java.util.List;
 //Cao
-public class Job extends Model
+public class Job
 {
     private int id;
     //private Employer employer;

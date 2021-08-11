@@ -18,6 +18,11 @@ public class SecurityConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 
     /**
+     * Naziv custom HTTP Header-a u kome se smesta JSON Web Token
+     */
+    public static final String JWT_CUSTOM_HTTP_HEADER = "Json-Web-Token";
+
+    /**
      * Adresa sajta koji je kreirao token
      */
     public static final String ISSUER = "http://localhost:8080";
@@ -55,7 +60,7 @@ public class SecurityConfig {
      *     Server Error)</li>
      * </ol>
      *
-     * @param token JSON Web Token (JWT) za koji se proverava pristupa resursu
+     * @param jwt JSON Web Token (JWT) za koji se proverava pristupa resursu
      * @param authorizedRoles lista svih tipova naloga kojima je dozvoljen pristup datom resursu
      * @return vraca se {@link org.springframework.http.ResponseEntity} sa objekatom tipa Model u kome se
      * nalazi JWT i odgovarajuci HTTP status
@@ -72,7 +77,7 @@ public class SecurityConfig {
             /* check if user is authenticated or not */
             if( jwt == null || jwt == "" ) {
                 role = Role.VISITOR;
-                LOGGER.debug("checkAccess | JWT not found. User role set to visitor " );
+                LOGGER.info("checkAccess | JWT not found. User role set to visitor" );
             }
             else {
                 Claims claims = decodeJWT(jwt);
@@ -90,7 +95,7 @@ public class SecurityConfig {
                 try {
                     String roleString = (String) roleClaim;
                     role = Role.valueOf( roleString.toUpperCase() );
-                    LOGGER.debug("checkAccess | found role inside JWT token: " + role);
+                    LOGGER.info("checkAccess | found role inside JWT token: " + role);
                 }
                 catch ( IllegalArgumentException | NullPointerException e ) {
                     LOGGER.error("checkAccess | an error occurred while extracting role from the token" );
@@ -166,7 +171,7 @@ public class SecurityConfig {
     }
 
     /**
-     * Prima JSON Web Token u obliku stringa, dekodira ga i vraca njegov sadrzaj ukoliko se uspesno dekodira uz pomoc
+     * Prima JSON Web Token string, dekodira ga i vraca njegov sadrzaj ukoliko se uspesno dekodira uz pomoc
      * kljuca, u suprotnom baca odgovarajuce izuzetke
      *
      * @param jwt JSON Web Token primljen od strane klijenta

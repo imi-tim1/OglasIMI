@@ -4,6 +4,7 @@ import com.tim1.oglasimi.model.Employer;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.EmployerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 
+import static com.tim1.oglasimi.security.SecurityConfig.JWT_CUSTOM_HTTP_HEADER;
 import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
 
 
@@ -57,12 +59,18 @@ public class EmployerController {
 
 
     @PostMapping
-    public ResponseEntity<String> register( @Valid @RequestBody Employer employer ) {
-        HttpStatus httpStatus = checkAccess( employer.getJwt(), Role.VISITOR ).getHttpStatus();
+    public ResponseEntity<String> register( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                            @Valid @RequestBody Employer employer ) {
+
+        HttpStatus httpStatus = checkAccess( jwt, Role.VISITOR ).getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
 
         if( httpStatus != HttpStatus.OK ) {
             return ResponseEntity
                     .status(httpStatus)
+                    .headers(responseHeaders)
                     .body( "You are not allowed to access this resource" );
         }
 
@@ -73,11 +81,13 @@ public class EmployerController {
         if( Objects.equals(resultMessage, "Successful") ) {
             return ResponseEntity
                     .status(HttpStatus.OK)
+                    .headers(responseHeaders)
                     .body(resultMessage);
         }
 
         return ResponseEntity
                 .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .headers(responseHeaders)
                 .body(resultMessage);
     }
 }

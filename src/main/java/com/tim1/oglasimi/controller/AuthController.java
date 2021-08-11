@@ -1,6 +1,5 @@
 package com.tim1.oglasimi.controller;
 
-import com.tim1.oglasimi.model.Model;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import org.springframework.http.HttpHeaders;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.tim1.oglasimi.security.SecurityConfig.JWT_CUSTOM_HTTP_HEADER;
 import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
 
 @RestController
@@ -18,7 +18,7 @@ import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
 public class AuthController {
 
     @GetMapping
-    public ResponseEntity<Model> checkAuth(@RequestHeader("json-web-token") String jwt) {
+    public ResponseEntity<?> checkAuth(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt) {
 
 
         ResultPair resultPair = checkAccess( jwt, Role.VISITOR, Role.EMPLOYER, Role.APPLICANT, Role.ADMIN );
@@ -29,7 +29,7 @@ public class AuthController {
         }
 
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("json-web-token", jwt);
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
 
         return ResponseEntity
                 .status(httpStatus)
