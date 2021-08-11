@@ -43,8 +43,13 @@ public class SecurityConfig {
      *     <li>ukoliko je sve ispravno vracaju se claim-ovi sadrzani unutar tokena kao i HTTP status kod 200 (OK)</li>
      *     <li>ukoliko je korisnik autentifikovan, ali njegov tip naloga nema dozvolu za pristup resursu vraca
      *     se HTTP status kod 403 (Forbidden)</li>
-     *     <li>ukoliko korisnik nema dozvolu da pristupi resursu, ako je token istekao ili ako je izmenjen od strane
-     *     korisnika vraca se HTTP status kod 401 (Unauthorized)</li>
+     *     <li>ukoliko korisnik:
+     *     <ul>
+     *         <li>nije autentifikovan</li>
+     *         <li>nema dozvolu da pristupi resursu</li>
+     *         <li>ima token koji je istekao</li>
+     *         <li>izmeni sadrzaj tokena</li>
+     *     </ul> vraca se HTTP status kod 401 (Unauthorized)</li>
      *     <li>ukoliko je zahtev neispravan vraca se HTTP status code 400 (Bad Request)</li>
      *     <li>ukoliko se dogodi neka nepredvidjena greska ili izuzetak vraca se HTTP status kod 500 (Internal
      *     Server Error)</li>
@@ -58,38 +63,44 @@ public class SecurityConfig {
      * @see Role
      * @see ResponseEntity
      */
-    public static ResultPair checkAccess(String token, Role... authorizedRoles) {
+     public static ResultPair checkAccess(String jwt, Role... authorizedRoles) {
         ResultPair resultPair = new ResultPair(null, HttpStatus.OK );
 
+        Role role;
+
         try {
-            Claims claims = decodeJWT(token);
-            LOGGER.debug("checkAccess | extracted JWT claims: " + claims);
+            /* check if user is authenticated or not */
+            if( jwt == null || jwt == "" ) {
+                role = Role.VISITOR;
+                LOGGER.debug("checkAccess | JWT not found. User role set to visitor " );
+            }
+            else {
+                Claims claims = decodeJWT(jwt);
+                LOGGER.debug("checkAccess | extracted JWT claims: " + claims);
 
-            Object roleClaim = claims.get( ROLE_CLAIM_NAME );
-            LOGGER.debug("checkAccess | extracted role claims: " + roleClaim);
+                Object roleClaim = claims.get(ROLE_CLAIM_NAME);
+                LOGGER.debug("checkAccess | extracted role claim: " + roleClaim);
 
-            if( roleClaim == null ) {
-                throw new UnsupportedJwtException("missing role claim");
+                /* check if token contains claim for a role */
+                if (roleClaim == null) {
+                    throw new UnsupportedJwtException("missing role claim");
+                }
+
+                /* extract role from the token */
+                try {
+                    String roleString = (String) roleClaim;
+                    role = Role.valueOf( roleString.toUpperCase() );
+                    LOGGER.debug("checkAccess | found role inside JWT token: " + role);
+                }
+                catch ( IllegalArgumentException | NullPointerException e ) {
+                    LOGGER.error("checkAccess | an error occurred while extracting role from the token" );
+                    throw e;
+                }
+
+                resultPair.setClaims( claims );
             }
 
-            /* check if endpoint is forbidden for all user types */
-            if( authorizedRoles.length == 0 ) {
-                resultPair.setHttpStatus( HttpStatus.FORBIDDEN );
-                return resultPair;
-            }
-
-            String roleString = (String) roleClaim;
-            try {
-                Role role = Role.valueOf( roleString.toUpperCase() );
-                LOGGER.debug("checkAccess | found role inside JWT token: " + role);
-                resultPair.setHttpStatus( role.checkAuthorization(authorizedRoles) );
-            }
-            catch ( IllegalArgumentException | NullPointerException e ) {
-                LOGGER.error("checkAccess | authorization check has failed" );
-                throw e;
-            }
-
-            resultPair.setClaims( claims );
+            resultPair.setHttpStatus( role.checkAuthorization(authorizedRoles) );
         }
         catch ( ExpiredJwtException | SignatureException e ) {
             LOGGER.warn("checkAccess | received JWT is invalid", e );
@@ -115,6 +126,7 @@ public class SecurityConfig {
      * Prihvata id korisnika i njegov role i od njih pravi JWT uz pomoc overload-ovanog metoda
      * <p>
      * Issuer i maksimalno trajanje JWT-a se postavljaju na podrazumevane vrednosti koje su definisane kao konstante
+     *
      * @param uid korisnicki id
      * @param role tip korisnickog naloga
      * @return JSON Web Token (JWT) sa dodaim claim-ovima za id i tip korisnickog naloga
@@ -122,11 +134,13 @@ public class SecurityConfig {
     public static String createJWT(int uid, String role) {
         return createJWT(uid, ISSUER, TIME_TO_LIVE_MILLS, role );
     }
+
     /**
      * Prihvata id korisnika, njegov role, issuer-a, i maksimalno vreme trajanja tokena i na osnovu tih podataka
      * pravi JWT
      * <p>
      * Koristi HS256 alogritam za sifrovanje signature JWT-a i Base64url za kodiranje header-a i payload-a
+     *
      * @param uid korisnicki id
      * @param issuer adresa sajta (URL) koji je kreirao token
      * @param timeToLiveMills maksimalno vreme trajanja tokena u milisekundama

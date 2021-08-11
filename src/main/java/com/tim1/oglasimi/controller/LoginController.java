@@ -3,6 +3,7 @@ package com.tim1.oglasimi.controller;
 import com.tim1.oglasimi.model.LoginCredentials;
 import com.tim1.oglasimi.model.LoginResponse;
 import com.tim1.oglasimi.model.Model;
+import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+
+import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
 
 @RestController
 @RequestMapping("/api/login")
@@ -54,23 +57,20 @@ public class LoginController {
      */
     @PostMapping
     public ResponseEntity<Model> login( @Valid @RequestBody LoginCredentials loginCredentials) {
+        HttpStatus httpStatus = checkAccess( loginCredentials.getJwt(), Role.VISITOR ).getHttpStatus();
 
-        String jwt = loginCredentials.getJwt();
         Model returnModel = new Model();
-
-        // check if authenticated user send the request
-        if(  jwt != null && jwt != "" ) {
+        if(  httpStatus != HttpStatus.OK ) {
             returnModel.setJwt( loginCredentials.getJwt() );
 
             return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
+                    .status(httpStatus)
                     .body( returnModel );
         }
 
         LoginResponse loginResponse = loginService.checkLoginCredentials( loginCredentials );
 
         /* determinate which HTTP status should be returned */
-        HttpStatus httpStatus = HttpStatus.OK;
         if( loginResponse == null ) {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }

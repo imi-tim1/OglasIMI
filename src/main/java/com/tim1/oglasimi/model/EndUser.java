@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.validation.constraints.*;
 
-@JsonIgnoreProperties({"id", "jwt"})
+@JsonIgnoreProperties({"id"})
 public class EndUser extends User {
     @Max( Integer.MAX_VALUE )
     private int id;

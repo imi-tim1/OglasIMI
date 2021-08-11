@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
 public enum Role {
+    VISITOR,
     APPLICANT,
     EMPLOYER,
     ADMIN;
@@ -14,7 +15,8 @@ public enum Role {
     /**
      * Proverava da li se dati tip korisnickog naloga nalazi u listi autorizovanih naloga za pristup odredjenom resursu
      * @param authorizedRoles lista autorizovanih naloga
-     * @return vraca HTTP status kod 200 (OK) ukoliko jeste autorizovan, u suprotnom vraca 403 (Forbidden)
+     * @return vraca HTTP status kod 200 (OK) ukoliko jeste autorizovan, u suprotnom vraca 401 (Unautorized) za
+     * neautentifikovanog korisnika ili 403 (Forbidden) za autentifikovanog korisnika
      * @see Role#equalsTo(Object)
      */
     public HttpStatus checkAuthorization( Role[] authorizedRoles ) {
@@ -26,6 +28,10 @@ public enum Role {
         }
 
         LOGGER.info("checkAuthorization | user is not authorized");
+        if( this.equalsTo( Role.VISITOR )) {
+            return HttpStatus.UNAUTHORIZED;
+        }
+
         return HttpStatus.FORBIDDEN;
     }
 

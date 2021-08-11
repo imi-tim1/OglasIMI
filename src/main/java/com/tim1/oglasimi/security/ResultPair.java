@@ -30,4 +30,12 @@ public class ResultPair {
     public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
     }
+
+    @Override
+    public String toString() {
+        return "ResultPair{" +
+                "claims=" + claims +
+                ", httpStatus=" + httpStatus +
+                '}';
+    }
 }

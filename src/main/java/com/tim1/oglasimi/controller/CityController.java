@@ -32,7 +32,7 @@ public class CityController
     @GetMapping
     public ResponseEntity<List<City>> getAllCities(@RequestBody Model model)
     {
-        ResultPair resultPair = checkAccess( model.getJwt(), Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
+        ResultPair resultPair = checkAccess( model.getJwt(), Role.VISITOR, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
         if(httpStatus == HttpStatus.OK)
