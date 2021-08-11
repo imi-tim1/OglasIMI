@@ -1,8 +1,20 @@
 package com.tim1.oglasimi.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Employer extends EndUser {
+
+    @NotNull
+    @Size( min = 1, max = 30)
     private String name;
+
+    @NotNull
+    @Size( min = 1, max = 50 )
     private String address;
+
+    @NotNull
+    @Size( min = 9, max = 20 )
     private String tin;
 
     public Employer() {

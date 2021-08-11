@@ -22,6 +22,7 @@ public class EmployerService {
             return "Successful";
         }
 
-        return "This email is already in use!";
+        return "This email address is already in use!";
     }
 }
+

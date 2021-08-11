@@ -2,12 +2,29 @@ package com.tim1.oglasimi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.validation.constraints.*;
+
 @JsonIgnoreProperties({"id", "jwt"})
-public class EndUser extends Model {
+public class EndUser extends User {
+    @Max( Integer.MAX_VALUE )
     private int id;
+
+    @NotBlank
+    @NotNull
+    @Email( message = "Email address is not valid" )
     private String email;
+
+    @NotNull
+    @NotBlank
+    @Size( max = 300, message = "Hashed password length exceeded maximum allowed length" )
     private String hashedPassword;
+
+    @Size( min = 5000, max = 65000,
+            message = "The length for base64 encoded picture must be between 10000 and 65000 characters" )
     private String pictureBase64;
+
+    @NotNull
+    @Size( min = 9, max = 30, message = "The length for phone number must be between 9 and 30 characters" )
     private String phoneNumber;
 
     public EndUser() {

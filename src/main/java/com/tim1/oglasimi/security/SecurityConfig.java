@@ -17,6 +17,9 @@ import java.util.Date;
 public class SecurityConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 
+    /**
+     * Adresa sajta koji je kreirao token
+     */
     public static final String ISSUER = "http://localhost:8080";
 
     /**
