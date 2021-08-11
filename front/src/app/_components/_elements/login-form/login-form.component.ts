@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { LoginHttpService } from 'src/app/_utilities/_api/_services/login-http.service';
+import { LoginApiService } from 'src/app/_utilities/_api/_services/login-api.service';
 
 @Component({
   selector: 'app-login-form',
@@ -14,13 +14,13 @@ export class LoginFormComponent implements OnInit {
   @Input() public email: string = '';
   @Input() public password: string = '';
 
-  constructor(private http: LoginHttpService) { }
+  constructor(private loginApi: LoginApiService) { }
 
   ngOnInit(): void {
   }
 
   onSubmit() {
-    let requestBody: LoginHttpService.Request = {
+    let requestBody: LoginApiService.Request = {
       jwt: '',                      // Potrebno je izvuci jwt sa local storage-a !!!! Ovo je za test
       email: this.email,
       hashedPassword: this.password // Potrebna je hesirana srfra !!!! Ovo je za test
@@ -28,7 +28,7 @@ export class LoginFormComponent implements OnInit {
 
     console.log('Kredencijali\n' + requestBody);
 
-    this.http.login(requestBody).subscribe(
+    this.loginApi.login(requestBody).subscribe(
       // Login Success
       (response) => {
         this.loginFailed = false;
@@ -41,7 +41,7 @@ export class LoginFormComponent implements OnInit {
           this.loginFailed = true;
         }
         if (HttpStatusCode.Forbidden == error.status) {
-          
+
         }
       }
     );

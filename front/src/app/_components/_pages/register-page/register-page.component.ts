@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ComponentAccessService } from 'src/app/_utilities/_auth/component-access.service';
 
 @Component({
   selector: 'app-register-page',
@@ -6,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegisterPageComponent implements OnInit {
 
-  constructor() { }
+  public allowedRoles: string[] = [];
+
+  constructor(private compAccess: ComponentAccessService) { }
 
   ngOnInit(): void {
+    this.compAccess.checkAccess([]);
   }
 
 }

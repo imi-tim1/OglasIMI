@@ -7,20 +7,20 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 
-export class LoginHttpService
+export class LoginApiService
 {
   private url: string = apiProperties.url + '/api/login';
 
   constructor(private http: HttpClient) { }
 
-  login(body: LoginHttpService.Request): Observable<LoginHttpService.Response> {
-    return this.http.post<LoginHttpService.Response>(this.url, body);
+  login(body: LoginApiService.Request): Observable<LoginApiService.Response> {
+    return this.http.post<LoginApiService.Response>(this.url, body);
   }
 }
 
 // Interfejsi
 
-export namespace LoginHttpService 
+export namespace LoginApiService
 {
     export interface Request {
       jwt: string;
