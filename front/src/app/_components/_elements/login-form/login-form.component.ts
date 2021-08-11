@@ -40,6 +40,9 @@ export class LoginFormComponent implements OnInit {
         if (HttpStatusCode.Unauthorized == error.status) {
           this.loginFailed = true;
         }
+        if (HttpStatusCode.Forbidden == error.status) {
+          
+        }
       }
     );
   }

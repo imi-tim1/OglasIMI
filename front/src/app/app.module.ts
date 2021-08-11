@@ -13,6 +13,7 @@ import { RegisterPageComponent } from './_components/_pages/register-page/regist
 import { ApplicantRegisterFormComponent } from './_components/_elements/applicant-register-form/applicant-register-form.component';
 import { EmployerRegisterFormComponent } from './_components/_elements/employer-register-form/employer-register-form.component';
 import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { HomePageComponent } from './_components/_pages/home-page/home-page.comp
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]
