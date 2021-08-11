@@ -3,14 +3,16 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './pages/login/login.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
+import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
+import { NavbarComponent } from './_components/_elements/navbar/navbar.component';
+import { FooterComponent } from './_components/_elements/footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    NavbarComponent
+    LoginPageComponent,
+    NavbarComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

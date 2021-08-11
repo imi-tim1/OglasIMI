@@ -1,0 +1,12 @@
+> components     # angular komponente
+    > elements       # elementi stranica
+    > pages          # zasebne stranice
+
+> globals        # globalni objekti i promenljive (konstante)
+
+> utilities      # pomocne korisne skripte
+    > api            # sve vezano za komunikaciju sa backendom
+    > token      ?
+    > auth       ?
+
+

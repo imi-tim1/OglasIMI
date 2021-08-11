@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ $1 == "p" ]]
+then
+    echo "new page:" $2
+    ng generate component _components/_pages/$2 --skip-tests --style none
+elif [[ $1 == "e" ]]
+then
+    echo "new element:" $2
+    ng generate component _components/_elements/$2 --skip-tests --style none
+fi
