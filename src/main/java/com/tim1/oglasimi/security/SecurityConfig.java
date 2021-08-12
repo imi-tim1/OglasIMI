@@ -50,8 +50,7 @@ public class SecurityConfig {
      *     se HTTP status kod 403 (Forbidden)</li>
      *     <li>ukoliko korisnik:
      *     <ul>
-     *         <li>nije autentifikovan</li>
-     *         <li>nema dozvolu da pristupi resursu</li>
+     *         <li>pristupi resursu za koji potrebna autentifikacija</li>
      *         <li>ima token koji je istekao</li>
      *         <li>izmeni sadrzaj tokena</li>
      *     </ul> vraca se HTTP status kod 401 (Unauthorized)</li>

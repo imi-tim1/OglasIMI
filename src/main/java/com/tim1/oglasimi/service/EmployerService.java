@@ -35,5 +35,9 @@ public class EmployerService {
     public Employer getEmployer(int id) {
         return employerRepositoryImpl.get(id);
     }
+
+    public boolean approveEmployer(int id) {
+        return employerRepositoryImpl.approve(id);
+    }
 }
 

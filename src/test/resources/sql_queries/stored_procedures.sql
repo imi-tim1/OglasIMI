@@ -181,3 +181,27 @@ BEGIN
 END //
 DELIMITER ;
 -- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for approving user registration
+DELIMITER // ;
+CREATE PROCEDURE approve_user(
+    IN p_id INT,
+    OUT p_approved_successfully BOOLEAN
+)
+BEGIN
+    SET p_approved_successfully = FALSE;
+
+    UPDATE user
+    SET approved = TRUE
+    WHERE id = p_id AND approved = FALSE;
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_approved_successfully = TRUE;
+    END IF;
+END //
+DELIMITER ;
+-- #######################################################################

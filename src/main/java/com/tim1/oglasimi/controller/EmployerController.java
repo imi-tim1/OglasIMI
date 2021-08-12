@@ -84,7 +84,7 @@ public class EmployerController {
         }
 
         return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .status(HttpStatus.CONFLICT)
                 .headers(responseHeaders)
                 .body(resultMessage);
     }
@@ -95,7 +95,9 @@ public class EmployerController {
                                                  @PathVariable("id")
                                                  @Min( 1 )
                                                  @Max( Integer.MAX_VALUE ) int id ) {
-        HttpStatus httpStatus = checkAccess(jwt, Role.VISITOR).getHttpStatus();
+        HttpStatus httpStatus = checkAccess(
+                jwt, Role.VISITOR, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN
+        ).getHttpStatus();
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
@@ -119,4 +121,36 @@ public class EmployerController {
                 .body( employer );
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<Employer> approveEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                 @PathVariable("id")
+                                                 @Min( 1 )
+                                                 @Max( Integer.MAX_VALUE ) int id ) {
+
+        HttpStatus httpStatus = checkAccess( jwt, Role.ADMIN ).getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK ) {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( null );
+        }
+
+        boolean isSuccessful = employerService.approveEmployer(id);
+
+        if( isSuccessful ) {
+            httpStatus = HttpStatus.NO_CONTENT;
+        }
+        else {
+            httpStatus = HttpStatus.CONFLICT;
+        }
+
+        return ResponseEntity
+                .status(httpStatus)
+                .headers(responseHeaders)
+                .body( null );
+    }
 }

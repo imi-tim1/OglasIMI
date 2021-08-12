@@ -15,6 +15,7 @@ call check_credentials( 'pera@wuiii.com',
 SELECT @user_id, @are_valid,  @is_approved, @role;
 //
 DELIMITER ;
+--
 
 
 -- test call for procedure check_credentials #2 valid creds & approved; role employer
@@ -29,7 +30,7 @@ CALL check_credentials( 'mika@yahoo.rs',
 SELECT @user_id, @valid_creds,  @is_approved, @role;
 //
 DELIMITER ;
-
+--
 
 
 -- test call for procedure check_credentials #3 invalid creds
@@ -45,6 +46,7 @@ SELECT @user_id, @valid_creds,  @is_approved, @role;
 //
 DELIMITER ;
 -- #######################################################################
+
 
 
 -- #######################################################################
@@ -112,6 +114,28 @@ SELECT user_id, email, approved, name, hashed_password
 FROM credentials c
          JOIN user u on u.id = c.user_id
          JOIN role r on r.id = u.role_id;
+//
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- approve_user
+
+-- test call for procedure approve_user #1 successfully approved
+DELIMITER // ;
+CALL approve_user(3, @approved_successfully);
+SELECT @approved_successfully 'Is successfully approved?'
+//
+DELIMITER ;
+--
+
+
+-- test call for procedure approve_user #2 unsuccessfully approved; user is already approved
+DELIMITER // ;
+CALL approve_user(1, @approved_successfully);
+SELECT @approved_successfully 'Is successfully approved?'
 //
 DELIMITER ;
 -- #######################################################################
