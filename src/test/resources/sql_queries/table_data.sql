@@ -53,13 +53,17 @@ values ('Kragujevac'),
        ('Vranje'),
        ('Leskovac');
 
-insert into job (employer_id, field_id, post_date, title, description, city_id, salary, work_from_home)
-values (4, 2, '2021-05-03 02:36:54.480', 'C Senior Dev', 'Opis1', 1, '1500 - 2000 € (Mesecno)' , false),
-       (4, 2, '2021-03-05 05:38:20.420', 'Remote Contract C++ Game Engineer', 'Opis2', 2, '3000 € (Mesecno)', true),
-       (5, 1, '2021-06-08 01:15:8.360', 'Bastovan', 'Opis3', 1, '300,000 RSD (Godisnje)', false);
+insert into job (employer_id, field_id, city_id, post_date, title, description, salary, work_from_home)
+values (4, 2, 1, '2021-05-03 02:36:54.480', 'C Senior Dev', 'Opis1', '1500 - 2000 € (Mesecno)' , false),
+       (4, 2, null, '2021-03-05 05:38:20.420', 'Remote Contract C++ Game Engineer', 'Opis2', '3000 € (Mesecno)', true),
+       (5, 1, 1, '2021-06-08 01:15:8.360', 'Bastovan', 'Opis3', '300,000 RSD (Godisnje)', false),
+       (5, 1, 3, '2021-02-01 03:20:8.360', 'Prodavac buketa', 'Opis4', '500,000 RSD (Godisnje)', false),
+       (4, 2, null, '2021-02-11 08:38:20.420', 'JS Dev', 'Opis5', '800 € (Mesecno)', true),
+       (4, 2, 2, '2021-03-05 12:23:18.520', 'Python Dev', 'Opis6', '1800 - 2000 € (Mesecno)', false);
 
 insert into job_tag (job_id, tag_id)
 values (1, 1),
+       (1, 2),
        (2, 4),
        (3, 6),
        (3, 7),
@@ -70,10 +74,3 @@ values (1, 3, '2021-05-08 00:26:13.500'),
        (2, 3, '2021-08-02 09:12:15.220'),
        (3, 2, '2021-11-05 11:25:8.260'),
        (3, 3, '2021-07-08 07:36:2.420');
-
-
-
-
-
-
-
