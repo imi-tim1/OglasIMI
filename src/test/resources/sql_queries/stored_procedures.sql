@@ -164,3 +164,20 @@ BEGIN
 END //
 DELIMITER ;
 -- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for getting an employer
+DELIMITER // ;
+CREATE PROCEDURE get_employer(
+    IN p_id INT
+)
+BEGIN
+    SELECT e.user_id, e.name, e.tin, e.address, e.picture_base64, e.phone_number, c.email
+    FROM employer e
+             JOIN credentials c on e.user_id = c.user_id
+    WHERE e.user_id = p_id;
+END //
+DELIMITER ;
+-- #######################################################################

@@ -31,5 +31,9 @@ public class EmployerService {
         return employerRepositoryImpl.getAll();
 
     }
+
+    public Employer getEmployer(int id) {
+        return employerRepositoryImpl.get(id);
+    }
 }
 

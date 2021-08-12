@@ -1,8 +1,10 @@
 package com.tim1.oglasimi.model;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 public class User {
+    @Min( 1 )
     @Max( Integer.MAX_VALUE )
     private int id;
 

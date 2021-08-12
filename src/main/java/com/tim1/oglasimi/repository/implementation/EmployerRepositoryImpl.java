@@ -16,8 +16,9 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployerRepositoryImpl.class);
 
-    private static final String REGISTER_STORED_PROCEDURE_CALL = "{call register_employer(?,?,?,?,?,?,?,?)}";
-    private static final String GET_ALL_STORED_PROCEDURE_CALL = "{call get_all_employers()}";
+    private static final String REGISTER_EMPLOYER_PROCEDURE_CALL = "{call register_employer(?,?,?,?,?,?,?,?)}";
+    private static final String GET_ALL_EMPLOYERS_PROCEDURE_CALL = "{call get_all_employers()}";
+    private static final String GET_EMPLOYER_PROCEDURE_CALL = "{call get_employer(?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -35,7 +36,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
         try (
                 Connection con = DriverManager.getConnection(
                         databaseSourceUrl, databaseUsername, databasePassword );
-                CallableStatement cstmt = con.prepareCall( GET_ALL_STORED_PROCEDURE_CALL) ) {
+                CallableStatement cstmt = con.prepareCall(GET_ALL_EMPLOYERS_PROCEDURE_CALL) ) {
 
 
             ResultSet resultSet = cstmt.executeQuery();
@@ -70,7 +71,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
         try (
                 Connection con = DriverManager.getConnection(
                         databaseSourceUrl, databaseUsername, databasePassword );
-                CallableStatement cstmt = con.prepareCall( REGISTER_STORED_PROCEDURE_CALL) ) {
+                CallableStatement cstmt = con.prepareCall(REGISTER_EMPLOYER_PROCEDURE_CALL) ) {
 
             cstmt.setString("p_email", employer.getEmail() );
             cstmt.setString("p_hashed_password", employer.getHashedPassword() );
@@ -94,8 +95,36 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     }
 
     @Override
-    public Employer get(Integer integer) {
-        return null;
+    public Employer get(Integer id) {
+        Employer employer = null;
+
+        try (
+                Connection con = DriverManager.getConnection(
+                        databaseSourceUrl, databaseUsername, databasePassword );
+                CallableStatement cstmt = con.prepareCall(GET_EMPLOYER_PROCEDURE_CALL) ) {
+
+            cstmt.setInt("p_id", id);
+            ResultSet resultSet = cstmt.executeQuery();
+
+            if( resultSet.first() ) {
+                employer = new Employer(
+                        resultSet.getInt("user_id"),
+                        resultSet.getString("email"),
+                        null,
+                        resultSet.getString("picture_base64"),
+                        resultSet.getString("phone_number"),
+                        resultSet.getString("name"),
+                        resultSet.getString("address"),
+                        resultSet.getString("tin")
+                );
+            }
+
+        } catch ( SQLException e ) {
+            LOGGER.error("getAll | An error occurred while communicating with a database", e );
+            e.printStackTrace();
+        }
+
+        return employer;
     }
 
     @Override

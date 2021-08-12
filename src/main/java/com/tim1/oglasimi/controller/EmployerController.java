@@ -11,6 +11,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +47,7 @@ public class EmployerController {
                     .body( new ArrayList<Employer>() );
         }
 
-        
+
         List<Employer> employers = employerService.getAllEmployers();
 
          return ResponseEntity
@@ -76,7 +78,7 @@ public class EmployerController {
         /* null-safe check if registration was successful or not */
         if( Objects.equals(resultMessage, "Successful") ) {
             return ResponseEntity
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.CREATED)
                     .headers(responseHeaders)
                     .body(resultMessage);
         }
@@ -86,4 +88,35 @@ public class EmployerController {
                 .headers(responseHeaders)
                 .body(resultMessage);
     }
+
+
+    @GetMapping("{id}")
+    public ResponseEntity<Employer> getEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                 @PathVariable("id")
+                                                 @Min( 1 )
+                                                 @Max( Integer.MAX_VALUE ) int id ) {
+        HttpStatus httpStatus = checkAccess(jwt, Role.VISITOR).getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK ) {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( null );
+        }
+
+        Employer employer = employerService.getEmployer(id);
+
+        if( employer == null ) {
+            httpStatus = HttpStatus.NOT_FOUND;
+        }
+
+        return ResponseEntity
+                .status(httpStatus)
+                .headers(responseHeaders)
+                .body( employer );
+    }
+
 }
