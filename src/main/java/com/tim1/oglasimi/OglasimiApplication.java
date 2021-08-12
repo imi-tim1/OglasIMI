@@ -43,5 +43,4 @@ public class OglasimiApplication {
 
 		return new CorsFilter(urlBasedCorsConfigurationSource);
 	}
-
 }

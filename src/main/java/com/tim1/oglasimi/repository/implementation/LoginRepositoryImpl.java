@@ -78,7 +78,7 @@ public class LoginRepositoryImpl implements LoginRepository {
             );
 
         } catch ( SQLException e ) {
-            LOGGER.debug("checkCredentials | An error occurred while communicating with a database" );
+            LOGGER.error("checkCredentials | An error occurred while communicating with a database" );
             e.printStackTrace();
         }
 

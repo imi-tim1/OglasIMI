@@ -1,1 +1,61 @@
-<p>jobs-filters works!</p>
+<input type="text" id="jobName" name="jobName" [(ngModel)]="jobName" placeholder="Radno mesto (pozicija)">
+<br><br>
+
+<div class="dropdown">
+    <button class="dropbtn">Oblast rada</button>
+    <div class="dropdown-content">
+      <a>Link 1</a>
+      <a>Link 2</a>
+      <a>Link 3</a>
+    </div>
+</div> 
+<br><br>
+
+<div class="dropdown">
+    <button class="dropbtn">Grad</button>
+    <div class="dropdown-content">
+      <a>Link 1</a>
+      <a>Link 2</a>
+      <a>Link 3</a>
+    </div>
+</div> 
+<br><br>
+
+<button id="search" (click)="onSearch()">Pretraga</button>
+<br><br>
+
+<button id="showMore" (click)="showMore()">Prikaži još filtera</button>
+<br><br>
+
+<form *ngIf="showMoreFilters">
+  <div class="dropdown">
+    <button class="dropbtn">Poslodavac</button>
+    <div class="dropdown-content">
+      <a>Link 1</a>
+      <a>Link 2</a>
+      <a>Link 3</a>
+    </div>
+  </div> 
+  <br><br>
+
+  <div id="list1" class="dropdown-check-list" tabindex="100">
+    <span class="anchor">Pretražite ključne reči: </span>
+    <ul class="items">
+      <li><input type="checkbox"> Apple </li>
+      <li><input type="checkbox"> Orange</li>
+      <li><input type="checkbox"> Grapes </li>
+      <li><input type="checkbox"> Berry </li>
+      <li><input type="checkbox"> Mango </li>
+      <li><input type="checkbox"> Banana </li>
+      <li><input type="checkbox"> Tomato</li>
+    </ul>
+  </div>
+
+  <br>
+
+  <label for="workFromHome">Rad od kuće:&nbsp;&nbsp;</label>
+  <input type="checkbox" id="workFromHome" name="workFromHome" 
+        [(ngModel)]="workFromHome">
+
+  <br><br>
+</form>

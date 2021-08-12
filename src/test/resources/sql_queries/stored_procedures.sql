@@ -33,7 +33,6 @@ BEGIN
     LIMIT 1;
 END //
 DELIMITER ;
-
 -- #######################################################################
 
 
@@ -151,3 +150,123 @@ leave_label:BEGIN
 END //
 DELIMITER ;
 -- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for getting list of all employers
+DELIMITER // ;
+CREATE PROCEDURE get_all_employers()
+BEGIN
+    SELECT e.user_id, e.name, e.tin, e.address, e.picture_base64, e.phone_number, c.email
+    FROM employer e
+        JOIN credentials c on e.user_id = c.user_id;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for getting an employer
+DELIMITER // ;
+CREATE PROCEDURE get_employer(
+    IN p_id INT
+)
+BEGIN
+    SELECT e.user_id, e.name, e.tin, e.address, e.picture_base64, e.phone_number, c.email
+    FROM employer e
+             JOIN credentials c on e.user_id = c.user_id
+    WHERE e.user_id = p_id;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for approving user registration
+DELIMITER // ;
+CREATE PROCEDURE approve_user(
+    IN p_id INT,
+    OUT p_approved_successfully BOOLEAN
+)
+BEGIN
+    SET p_approved_successfully = FALSE;
+
+    UPDATE user
+    SET approved = TRUE
+    WHERE id = p_id AND approved = FALSE;
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_approved_successfully = TRUE;
+    END IF;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for job-tag checking
+DELIMITER // ;
+CREATE PROCEDURE get_job_tag_filter
+(
+    IN p_employer_id int,
+    IN p_field_id int,
+    IN p_city_id int,
+    IN p_title varchar(30),
+    IN p_work_from_home boolean
+)
+BEGIN
+    SELECT J.id job_id, T.id tag_id
+    FROM (SELECT j.*,
+                 f.id f_id, f.name f_name,
+                 c.id c_id, c.name c_name,
+                 e.user_id, e.name e_name, e.tin, e.address, e.picture_base64,e.phone_number
+          from job j left join field f on j.field_id = f.id
+                     left join city c on c.id = j.city_id
+                     left join employer e on e.user_id = j.employer_id
+          WHERE
+              (p_field_id = 0 OR p_field_id = field_id)
+            AND (p_employer_id = 0 OR p_employer_id = employer_id)
+            AND (p_city_id = 0 OR p_city_id = city_id)
+            AND (p_title is NULL OR title RLIKE(CONCAT(p_title,'+')))
+            AND (p_work_from_home = false OR p_work_from_home = work_from_home)) J join job_tag JT ON J.id = job_id
+                                                                                   join tag T ON tag_id = T.id
+    ORDER BY post_date DESC;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Main procedure for getting filtered jobs
+DELIMITER // ;
+CREATE PROCEDURE get_job_common_filter
+(
+    IN p_employer_id int,
+    IN p_field_id int,
+    IN p_city_id int,
+    IN p_title varchar(30),
+    IN p_work_from_home boolean
+)
+BEGIN
+    SELECT j.*,
+           f.id f_id, f.name f_name,
+           c.id c_id, c.name c_name,
+           e.user_id, e.name e_name, e.tin, e.address, e.picture_base64,e.phone_number
+    from job j left join field f on j.field_id = f.id
+               left join city c on c.id = j.city_id
+               left join employer e on e.user_id = j.employer_id
+    WHERE
+        (p_field_id = 0 OR p_field_id = field_id)
+      AND (p_employer_id = 0 OR p_employer_id = employer_id)
+      AND (p_city_id = 0 OR p_city_id = city_id)
+      AND (p_title is NULL OR title RLIKE(CONCAT(p_title,'+')))
+      AND (p_work_from_home = false OR p_work_from_home = work_from_home)
+    ORDER BY post_date DESC;
+END //
+DELIMITER ;

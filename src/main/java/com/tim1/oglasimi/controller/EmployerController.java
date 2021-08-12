@@ -11,6 +11,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,30 +34,25 @@ public class EmployerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Employer>> getEmployerList(@Valid @RequestBody Employer employer ) {
+    public ResponseEntity<List<Employer>> getEmployerList( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt ) {
+        HttpStatus httpStatus = checkAccess( jwt, Role.VISITOR ).getHttpStatus();
 
-        /*String jwt = employer.getJwt();
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
 
-        // check if user is already authenticated
-        if(  jwt != null && jwt != "" ) {
+        if( httpStatus != HttpStatus.OK ) {
             return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body( "You are not allowed to access this resource" );
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( new ArrayList<Employer>() );
         }
 
-        String resultMessage = employerService.registerEmployer( employer );*/
 
-        /* null-safe check if registration was successful or not */
-        /*if( Objects.equals(resultMessage, "Successful") ) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(resultMessage);
-        }
+        List<Employer> employers = employerService.getAllEmployers();
 
-        return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(resultMessage);*/
-        return null;
+         return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(employers);
     }
 
 
@@ -80,14 +78,79 @@ public class EmployerController {
         /* null-safe check if registration was successful or not */
         if( Objects.equals(resultMessage, "Successful") ) {
             return ResponseEntity
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.CREATED)
                     .headers(responseHeaders)
                     .body(resultMessage);
         }
 
         return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .status(HttpStatus.CONFLICT)
                 .headers(responseHeaders)
                 .body(resultMessage);
+    }
+
+
+    @GetMapping("{id}")
+    public ResponseEntity<Employer> getEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                 @PathVariable("id")
+                                                 @Min( 1 )
+                                                 @Max( Integer.MAX_VALUE ) int id ) {
+        HttpStatus httpStatus = checkAccess(
+                jwt, Role.VISITOR, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN
+        ).getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK ) {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( null );
+        }
+
+        Employer employer = employerService.getEmployer(id);
+
+        if( employer == null ) {
+            httpStatus = HttpStatus.NOT_FOUND;
+        }
+
+        return ResponseEntity
+                .status(httpStatus)
+                .headers(responseHeaders)
+                .body( employer );
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Employer> approveEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                 @PathVariable("id")
+                                                 @Min( 1 )
+                                                 @Max( Integer.MAX_VALUE ) int id ) {
+
+        HttpStatus httpStatus = checkAccess( jwt, Role.ADMIN ).getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK ) {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( null );
+        }
+
+        boolean isSuccessful = employerService.approveEmployer(id);
+
+        if( isSuccessful ) {
+            httpStatus = HttpStatus.NO_CONTENT;
+        }
+        else {
+            httpStatus = HttpStatus.CONFLICT;
+        }
+
+        return ResponseEntity
+                .status(httpStatus)
+                .headers(responseHeaders)
+                .body( null );
     }
 }

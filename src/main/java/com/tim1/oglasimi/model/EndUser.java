@@ -1,14 +1,13 @@
 package com.tim1.oglasimi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-@JsonIgnoreProperties({"id"})
 public class EndUser extends User {
-    @Max( Integer.MAX_VALUE )
-    private int id;
-
     @NotBlank
     @NotNull
     @Email( message = "Email address is not valid" )
@@ -36,19 +35,13 @@ public class EndUser extends User {
             String hashedPassword,
             String pictureBase64,
             String phoneNumber) {
+        super(id);
         this.email = email;
         this.hashedPassword = hashedPassword;
         this.pictureBase64 = pictureBase64;
         this.phoneNumber = phoneNumber;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;
@@ -58,6 +51,7 @@ public class EndUser extends User {
         this.email = email;
     }
 
+    @JsonIgnore
     public String getHashedPassword() {
         return hashedPassword;
     }
@@ -85,7 +79,7 @@ public class EndUser extends User {
     @Override
     public String toString() {
         return "EndUser{" +
-                "id=" + id +
+                "id=" + super.getId() +
                 ", email='" + email + '\'' +
                 ", hashedPassword='" + hashedPassword + '\'' +
                 ", pictureBase64='" + pictureBase64 + '\'' +
