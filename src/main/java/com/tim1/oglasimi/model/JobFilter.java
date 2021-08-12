@@ -3,25 +3,30 @@ package com.tim1.oglasimi.model;
 public class JobFilter extends Job
 {
     private int pageNumber;
-    private boolean onlyMyJobs;
+    private int jobsPerPage;
+    private boolean ascendingOrder;
 
-    public int getPageNumber()
-    {
+    public int getPageNumber() {
         return pageNumber;
     }
 
-    public void setPageNumber(int pageNumber)
-    {
+    public void setPageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
     }
 
-    public boolean isOnlyMyJobs()
-    {
-        return onlyMyJobs;
+    public int getJobsPerPage() {
+        return jobsPerPage;
     }
 
-    public void setOnlyMyJobs(boolean onlyMyJobs)
-    {
-        this.onlyMyJobs = onlyMyJobs;
+    public void setJobsPerPage(int jobsPerPage) {
+        this.jobsPerPage = jobsPerPage;
+    }
+
+    public boolean isAscendingOrder() {
+        return ascendingOrder;
+    }
+
+    public void setAscendingOrder(boolean ascendingOrder) {
+        this.ascendingOrder = ascendingOrder;
     }
 }
