@@ -18,6 +18,7 @@ import { JobsListComponent } from './_components/_elements/jobs-list/jobs-list.c
 import { JobsFiltersComponent } from './_components/_elements/jobs-filters/jobs-filters.component';
 import { JobsListCardComponent } from './_components/_elements/jobs-list-card/jobs-list-card.component';
 import { JobsFeedComponent } from './_components/_elements/jobs-feed/jobs-feed.component';
+import { JobFiltersButtonComponent } from './_components/_elements/job-filters-button/job-filters-button.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { JobsFeedComponent } from './_components/_elements/jobs-feed/jobs-feed.c
     JobsListComponent,
     JobsFiltersComponent,
     JobsListCardComponent,
-    JobsFeedComponent
+    JobsFeedComponent,
+    JobFiltersButtonComponent
   ],
   imports: [
     BrowserModule,
