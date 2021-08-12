@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,30 +32,25 @@ public class EmployerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Employer>> getEmployerList(@Valid @RequestBody Employer employer ) {
+    public ResponseEntity<List<Employer>> getEmployerList( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt ) {
+        HttpStatus httpStatus = checkAccess( jwt, Role.VISITOR ).getHttpStatus();
 
-        /*String jwt = employer.getJwt();
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
 
-        // check if user is already authenticated
-        if(  jwt != null && jwt != "" ) {
+        if( httpStatus != HttpStatus.OK ) {
             return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body( "You are not allowed to access this resource" );
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( new ArrayList<Employer>() );
         }
 
-        String resultMessage = employerService.registerEmployer( employer );*/
+        
+        List<Employer> employers = employerService.getAllEmployers();
 
-        /* null-safe check if registration was successful or not */
-        /*if( Objects.equals(resultMessage, "Successful") ) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(resultMessage);
-        }
-
-        return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(resultMessage);*/
-        return null;
+         return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(employers);
     }
 
 

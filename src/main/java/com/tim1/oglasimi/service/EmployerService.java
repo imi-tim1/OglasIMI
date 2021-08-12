@@ -5,6 +5,8 @@ import com.tim1.oglasimi.repository.implementation.EmployerRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmployerService {
 
@@ -23,6 +25,11 @@ public class EmployerService {
         }
 
         return "This email address is already in use!";
+    }
+
+    public List<Employer> getAllEmployers() {
+        return employerRepositoryImpl.getAll();
+
     }
 }
 

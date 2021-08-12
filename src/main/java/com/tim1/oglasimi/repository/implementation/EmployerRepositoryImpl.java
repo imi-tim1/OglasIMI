@@ -8,13 +8,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.LinkedList;
 import java.util.List;
 
 @Repository
 public class EmployerRepositoryImpl implements EmployerRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployerRepositoryImpl.class);
+
     private static final String REGISTER_STORED_PROCEDURE_CALL = "{call register_employer(?,?,?,?,?,?,?,?)}";
+    private static final String GET_ALL_STORED_PROCEDURE_CALL = "{call get_all_employers()}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -27,7 +30,37 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 
     @Override
     public List<Employer> getAll() {
-        return null;
+        List<Employer> employers = new LinkedList<>();
+
+        try (
+                Connection con = DriverManager.getConnection(
+                        databaseSourceUrl, databaseUsername, databasePassword );
+                CallableStatement cstmt = con.prepareCall( GET_ALL_STORED_PROCEDURE_CALL) ) {
+
+
+            ResultSet resultSet = cstmt.executeQuery();
+
+            Employer tempEmployer;
+
+            while( resultSet.next() ) {
+                tempEmployer = new Employer();
+                tempEmployer.setId( resultSet.getInt("user_id") );
+                tempEmployer.setEmail( resultSet.getString("email") );
+                tempEmployer.setPictureBase64( resultSet.getString("picture_base64") );
+                tempEmployer.setPhoneNumber( resultSet.getString("phone_number") );
+                tempEmployer.setName( resultSet.getString("name") );
+                tempEmployer.setAddress( resultSet.getString("address") );
+                tempEmployer.setTin( resultSet.getString("tin") );
+
+                employers.add(tempEmployer);
+            }
+
+        } catch ( SQLException e ) {
+            LOGGER.error("getAll | An error occurred while communicating with a database", e );
+            e.printStackTrace();
+        }
+
+        return employers;
     }
 
     @Override

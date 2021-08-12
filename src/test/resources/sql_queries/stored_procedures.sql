@@ -151,3 +151,17 @@ leave_label:BEGIN
 END //
 DELIMITER ;
 -- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for getting list of all employers
+DELIMITER // ;
+CREATE PROCEDURE get_all_employers()
+BEGIN
+    SELECT e.user_id, e.name, e.tin, e.address, e.picture_base64, e.phone_number, c.email
+    FROM employer e
+        JOIN credentials c on e.user_id = c.user_id;
+END //
+DELIMITER ;
+-- #######################################################################
