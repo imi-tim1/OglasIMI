@@ -62,7 +62,12 @@ public class Employer extends EndUser {
     @Override
     public String toString() {
         return "Employer{" +
-                "name='" + name + '\'' +
+                "id=" + super.getId() +
+                ", email='" + super.getEmail() + '\'' +
+                ", hashedPassword='" + super.getHashedPassword() + '\'' +
+                ", pictureBase64='" + super.getPictureBase64() + '\'' +
+                ", phoneNumber='" + super.getPhoneNumber() + '\'' +
+                ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", tin='" + tin + '\'' +
                 '}';

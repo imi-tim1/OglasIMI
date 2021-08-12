@@ -77,7 +77,7 @@ public class SecurityConfig {
             /* check if user is authenticated or not */
             if( jwt == null || jwt == "" ) {
                 role = Role.VISITOR;
-                LOGGER.info("checkAccess | JWT not found. User role set to visitor" );
+                LOGGER.info("checkAccess | JWT not found. User role is set to VISITOR" );
             }
             else {
                 Claims claims = decodeJWT(jwt);
@@ -112,9 +112,10 @@ public class SecurityConfig {
             resultPair.setHttpStatus( HttpStatus.UNAUTHORIZED );
         }
         catch ( MalformedJsonException
-                        | JsonSyntaxException
-                        | IllegalArgumentException
-                        | UnsupportedJwtException e ) {
+                | MalformedJwtException
+                | JsonSyntaxException
+                | IllegalArgumentException
+                | UnsupportedJwtException e ) {
             LOGGER.warn("checkAccess | an error occurred while parsing JWT", e );
             resultPair.setHttpStatus( HttpStatus.BAD_REQUEST );
         }
@@ -176,6 +177,7 @@ public class SecurityConfig {
      *
      * @param jwt JSON Web Token primljen od strane klijenta
      * @return sadrzaj tokena u kome se nalaze informacije o korisniku
+     * @throws MalformedJwtException baca se kada se utvrdi da Json Web Token nije ispravno kreiran
      * @throws MalformedJsonException baca se kada se utvrdi da JSON nije ispravan
      * @throws ExpiredJwtException baca se ukoliko je primljeni JSON Web Token istekao
      * @throws SignatureException baca se ukoliko se header i payload ne poklapaju sa signaturom JSON Web Token-a
@@ -186,7 +188,11 @@ public class SecurityConfig {
      * @see Claims
      */
     public static Claims decodeJWT(String jwt)
-            throws MalformedJsonException, ExpiredJwtException, SignatureException, JsonSyntaxException {
+            throws MalformedJwtException,
+            MalformedJsonException,
+            ExpiredJwtException,
+            SignatureException,
+            JsonSyntaxException {
         return Jwts.parserBuilder()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                 .build()

@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
+import java.util.Arrays;
+
 public enum Role {
     VISITOR,
     APPLICANT,
@@ -27,7 +29,10 @@ public enum Role {
             }
         }
 
-        LOGGER.info("checkAuthorization | user is not authorized");
+        LOGGER.info("checkAuthorization | user is not authorized, authorized roles: "
+                + Arrays.toString( authorizedRoles )
+        );
+
         if( this.equalsTo( Role.VISITOR )) {
             return HttpStatus.UNAUTHORIZED;
         }

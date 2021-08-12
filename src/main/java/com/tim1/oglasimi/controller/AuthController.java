@@ -18,7 +18,7 @@ import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
 public class AuthController {
 
     @GetMapping
-    public ResponseEntity<?> checkAuth(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt) {
+    public ResponseEntity<?> checkAuth( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt ) {
 
 
         ResultPair resultPair = checkAccess( jwt, Role.VISITOR, Role.EMPLOYER, Role.APPLICANT, Role.ADMIN );
