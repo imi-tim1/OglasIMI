@@ -23,7 +23,7 @@ export class IdentityApiService {
     let j = 'eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsInJvbCI6ImFkbWluIiwiZXhwIjoxNjI4NzE3NzA0LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAifQ.B5cVELJKOcoUd1kExFG46nUYbWpRhDj6zQ94GsNI59w';
 
     let headers: HttpHeaders = new HttpHeaders({
-      'json-web-token': j
+      'Json-Web-Token': j
     });
 
     return this.http.get<HttpResponse<any>>(this.url, { headers: headers, observe: 'response' });
