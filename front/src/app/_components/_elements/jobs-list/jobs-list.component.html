@@ -1,0 +1,5 @@
+<app-jobs-list-card
+    *ngFor="let job of jobs"
+    [job]="job"
+    (click)="showJob(job.id)"> <!-- prikazi page datog joba-->
+</app-jobs-list-card>

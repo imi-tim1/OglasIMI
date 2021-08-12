@@ -14,6 +14,10 @@ import { ApplicantRegisterFormComponent } from './_components/_elements/applican
 import { EmployerRegisterFormComponent } from './_components/_elements/employer-register-form/employer-register-form.component';
 import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
 import { RouterModule } from '@angular/router';
+import { JobsListComponent } from './_components/_elements/jobs-list/jobs-list.component';
+import { JobsFiltersComponent } from './_components/_elements/jobs-filters/jobs-filters.component';
+import { JobsListCardComponent } from './_components/_elements/jobs-list-card/jobs-list-card.component';
+import { JobsFeedComponent } from './_components/_elements/jobs-feed/jobs-feed.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,11 @@ import { RouterModule } from '@angular/router';
     RegisterPageComponent,
     ApplicantRegisterFormComponent,
     EmployerRegisterFormComponent,
-    HomePageComponent
+    HomePageComponent,
+    JobsListComponent,
+    JobsFiltersComponent,
+    JobsListCardComponent,
+    JobsFeedComponent
   ],
   imports: [
     BrowserModule,
