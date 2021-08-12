@@ -1,17 +1,19 @@
 package com.tim1.oglasimi.repository.implementation;
 
-import com.tim1.oglasimi.model.Job;
-import com.tim1.oglasimi.model.Tag;
+import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class JobRepositoryImpl implements JobRepository
 {
-    private static final String STORED_PROCEDURE = "{call getJobsPage(?,?,?,?,?,?,?)}";
+    private static final String MASTER_STORED_PROCEDURE = "{call get_job_common_filter(?,?,?,?,?)}";
+    private static final String TAG_STORED_PROCEDURE = "{call get_job_tag_filter(?,?,?,?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -23,30 +25,110 @@ public class JobRepositoryImpl implements JobRepository
     private String databasePassword;
 
     @Override
-    public List<Job> getAll()
+    public List<Job> getFilteredJobs(JobFilter jobFilter)
     {
         List<Job> jobList = new ArrayList<>();
-        Tag tempJob;
+        List<Tag> tempTagList = jobFilter.getTags();
+        Job tempJob;
 
-        try (Connection con = DriverManager.getConnection("jdbc:mariadb://localhost:3306/oglasimi_db", "oglasimi", "12345" );
-             CallableStatement cstmt = con.prepareCall(STORED_PROCEDURE))
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
+             CallableStatement cstmtMaster = con.prepareCall(MASTER_STORED_PROCEDURE);
+             CallableStatement cstmtTag = con.prepareCall(TAG_STORED_PROCEDURE))
         {
-            cstmt.setInt("p_employer_id", 0);
-            cstmt.setInt("p_field_id", 2);
-            cstmt.setInt("p_city_id", 1);
-            cstmt.setString("p_title", null);
-            cstmt.setString("p_tag", null);
-            cstmt.setBoolean("p_work_from_home", false);
-            cstmt.setBoolean("p_ascending_order", false);
+            ResultSet rsTag;
 
-            ResultSet rs = cstmt.executeQuery();
+            setStatement(cstmtMaster,jobFilter);
+            ResultSet rsMaster = cstmtMaster.executeQuery(); // Glavna tabela sa uobicajenim filterima
 
-            while(rs.next())
+            int flagPage = jobFilter.getJobsPerPage();
+            int pointerPosition = (jobFilter.getPageNumber() - 1) * jobFilter.getJobsPerPage();
+
+            if(jobFilter.isAscendingOrder()) // Filtriranje za rastuce sortiranje
             {
-                int x;
-                x = rs.getInt("id");
+                rsMaster.afterLast();
 
-                System.out.println(x);
+                while(pointerPosition != 0) // Pomeranje pointera na zeljeni red
+                {
+                    rsMaster.previous();
+                    pointerPosition--;
+                }
+
+                if(tempTagList == null)
+                {
+                    while(rsMaster.previous())
+                    {
+                        tempJob = setJobModel(rsMaster);
+                        jobList.add(tempJob);
+
+                        flagPage--;
+                        if(flagPage == 0) break;
+                    }
+                }
+
+                else
+                {
+                    setStatement(cstmtTag,jobFilter);
+                    rsTag = cstmtTag.executeQuery();
+
+                    while(rsMaster.previous())
+                    {
+                        int tempId = rsMaster.getInt("id");
+
+                        boolean flagTag = checkForTag(rsTag, jobFilter.getTags(), tempId);
+
+                        if(flagTag)
+                        {
+                            tempJob = setJobModel(rsMaster);
+                            jobList.add(tempJob);
+                        }
+
+                        flagPage--;
+                        if(flagPage == 0) break;
+                    }
+                }
+            }
+
+            else // Filtriranje za opadajuce sortiranje
+            {
+                while(pointerPosition != 0) // Pomeranje pointera na zeljeni red
+                {
+                    rsMaster.next();
+                    pointerPosition--;
+                }
+
+                if(tempTagList == null)
+                {
+                    while(rsMaster.next())
+                    {
+                        tempJob = setJobModel(rsMaster);
+                        jobList.add(tempJob);
+
+                        flagPage--;
+                        if(flagPage == 0) break;
+                    }
+                }
+
+                else
+                {
+                    setStatement(cstmtTag,jobFilter);
+                    rsTag = cstmtTag.executeQuery();
+
+                    while(rsMaster.next())
+                    {
+                        int tempId = rsMaster.getInt("id");
+
+                        boolean flagTag = checkForTag(rsTag, jobFilter.getTags(), tempId);
+
+                        if(flagTag)
+                        {
+                            tempJob = setJobModel(rsMaster);
+                            jobList.add(tempJob);
+                        }
+
+                        flagPage--;
+                        if(flagPage == 0) break;
+                    }
+                }
             }
         }
 
@@ -55,6 +137,80 @@ public class JobRepositoryImpl implements JobRepository
         }
 
         return jobList;
+    }
+
+    public Job setJobModel(ResultSet rs) throws SQLException
+    {
+        Job tempJob = new Job();
+
+        Employer employer = new Employer();
+        employer.setId(rs.getInt("employer_id"));
+        employer.setName(rs.getString("e_name"));
+        employer.setTin(rs.getString("tin"));
+        employer.setAddress(rs.getString("address"));
+        employer.setPictureBase64(rs.getString("picture_base64"));
+        employer.setPhoneNumber(rs.getString("phone_number"));
+
+        Field field = new Field();
+        field.setId(rs.getInt("field_id"));
+        field.setName(rs.getString("f_name"));
+
+        City city = new City();
+        city.setId(rs.getInt("city_id"));
+        city.setName(rs.getString("c_name"));
+
+        tempJob.setId(rs.getInt("id"));
+        tempJob.setPostDate(rs.getDate("post_date"));
+        tempJob.setTitle(rs.getString("title"));
+        tempJob.setDescription(rs.getString("description"));
+        tempJob.setSalary(rs.getString("salary"));
+        tempJob.setEmployer(employer);
+        tempJob.setField(field);
+        tempJob.setCity(city);
+
+        return tempJob;
+    }
+
+    public void setStatement(CallableStatement cstmt, Job job) throws SQLException
+    {
+        cstmt.setInt("p_employer_id", job.getEmployer().getId());
+        cstmt.setInt("p_field_id", job.getField().getId());
+        cstmt.setInt("p_city_id", job.getCity().getId());
+        cstmt.setString("p_title", job.getTitle());
+        cstmt.setBoolean("p_work_from_home", job.isWorkFromHome());
+    }
+
+    public boolean checkForTag(ResultSet rsTag, List<Tag> tagList, int id) throws SQLException
+    {
+        boolean flag = false;
+        int counter = 0;
+
+        rsTag.beforeFirst();
+
+        while(rsTag.next())
+        {
+            int tmpId = rsTag.getInt("job_id");
+
+            if(id == tmpId)
+            {
+                int tmpTag = rsTag.getInt("tag_id");
+
+                for(Tag tag : tagList)
+                {
+                    if(tmpTag == tag.getId()) counter++;
+                }
+            }
+        }
+
+        if(counter == tagList.size()) flag = true;
+
+        return flag;
+    }
+
+    @Override
+    public List<Job> getAll()
+    {
+        return null;
     }
 
     @Override

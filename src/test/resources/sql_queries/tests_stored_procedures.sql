@@ -139,3 +139,35 @@ SELECT @approved_successfully 'Is successfully approved?'
 //
 DELIMITER ;
 -- #######################################################################
+
+
+-- #######################################################################
+-- test call for procedure get_job_tag_filter
+DELIMITER // ;
+call get_job_tag_filter(
+        0,
+        0,
+        0,
+        null,
+        false
+    );
+//
+DELIMITER ;
+--
+
+-- test call for procedure get_job_tag_filter
+DELIMITER // ;
+call get_job_common_filter(
+        0,
+        0,
+        0,
+        null,
+        false
+    );
+//
+DELIMITER ;
+--
+-- #######################################################################
+
+
+-- #######################################################################
