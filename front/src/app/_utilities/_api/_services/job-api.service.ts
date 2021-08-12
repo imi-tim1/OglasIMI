@@ -2,7 +2,9 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
-import { Job } from '../_data-types/classes';
+import { HeaderUtil } from '../../_helpers/header-util';
+import { JWTUtil } from '../../_helpers/jwt-util';
+import { Job } from '../_data-types/interfaces';
 import { StandardHeaders } from '../_data-types/interfaces';
 
 @Injectable({
@@ -14,11 +16,16 @@ export class JobApiService {
 
   constructor(private http: HttpClient) { }
 
-  getJobs(): Observable<HttpResponse<Job[]>> {
-    let h: StandardHeaders = {
-      'Json-Web-Token': ''
-    }
-    
-    return this.http.get<Job[]>(this.url, { headers: new HttpHeaders(), observe: 'response' });
+  getJobs(): Observable<HttpResponse<Job[]>> 
+  {
+    let response = this.http.get<Job[]>(
+      this.url, 
+      { 
+        headers: HeaderUtil.jwtOnlyHeaders(), 
+        observe: 'response'
+      }
+    );
+
+    return response;
   }
 }

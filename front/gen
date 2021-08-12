@@ -8,8 +8,15 @@ elif [[ $1 == "e" ]]
 then
     echo "new element:" $2
     ng generate component _components/_elements/$2 --skip-tests --style none
-elif [[ $1 == "s" ]]
+elif [[ $1 == "api" ]]
 then
-    echo "new service:" $2
-    ng generate service _utilities/$2 --skip-tests
+    echo "new api service:" $2"-api"
+    ng generate service _utilities/_api/_services/$2-api --skip-tests
+elif [[ $1 == "mid" ]]
+then
+    echo "new api middleware:" $2
+    ng generate service _utilities/_middleware/_services/$2 --skip-tests
+else
+    echo "wrong command"
+    echo "possible options: p | e | api | mid"
 fi

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Job } from 'src/app/_utilities/_api/_data-types/classes';
+import { Job } from 'src/app/_utilities/_api/_data-types/interfaces';
 
 @Component({
   selector: 'app-jobs-list-card',

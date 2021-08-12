@@ -1,7 +1,10 @@
 import { Injectable, Self } from '@angular/core';
-import { HttpClient, HttpStatusCode } from '@angular/common/http'
+import { HttpClient, HttpResponse, HttpStatusCode } from '@angular/common/http'
 import { apiProperties } from '../../_constants/api.properties';
 import { Observable } from 'rxjs';
+import { Creds, StandardHeaders } from '../_data-types/interfaces';
+import { HeaderUtil } from '../../_helpers/header-util';
+import { JWTUtil } from '../../_helpers/jwt-util';
 
 @Injectable({
   providedIn: 'root'
@@ -13,23 +16,21 @@ export class LoginApiService
 
   constructor(private http: HttpClient) { }
 
-  login(body: LoginApiService.Request): Observable<LoginApiService.Response> {
-    return this.http.post<LoginApiService.Response>(this.url, body);
+  login(body: Creds): Observable<HttpResponse<null>> 
+  {
+    let response = this.http.post<null>(
+      this.url, 
+      body, 
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+    
+    response.subscribe();
+    
+    return response;
   }
-}
-
-// Interfejsi
-
-export namespace LoginApiService
-{
-    export interface Request {
-      jwt: string;
-      email: string;
-      hashedPassword: string;
-    }
-    export interface Response {
-      jwt: string;
-    }
 }
 
 /*

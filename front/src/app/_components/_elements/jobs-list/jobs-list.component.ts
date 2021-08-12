@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { JobService } from 'src/app/_utilities/_helpers/_services/job.service';
+import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 // import { GetJobsHttpService } from 'src/app/_utilities/_api/_services/getjobs-http.service'
 
 @Component({

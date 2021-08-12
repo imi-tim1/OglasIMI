@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentAccessService } from 'src/app/_utilities/_helpers/_services/component-access.service';
+import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 
 @Component({
   selector: 'app-register-page',
