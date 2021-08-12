@@ -1,22 +1,20 @@
 <a class="list-group-item list-group-item-action p-4"
-    routerLink="/job"
-    [ngStyle]="{'color':'red'}">
+    routerLink="/job/{{job.id}}"
+    >
     
-    <h6>Poslodavac</h6>
+    <h6>{{job.employer.name}}</h6>
     <!--<button type="button" 
         class="btn btn-outline-success" 
         id="snd_cvbtn' + job.id + '" 
         style="float: right;">
         Pošalji CV
     </button>-->
-    <h3>job.title</h3>
-    <div>job.description</div>
-    <div class="pt-4 pb-2 text-primary">job.place</div>
+    <h3>{{job.title}}</h3>
+    <div>{{job.description}}</div>
+    <div class="pt-4 pb-2 text-primary">{{job.city}}</div>
 
-<!--for (let t of job.tags) {
-e += '<span class="bg-warning"><strong class="p-1">' + t + '</strong></span>\n';
-}
-
-e +=
-    '<h4 class="pt-4 pb-2 text-success">$ ' + job.salary + ' /mes.</h4>-->
+    <span *ngFor="let t of job.tags" class="bg-warning">
+        <strong class="p-1">{{t.name}}</strong>
+    </span>
+    <h4 class="pt-4 pb-2 text-success">{{job.salary}}</h4>
 </a>
