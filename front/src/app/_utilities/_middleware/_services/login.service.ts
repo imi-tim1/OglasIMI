@@ -8,6 +8,7 @@ import { LoginApiService } from '../../_api/_services/login-api.service';
 import { PasswdHash } from '../../_helpers/hash-util';
 import { JWTUtil } from '../../_helpers/jwt-util';
 import { DEFAULT_REDIRECT_ROUTE } from '../../_constants/routing.properties';
+import { ComponentAccessService } from './component-access.service';
 
 @Injectable({
   providedIn: 'root'
@@ -57,8 +58,13 @@ export class LoginService {
           JWTUtil.delete();
         }
         // Forbidden
-        if (HttpStatusCode.Forbidden == error.status) {
+        else if (HttpStatusCode.Forbidden == error.status) {
           this.responseCode = ResponseCode.Forbidden;
+          this.router.navigate([DEFAULT_REDIRECT_ROUTE]);
+        }
+        // Bad Request
+        else if (HttpStatusCode.BadRequest == error.status) {
+          JWTUtil.delete();
           this.router.navigate([DEFAULT_REDIRECT_ROUTE]);
         }
       }
