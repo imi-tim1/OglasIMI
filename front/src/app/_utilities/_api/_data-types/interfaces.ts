@@ -44,3 +44,15 @@ export interface City
     id: number;
     name: string;
 }
+
+export interface Filters {
+    title?: string;
+    tagList?: number[];
+    employerId: number;
+    fieldId: number;
+    cityId: number;
+    pageNumber: number;
+    jobsPerPage: number;
+    workFromHome: boolean;
+    ascendingOrder: boolean;
+}
