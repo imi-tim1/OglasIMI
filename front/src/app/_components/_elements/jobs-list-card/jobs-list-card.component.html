@@ -11,7 +11,7 @@
     </button>-->
     <h3>{{job.title}}</h3>
     <div>{{job.description}}</div>
-    <div class="pt-4 pb-2 text-primary">{{job.city}}</div>
+    <div class="pt-4 pb-2 text-primary">{{job.city.name}}</div>
 
     <span *ngFor="let t of job.tags" class="bg-warning">
         <strong class="p-1">{{t.name}}</strong>

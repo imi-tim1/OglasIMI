@@ -12,12 +12,13 @@ export interface Job
 {
     id: number;
     employer: Employer;
-    title: string;
-    description: string;
     field: Field;
     tags: Tag[];
+    title: string;
+    description: string;
     salary: string;
-    city: string;
+    city: City;
+    postDate: Date;
     workFromHome: boolean;
 }
 
