@@ -9,7 +9,8 @@
   <label for="fields">Oblast rada:&nbsp;</label>
   <select [(ngModel)]="selectedFieldId">
     <option *ngFor="let f of fieldService.fields"
-          [ngValue]="f.id">
+          [ngValue]="f.id"
+          (click)="getNewTags()">
           {{f.name}}
     </option>
   </select>

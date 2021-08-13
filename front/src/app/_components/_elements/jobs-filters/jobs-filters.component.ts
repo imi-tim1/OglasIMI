@@ -51,7 +51,7 @@ export class JobsFiltersComponent implements OnInit {
     this.fieldService.getFields();
     this.cityService.getCities();
     this.employerService.getEmployers();
-    this.fieldService.getTags(this.selectedFieldId);
+    //this.fieldService.getTags(this.selectedFieldId);
   }
 
   showMore() {
@@ -64,7 +64,7 @@ export class JobsFiltersComponent implements OnInit {
     
     this.showMoreBool = !this.showMoreBool;
 
-    this.fieldService.getTags(this.selectedFieldId);
+    //this.fieldService.getTags(this.selectedFieldId);
   }
 
   onSearch() {
@@ -100,21 +100,37 @@ export class JobsFiltersComponent implements OnInit {
 
   toggleTag(tagID: number) {
 
+    console.log('Tag ID: ' + tagID);
+
     let pom: boolean = false;
 
-    for (let t of this.fieldService.tags)
-      if (t.id == tagID)//tag je vec cekiran, izbaci ga iz niza
+    for (let t of this.checkedTags)
+      if (t == tagID)//tag je vec cekiran, izbaci ga iz niza
       {
-        let ind: number = this.checkedTags.indexOf(t.id);
+        console.log('Brisanje');
+        let ind: number = this.checkedTags.indexOf(t);
         /*let arr1 = this.checkedTags.splice(0, ind);
         let arr2 = this.checkedTags.splice(ind + 1);
         let arr = arr1.concat(arr2);*/
         this.checkedTags.splice(ind, 1);
         pom = true; 
+
+        console.log(this.checkedTags);
         return;
       }
       if(pom == false) //tag nije bio cekiran
         this.checkedTags.push(tagID);
+
+      console.log('Dodavanje');
+      console.log(this.checkedTags);
+  }
+
+  getNewTags() {
+    if(this.selectedFieldId > 0) {
+      this.checkedTags = [];
+      this.fieldService.tags = [];
+      this.fieldService.getTags(this.selectedFieldId);
+    }
   }
 
   /*printSelVal() {

@@ -9,7 +9,7 @@ import { FieldApiService } from '../../_api/_services/field-api.service';
 export class FieldService {
 
   public fields: Field[] = [{id: 0, name: 'Sve oblasti'}];
-  public tags: Tag[] = [{id: 0, name: 'Sve kljucne reci'}];
+  public tags: Tag[] = [];
 
   constructor(private api: FieldApiService) { }
 
