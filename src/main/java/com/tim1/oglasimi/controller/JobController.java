@@ -1,21 +1,25 @@
 package com.tim1.oglasimi.controller;
 
 import com.tim1.oglasimi.model.*;
-import com.tim1.oglasimi.repository.implementation.JobRepositoryImpl;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import static com.tim1.oglasimi.security.SecurityConfig.JWT_CUSTOM_HTTP_HEADER;
 import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
 
+@Validated
 @RestController
 @RequestMapping("/api/jobs")
 public class JobController
@@ -28,30 +32,33 @@ public class JobController
         this.jobService = jobService;
     }
 
+
     @GetMapping
-    public List<Job> getFilteredJobs(@RequestParam(required = false) String title,
-                                     @RequestParam(required = false) List<Integer> tagList,
-                                     @RequestParam Integer employerId,
-                                     @RequestParam Integer fieldId,
-                                     @RequestParam Integer cityId,
-                                     @RequestParam Integer pageNumber,
-                                     @RequestParam Integer jobsPerPage,
-                                     @RequestParam Boolean workFromHome,
-                                     @RequestParam Boolean ascendingOrder)
+    public ResponseEntity<List<Job>> getFilteredJobs(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                  @RequestParam(required = false) String title,
+                                                  @RequestParam(required = false) List<Integer> tagList,
+                                                  @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int employerId,
+                                                  @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int fieldId,
+                                                  @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int cityId,
+                                                  @RequestParam @Min(1) @Max(Integer.MAX_VALUE) int pageNumber,
+                                                  @RequestParam @Min(5) @Max(Integer.MAX_VALUE) int jobsPerPage,
+                                                  @RequestParam boolean workFromHome,
+                                                  @RequestParam boolean ascendingOrder)
     {
         JobFilter jobFilter = setJobModel(employerId,fieldId,cityId,title,tagList,workFromHome,pageNumber,jobsPerPage,ascendingOrder);
 
-        /*ResultPair resultPair = checkAccess( model.getJwt(), Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
+        ResultPair resultPair = checkAccess( jwt, Role.VISITOR, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
         HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
 
         if(httpStatus == HttpStatus.OK)
         {
-            return ResponseEntity.status(resultPair.getHttpStatus()).body(jobService.getFilteredJobs(jobFilter));
+            return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(jobService.getFilteredJobs(jobFilter));
         }
 
-        return ResponseEntity.status(resultPair.getHttpStatus()).body(null);*/
-
-        return jobService.getFilteredJobs(jobFilter);
+        return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(null);
     }
 
     private JobFilter setJobModel(int employerId, int fieldId, int cityId, String title, List<Integer> tagList,
@@ -84,8 +91,7 @@ public class JobController
 
         else tags = null;
 
-        if(pageNumber == 0) pageNumber = 1;
-        if(jobsPerPage == 0) jobsPerPage = 10;
+        if(title.equals("")) title = "default";
 
         jobFilter.setEmployer(employer);
         jobFilter.setField(field);
@@ -99,5 +105,4 @@ public class JobController
 
         return jobFilter;
     }
-
 }
