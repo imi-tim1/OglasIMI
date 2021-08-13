@@ -208,6 +208,31 @@ DELIMITER ;
 
 
 -- #######################################################################
+-- Procedure for deleting user's records from the database
+DELIMITER // ;
+CREATE PROCEDURE delete_user(
+    IN p_id INT,
+    OUT p_deleted_successfully BOOLEAN
+)
+BEGIN
+    SET p_deleted_successfully = FALSE;
+
+    DELETE u.*
+    FROM user u
+    INNER JOIN role r ON u.role_id = r.id
+    WHERE u.id = p_id AND r.name <> 'admin';
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_deleted_successfully = TRUE;
+    END IF;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
 -- Procedure for job-tag checking
 DELIMITER // ;
 CREATE PROCEDURE get_job_tag_filter

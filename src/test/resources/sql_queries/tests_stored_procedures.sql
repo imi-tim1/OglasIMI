@@ -141,6 +141,29 @@ DELIMITER ;
 -- #######################################################################
 
 
+
+-- #######################################################################
+-- delete_user
+
+-- test call for procedure delete_user #1 non-admin account; successful delete
+DELIMITER // ;
+CALL delete_user(3, @deleted_successfully);
+SELECT @deleted_successfully 'Is successfully deleted?'
+//
+DELIMITER ;
+--
+
+
+-- test call for procedure delete_user #1 non-admin account; successful delete
+DELIMITER // ;
+CALL delete_user(1, @deleted_successfully);
+SELECT @deleted_successfully 'Is successfully deleted?'
+//
+DELIMITER ;
+--
+-- #######################################################################
+
+
 -- #######################################################################
 -- test call for procedure get_job_tag_filter
 DELIMITER // ;
