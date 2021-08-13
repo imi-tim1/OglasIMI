@@ -14,7 +14,28 @@ export class JobService {
 
   getJobs() {
     this.jobs = [
-      
+      { 
+        id: 1,
+        employer: { id: 1, name: 'Comtrade' },
+        title: 'C++ Developer',
+        description: 'Desc ....',
+        field: { id: 1, name: 'IT' },
+        tags: [ { id: 1, name: 'java' }, { id: 2, name: 'c++'}, { id: 3, name: 'c' }  ],
+        salary: '$ 1800 /mo',
+        city: 'Kragujevac',
+        workFromHome: false
+       },
+       { 
+        id: 2,
+        employer: { id: 2, name: 'Microsoft' },
+        title: 'Unity Developer',
+        description: 'Desc ....',
+        field: { id: 1, name: 'IT' },
+        tags: [ { id: 1, name: 'unity' }, { id: 2, name: 'c#'}, { id: 3, name: 'gamedev' }  ],
+        salary: '$ 2100 /mo',
+        city: 'Beograd',
+        workFromHome: true
+       }
     ]
 
     // this.jobApi.getJobs().subscribe(

@@ -1,7 +1,70 @@
-<input type="text" id="jobName" name="jobName" [(ngModel)]="jobName" placeholder="Radno mesto (pozicija)">
+<div>
+  <input type="text" id="jobName" name="jobName" [(ngModel)]="jobName"
+     placeholder="Radno mesto (pozicija)">
+</div>
+
 <br><br>
 
-<div class="dropdown">
+<div>
+  <label for="fields">Oblast rada:&nbsp;</label>
+  <select [(ngModel)]="selectedFieldId">
+    <option *ngFor="let f of fieldService.fields"
+          [ngValue]="f.id">
+          {{f.name}}
+    </option>
+  </select>
+</div>
+
+<br><br>
+
+<div>
+  <label for="cities">Grad:&nbsp;</label>
+  <select [(ngModel)]="selectedCityId">
+    <option *ngFor="let c of cityService.cities"
+          [ngValue]="c.id">
+          {{c.name}}
+    </option>
+  </select>
+</div>
+
+<br><br>
+
+<div>
+  <button id="search" (click)="onSearch()">Pretraga</button>
+</div>
+
+<br><br>
+
+<div>
+  <button id="showMore" (click)="showMore()">Prikaži još filtera</button>
+</div>
+
+<br><br>
+
+<div *ngIf="showMoreFilters">
+  
+  <div>
+    <label for="employers">Poslodavac:&nbsp;</label>
+    <select [(ngModel)]="selectedEmployerId">
+      <option *ngFor="let e of employerService.employers"
+            [ngValue]="e.id">
+            {{e.name}}
+      </option>
+    </select>
+  </div>
+  
+
+  <br><br>
+
+  <label for="workFromHome">Rad od kuće:&nbsp;&nbsp;</label>
+  <input type="checkbox" id="workFromHome" name="workFromHome" 
+        [(ngModel)]="workFromHome" (click)="wfh()">
+  <br><br>
+</div>
+
+
+<!--
+  <div class="dropdown">
     <button class="dropbtn">Oblast rada</button>
     <div class="dropdown-content">
       <a>Link 1</a>
@@ -38,18 +101,7 @@
   </div> 
   <br><br>
 
-  <div id="list1" class="dropdown-check-list" tabindex="100">
-    <span class="anchor">Pretražite ključne reči: </span>
-    <ul class="items">
-      <li><input type="checkbox"> Apple </li>
-      <li><input type="checkbox"> Orange</li>
-      <li><input type="checkbox"> Grapes </li>
-      <li><input type="checkbox"> Berry </li>
-      <li><input type="checkbox"> Mango </li>
-      <li><input type="checkbox"> Banana </li>
-      <li><input type="checkbox"> Tomato</li>
-    </ul>
-  </div>
+  
 
   <br>
 
@@ -59,3 +111,4 @@
 
   <br><br>
 </form>
+-->
