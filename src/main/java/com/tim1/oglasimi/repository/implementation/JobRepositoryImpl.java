@@ -253,24 +253,20 @@ public class JobRepositoryImpl implements JobRepository
     {
         boolean isJobSuccessfullyPosted = false;
 
-        try (Connection con = DriverManager.getConnection("jdbc:mariadb://localhost:3306/oglasimi_db","oglasimi","12345");
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
              CallableStatement cstmt = con.prepareCall(POST_JOB_STORED_PROCEDURE))
         {
             setJobPostStatement(cstmt,job);
-            /*cstmt.registerOutParameter("p_is_posted", Types.BOOLEAN);*/
+            cstmt.registerOutParameter("p_is_posted", Types.BOOLEAN);
 
-            cstmt.registerOutParameter("flag", Types.DATE);
             cstmt.execute();
 
-            LocalDateTime flag = cstmt.getObject("flag", LocalDateTime.class);
-            System.out.println(flag);
-            //isJobSuccessfullyPosted = cstmt.getBoolean("p_is_posted");
-
-
+            isJobSuccessfullyPosted = cstmt.getBoolean("p_is_posted");
+            System.out.println(isJobSuccessfullyPosted);
         }
 
         catch (SQLException e) {
-            LOGGER.debug("checkCredentials | An error occurred while communicating with a database", e );
+            LOGGER.debug("checkCredentials | An error occurred while communicating with a database", e);
             e.printStackTrace();
         }
 
@@ -279,23 +275,14 @@ public class JobRepositoryImpl implements JobRepository
 
     public void setJobPostStatement(CallableStatement cstmt, Job job) throws SQLException
     {
-        /*cstmt.setInt("p_employer_id", job.getEmployer().getId());
+        cstmt.setInt("p_employer_id", job.getEmployer().getId());
         cstmt.setInt("p_field_id", job.getField().getId());
         cstmt.setInt("p_city_id", job.getCity().getId());
         cstmt.setObject("p_post_date", job.getPostDate());
         cstmt.setString("p_title", job.getTitle());
         cstmt.setString("p_description", job.getDescription());
         cstmt.setString("p_salary", job.getSalary());
-        cstmt.setBoolean("p_work_from_home", job.isWorkFromHome());*/
-
-        cstmt.setInt("p_employer_id", 0);
-        cstmt.setInt("p_field_id",0);
-        cstmt.setInt("p_city_id", 0);
-        cstmt.setObject("p_post_date", "2021-06-08 01:15:08");
-        cstmt.setString("p_title", "title");
-        cstmt.setString("p_description", "desc");
-        cstmt.setString("p_salary", "sal");
-        cstmt.setBoolean("p_work_from_home", false);
+        cstmt.setBoolean("p_work_from_home", job.isWorkFromHome());
     }
 
 
