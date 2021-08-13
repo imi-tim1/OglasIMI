@@ -23,6 +23,6 @@ export class HeaderUtil
 
 export class ParamUtil {
     static toString(params: any) {
-        return params.join(',')
+        return params.join(', ')
     }
 }
