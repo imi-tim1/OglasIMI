@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ResponseCode } from 'src/app/_utilities/_api/_data-types/enums';
 import { LoginService } from 'src/app/_utilities/_middleware/_services/login.service';
 
 @Component({
@@ -17,6 +18,10 @@ export class LoginFormComponent implements OnInit {
 
   onSubmit() {
     this.loginService.login(this.email, this.password);
+  }
+
+  checkLoginFailed(): boolean {
+    return this.loginService.responseCode == ResponseCode.WrongCredentials;
   }
 
 }

@@ -10,8 +10,8 @@ export class JWTUtil
         return jwt;
     }
 
-    static store(jwt: string) {
-        window.localStorage.setItem(this.localStorageKey, jwt);
+    static store(jwt: string | null) {
+        window.localStorage.setItem(this.localStorageKey, (jwt == null)? '' : jwt);
     }
 
     static delete() {
