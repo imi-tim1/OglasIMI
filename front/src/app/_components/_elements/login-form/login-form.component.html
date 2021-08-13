@@ -1,4 +1,8 @@
-<section class="vh-100">
+<div *ngIf="!accessService.allowed"> 
+  <h1>Loading</h1>
+</div>
+
+<section *ngIf="accessService.allowed" class="vh-100">
     <div class="container-fluid h-custom">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-md-9 col-lg-6 col-xl-5">
@@ -23,7 +27,7 @@
   
             <div class="text-center text-lg-start mt-4 pt-2">
                 <!-- Text - Pogresna lozinka -->
-                <p *ngIf="loginService.loginFailed" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Lozinka ili imejl su pogresni </p>
+                <p *ngIf="checkLoginFailed()" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Lozinka ili imejl su pogresni </p>
                 <br>
 
                 <button 

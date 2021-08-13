@@ -10,23 +10,35 @@ export class JWTUtil
         return jwt;
     }
 
-    static store(jwt: string) {
-        window.localStorage.setItem(this.localStorageKey, jwt);
+    static store(jwt: string | null) {
+        window.localStorage.setItem(this.localStorageKey, (jwt == null)? '' : jwt);
     }
 
     static delete() {
         this.store('');
     }
 
-    static decodePayload(jwt: string | null) {
+    static decodePayload(jwt: string | null): JWT | null {
         if (jwt == null || jwt == '')
-            return {};
+            return null;
             
         const payload = jwt.split('.')[1];    
-        return JSON.parse(btoa(payload));
+        return JSON.parse(atob(payload));
     }
 
-    static getPayload() {
+    static getPayload(): JWT | null {
         return this.decodePayload(this.get());
     }
+
+    static getRole(): string {
+        let g = this.getPayload();
+        return (g == null)? '' : g.rol;
+    }
+}
+
+interface JWT {
+    exp: number;
+    iss: string;
+    rol: string;
+    uid: number;
 }

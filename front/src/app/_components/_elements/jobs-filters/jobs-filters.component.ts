@@ -27,7 +27,7 @@ export class JobsFiltersComponent implements OnInit {
 
   selectedCityId: number = 0;
   selectedFieldId: number = 0;
-  selectedEmployerId: number = 0; 
+  selectedEmployerId: number = 0;
   //checkedWorkFromHome: boolean = false; DRUGA VARIJANTA
 
   constructor(public cityService: CityService,

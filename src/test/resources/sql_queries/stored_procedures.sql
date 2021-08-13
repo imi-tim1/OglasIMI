@@ -1,4 +1,4 @@
-use oglasimi_db;
+USE oglasimi_db;
 
 -- #######################################################################
 -- Procedure for checking login credentials
@@ -16,7 +16,7 @@ BEGIN
     SELECT COUNT(c.user_id)
     INTO v_retval
     FROM credentials c
-    WHERE c.email = p_email and c.hashed_password = p_hashed_password;
+    WHERE c.email = p_email AND c.hashed_password = p_hashed_password;
 
     IF v_retval != 0 THEN
         SET p_valid_creds = TRUE;
@@ -27,8 +27,8 @@ BEGIN
     SELECT u.id, u.approved, r.name
     INTO p_user_id, p_approved, p_role
     FROM credentials c
-         JOIN user u on c.user_id = u.id
-         JOIN role r on u.role_id = r.id
+         JOIN user u ON c.user_id = u.id
+         JOIN role r ON u.role_id = r.id
     WHERE c.email = p_email
     LIMIT 1;
 END //
@@ -43,7 +43,7 @@ DELIMITER ;
 DELIMITER // ;
 CREATE PROCEDURE get_all_fields ()
 BEGIN
-    SELECT * from field;
+    SELECT * FROM field;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -56,7 +56,7 @@ DELIMITER ;
 DELIMITER // ;
 CREATE PROCEDURE get_all_cities ()
 BEGIN
-    SELECT * from city;
+    SELECT * FROM city;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -67,7 +67,7 @@ DELIMITER ;
 -- Procedure for tag list
 
 DELIMITER // ;
-CREATE PROCEDURE get_tag_list (IN id int)
+CREATE PROCEDURE get_tag_list (IN id INT)
 BEGIN
     SELECT * FROM tag WHERE field_id = id;
 END //
@@ -78,7 +78,6 @@ DELIMITER ;
 
 -- #######################################################################
 -- Procedure for employer registration
-drop procedure if exists register_employer ;
 DELIMITER // ;
 CREATE PROCEDURE register_employer (
     IN p_email VARCHAR(190),
@@ -130,7 +129,7 @@ leave_label:BEGIN
 
     -- add employer into table "user"
     INSERT INTO user ( role_id, approved )
-        VALUES ( v_employer_role_id, false );
+        VALUES ( v_employer_role_id, FALSE );
 
     -- get employer's id
     SELECT LAST_INSERT_ID()
@@ -160,7 +159,7 @@ CREATE PROCEDURE get_all_employers()
 BEGIN
     SELECT e.user_id, e.name, e.tin, e.address, e.picture_base64, e.phone_number, c.email
     FROM employer e
-        JOIN credentials c on e.user_id = c.user_id;
+        JOIN credentials c ON e.user_id = c.user_id;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -176,7 +175,7 @@ CREATE PROCEDURE get_employer(
 BEGIN
     SELECT e.user_id, e.name, e.tin, e.address, e.picture_base64, e.phone_number, c.email
     FROM employer e
-             JOIN credentials c on e.user_id = c.user_id
+             JOIN credentials c ON e.user_id = c.user_id
     WHERE e.user_id = p_id;
 END //
 DELIMITER ;
