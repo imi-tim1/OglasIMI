@@ -39,5 +39,9 @@ public class EmployerService {
     public boolean approveEmployer(int id) {
         return employerRepositoryImpl.approve(id);
     }
+
+    public boolean deleteEmployer(int id) {
+        return employerRepositoryImpl.delete(id);
+    }
 }
 

@@ -2,7 +2,7 @@ import { HttpClient, HttpParams, HttpHeaders, HttpResponse } from '@angular/comm
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
-import { HeaderUtil } from '../../_helpers/header-util';
+import { HeaderUtil } from '../../_helpers/http-util';
 import { UserRole } from '../_data-types/enums';
 
 @Injectable({

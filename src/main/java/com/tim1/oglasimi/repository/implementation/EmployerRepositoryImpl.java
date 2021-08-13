@@ -20,6 +20,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     private static final String GET_ALL_EMPLOYERS_PROCEDURE_CALL = "{call get_all_employers()}";
     private static final String GET_EMPLOYER_PROCEDURE_CALL = "{call get_employer(?)}";
     private static final String APPROVE_EMPLOYER_PROCEDURE_CALL = "{call approve_user(?,?)}";
+    private static final String DELETE_EMPLOYER_PROCEDURE_CALL = "{call delete_user(?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -134,8 +135,27 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     }
 
     @Override
-    public boolean delete(Integer integer) {
-        return false;
+    public boolean delete(Integer id) {
+        boolean isDeletedSuccessfully = false;
+
+        try (
+                Connection con = DriverManager.getConnection(
+                        databaseSourceUrl, databaseUsername, databasePassword );
+                CallableStatement cstmt = con.prepareCall(DELETE_EMPLOYER_PROCEDURE_CALL) ) {
+
+            cstmt.setInt("p_id", id);
+            cstmt.registerOutParameter("p_deleted_successfully", Types.BOOLEAN);
+
+            cstmt.executeUpdate();
+
+            isDeletedSuccessfully = cstmt.getBoolean("p_deleted_successfully");
+
+        } catch ( SQLException e ) {
+            LOGGER.error("delete | An error occurred while communicating with a database", e );
+            e.printStackTrace();
+        }
+
+        return isDeletedSuccessfully;
     }
 
     @Override

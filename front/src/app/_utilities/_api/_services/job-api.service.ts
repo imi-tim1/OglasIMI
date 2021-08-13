@@ -1,10 +1,10 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
-import { HeaderUtil } from '../../_helpers/header-util';
+import { HeaderUtil, ParamUtil } from '../../_helpers/http-util';
 import { JWTUtil } from '../../_helpers/jwt-util';
-import { Job } from '../_data-types/interfaces';
+import { Filters, Job } from '../_data-types/interfaces';
 import { StandardHeaders } from '../_data-types/interfaces';
 
 @Injectable({
@@ -16,13 +16,23 @@ export class JobApiService {
 
   constructor(private http: HttpClient) { }
 
-  getJobs(): Observable<HttpResponse<Job[]>> 
+  getJobs(filters: Filters): Observable<HttpResponse<Job[]>> 
   {
+    let par: HttpParams = new HttpParams();
+    let key: keyof typeof filters;
+    for (key in filters) {
+      if(filters[key] != undefined)
+        par = par.set(key, (typeof filters[key] == 'object')? ParamUtil.toString(filters[key]) : filters[key])
+    }
+
+    console.log(par.toString());
+
     let response = this.http.get<Job[]>(
       this.url, 
       { 
-        headers: HeaderUtil.jwtOnlyHeaders(), 
-        observe: 'response'
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders(),
+        params: par
       }
     );
 

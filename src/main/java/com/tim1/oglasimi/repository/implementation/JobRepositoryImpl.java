@@ -2,18 +2,25 @@ package com.tim1.oglasimi.repository.implementation;
 
 import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.repository.JobRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class JobRepositoryImpl implements JobRepository
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployerRepositoryImpl.class);
+
     private static final String MASTER_STORED_PROCEDURE = "{call get_job_common_filter(?,?,?,?,?)}";
     private static final String TAG_STORED_PROCEDURE = "{call get_job_tag_filter(?,?,?,?,?)}";
+    private static final String POST_JOB_STORED_PROCEDURE = "{call post_job(?,?,?,?,?,?,?,?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -35,7 +42,7 @@ public class JobRepositoryImpl implements JobRepository
              CallableStatement cstmtMaster = con.prepareCall(MASTER_STORED_PROCEDURE);
              CallableStatement cstmtTag = con.prepareCall(TAG_STORED_PROCEDURE))
         {
-            ResultSet rsTag;
+            ResultSet rsTag = null;
 
             setStatement(cstmtMaster,jobFilter);
             ResultSet rsMaster = cstmtMaster.executeQuery(); // Glavna tabela sa uobicajenim filterima
@@ -57,7 +64,7 @@ public class JobRepositoryImpl implements JobRepository
                 {
                     while(rsMaster.previous())
                     {
-                        tempJob = setJobModel(rsMaster);
+                        tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
                         jobList.add(tempJob);
 
                         flagPage--;
@@ -78,7 +85,7 @@ public class JobRepositoryImpl implements JobRepository
 
                         if(flagTag)
                         {
-                            tempJob = setJobModel(rsMaster);
+                            tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
                             jobList.add(tempJob);
                         }
 
@@ -100,7 +107,7 @@ public class JobRepositoryImpl implements JobRepository
                 {
                     while(rsMaster.next())
                     {
-                        tempJob = setJobModel(rsMaster);
+                        tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
                         jobList.add(tempJob);
 
                         flagPage--;
@@ -121,7 +128,7 @@ public class JobRepositoryImpl implements JobRepository
 
                         if(flagTag)
                         {
-                            tempJob = setJobModel(rsMaster);
+                            tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
                             jobList.add(tempJob);
                         }
 
@@ -139,34 +146,62 @@ public class JobRepositoryImpl implements JobRepository
         return jobList;
     }
 
-    public Job setJobModel(ResultSet rs) throws SQLException
+    public Job setJobModel(ResultSet rsMaster, ResultSet rsTag, List<Tag> tagList) throws SQLException
     {
+        Tag tempTag;
         Job tempJob = new Job();
+        List<Tag> tags = new ArrayList<>();
 
         Employer employer = new Employer();
-        employer.setId(rs.getInt("employer_id"));
-        employer.setName(rs.getString("e_name"));
-        employer.setTin(rs.getString("tin"));
-        employer.setAddress(rs.getString("address"));
-        employer.setPictureBase64(rs.getString("picture_base64"));
-        employer.setPhoneNumber(rs.getString("phone_number"));
+        employer.setId(rsMaster.getInt("employer_id"));
+        employer.setName(rsMaster.getString("e_name"));
+        employer.setTin(rsMaster.getString("tin"));
+        employer.setAddress(rsMaster.getString("address"));
+        employer.setPictureBase64(rsMaster.getString("picture_base64"));
+        employer.setPhoneNumber(rsMaster.getString("phone_number"));
 
         Field field = new Field();
-        field.setId(rs.getInt("field_id"));
-        field.setName(rs.getString("f_name"));
+        field.setId(rsMaster.getInt("field_id"));
+        field.setName(rsMaster.getString("f_name"));
 
         City city = new City();
-        city.setId(rs.getInt("city_id"));
-        city.setName(rs.getString("c_name"));
+        city.setId(rsMaster.getInt("city_id"));
+        city.setName(rsMaster.getString("c_name"));
 
-        tempJob.setId(rs.getInt("id"));
-        tempJob.setPostDate(rs.getDate("post_date"));
-        tempJob.setTitle(rs.getString("title"));
-        tempJob.setDescription(rs.getString("description"));
-        tempJob.setSalary(rs.getString("salary"));
+        tempJob.setId(rsMaster.getInt("id"));
+        tempJob.setPostDate(rsMaster.getObject("post_date",LocalDateTime.class));
+        tempJob.setTitle(rsMaster.getString("title"));
+        tempJob.setDescription(rsMaster.getString("description"));
+        tempJob.setSalary(rsMaster.getString("salary"));
         tempJob.setEmployer(employer);
         tempJob.setField(field);
         tempJob.setCity(city);
+
+        if(rsTag != null)
+        {
+            rsTag.beforeFirst();
+            while(rsTag.next())
+            {
+                boolean flag = false;
+
+                tempTag = new Tag();
+                tempTag.setId(rsTag.getInt("t_id"));
+
+                for(Tag tag : tagList)
+                {
+                    if(tempTag.getId() == tag.getId() && rsTag.getInt("j_id") == tempJob.getId()) flag = true;
+                }
+
+                if(flag)
+                {
+                    tempTag.setName(rsTag.getString("t_name"));
+                    tempTag.setFieldId(tempJob.getField().getId());
+                    tags.add(tempTag);
+                }
+            }
+
+            tempJob.setTags(tags);
+        }
 
         return tempJob;
     }
@@ -189,11 +224,11 @@ public class JobRepositoryImpl implements JobRepository
 
         while(rsTag.next())
         {
-            int tmpId = rsTag.getInt("job_id");
+            int tmpId = rsTag.getInt("j_id");
 
             if(id == tmpId)
             {
-                int tmpTag = rsTag.getInt("tag_id");
+                int tmpTag = rsTag.getInt("t_id");
 
                 for(Tag tag : tagList)
                 {
@@ -216,8 +251,53 @@ public class JobRepositoryImpl implements JobRepository
     @Override
     public boolean create(Job job)
     {
-        return false;
+        boolean isJobSuccessfullyPosted = false;
+
+        try (Connection con = DriverManager.getConnection("jdbc:mariadb://localhost:3306/oglasimi_db","oglasimi","12345");
+             CallableStatement cstmt = con.prepareCall(POST_JOB_STORED_PROCEDURE))
+        {
+            setJobPostStatement(cstmt,job);
+            /*cstmt.registerOutParameter("p_is_posted", Types.BOOLEAN);*/
+
+            cstmt.registerOutParameter("flag", Types.DATE);
+            cstmt.execute();
+
+            LocalDateTime flag = cstmt.getObject("flag", LocalDateTime.class);
+            System.out.println(flag);
+            //isJobSuccessfullyPosted = cstmt.getBoolean("p_is_posted");
+
+
+        }
+
+        catch (SQLException e) {
+            LOGGER.debug("checkCredentials | An error occurred while communicating with a database", e );
+            e.printStackTrace();
+        }
+
+        return isJobSuccessfullyPosted;
     }
+
+    public void setJobPostStatement(CallableStatement cstmt, Job job) throws SQLException
+    {
+        /*cstmt.setInt("p_employer_id", job.getEmployer().getId());
+        cstmt.setInt("p_field_id", job.getField().getId());
+        cstmt.setInt("p_city_id", job.getCity().getId());
+        cstmt.setObject("p_post_date", job.getPostDate());
+        cstmt.setString("p_title", job.getTitle());
+        cstmt.setString("p_description", job.getDescription());
+        cstmt.setString("p_salary", job.getSalary());
+        cstmt.setBoolean("p_work_from_home", job.isWorkFromHome());*/
+
+        cstmt.setInt("p_employer_id", 0);
+        cstmt.setInt("p_field_id",0);
+        cstmt.setInt("p_city_id", 0);
+        cstmt.setObject("p_post_date", "2021-06-08 01:15:08");
+        cstmt.setString("p_title", "title");
+        cstmt.setString("p_description", "desc");
+        cstmt.setString("p_salary", "sal");
+        cstmt.setBoolean("p_work_from_home", false);
+    }
+
 
     @Override
     public Job get(Integer integer)

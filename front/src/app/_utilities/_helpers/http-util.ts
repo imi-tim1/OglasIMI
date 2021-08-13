@@ -20,3 +20,9 @@ export class HeaderUtil
     //     return new HttpHeaders(obj);
     // }
 }
+
+export class ParamUtil {
+    static toString(params: any) {
+        return params.join(',')
+    }
+}

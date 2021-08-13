@@ -3,7 +3,7 @@ import { HttpClient, HttpResponse, HttpStatusCode } from '@angular/common/http'
 import { apiProperties } from '../../_constants/api.properties';
 import { Observable } from 'rxjs';
 import { Creds, StandardHeaders } from '../_data-types/interfaces';
-import { HeaderUtil } from '../../_helpers/header-util';
+import { HeaderUtil } from '../../_helpers/http-util';
 import { JWTUtil } from '../../_helpers/jwt-util';
 
 @Injectable({

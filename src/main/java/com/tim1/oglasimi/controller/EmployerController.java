@@ -15,7 +15,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static com.tim1.oglasimi.security.SecurityConfig.JWT_CUSTOM_HTTP_HEADER;
 import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
@@ -57,7 +56,7 @@ public class EmployerController {
 
 
     @PostMapping
-    public ResponseEntity<String> register( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+    public ResponseEntity<String> registerEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                             @Valid @RequestBody Employer employer ) {
 
         HttpStatus httpStatus = checkAccess( jwt, Role.VISITOR ).getHttpStatus();
@@ -75,8 +74,8 @@ public class EmployerController {
         /* perform employer registration */
         String resultMessage = employerService.registerEmployer( employer );
 
-        /* null-safe check if registration was successful or not */
-        if( Objects.equals(resultMessage, "Successful") ) {
+        /* check if registration was successful or not */
+        if( resultMessage == "Successful" ) {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .headers(responseHeaders)
@@ -122,7 +121,7 @@ public class EmployerController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Employer> approveEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+    public ResponseEntity<?> approveEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                                  @PathVariable("id")
                                                  @Min( 1 )
                                                  @Max( Integer.MAX_VALUE ) int id ) {
@@ -140,6 +139,39 @@ public class EmployerController {
         }
 
         boolean isSuccessful = employerService.approveEmployer(id);
+
+        if( isSuccessful ) {
+            httpStatus = HttpStatus.NO_CONTENT;
+        }
+        else {
+            httpStatus = HttpStatus.CONFLICT;
+        }
+
+        return ResponseEntity
+                .status(httpStatus)
+                .headers(responseHeaders)
+                .body( null );
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                     @PathVariable("id")
+                                                     @Min( 1 )
+                                                     @Max( Integer.MAX_VALUE ) int id ) {
+
+        HttpStatus httpStatus = checkAccess( jwt, Role.ADMIN ).getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK ) {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( null );
+        }
+
+        boolean isSuccessful = employerService.deleteEmployer(id);
 
         if( isSuccessful ) {
             httpStatus = HttpStatus.NO_CONTENT;
