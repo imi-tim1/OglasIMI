@@ -12,19 +12,8 @@ export class JobService {
 
   constructor(private jobApi: JobApiService) { }
 
-  getJobs() {
-    let filters: Filters = {
-      title: '',
-      tagList: [1],
-      cityId: 0,
-      employerId: 4,
-      fieldId: 0,
-      workFromHome: false,
-      pageNumber: 1,
-      jobsPerPage: 5,
-      ascendingOrder: false
-    };
-
+  getFilteredJobs(filters: Filters) 
+  {
     this.jobApi.getJobs(filters).subscribe(
       // Success
       (response) => {
@@ -39,5 +28,20 @@ export class JobService {
 
       }
     );
+  }
+
+  getJobs() {
+    let filters: Filters = {
+      title: '',
+      cityId: 0,
+      employerId: 0,
+      fieldId: 0,
+      workFromHome: false,
+      pageNumber: 1,
+      jobsPerPage: 5,
+      ascendingOrder: false
+    };
+
+    this.getFilteredJobs(filters);
   }
 }
