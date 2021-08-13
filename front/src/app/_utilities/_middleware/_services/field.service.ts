@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Field } from '../../_api/_data-types/interfaces';
+import { Tag } from '../../_api/_data-types/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +8,7 @@ import { Field } from '../../_api/_data-types/interfaces';
 export class FieldService {
 
   public fields: Field[] | null = null;
+  public tags: Tag[] | null = null;
 
   constructor() { }
 
@@ -28,6 +30,15 @@ export class FieldService {
   }
 
   getTags(id: number) {
-
+    this.tags = [
+      {
+        id: 1,
+        name: 'java'
+      },
+      {
+        id: 5,
+        name: 'c++'
+      }
+    ]
   }
 }

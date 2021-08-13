@@ -30,18 +30,20 @@
 <br><br>
 
 <div>
-  <button id="search" (click)="onSearch()">Pretraga</button>
+  <button id="searchBtn" (click)="onSearch();">Pretraga</button>
 </div>
 
 <br><br>
 
 <div>
-  <button id="showMore" (click)="showMore()">Prikaži još filtera</button>
+  <button id="showMore" (click)="showMore()">
+    Prikaži sve filtere
+  </button>
 </div>
 
 <br><br>
 
-<div *ngIf="showMoreFilters">
+<div *ngIf="showMoreBool">
   
   <div>
     <label for="employers">Poslodavac:&nbsp;</label>
@@ -58,57 +60,18 @@
 
   <label for="workFromHome">Rad od kuće:&nbsp;&nbsp;</label>
   <input type="checkbox" id="workFromHome" name="workFromHome" 
-        [(ngModel)]="workFromHome" (click)="wfh()">
+        [(ngModel)]="workFromHome"> <!-- (click)="wfh()" -->
   <br><br>
+
+
+  <div *ngIf="selectedFieldId"> <!-- ako je izabrana oblast rada != 0  (nesto je izabrano), prikazi tagove-->
+    <label for="tags">Odaberite ključne reči:</label><br>
+    
+    <div *ngFor="let t of fieldService.tags">
+      <input type="checkbox" value="{{t.id}}" id="{{t.id}}">
+      <label for="{{t.id}}">&nbsp;&nbsp;{{t.name}}</label>
+    </div>
+  </div>
+
 </div>
 
-
-<!--
-  <div class="dropdown">
-    <button class="dropbtn">Oblast rada</button>
-    <div class="dropdown-content">
-      <a>Link 1</a>
-      <a>Link 2</a>
-      <a>Link 3</a>
-    </div>
-</div> 
-<br><br>
-
-<div class="dropdown">
-    <button class="dropbtn">Grad</button>
-    <div class="dropdown-content">
-      <a>Link 1</a>
-      <a>Link 2</a>
-      <a>Link 3</a>
-    </div>
-</div> 
-<br><br>
-
-<button id="search" (click)="onSearch()">Pretraga</button>
-<br><br>
-
-<button id="showMore" (click)="showMore()">Prikaži još filtera</button>
-<br><br>
-
-<form *ngIf="showMoreFilters">
-  <div class="dropdown">
-    <button class="dropbtn">Poslodavac</button>
-    <div class="dropdown-content">
-      <a>Link 1</a>
-      <a>Link 2</a>
-      <a>Link 3</a>
-    </div>
-  </div> 
-  <br><br>
-
-  
-
-  <br>
-
-  <label for="workFromHome">Rad od kuće:&nbsp;&nbsp;</label>
-  <input type="checkbox" id="workFromHome" name="workFromHome" 
-        [(ngModel)]="workFromHome">
-
-  <br><br>
-</form>
--->

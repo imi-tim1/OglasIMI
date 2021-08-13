@@ -18,7 +18,7 @@ export class JobsFiltersComponent implements OnInit {
 
   //@Input() public city!: City;
 
-  showMoreFilters: boolean = false;
+
   jobName: String = '';
   /*
 
@@ -28,6 +28,7 @@ export class JobsFiltersComponent implements OnInit {
   selectedCityId: number = 0;
   selectedFieldId: number = 0;
   selectedEmployerId: number = 0;
+  showMoreBool: boolean = false;
   //checkedWorkFromHome: boolean = false; DRUGA VARIJANTA
 
   constructor(public cityService: CityService,
@@ -38,10 +39,20 @@ export class JobsFiltersComponent implements OnInit {
     this.fieldService.getFields();
     this.cityService.getCities();
     this.employerService.getEmployers();
+    this.fieldService.getTags(this.selectedFieldId);
   }
 
   showMore() {
-    this.showMoreFilters = true;
+    let p = <HTMLSelectElement> document.getElementById('showMore');
+    
+    if (this.showMoreBool)
+      p.innerHTML = "Prikaži sve filtere";
+    else 
+      p.innerHTML = "Prikaži samo osnovne filtere";
+    
+    this.showMoreBool = !this.showMoreBool;
+
+    this.fieldService.getTags(this.selectedFieldId);
   }
 
   onSearch() {
@@ -63,8 +74,12 @@ export class JobsFiltersComponent implements OnInit {
     console.log(this.selectedValueCity);
   }*/
 
-  wfh() {
+  /*wfh() {
     //this.checkedWorkFromHome = !this.checkedWorkFromHome; DRUGA VARIJANTA
     console.log(this.workFromHome);
   }
+
+  showTags() {
+    this.fieldService.getTags(this.selectedFieldId);
+  }*/
 }
