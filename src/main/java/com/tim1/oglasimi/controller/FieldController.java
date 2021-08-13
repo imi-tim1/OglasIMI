@@ -48,7 +48,7 @@ public class FieldController
     @GetMapping("{id}/tags")
     public ResponseEntity<List<Tag>> getTagList(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt, @PathVariable int id)
     {
-        ResultPair resultPair = checkAccess( jwt, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
+        ResultPair resultPair = checkAccess( jwt, Role.VISITOR, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
         HttpHeaders responseHeaders = new HttpHeaders();
