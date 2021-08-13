@@ -20,7 +20,7 @@ export class FieldService {
       (response) => {
         console.log('Get Fields (Success), Body: ')
         console.log(response.body)
-        this.fields.concat((response.body == null)? [] : response.body);
+        this.fields = this.fields.concat((response.body == null)? [] : response.body);
         console.log('Fields: ')
         console.log(this.fields)
       }
@@ -33,7 +33,7 @@ export class FieldService {
       (response) => {
         console.log('Get Tags (Success), Body: ')
         console.log(response.body)
-        this.tags.concat((response.body == null)? [] : response.body);
+        this.tags = this.tags.concat((response.body == null)? [] : response.body);
         console.log('Tags: ')
         console.log(this.tags)
       }

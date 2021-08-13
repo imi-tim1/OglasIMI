@@ -17,7 +17,7 @@ export class CityService {
       (response) => {
         console.log('Get Cities (Success), Body: ')
         console.log(response.body)
-        this.cities.concat((response.body == null)? [] : response.body);
+        this.cities = this.cities.concat((response.body == null)? [] : response.body);
         console.log('Cities: ')
         console.log(this.cities)
       }
