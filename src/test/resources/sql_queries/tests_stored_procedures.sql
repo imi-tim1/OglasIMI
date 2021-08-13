@@ -68,8 +68,8 @@ CALL register_employer(
 SELECT @p_is_added AS 'Is employer successfully registered?';
 SELECT user_id, email, approved, name, hashed_password
 FROM credentials c
-    JOIN user u on u.id = c.user_id
-    JOIN role r on r.id = u.role_id;
+    JOIN user u ON u.id = c.user_id
+    JOIN role r ON r.id = u.role_id;
 //
 DELIMITER ;
 --
@@ -90,8 +90,8 @@ CALL register_employer(
 SELECT @p_is_added AS 'Is employer successfully registered?';
 SELECT user_id, email, approved, name, hashed_password
 FROM credentials c
-         JOIN user u on u.id = c.user_id
-         JOIN role r on r.id = u.role_id;
+         JOIN user u ON u.id = c.user_id
+         JOIN role r ON r.id = u.role_id;
 //
 DELIMITER ;
 --
@@ -112,8 +112,8 @@ CALL register_employer(
 SELECT @p_is_added AS 'Is employer successfully registered?';
 SELECT user_id, email, approved, name, hashed_password
 FROM credentials c
-         JOIN user u on u.id = c.user_id
-         JOIN role r on r.id = u.role_id;
+         JOIN user u ON u.id = c.user_id
+         JOIN role r ON r.id = u.role_id;
 //
 DELIMITER ;
 -- #######################################################################
@@ -144,12 +144,12 @@ DELIMITER ;
 -- #######################################################################
 -- test call for procedure get_job_tag_filter
 DELIMITER // ;
-call get_job_tag_filter(
+CALL get_job_tag_filter(
         0,
         0,
         0,
-        null,
-        false
+        NULL,
+        FALSE
     );
 //
 DELIMITER ;
@@ -157,12 +157,12 @@ DELIMITER ;
 
 -- test call for procedure get_job_tag_filter
 DELIMITER // ;
-call get_job_common_filter(
+CALL get_job_common_filter(
         0,
         0,
         0,
-        null,
-        false
+        NULL,
+        FALSE
     );
 //
 DELIMITER ;

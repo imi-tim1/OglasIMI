@@ -1,117 +1,142 @@
-use oglasimi_db;
+USE oglasimi_db;
 
-create table role
+CREATE TABLE role
 (
-    id int auto_increment,
-    name varchar(20) not null,
-    constraint primary key (id),
-    constraint unique key (name)
+    id INT AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL,
+    CONSTRAINT PRIMARY KEY (id),
+    CONSTRAINT UNIQUE KEY (name)
 );
 
-create table user
+CREATE TABLE user
 (
-    id int auto_increment,
-    role_id int not null,
-    approved bool not null,
-    constraint primary key (id),
-    constraint foreign key (role_id) references role (id)
+    id INT AUTO_INCREMENT,
+    role_id INT NOT NULL,
+    approved BOOLEAN NOT NULL,
+    CONSTRAINT PRIMARY KEY (id),
+    CONSTRAINT FOREIGN KEY (role_id) REFERENCES role (id)
+        ON UPDATE CASCADE
 );
 
-create table credentials
+CREATE TABLE credentials
 (
-    user_id int not null,
-    email varchar(190) not null,
-    hashed_password varchar(300) not null,
-    constraint primary key (user_id),
-    constraint foreign key (user_id) references user (id),
-    constraint unique key (email)
+    user_id INT NOT NULL,
+    email VARCHAR(190) NOT NULL,
+    hashed_password VARCHAR(300) NOT NULL,
+    CONSTRAINT PRIMARY KEY (user_id),
+    CONSTRAINT FOREIGN KEY (user_id) REFERENCES user (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT UNIQUE KEY (email)
 );
 
-create table field
+CREATE TABLE field
 (
-    id int auto_increment,
-    name varchar(30) not null,
-    constraint primary key (id)
+    id INT AUTO_INCREMENT,
+    name VARCHAR(30) NOT NULL,
+    CONSTRAINT PRIMARY KEY (id)
 );
 
-create table city
+CREATE TABLE city
 (
-  id int auto_increment,
-  name varchar(30) not null,
-  constraint primary key (id)
+  id INT AUTO_INCREMENT,
+  name VARCHAR(30) NOT NULL,
+  CONSTRAINT PRIMARY KEY (id)
 );
 
-create table tag
+CREATE TABLE tag
 (
-    id int auto_increment,
-    field_id int not null,
-    name varchar(30) not null,
-    constraint primary key (id),
-    constraint foreign key (field_id) references field (id)
+    id INT AUTO_INCREMENT,
+    field_id INT NOT NULL,
+    name VARCHAR(30) NOT NULL,
+    CONSTRAINT PRIMARY KEY (id),
+    CONSTRAINT FOREIGN KEY (field_id) REFERENCES field (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
-create table applicant
+CREATE TABLE applicant
 (
-    user_id int not null,
-    first_name varchar(30) not null,
-    last_name varchar(30) not null,
-    picture_base64 text(65000),
-    phone_number varchar(30) not null,
-    constraint primary key (user_id),
-    constraint foreign key (user_id) references user (id)
+    user_id INT NOT NULL,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
+    picture_base64 TEXT(65000),
+    phone_number VARCHAR(30) NOT NULL,
+    CONSTRAINT PRIMARY KEY (user_id),
+    CONSTRAINT FOREIGN KEY (user_id) REFERENCES user (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
-create table admin
+CREATE TABLE admin
 (
-    user_id int,
-    name varchar(30) not null,
-    constraint primary key (user_id),
-    constraint foreign key (user_id) references user (id)
+    user_id INT,
+    name VARCHAR(30) NOT NULL,
+    CONSTRAINT PRIMARY KEY (user_id),
+    CONSTRAINT FOREIGN KEY (user_id) REFERENCES user (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
-create table employer
+CREATE TABLE employer
 (
-    user_id int,
-    name varchar(30) not null,
-    tin varchar(20) not null,
-    address varchar(50) not null,
-    picture_base64 text(65000),
-    phone_number varchar(30) not null,
-    constraint primary key (user_id),
-    constraint foreign key (user_id) references user (id)
+    user_id INT,
+    name VARCHAR(30) NOT NULL,
+    tin VARCHAR(20) NOT NULL,
+    address VARCHAR(50) NOT NULL,
+    picture_base64 TEXT(65000),
+    phone_number VARCHAR(30) NOT NULL,
+    CONSTRAINT PRIMARY KEY (user_id),
+    CONSTRAINT FOREIGN KEY (user_id) REFERENCES user (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
-create table job
+CREATE TABLE job
 (
-    id int primary key auto_increment,
-    employer_id int not null,
-    field_id int not null,
-    city_id int,
-    post_date DATETIME not null,
-    title varchar(50) not null,
-    description varchar(510) not null,
-    salary varchar(50),
-    work_from_home boolean,
-    constraint foreign key (employer_id) references employer (user_id),
-    constraint foreign key (field_id) references field (id),
-    constraint foreign key (city_id) references city (id)
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    employer_id INT NOT NULL,
+    field_id INT NOT NULL,
+    city_id INT,
+    post_date DATETIME NOT NULL,
+    title VARCHAR(50) NOT NULL,
+    description VARCHAR(510) NOT NULL,
+    salary VARCHAR(50),
+    work_from_home BOOLEAN,
+    CONSTRAINT FOREIGN KEY (employer_id) REFERENCES employer (user_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (field_id) REFERENCES field (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (city_id) REFERENCES city (id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 
-create table job_application
+CREATE TABLE job_application
 (
-    job_id int not null,
-    applicant_id int not null,
-    date DATETIME not null,
-    constraint primary key (job_id, applicant_id),
-    constraint foreign key (job_id) references job (id),
-    constraint foreign key (applicant_id) references applicant (user_id)
+    job_id INT NOT NULL,
+    applicant_id INT NOT NULL,
+    date DATETIME NOT NULL,
+    CONSTRAINT PRIMARY KEY (job_id, applicant_id),
+    CONSTRAINT FOREIGN KEY (job_id) REFERENCES job (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (applicant_id) REFERENCES applicant (user_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
-create table job_tag
+CREATE TABLE job_tag
 (
-    job_id int not null,
-    tag_id int not null,
-    constraint primary key (job_id, tag_id),
-    constraint foreign key (job_id) references job (id),
-    constraint foreign key (tag_id) references tag (id)
+    job_id INT NOT NULL,
+    tag_id INT NOT NULL,
+    CONSTRAINT PRIMARY KEY (job_id, tag_id),
+    CONSTRAINT FOREIGN KEY (job_id) REFERENCES job (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (tag_id) REFERENCES tag (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
