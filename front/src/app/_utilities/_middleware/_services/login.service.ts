@@ -18,6 +18,9 @@ export class LoginService {
 
   login(email: string, password: string) 
   {
+    console.log('Kredencijali\n');
+    console.log(password);
+
     let body: Creds = {
       email: email,
       hashedPassword: Sha256.encrypt(password)
@@ -33,6 +36,11 @@ export class LoginService {
         this.loginFailed = false;
         console.log('body:');
         console.log(response.body);
+
+        let jwt = response.headers.get(JWT_HEADER_NAME);
+        JWTUtil.store((jwt == null)? '' : jwt);
+
+        console.log(JWTUtil.getPayload());
       },
 
       // Login Failed
@@ -41,11 +49,15 @@ export class LoginService {
         // Unauthorized
         if (HttpStatusCode.Unauthorized == error.status) {
           this.loginFailed = true;
+          if(JWTUtil.get() != '')
+            console.log("istekla sesija");
+          else
+            console.log('pogresni kredencijali')
           JWTUtil.delete();
         }
         // Forbidden
         if (HttpStatusCode.Forbidden == error.status) {
-
+          console.log(JWTUtil.getPayload());
         }
       },
       ()=>{console.log("Complete")}

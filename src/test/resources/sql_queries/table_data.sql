@@ -13,11 +13,11 @@ values (1, true),
        (3, true);
 
 insert into credentials (user_id, email, hashed_password)
-values (1, 'misas@ad.min', 'aeab55bba4162e7a7cde64142532e26955b1d5c8fb251d83ba95a7ba1ffdd238'),
-       (2, 'zika@bacv.anin', '92ded8e40979699983b844c5c10bbefaa0fbcadd12795ee75a535e833bc1e9ca'),
-       (3, 'pera@wuiii.com', 'd32aea39aa588565353ce46716459c77039c06f032ce027519eccf209617cf6e'),
-       (4, 'laza@vass.org', 'be2ac81588a6ef186d73f4738e95a3926c5c88a9d03a7970f1ddd182d9f236cd'),
-       (5, 'mika@yahoo.rs', '657c5f62072faf7bc0a6ead16b3338b109bf8b7ecffdfe1b545bc25503f5199e');
+values (1, 'misas@ad.min', '283d0cb1289e2dccb8c1ee70c5c3382d2ec25e160742ca2bcb67971dcba3d28ffa920e6bf7b37fe939e29100d96849c61f61338c5dab27943beda77137b85151'),
+       (2, 'zika@bacv.anin', '5739d5d6e80ef1fbdf3b6ce697ba827108c3d1bd0f9da652803044e4861138330f315039f44d173e6f5d5cd3a8d0869c224c72c30814088b942df2eb8804a42c'),
+       (3, 'pera@wuiii.com', '3a772c82dc28af481ff4099526353598f8ada4d243ddd0ae182a3ac631b7a6432afe0d215108e28a4fcd2ad61a70c8d45e97d87ba36665f8c55c18dc524105ea'),
+       (4, 'laza@vass.org', 'f3c2eedfc3c558e50972dcb4d909ca391a79dd2acca9d3fc750fffe6db03a3a1431713da854fbb8bc48a2c6ffdb6f699c5cf6f6885652c6cd730ed5f9005523f'),
+       (5, 'mika@yahoo.rs', 'a7fce35f48a350ae1125a3ca4e0af6e37316a9ed4555b146b9f663d52c33eda09a49aa813c9d36c1a617c2453156bb273c93eb68ece01ca7c38e5f247794104c');
 
 insert into employer (user_id, name, tin, address, picture_base64, phone_number)
 values (4, 'Lažarus d.o.o', '123456789', 'Keba Kraba, 3', null, '063123456'),

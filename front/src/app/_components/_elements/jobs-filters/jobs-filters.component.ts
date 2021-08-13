@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { JobService } from 'src/app/_utilities/_helpers/_services/job.service';
+// import { JobService } from 'src/app/_utilities/_helpers/_services/job.service';
 
 @Component({
   selector: 'app-jobs-filters',
@@ -20,7 +20,7 @@ export class JobsFiltersComponent implements OnInit {
   workFromHome: boolean = false;
   
 
-  constructor(private jobService: JobService) { }
+  // constructor(private jobService: JobService) { }
 
   ngOnInit(): void {
   }
