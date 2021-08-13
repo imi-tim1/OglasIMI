@@ -47,7 +47,7 @@ export interface City
 }
 
 export interface Filters {
-    title?: string;
+    title: string;
     tagList?: number[];
     employerId: number;
     fieldId: number;

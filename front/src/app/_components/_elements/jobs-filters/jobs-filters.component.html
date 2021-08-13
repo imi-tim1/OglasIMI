@@ -68,7 +68,8 @@
     <label for="tags">Odaberite ključne reči:</label><br>
     
     <div *ngFor="let t of fieldService.tags">
-      <input type="checkbox" value="{{t.id}}" id="{{t.id}}">
+      <input type="checkbox" value="{{t.id}}" id="{{t.id}}"
+              (click)="toggleTag(t.id)">
       <label for="{{t.id}}">&nbsp;&nbsp;{{t.name}}</label>
     </div>
   </div>
