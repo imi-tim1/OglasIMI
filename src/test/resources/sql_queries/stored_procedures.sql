@@ -219,7 +219,7 @@ CREATE PROCEDURE get_job_tag_filter
     IN p_work_from_home boolean
 )
 BEGIN
-    SELECT J.id job_id, T.id tag_id
+    SELECT J.id j_id, T.id t_id, T.name t_name
     FROM (SELECT j.*,
                  f.id f_id, f.name f_name,
                  c.id c_id, c.name c_name,
@@ -231,7 +231,7 @@ BEGIN
               (p_field_id = 0 OR p_field_id = field_id)
             AND (p_employer_id = 0 OR p_employer_id = employer_id)
             AND (p_city_id = 0 OR p_city_id = city_id)
-            AND (p_title is NULL OR title RLIKE(CONCAT(p_title,'+')))
+            AND (p_title is NULL OR p_title = 'default' OR title RLIKE(CONCAT(p_title,'+')))
             AND (p_work_from_home = false OR p_work_from_home = work_from_home)) J join job_tag JT ON J.id = job_id
                                                                                    join tag T ON tag_id = T.id
     ORDER BY post_date DESC;
@@ -264,7 +264,7 @@ BEGIN
         (p_field_id = 0 OR p_field_id = field_id)
       AND (p_employer_id = 0 OR p_employer_id = employer_id)
       AND (p_city_id = 0 OR p_city_id = city_id)
-      AND (p_title is NULL OR title RLIKE(CONCAT(p_title,'+')))
+      AND (p_title is NULL OR p_title = 'default' OR title RLIKE(CONCAT(p_title,'+')))
       AND (p_work_from_home = false OR p_work_from_home = work_from_home)
     ORDER BY post_date DESC;
 END //
