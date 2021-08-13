@@ -2,18 +2,25 @@ package com.tim1.oglasimi.repository.implementation;
 
 import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.repository.JobRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class JobRepositoryImpl implements JobRepository
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployerRepositoryImpl.class);
+
     private static final String MASTER_STORED_PROCEDURE = "{call get_job_common_filter(?,?,?,?,?)}";
     private static final String TAG_STORED_PROCEDURE = "{call get_job_tag_filter(?,?,?,?,?)}";
+    private static final String POST_JOB_STORED_PROCEDURE = "{call post_job(?,?,?,?,?,?,?,?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -162,7 +169,7 @@ public class JobRepositoryImpl implements JobRepository
         city.setName(rsMaster.getString("c_name"));
 
         tempJob.setId(rsMaster.getInt("id"));
-        tempJob.setPostDate(rsMaster.getDate("post_date"));
+        tempJob.setPostDate(rsMaster.getObject("post_date",LocalDateTime.class));
         tempJob.setTitle(rsMaster.getString("title"));
         tempJob.setDescription(rsMaster.getString("description"));
         tempJob.setSalary(rsMaster.getString("salary"));
@@ -244,8 +251,53 @@ public class JobRepositoryImpl implements JobRepository
     @Override
     public boolean create(Job job)
     {
-        return false;
+        boolean isJobSuccessfullyPosted = false;
+
+        try (Connection con = DriverManager.getConnection("jdbc:mariadb://localhost:3306/oglasimi_db","oglasimi","12345");
+             CallableStatement cstmt = con.prepareCall(POST_JOB_STORED_PROCEDURE))
+        {
+            setJobPostStatement(cstmt,job);
+            /*cstmt.registerOutParameter("p_is_posted", Types.BOOLEAN);*/
+
+            cstmt.registerOutParameter("flag", Types.DATE);
+            cstmt.execute();
+
+            LocalDateTime flag = cstmt.getObject("flag", LocalDateTime.class);
+            System.out.println(flag);
+            //isJobSuccessfullyPosted = cstmt.getBoolean("p_is_posted");
+
+
+        }
+
+        catch (SQLException e) {
+            LOGGER.debug("checkCredentials | An error occurred while communicating with a database", e );
+            e.printStackTrace();
+        }
+
+        return isJobSuccessfullyPosted;
     }
+
+    public void setJobPostStatement(CallableStatement cstmt, Job job) throws SQLException
+    {
+        /*cstmt.setInt("p_employer_id", job.getEmployer().getId());
+        cstmt.setInt("p_field_id", job.getField().getId());
+        cstmt.setInt("p_city_id", job.getCity().getId());
+        cstmt.setObject("p_post_date", job.getPostDate());
+        cstmt.setString("p_title", job.getTitle());
+        cstmt.setString("p_description", job.getDescription());
+        cstmt.setString("p_salary", job.getSalary());
+        cstmt.setBoolean("p_work_from_home", job.isWorkFromHome());*/
+
+        cstmt.setInt("p_employer_id", 0);
+        cstmt.setInt("p_field_id",0);
+        cstmt.setInt("p_city_id", 0);
+        cstmt.setObject("p_post_date", "2021-06-08 01:15:08");
+        cstmt.setString("p_title", "title");
+        cstmt.setString("p_description", "desc");
+        cstmt.setString("p_salary", "sal");
+        cstmt.setBoolean("p_work_from_home", false);
+    }
+
 
     @Override
     public Job get(Integer integer)

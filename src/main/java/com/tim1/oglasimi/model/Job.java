@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 //Cao
@@ -21,7 +22,7 @@ public class Job
 
     @NotBlank @NotNull
     @DateTimeFormat
-    private Date postDate;
+    private LocalDateTime postDate;
 
     @NotBlank @NotNull
     @Size( min = 3, max = 50, message = "The length of title must be between 3 and 50 characters" )
@@ -74,11 +75,11 @@ public class Job
         this.tags = tags;
     }
 
-    public Date getPostDate() {
+    public LocalDateTime getPostDate() {
         return postDate;
     }
 
-    public void setPostDate(Date postDate) {
+    public void setPostDate(LocalDateTime postDate) {
         this.postDate = postDate;
     }
 
