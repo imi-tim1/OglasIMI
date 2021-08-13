@@ -1,21 +1,36 @@
 package com.tim1.oglasimi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 //Cao
 public class Job
 {
+    @Min(1)
+    @Max(Integer.MAX_VALUE)
     private int id;
+
     private Employer employer;
     private Field field;
     private City city;
     private List<Tag> tags;
+
+    @NotBlank @NotNull
+    @DateTimeFormat
     private Date postDate;
+
+    @NotBlank @NotNull
+    @Size( min = 3, max = 50, message = "The length of title must be between 3 and 50 characters" )
     private String title;
+
+    @NotBlank @NotNull
+    @Size(min = 10, max = 500, message = "The length of description must be between 10 and 500 characters")
     private String description;
+
     private String salary;
     private boolean workFromHome;
 

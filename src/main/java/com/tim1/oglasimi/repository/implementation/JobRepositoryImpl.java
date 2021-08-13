@@ -35,7 +35,7 @@ public class JobRepositoryImpl implements JobRepository
              CallableStatement cstmtMaster = con.prepareCall(MASTER_STORED_PROCEDURE);
              CallableStatement cstmtTag = con.prepareCall(TAG_STORED_PROCEDURE))
         {
-            ResultSet rsTag;
+            ResultSet rsTag = null;
 
             setStatement(cstmtMaster,jobFilter);
             ResultSet rsMaster = cstmtMaster.executeQuery(); // Glavna tabela sa uobicajenim filterima
@@ -57,7 +57,7 @@ public class JobRepositoryImpl implements JobRepository
                 {
                     while(rsMaster.previous())
                     {
-                        tempJob = setJobModel(rsMaster);
+                        tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
                         jobList.add(tempJob);
 
                         flagPage--;
@@ -78,7 +78,7 @@ public class JobRepositoryImpl implements JobRepository
 
                         if(flagTag)
                         {
-                            tempJob = setJobModel(rsMaster);
+                            tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
                             jobList.add(tempJob);
                         }
 
@@ -100,7 +100,7 @@ public class JobRepositoryImpl implements JobRepository
                 {
                     while(rsMaster.next())
                     {
-                        tempJob = setJobModel(rsMaster);
+                        tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
                         jobList.add(tempJob);
 
                         flagPage--;
@@ -121,7 +121,7 @@ public class JobRepositoryImpl implements JobRepository
 
                         if(flagTag)
                         {
-                            tempJob = setJobModel(rsMaster);
+                            tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
                             jobList.add(tempJob);
                         }
 
@@ -139,34 +139,62 @@ public class JobRepositoryImpl implements JobRepository
         return jobList;
     }
 
-    public Job setJobModel(ResultSet rs) throws SQLException
+    public Job setJobModel(ResultSet rsMaster, ResultSet rsTag, List<Tag> tagList) throws SQLException
     {
+        Tag tempTag;
         Job tempJob = new Job();
+        List<Tag> tags = new ArrayList<>();
 
         Employer employer = new Employer();
-        employer.setId(rs.getInt("employer_id"));
-        employer.setName(rs.getString("e_name"));
-        employer.setTin(rs.getString("tin"));
-        employer.setAddress(rs.getString("address"));
-        employer.setPictureBase64(rs.getString("picture_base64"));
-        employer.setPhoneNumber(rs.getString("phone_number"));
+        employer.setId(rsMaster.getInt("employer_id"));
+        employer.setName(rsMaster.getString("e_name"));
+        employer.setTin(rsMaster.getString("tin"));
+        employer.setAddress(rsMaster.getString("address"));
+        employer.setPictureBase64(rsMaster.getString("picture_base64"));
+        employer.setPhoneNumber(rsMaster.getString("phone_number"));
 
         Field field = new Field();
-        field.setId(rs.getInt("field_id"));
-        field.setName(rs.getString("f_name"));
+        field.setId(rsMaster.getInt("field_id"));
+        field.setName(rsMaster.getString("f_name"));
 
         City city = new City();
-        city.setId(rs.getInt("city_id"));
-        city.setName(rs.getString("c_name"));
+        city.setId(rsMaster.getInt("city_id"));
+        city.setName(rsMaster.getString("c_name"));
 
-        tempJob.setId(rs.getInt("id"));
-        tempJob.setPostDate(rs.getDate("post_date"));
-        tempJob.setTitle(rs.getString("title"));
-        tempJob.setDescription(rs.getString("description"));
-        tempJob.setSalary(rs.getString("salary"));
+        tempJob.setId(rsMaster.getInt("id"));
+        tempJob.setPostDate(rsMaster.getDate("post_date"));
+        tempJob.setTitle(rsMaster.getString("title"));
+        tempJob.setDescription(rsMaster.getString("description"));
+        tempJob.setSalary(rsMaster.getString("salary"));
         tempJob.setEmployer(employer);
         tempJob.setField(field);
         tempJob.setCity(city);
+
+        if(rsTag != null)
+        {
+            rsTag.beforeFirst();
+            while(rsTag.next())
+            {
+                boolean flag = false;
+
+                tempTag = new Tag();
+                tempTag.setId(rsTag.getInt("t_id"));
+
+                for(Tag tag : tagList)
+                {
+                    if(tempTag.getId() == tag.getId() && rsTag.getInt("j_id") == tempJob.getId()) flag = true;
+                }
+
+                if(flag)
+                {
+                    tempTag.setName(rsTag.getString("t_name"));
+                    tempTag.setFieldId(tempJob.getField().getId());
+                    tags.add(tempTag);
+                }
+            }
+
+            tempJob.setTags(tags);
+        }
 
         return tempJob;
     }
@@ -189,11 +217,11 @@ public class JobRepositoryImpl implements JobRepository
 
         while(rsTag.next())
         {
-            int tmpId = rsTag.getInt("job_id");
+            int tmpId = rsTag.getInt("j_id");
 
             if(id == tmpId)
             {
-                int tmpTag = rsTag.getInt("tag_id");
+                int tmpTag = rsTag.getInt("t_id");
 
                 for(Tag tag : tagList)
                 {

@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class JobService
 {
-    private final JobRepositoryImpl jobRepositoryImpl;
+    private JobRepositoryImpl jobRepositoryImpl;
 
     @Autowired
     public JobService(JobRepositoryImpl jobRepositoryImpl)

@@ -1,8 +1,16 @@
 package com.tim1.oglasimi.model;
 
-public class Field 
+import javax.validation.constraints.*;
+
+public class Field
 {
+    @Min(1)
+    @Max(Integer.MAX_VALUE)
     private int id;
+
+    @NotBlank
+    @NotNull
+    @Size( min = 2, max = 30, message = "The length of name must be between 2 and 30 characters" )
     private String name;
 
     public int getId()
