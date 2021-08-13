@@ -23,4 +23,9 @@ public class JobService
     {
         return jobRepositoryImpl.getFilteredJobs(jobFilter);
     }
+
+    public boolean postJob(Job job)
+    {
+        return jobRepositoryImpl.create(job);
+    }
 }

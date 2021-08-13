@@ -61,6 +61,30 @@ public class JobController
         return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(null);
     }
 
+    @PostMapping
+    public ResponseEntity<?> postJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                  @RequestBody Job job)
+    {
+        ResultPair resultPair = checkAccess( jwt, Role.VISITOR, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( "You are not allowed to access this resource" );
+        }
+
+        boolean flag = jobService.postJob(job);
+
+        if(flag) return ResponseEntity.status(HttpStatus.CREATED).headers(responseHeaders).body(null);
+        return ResponseEntity.status(HttpStatus.CONFLICT).headers(responseHeaders).body(null);
+    }
+
     private JobFilter setJobModel(int employerId, int fieldId, int cityId, String title, List<Integer> tagList,
                             boolean workFromHome, int pageNumber, int jobsPerPage, boolean ascendingOrder)
     {
