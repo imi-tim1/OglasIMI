@@ -3,20 +3,20 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
 import { HeaderUtil } from '../../_helpers/http-util';
-import { Employer, Job } from '../_data-types/interfaces';
+import { Applicant, Job } from '../_data-types/interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
+export class ApplicantApiService {
 
-export class EmployerApiService {
-
-  private url: string = apiProperties.url + '/api/employers'
+  private url: string = apiProperties.url + '/api/applicants'
 
   constructor(private http: HttpClient) { }
 
-  getEmployers(): Observable<HttpResponse<Employer[]>> {
-    return this.http.get<Employer[]>(
+  // Potrebno TESTIRANJE !!!
+  getApplicants(): Observable<HttpResponse<Applicant[]>> {
+    return this.http.get<Applicant[]>(
       this.url,
       {
         observe: 'response',
@@ -26,8 +26,8 @@ export class EmployerApiService {
   }
 
   // Potrebno TESTIRANJE !!!
-  getEmployer(id: number): Observable<HttpResponse<Employer>> {
-    return this.http.get<Employer>(
+  getApplicant(id: number): Observable<HttpResponse<Applicant>> {
+    return this.http.get<Applicant>(
       this.url + `/${id}`,
       {
         observe: 'response',
@@ -37,7 +37,7 @@ export class EmployerApiService {
   }
 
   // Potrebno TESTIRANJE !!!
-  getEmployersJobs(id: number): Observable<HttpResponse<Job[]>> {
+  getApplicantsJobs(id: number): Observable<HttpResponse<Job[]>> {
     return this.http.get<Job[]>(
       this.url + `/${id}/jobs`,
       {
@@ -48,14 +48,14 @@ export class EmployerApiService {
   }
 
   // Potrebno TESTIRANJE !!!
-  createEmployer(employerData: Employer): Observable<HttpResponse<null>> {
+  createApplicant(applicantData: Applicant): Observable<HttpResponse<null>> {
     return this.http.post<null>(
       this.url, // api url
-      employerData, // body
+      applicantData, // body
       { // options
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()
       });
   }
-
+  
 }
