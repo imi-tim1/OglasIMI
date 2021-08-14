@@ -39,10 +39,12 @@ export interface Employer
     id: number;
     name: string;
     email?: string;
-    pictureBase64?: string;
+    pictureBase64?: string | null;
     phoneNumber?: string;
     address?: string;
     tin?: string;
+
+    hashedPassword?: string;
 }
 
 // "id": 4,
