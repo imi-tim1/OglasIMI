@@ -248,6 +248,24 @@ DELIMITER ;
 
 
 -- #######################################################################
+-- Procedure for applicants which applied for particular job
+DELIMITER // ;
+CREATE PROCEDURE get_job_applicants(
+    IN p_job_id INT
+)
+BEGIN
+    SELECT a.*, c.email, c.hashed_password
+    FROM applicant a
+             JOIN job_application ja on a.user_id = ja.applicant_id
+             JOIN credentials c on a.user_id = c.user_id
+    WHERE p_job_id = job_id;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
 -- Procedure for getting employer's job posts (without tags)
 DELIMITER // ;
 CREATE PROCEDURE employer_get_posts_without_tags(

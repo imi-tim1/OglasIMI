@@ -128,4 +128,62 @@ public class JobController
 
         return jobFilter;
     }
+
+    @GetMapping("{jobId}/applicants")
+    public ResponseEntity<List<Applicant>> getJobApplicants( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                 @PathVariable("jobId")
+                                                 @Min( 1 )
+                                                 @Max( Integer.MAX_VALUE ) int jobId ) {
+        ResultPair resultPair = checkAccess( jwt, Role.EMPLOYER, Role.ADMIN );
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK ) {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( null );
+        }
+
+        double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+        int uid = (int) tempUid;
+        String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
+
+        int employerId = 0;
+        List<Applicant> applicantList = null;
+
+        Job job = jobService.getJob(jobId);
+
+        /* check if job exists */
+        if( job == null ) {
+            httpStatus = HttpStatus.NOT_FOUND;
+            System.out.println("Job doesn't exist");
+        }
+        else {
+            employerId = job.getEmployer().getId();
+            System.out.println("employerId: " + employerId + "; uid= " + uid);
+            /* check if another employer is trying to access the api;
+            only admin and employer himself are allowed to access list of employer's posts */
+            if( Role.EMPLOYER.equalsTo(role) && employerId != uid ) {
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .headers(responseHeaders)
+                        .body( null );
+            }
+
+            applicantList = jobService.getJobApplicants(jobId);
+
+            if( applicantList == null || applicantList.isEmpty() ) {
+                httpStatus = HttpStatus.NOT_FOUND;
+                System.out.println("No one appliend for this job");
+            }
+        }
+
+        return ResponseEntity
+                .status(httpStatus)
+                .headers(responseHeaders)
+                .body( applicantList );
+    }
 }

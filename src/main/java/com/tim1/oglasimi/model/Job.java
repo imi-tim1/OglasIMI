@@ -1,12 +1,9 @@
 package com.tim1.oglasimi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 //Cao
 public class Job
@@ -112,6 +109,32 @@ public class Job
     }
 
     public void setWorkFromHome(boolean workFromHome) {
+        this.workFromHome = workFromHome;
+    }
+
+    public Job() {
+    }
+
+    public Job(
+            int id,
+            Employer employer,
+            Field field,
+            City city,
+            List<Tag> tags,
+            LocalDateTime postDate,
+            String title,
+            String description,
+            String salary,
+            boolean workFromHome ) {
+        this.id = id;
+        this.employer = employer;
+        this.field = field;
+        this.city = city;
+        this.tags = tags;
+        this.postDate = postDate;
+        this.title = title;
+        this.description = description;
+        this.salary = salary;
         this.workFromHome = workFromHome;
     }
 }
