@@ -66,7 +66,7 @@
 
 
   <div *ngIf="selectedFieldId"> <!-- ako je izabrana oblast rada != 0  (nesto je izabrano), prikazi tagove-->
-    <label for="tags">Odaberite ključne reči:</label><br>
+    <label for="tags">Izaberite ključne reči:</label><br>
     
     <div class="border border-dark" [ngStyle]="{ 'overflow': 'scroll', 'height': '100px', 'width': '200px' }">
       <div *ngFor="let t of fieldService.tags">

@@ -8,12 +8,13 @@ import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services
 })
 export class RegisterPageComponent implements OnInit {
 
-  public allowedRoles: string[] = [];
+  public allowedRoles: UserRole[] = [
+    UserRole.Visitor
+  ]
 
-  constructor(private compAccess: ComponentAccessService) { }
+  constructor(public accessService: ComponentAccessService) { }
 
   ngOnInit(): void {
-    this.compAccess.checkAccess([UserRole.Visitor]);
+    this.accessService.checkAccess(this.allowedRoles);
   }
-
 }

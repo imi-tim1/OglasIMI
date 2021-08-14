@@ -55,6 +55,7 @@ export class ComponentAccessService {
       // Error (Not Logged In)
       (error: HttpErrorResponse) => {
         JWTUtil.delete();
+        console.log("IZBRISAN TOKEN !!!!!!!!!!!!");
 
         console.log('Check Access, "Error" Block'); // DEBUG
         console.log('Status: ' + error.status); // DEBUG
