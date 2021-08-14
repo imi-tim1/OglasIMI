@@ -32,4 +32,13 @@ public class Field
     {
         this.name = name;
     }
+
+
+    public Field() {
+    }
+
+    public Field(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
