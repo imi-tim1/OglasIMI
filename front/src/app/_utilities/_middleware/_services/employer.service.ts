@@ -26,6 +26,8 @@ export class EmployerService {
     );
   }
 
+
+  // Potrebno TESTIRANJE !!!
   getEmployer(id: number) {
     this.api.getEmployer(id).subscribe(
       // Success
@@ -37,6 +39,7 @@ export class EmployerService {
     );
   }
 
+  // Potrebno TESTIRANJE !!!
   getEmployersJobs(id: number) {
     this.api.getEmployersJobs(id).subscribe(
       // Success
@@ -44,6 +47,16 @@ export class EmployerService {
         this.employersJobs = (response.body == null)? [] : response.body;
         console.log('Employers Jobs: ')
         console.log(this.employer)
+      }
+    );
+  }
+
+  // Potrebno TESTIRANJE !!!
+  createEmployer(employerData: Employer) {
+    this.api.createEmployer(employerData).subscribe(
+      // Success
+      (response) => {
+        console.log('New Employer Added, status: ' + response.status);
       }
     );
   }

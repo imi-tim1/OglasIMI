@@ -25,9 +25,10 @@ export class EmployerApiService {
     );
   }
 
+  // Potrebno TESTIRANJE !!!
   getEmployer(id: number): Observable<HttpResponse<Employer>> {
     return this.http.get<Employer>(
-      this.url + `/${id}}`,
+      this.url + `/${id}`,
       {
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()
@@ -35,6 +36,7 @@ export class EmployerApiService {
     );
   }
 
+  // Potrebno TESTIRANJE !!!
   getEmployersJobs(id: number): Observable<HttpResponse<Job[]>> {
     return this.http.get<Job[]>(
       this.url + `/${id}/jobs`,
@@ -43,6 +45,17 @@ export class EmployerApiService {
         headers: HeaderUtil.jwtOnlyHeaders()
       }
     );
+  }
+
+  // Potrebno TESTIRANJE !!!
+  createEmployer(employerData: Employer): Observable<HttpResponse<null>> {
+    return this.http.post<null>(
+      this.url, // api url
+      employerData, // body
+      { // options
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      });
   }
 
 }
