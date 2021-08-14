@@ -9,6 +9,7 @@ import { JobApiService } from '../../_api/_services/job-api.service';
 export class JobService {
 
   public jobs: Job[] = [];
+  public totalJobNumber: number = 0;
   public job: Job | null = null;
 
   constructor(private jobApi: JobApiService) { }
@@ -18,11 +19,14 @@ export class JobService {
     this.jobApi.getJobs(filters).subscribe(
       // Success
       (response) => {
-        console.log('Success, Body: ')
-        console.log(response.body)
-        this.jobs = (response.body == null)? [] : response.body;
+        if (response.body != null && response.body.jobs != null) {
+          this.jobs = response.body.jobs;
+          this.totalJobNumber = response.body.totalJobNumber;
+        }
+
         console.log('Jobs: ')
         console.log(this.jobs)
+        console.log(this.totalJobNumber)
       }
     );
   }
