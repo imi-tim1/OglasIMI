@@ -17,7 +17,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployerRepositoryImpl.class);
 
-    private static final String REGISTER_EMPLOYER_PROCEDURE_CALL = "{call register_employer(?,?,?,?,?,?,?,?)}";
+    private static final String REGISTER_EMPLOYER_PROCEDURE_CALL = "{call register_employer(?,?,?,?,?,?,?,?,?)}";
     private static final String GET_ALL_EMPLOYERS_PROCEDURE_CALL = "{call get_all_employers()}";
     private static final String GET_EMPLOYER_PROCEDURE_CALL = "{call get_employer(?)}";
     private static final String APPROVE_EMPLOYER_PROCEDURE_CALL = "{call approve_user(?,?)}";
@@ -86,12 +86,18 @@ public class EmployerRepositoryImpl implements EmployerRepository {
             cstmt.setString("p_tin", employer.getTin() );
 
             cstmt.registerOutParameter("p_is_added", Types.BOOLEAN);
+            cstmt.registerOutParameter("p_already_exists", Types.BOOLEAN);
             cstmt.execute();
 
             isSuccessfullyRegistered = cstmt.getBoolean("p_is_added");
+            boolean alreadyExists = cstmt.getBoolean("p_already_exists");
+            if( ! isSuccessfullyRegistered && ! alreadyExists )
+                throw new Exception("transaction failed");
 
-        } catch ( SQLException e ) {
-            LOGGER.debug("checkCredentials | An error occurred while communicating with a database", e );
+        }
+        catch ( Exception e ) {
+            LOGGER.error("checkCredentials | An error occurred while communicating with a database.");
+            LOGGER.error("checkCredentials | {}", e.getMessage() );
             e.printStackTrace();
         }
 

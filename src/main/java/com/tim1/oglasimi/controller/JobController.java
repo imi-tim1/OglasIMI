@@ -39,15 +39,15 @@ public class JobController
 
     @GetMapping
     public ResponseEntity<JobFeed> getFilteredJobs(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                                  @RequestParam(required = false) String title,
-                                                  @RequestParam(required = false) List<Integer> tagList,
-                                                  @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int employerId,
-                                                  @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int fieldId,
-                                                  @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int cityId,
-                                                  @RequestParam @Min(1) @Max(Integer.MAX_VALUE) int pageNumber,
-                                                  @RequestParam @Min(5) @Max(Integer.MAX_VALUE) int jobsPerPage,
-                                                  @RequestParam boolean workFromHome,
-                                                  @RequestParam boolean ascendingOrder)
+                                                   @RequestParam(required = false) String title,
+                                                   @RequestParam(required = false) List<Integer> tagList,
+                                                   @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int employerId,
+                                                   @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int fieldId,
+                                                   @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int cityId,
+                                                   @RequestParam @Min(1) @Max(Integer.MAX_VALUE) int pageNumber,
+                                                   @RequestParam @Min(5) @Max(Integer.MAX_VALUE) int jobsPerPage,
+                                                   @RequestParam boolean workFromHome,
+                                                   @RequestParam boolean ascendingOrder)
     {
         JobFilter jobFilter = setJobModel(employerId,fieldId,cityId,title,tagList,workFromHome,pageNumber,jobsPerPage,ascendingOrder);
 

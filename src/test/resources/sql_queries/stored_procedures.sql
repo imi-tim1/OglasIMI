@@ -87,7 +87,8 @@ CREATE PROCEDURE register_employer (
     IN p_name VARCHAR(30),
     IN p_address VARCHAR(50),
     IN p_tin VARCHAR(20),
-    OUT p_is_added BOOLEAN
+    OUT p_is_added BOOLEAN,
+    OUT p_already_exists BOOLEAN
 )
 leave_label:BEGIN
 
@@ -106,6 +107,7 @@ leave_label:BEGIN
 
 
     SET p_is_added = FALSE;
+    SET p_already_exists = FALSE;
 
     -- count number of users which have the same email as user that is attempting to make
     -- an account
@@ -116,6 +118,7 @@ leave_label:BEGIN
 
     -- if provided email already exists inside database exit procedure
     IF v_retval != 0 THEN
+        SET p_already_exists = TRUE;
         LEAVE leave_label;
     END IF;
 
@@ -131,7 +134,7 @@ leave_label:BEGIN
     INSERT INTO user ( role_id, approved )
         VALUES ( v_employer_role_id, FALSE );
 
-    IF ROW_COUNT() != 0
+    IF ROW_COUNT() = 0
     THEN
         ROLLBACK;
     END IF;
@@ -144,7 +147,7 @@ leave_label:BEGIN
     INSERT INTO employer ( user_id, picture_base64, phone_number, name, address, tin )
         VALUES ( v_employer_id, p_picture_base64, p_phone_number, p_name, p_address, p_tin );
 
-    IF ROW_COUNT() != 0
+    IF ROW_COUNT() = 0
     THEN
         ROLLBACK;
     END IF;
@@ -153,7 +156,7 @@ leave_label:BEGIN
     INSERT INTO credentials ( user_id, email, hashed_password  )
     VALUES ( v_employer_id, p_email, p_hashed_password );
 
-    IF ROW_COUNT() != 0
+    IF ROW_COUNT() = 0
     THEN
         ROLLBACK;
     END IF;

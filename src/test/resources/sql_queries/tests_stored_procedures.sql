@@ -62,10 +62,11 @@ CALL register_employer(
         'Picosoft',
         'Radoja Domanovica 12',
         '123-456-789',
-        @p_is_added
+        @p_is_added,
+    @p_already_exists
 );
 
-SELECT @p_is_added AS 'Is employer successfully registered?';
+SELECT @p_is_added AS 'Is employer successfully registered?', @p_already_exists AS 'Is email alreadly registered';
 SELECT user_id, email, approved, name, hashed_password
 FROM credentials c
     JOIN user u ON u.id = c.user_id
@@ -84,10 +85,11 @@ CALL register_employer(
         'Mir Company',
         'Radoja 15',
         '222-456-000',
-        @p_is_added
-);
+        @p_is_added,
+        @p_already_exists
+    );
 
-SELECT @p_is_added AS 'Is employer successfully registered?';
+SELECT @p_is_added AS 'Is employer successfully registered?', @p_already_exists AS 'Is email alreadly registered';
 SELECT user_id, email, approved, name, hashed_password
 FROM credentials c
          JOIN user u ON u.id = c.user_id
@@ -106,10 +108,11 @@ CALL register_employer(
         'Dar Company',
         'Doman III 3',
         '451-154-444',
-        @p_is_added
-);
+        @p_is_added,
+        @p_already_exists
+    );
 
-SELECT @p_is_added AS 'Is employer successfully registered?';
+SELECT @p_is_added AS 'Is employer successfully registered?', @p_already_exists AS 'Is email alreadly registered';
 SELECT user_id, email, approved, name, hashed_password
 FROM credentials c
          JOIN user u ON u.id = c.user_id
