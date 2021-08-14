@@ -1,4 +1,4 @@
-package com.tim1.oglasimi.model;
+package com.tim1.oglasimi.model.payload;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

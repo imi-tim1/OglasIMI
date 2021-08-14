@@ -1,6 +1,8 @@
 package com.tim1.oglasimi.repository.implementation;
 
 import com.tim1.oglasimi.model.*;
+import com.tim1.oglasimi.model.payload.JobFeed;
+import com.tim1.oglasimi.model.payload.JobFilter;
 import com.tim1.oglasimi.repository.JobRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,6 +150,29 @@ public class JobRepositoryImpl implements JobRepository
         }
 
         return jobFeed;
+    }
+
+    @Override
+    public boolean applyForAJob(Integer jobId, Integer uid) {
+        boolean isSuccessful = false;
+
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
+              CallableStatement cstmt = con.prepareCall(JOB_APPLY_PROCEDURE_CALL) ) {
+
+            cstmt.setInt("p_job_id", jobId);
+            cstmt.setInt("p_applicant_id", uid);
+            cstmt.registerOutParameter("p_successfully_applied", Types.BOOLEAN);
+
+            cstmt.executeUpdate();
+
+            isSuccessful = cstmt.getBoolean("p_successfully_applied");
+
+        } catch ( SQLException e ) {
+            LOGGER.error("approve | An error occurred while communicating with a database", e );
+            e.printStackTrace();
+        }
+
+        return isSuccessful;
     }
 
     @Override

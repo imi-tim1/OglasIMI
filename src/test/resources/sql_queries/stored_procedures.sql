@@ -114,7 +114,7 @@ leave_label:BEGIN
     FROM credentials c
     WHERE c.email = p_email;
 
-    -- if provided email already exists inside database return false and exit
+    -- if provided email already exists inside database exit procedure
     IF v_retval != 0 THEN
         LEAVE leave_label;
     END IF;

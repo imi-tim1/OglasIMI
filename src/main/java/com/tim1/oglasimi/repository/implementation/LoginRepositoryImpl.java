@@ -1,7 +1,7 @@
 package com.tim1.oglasimi.repository.implementation;
 
-import com.tim1.oglasimi.model.LoginCredentials;
-import com.tim1.oglasimi.model.LoginResponse;
+import com.tim1.oglasimi.model.payload.LoginCredentials;
+import com.tim1.oglasimi.model.payload.LoginResponse;
 import com.tim1.oglasimi.repository.LoginRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

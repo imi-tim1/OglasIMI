@@ -1,4 +1,4 @@
-package com.tim1.oglasimi.model;
+package com.tim1.oglasimi.model.payload;
 
 public class LoginResponse {
     private int userId;

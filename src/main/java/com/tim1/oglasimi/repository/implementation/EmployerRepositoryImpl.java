@@ -86,8 +86,8 @@ public class EmployerRepositoryImpl implements EmployerRepository {
             cstmt.setString("p_tin", employer.getTin() );
 
             cstmt.registerOutParameter("p_is_added", Types.BOOLEAN);
-
             cstmt.execute();
+
             isSuccessfullyRegistered = cstmt.getBoolean("p_is_added");
 
         } catch ( SQLException e ) {

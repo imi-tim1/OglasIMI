@@ -1,6 +1,8 @@
 package com.tim1.oglasimi.controller;
 
 import com.tim1.oglasimi.model.*;
+import com.tim1.oglasimi.model.payload.JobFeed;
+import com.tim1.oglasimi.model.payload.JobFilter;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.JobService;

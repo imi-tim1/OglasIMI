@@ -1,10 +1,9 @@
 package com.tim1.oglasimi.service;
 
 import com.tim1.oglasimi.model.Applicant;
-import com.tim1.oglasimi.model.Employer;
 import com.tim1.oglasimi.model.Job;
-import com.tim1.oglasimi.model.JobFeed;
-import com.tim1.oglasimi.model.JobFilter;
+import com.tim1.oglasimi.model.payload.JobFeed;
+import com.tim1.oglasimi.model.payload.JobFilter;
 import com.tim1.oglasimi.repository.implementation.JobRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,5 +38,14 @@ public class JobService
     public Job getJob(int id)
     {
         return jobRepositoryImpl.get(id);
+    }
+
+    public String applyForAJob(int jobId, int uid) {
+        boolean isSuccessful = jobRepositoryImpl.applyForAJob(uid, jobId);
+
+        if( isSuccessful)
+            return "Successful";
+
+        return "Unsuccessful";
     }
 }
