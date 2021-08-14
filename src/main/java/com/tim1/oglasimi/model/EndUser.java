@@ -1,6 +1,7 @@
 package com.tim1.oglasimi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -19,7 +20,7 @@ public class EndUser extends User {
     private String hashedPassword;
 
     @Size( min = 5000, max = 65000,
-            message = "The length for base64 encoded picture must be between 10000 and 65000 characters" )
+            message = "The length for base64 encoded picture must be between 5000 and 65000 characters" )
     private String pictureBase64;
 
     @NotNull
@@ -56,6 +57,7 @@ public class EndUser extends User {
         return hashedPassword;
     }
 
+    @JsonProperty
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }

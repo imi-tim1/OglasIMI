@@ -131,6 +131,11 @@ leave_label:BEGIN
     INSERT INTO user ( role_id, approved )
         VALUES ( v_employer_role_id, FALSE );
 
+    IF ROW_COUNT() != 0
+    THEN
+        ROLLBACK;
+    END IF;
+
     -- get employer's id
     SELECT LAST_INSERT_ID()
     INTO v_employer_id;
@@ -139,9 +144,19 @@ leave_label:BEGIN
     INSERT INTO employer ( user_id, picture_base64, phone_number, name, address, tin )
         VALUES ( v_employer_id, p_picture_base64, p_phone_number, p_name, p_address, p_tin );
 
+    IF ROW_COUNT() != 0
+    THEN
+        ROLLBACK;
+    END IF;
+
     -- add employer's credentials into table "credentials"
     INSERT INTO credentials ( user_id, email, hashed_password  )
     VALUES ( v_employer_id, p_email, p_hashed_password );
+
+    IF ROW_COUNT() != 0
+    THEN
+        ROLLBACK;
+    END IF;
 
     SET p_is_added = TRUE;
 
@@ -226,6 +241,24 @@ BEGIN
     THEN
         SET p_deleted_successfully = TRUE;
     END IF;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for applicants which applied for particular job
+DELIMITER // ;
+CREATE PROCEDURE get_job_applicants(
+    IN p_job_id INT
+)
+BEGIN
+    SELECT a.*, c.email, c.hashed_password
+    FROM applicant a
+             JOIN job_application ja on a.user_id = ja.applicant_id
+             JOIN credentials c on a.user_id = c.user_id
+    WHERE p_job_id = job_id;
 END //
 DELIMITER ;
 -- #######################################################################

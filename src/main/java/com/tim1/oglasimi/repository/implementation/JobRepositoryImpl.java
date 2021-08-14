@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Repository
@@ -22,6 +22,7 @@ public class JobRepositoryImpl implements JobRepository
     private static final String TAG_STORED_PROCEDURE = "{call get_tags_for_a_job(?)}";
     private static final String POST_JOB_STORED_PROCEDURE = "{call post_job(?,?,?,?,?,?,?,?,?)}";
     private static final String JOB_COUNT_STORED_PROCEDURE = "{call count_jobs()}";
+    private static final String GET_JOB_APPLICANTS_PROCEDURE_CALL = "{call get_job_applicants(?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -147,6 +148,43 @@ public class JobRepositoryImpl implements JobRepository
 
         return jobFeed;
     }
+
+    @Override
+    public List<Applicant> getJobApplicants(Integer jobId) {
+        List<Applicant> jobApplicants = null;
+
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
+              CallableStatement cstmt = con.prepareCall(GET_JOB_APPLICANTS_PROCEDURE_CALL); ) {
+
+            cstmt.setInt("p_job_id", jobId);
+            ResultSet rs = cstmt.executeQuery();
+
+            Applicant tempApplicant;
+            jobApplicants = new LinkedList<Applicant>();
+
+            while( rs.next() ) {
+                tempApplicant = new Applicant();
+
+                tempApplicant.setId( rs.getInt("user_id") );
+                tempApplicant.setFirstName( rs.getString("first_name") );
+                tempApplicant.setLastName( rs.getString("last_name")  );
+                tempApplicant.setPictureBase64( rs.getString("picture_base64") );
+                tempApplicant.setPhoneNumber( rs.getString("phone_number") );
+                tempApplicant.setEmail( rs.getString("email") );
+                tempApplicant.setHashedPassword( rs.getString("hashed_password") );
+
+                jobApplicants.add(tempApplicant);
+            }
+
+        }
+        catch ( SQLException e ) {
+            LOGGER.error("getJobApplicants | An error occurred while communicating with a database" );
+            e.printStackTrace();
+        }
+
+        return jobApplicants;
+    }
+
 
     public Job setJobModel(ResultSet rsMaster, CallableStatement cstmtTag) throws SQLException
     {

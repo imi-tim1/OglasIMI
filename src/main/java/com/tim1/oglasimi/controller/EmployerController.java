@@ -35,7 +35,9 @@ public class EmployerController {
 
     @GetMapping
     public ResponseEntity<List<Employer>> getEmployerList( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt ) {
-        HttpStatus httpStatus = checkAccess( jwt, Role.VISITOR ).getHttpStatus();
+        HttpStatus httpStatus = checkAccess(
+                jwt, Role.VISITOR, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN
+        ).getHttpStatus();
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
@@ -190,8 +192,8 @@ public class EmployerController {
     @GetMapping("{id}/jobs")
     public ResponseEntity<List<Job>> getPostedJobs(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                                    @PathVariable("id")
-                                                 @Min( 1 )
-                                                 @Max( Integer.MAX_VALUE ) int id ) {
+                                                   @Min( 1 )
+                                                   @Max( Integer.MAX_VALUE ) int id ) {
         ResultPair resultPair = checkAccess( jwt, Role.EMPLOYER, Role.ADMIN );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
@@ -204,18 +206,18 @@ public class EmployerController {
                     .headers(responseHeaders)
                     .body( null );
         }
-        else {
-            double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
-            int uid = (int) tempUid;
-            String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
 
-            /* check if another employer is trying to access the api */
-            if( Role.EMPLOYER.equalsTo(role) && id != uid ) {
-                return ResponseEntity
-                        .status(HttpStatus.FORBIDDEN)
-                        .headers(responseHeaders)
-                        .body( null );
-            }
+        double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+        int uid = (int) tempUid;
+        String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
+
+        /* check if another employer is trying to access the api;
+        only admin and employer himself are allowed to access list of employer's posts */
+        if( Role.EMPLOYER.equalsTo(role) && id != uid ) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .headers(responseHeaders)
+                    .body( null );
         }
 
         List<Job> postedJobs = employerService.getPostedJobs(id);
