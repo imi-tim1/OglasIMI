@@ -4,6 +4,8 @@ import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.JobService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import static com.tim1.oglasimi.security.SecurityConfig.*;
 public class JobController
 {
     private final JobService jobService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(JobController.class);
 
     @Autowired
     public JobController(JobService jobService)
@@ -149,7 +152,10 @@ public class JobController
 
         double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
         int uid = (int) tempUid;
+        LOGGER.debug("getJobApplicants | found uid in the token: {}", uid );
+
         String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
+        LOGGER.debug("getJobApplicants | found role in the token: {}", role );
 
         int employerId = 0;
         List<Applicant> applicantList = null;
@@ -159,11 +165,11 @@ public class JobController
         /* check if job exists */
         if( job == null ) {
             httpStatus = HttpStatus.NOT_FOUND;
-            System.out.println("Job doesn't exist");
+            LOGGER.warn("getJobApplicants | job with id {} does not exist", jobId );
         }
         else {
             employerId = job.getEmployer().getId();
-            System.out.println("employerId: " + employerId + "; uid= " + uid);
+
             /* check if another employer is trying to access the api;
             only admin and employer himself are allowed to access list of employer's posts */
             if( Role.EMPLOYER.equalsTo(role) && employerId != uid ) {
@@ -175,9 +181,9 @@ public class JobController
 
             applicantList = jobService.getJobApplicants(jobId);
 
-            if( applicantList == null || applicantList.isEmpty() ) {
+            if( applicantList == null ) {
                 httpStatus = HttpStatus.NOT_FOUND;
-                System.out.println("No one appliend for this job");
+                LOGGER.info("getJobApplicants | no one applied for this job. Job ID: {} )", jobId );
             }
         }
 
