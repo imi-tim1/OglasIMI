@@ -377,3 +377,25 @@ BEGIN
 
 END //
 DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for getting specific job by id
+drop procedure get_job;
+DELIMITER // ;
+CREATE PROCEDURE get_job(IN p_id int)
+BEGIN
+    SELECT j.*,
+           f.id f_id, f.name f_name,
+           c.id c_id, c.name c_name,
+           e.user_id, e.name e_name, e.tin, e.address, e.picture_base64,e.phone_number
+    from job j left join field f on j.field_id = f.id
+               left join city c on c.id = j.city_id
+               left join employer e on e.user_id = j.employer_id
+    WHERE p_id = j.id;
+END //
+DELIMITER ;
+
+select * from job;
