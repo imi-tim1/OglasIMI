@@ -1,4 +1,4 @@
-import { HttpErrorResponse, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpRequest, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserRole } from '../../_api/_data-types/enums';
@@ -54,7 +54,10 @@ export class ComponentAccessService {
       },
       // Error (Not Logged In)
       (error: HttpErrorResponse) => {
-        JWTUtil.delete();
+        
+        if (HttpStatusCode.Unauthorized == error.status) {
+          JWTUtil.delete();
+        }
 
         console.log('Check Access, "Error" Block'); // DEBUG
         console.log('Status: ' + error.status); // DEBUG
