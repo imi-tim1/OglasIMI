@@ -18,9 +18,10 @@ public class JobRepositoryImpl implements JobRepository
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployerRepositoryImpl.class);
 
-    private static final String MASTER_STORED_PROCEDURE = "{call get_job_common_filter(?,?,?,?,?)}";
-    private static final String TAG_STORED_PROCEDURE = "{call get_job_tag_filter(?,?,?,?,?)}";
+    private static final String MASTER_STORED_PROCEDURE = "{call get_filtered_jobs(?,?,?,?,?)}";
+    private static final String TAG_STORED_PROCEDURE = "{call get_tags_for_a_job(?)}";
     private static final String POST_JOB_STORED_PROCEDURE = "{call post_job(?,?,?,?,?,?,?,?,?)}";
+    private static final String JOB_COUNT_STORED_PROCEDURE = "{call count_jobs()}";
     private static final String GET_JOB_APPLICANTS_PROCEDURE_CALL = "{call get_job_applicants(?)}";
 
     @Value("${spring.datasource.url}")
@@ -33,18 +34,18 @@ public class JobRepositoryImpl implements JobRepository
     private String databasePassword;
 
     @Override
-    public List<Job> getFilteredJobs(JobFilter jobFilter)
+    public JobFeed getFilteredJobs(JobFilter jobFilter)
     {
         List<Job> jobList = new ArrayList<>();
         List<Tag> tempTagList = jobFilter.getTags();
+        JobFeed jobFeed = new JobFeed();
         Job tempJob;
 
         try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
              CallableStatement cstmtMaster = con.prepareCall(MASTER_STORED_PROCEDURE);
-             CallableStatement cstmtTag = con.prepareCall(TAG_STORED_PROCEDURE))
+             CallableStatement cstmtTag = con.prepareCall(TAG_STORED_PROCEDURE);
+             CallableStatement cstmtCount = con.prepareCall(JOB_COUNT_STORED_PROCEDURE))
         {
-            ResultSet rsTag = null;
-
             setStatement(cstmtMaster,jobFilter);
             ResultSet rsMaster = cstmtMaster.executeQuery(); // Glavna tabela sa uobicajenim filterima
 
@@ -65,7 +66,7 @@ public class JobRepositoryImpl implements JobRepository
                 {
                     while(rsMaster.previous())
                     {
-                        tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
+                        tempJob = setJobModel(rsMaster,cstmtTag);
                         jobList.add(tempJob);
 
                         flagPage--;
@@ -75,18 +76,15 @@ public class JobRepositoryImpl implements JobRepository
 
                 else
                 {
-                    setStatement(cstmtTag,jobFilter);
-                    rsTag = cstmtTag.executeQuery();
-
                     while(rsMaster.previous())
                     {
                         int tempId = rsMaster.getInt("id");
 
-                        boolean flagTag = checkForTag(rsTag, jobFilter.getTags(), tempId);
+                        boolean flagTag = checkForTag(cstmtTag, jobFilter.getTags(), tempId);
 
                         if(flagTag)
                         {
-                            tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
+                            tempJob = setJobModel(rsMaster,cstmtTag);
                             jobList.add(tempJob);
                         }
 
@@ -108,7 +106,7 @@ public class JobRepositoryImpl implements JobRepository
                 {
                     while(rsMaster.next())
                     {
-                        tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
+                        tempJob = setJobModel(rsMaster,cstmtTag);
                         jobList.add(tempJob);
 
                         flagPage--;
@@ -118,18 +116,15 @@ public class JobRepositoryImpl implements JobRepository
 
                 else
                 {
-                    setStatement(cstmtTag,jobFilter);
-                    rsTag = cstmtTag.executeQuery();
-
                     while(rsMaster.next())
                     {
                         int tempId = rsMaster.getInt("id");
 
-                        boolean flagTag = checkForTag(rsTag, jobFilter.getTags(), tempId);
+                        boolean flagTag = checkForTag(cstmtTag, jobFilter.getTags(), tempId);
 
                         if(flagTag)
                         {
-                            tempJob = setJobModel(rsMaster,rsTag,jobFilter.getTags());
+                            tempJob = setJobModel(rsMaster,cstmtTag);
                             jobList.add(tempJob);
                         }
 
@@ -138,13 +133,20 @@ public class JobRepositoryImpl implements JobRepository
                     }
                 }
             }
+            ResultSet rsCount = cstmtCount.executeQuery();
+            rsCount.first();
+
+            int totalJobNumber = rsCount.getInt("job_num");
+
+            jobFeed.setJobs(jobList);
+            jobFeed.setTotalJobNumber(totalJobNumber);
         }
 
         catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-        return jobList;
+        return jobFeed;
     }
 
     @Override
@@ -183,7 +185,8 @@ public class JobRepositoryImpl implements JobRepository
         return jobApplicants;
     }
 
-    public Job setJobModel(ResultSet rsMaster, ResultSet rsTag, List<Tag> tagList) throws SQLException
+
+    public Job setJobModel(ResultSet rsMaster, CallableStatement cstmtTag) throws SQLException
     {
         Tag tempTag;
         Job tempJob = new Job();
@@ -214,27 +217,20 @@ public class JobRepositoryImpl implements JobRepository
         tempJob.setField(field);
         tempJob.setCity(city);
 
+        cstmtTag.setInt("p_job_id",tempJob.getId());
+        ResultSet rsTag = cstmtTag.executeQuery();
+
         if(rsTag != null)
         {
             rsTag.beforeFirst();
             while(rsTag.next())
             {
-                boolean flag = false;
-
                 tempTag = new Tag();
-                tempTag.setId(rsTag.getInt("t_id"));
+                tempTag.setId(rsTag.getInt("id"));
+                tempTag.setFieldId(rsTag.getInt("field_id"));
+                tempTag.setName(rsTag.getString("name"));
 
-                for(Tag tag : tagList)
-                {
-                    if(tempTag.getId() == tag.getId() && rsTag.getInt("j_id") == tempJob.getId()) flag = true;
-                }
-
-                if(flag)
-                {
-                    tempTag.setName(rsTag.getString("t_name"));
-                    tempTag.setFieldId(tempJob.getField().getId());
-                    tags.add(tempTag);
-                }
+                tags.add(tempTag);
             }
 
             tempJob.setTags(tags);
@@ -252,20 +248,20 @@ public class JobRepositoryImpl implements JobRepository
         cstmt.setBoolean("p_work_from_home", job.isWorkFromHome());
     }
 
-    public boolean checkForTag(ResultSet rsTag, List<Tag> tagList, int id) throws SQLException
+    public boolean checkForTag(CallableStatement cstmtTag, List<Tag> tagList, int id) throws SQLException
     {
         boolean flag = false;
         int counter = 0;
 
-        rsTag.beforeFirst();
+        cstmtTag.setInt("p_job_id",id);
+        ResultSet rsTag = cstmtTag.executeQuery();
 
-        while(rsTag.next())
+        if(rsTag != null)
         {
-            int tmpId = rsTag.getInt("j_id");
-
-            if(id == tmpId)
+            rsTag.beforeFirst();
+            while (rsTag.next())
             {
-                int tmpTag = rsTag.getInt("t_id");
+                int tmpTag = rsTag.getInt("id");
 
                 for(Tag tag : tagList)
                 {
@@ -278,6 +274,7 @@ public class JobRepositoryImpl implements JobRepository
 
         return flag;
     }
+
 
     @Override
     public List<Job> getAll()
@@ -299,7 +296,6 @@ public class JobRepositoryImpl implements JobRepository
             cstmt.execute();
 
             isJobSuccessfullyPosted = cstmt.getBoolean("p_is_posted");
-            System.out.println(isJobSuccessfullyPosted);
         }
 
         catch (SQLException e) {
@@ -321,7 +317,6 @@ public class JobRepositoryImpl implements JobRepository
         cstmt.setString("p_salary", job.getSalary());
         cstmt.setBoolean("p_work_from_home", job.isWorkFromHome());
     }
-
 
     @Override
     public Job get(Integer integer)

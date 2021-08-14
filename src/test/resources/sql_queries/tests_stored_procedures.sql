@@ -194,3 +194,10 @@ DELIMITER ;
 
 
 -- #######################################################################
+-- test call for procedure get_job_tag_filter
+DELIMITER // ;
+CALL get_tags_for_a_job(
+        1
+    );
+//
+DELIMITER ;

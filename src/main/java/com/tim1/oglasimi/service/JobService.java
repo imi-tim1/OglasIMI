@@ -3,6 +3,7 @@ package com.tim1.oglasimi.service;
 import com.tim1.oglasimi.model.Applicant;
 import com.tim1.oglasimi.model.Employer;
 import com.tim1.oglasimi.model.Job;
+import com.tim1.oglasimi.model.JobFeed;
 import com.tim1.oglasimi.model.JobFilter;
 import com.tim1.oglasimi.repository.implementation.JobRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class JobService
         this.jobRepositoryImpl = jobRepositoryImpl;
     }
 
-    public List<Job> getFilteredJobs(JobFilter jobFilter)
+    public JobFeed getFilteredJobs(JobFilter jobFilter)
     {
         return jobRepositoryImpl.getFilteredJobs(jobFilter);
     }

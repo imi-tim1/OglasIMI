@@ -33,7 +33,7 @@ public class JobController
 
 
     @GetMapping
-    public ResponseEntity<List<Job>> getFilteredJobs(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+    public ResponseEntity<JobFeed> getFilteredJobs(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                                   @RequestParam(required = false) String title,
                                                   @RequestParam(required = false) List<Integer> tagList,
                                                   @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int employerId,

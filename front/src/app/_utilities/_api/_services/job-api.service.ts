@@ -38,4 +38,17 @@ export class JobApiService {
 
     return response;
   }
+
+  getJob(id: number): Observable<HttpResponse<Job>> 
+  {
+    let response = this.http.get<Job>(
+      this.url + `/${id}`, 
+      { 
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+
+    return response;
+  }
 }

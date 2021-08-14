@@ -19,6 +19,8 @@ import { JobsFiltersComponent } from './_components/_elements/jobs-filters/jobs-
 import { JobsListCardComponent } from './_components/_elements/jobs-list-card/jobs-list-card.component';
 import { JobsFeedComponent } from './_components/_elements/jobs-feed/jobs-feed.component';
 import { JobFiltersButtonComponent } from './_components/_elements/job-filters-button/job-filters-button.component';
+import { RegisterFormComponent } from './_components/_elements/register-form/register-form.component';
+import { TestingPageComponent } from './_components/_pages/testing-page/testing-page.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { JobFiltersButtonComponent } from './_components/_elements/job-filters-b
     JobsFiltersComponent,
     JobsListCardComponent,
     JobsFeedComponent,
-    JobFiltersButtonComponent
+    JobFiltersButtonComponent,
+    RegisterFormComponent,
+    TestingPageComponent
   ],
   imports: [
     BrowserModule,
