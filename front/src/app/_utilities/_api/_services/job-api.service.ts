@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
 import { HeaderUtil, ParamUtil } from '../../_helpers/http-util';
 import { JWTUtil } from '../../_helpers/jwt-util';
-import { Filters, Job } from '../_data-types/interfaces';
+import { Filters, Job, PagedJobs } from '../_data-types/interfaces';
 import { StandardHeaders } from '../_data-types/interfaces';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class JobApiService {
 
   constructor(private http: HttpClient) { }
 
-  getJobs(filters: Filters): Observable<HttpResponse<Job[]>> 
+  getJobs(filters: Filters): Observable<HttpResponse<PagedJobs>> 
   {
     let par: HttpParams = new HttpParams();
     let key: keyof typeof filters;
@@ -27,7 +27,7 @@ export class JobApiService {
 
     console.log(par.toString());
 
-    let response = this.http.get<Job[]>(
+    let response = this.http.get<PagedJobs>(
       this.url, 
       { 
         observe: 'response',

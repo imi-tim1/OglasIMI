@@ -22,6 +22,11 @@ export interface Job
     workFromHome: boolean;
 }
 
+export interface PagedJobs {
+    totalJobNumber: number;
+    jobs: Job[];
+}
+
 export interface Field 
 {
     id: number;

@@ -19,7 +19,7 @@ export class TestingPageComponent implements OnInit {
   ngOnInit(): void {
     // this.testEmployerService();
     // this.testApplicantService();
-    // this.testJobService();
+    this.testJobService();
   }
 
   testEmployerService() {
@@ -48,7 +48,10 @@ export class TestingPageComponent implements OnInit {
 
   testJobService() {
     // Ceka se Back End ...
-    this.jobService.getJob(3); // ?
+    // this.jobService.getJob(3); // ?
+
+    // this.jobService.getJobs(); // ?
+    this.jobService.getJobs();
   }
 
 }
