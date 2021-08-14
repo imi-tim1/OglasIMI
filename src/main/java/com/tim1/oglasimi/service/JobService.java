@@ -36,38 +36,8 @@ public class JobService
         return jobRepositoryImpl.getJobApplicants(job_id);
     }
 
-    public Job getJob( int id ) { // TODO replace hardcoded code
-        switch (id) {
-            case 1:
-                return new Job( 1,
-                        new Employer(4,null,null,null,null,null,null,null),
-                        null,null,null,null,null,null,null,false);
-            case 2:
-                return new Job( 2,
-                        new Employer(4,null,null,null,null,null,null,null),
-                        null,null,null,null,null,null,null,false);
-            case 3:
-                return new Job( 3,
-                        new Employer(5,null,null,null,null,null,null,null),
-                        null,null,null,null,null,null,null,false);
-            case 4:
-                return new Job( 4,
-                        new Employer(5,null,null,null,null,null,null,null),
-                        null,null,null,null,null,null,null,false);
-            case 5:
-                return new Job( 5,
-                        new Employer(4,null,null,null,null,null,null,null),
-                        null,null,null,null,null,null,null,false);
-            case 6:
-                return new Job( 6,
-                        new Employer(4,null,null,null,null,null,null,null),
-                        null,null,null,null,null,null,null,false);
-            case 7:
-                return new Job( 7,
-                        new Employer(5,null,null,null,null,null,null,null),
-                        null,null,null,null,null,null,null,false);
-        }
-
-        return null;
+    public Job getJob(int id)
+    {
+        return jobRepositoryImpl.get(id);
     }
 }

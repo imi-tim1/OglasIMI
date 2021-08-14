@@ -23,6 +23,7 @@ public class JobRepositoryImpl implements JobRepository
     private static final String POST_JOB_STORED_PROCEDURE = "{call post_job(?,?,?,?,?,?,?,?,?)}";
     private static final String JOB_COUNT_STORED_PROCEDURE = "{call count_jobs()}";
     private static final String GET_JOB_APPLICANTS_PROCEDURE_CALL = "{call get_job_applicants(?)}";
+    private static final String GET_JOB_STORED_PROCEDURE = "{call get_job(?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -216,6 +217,7 @@ public class JobRepositoryImpl implements JobRepository
         tempJob.setEmployer(employer);
         tempJob.setField(field);
         tempJob.setCity(city);
+        tempJob.setWorkFromHome(rsMaster.getBoolean("work_from_home"));
 
         cstmtTag.setInt("p_job_id",tempJob.getId());
         ResultSet rsTag = cstmtTag.executeQuery();
@@ -319,9 +321,30 @@ public class JobRepositoryImpl implements JobRepository
     }
 
     @Override
-    public Job get(Integer integer)
+    public Job get(Integer id)
     {
-        return null;
+        Job job = null;
+
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
+             CallableStatement cstmt = con.prepareCall(GET_JOB_STORED_PROCEDURE);
+             CallableStatement cstmtTag = con.prepareCall(TAG_STORED_PROCEDURE))
+        {
+            cstmt.setInt("p_id", id);
+
+            ResultSet rs = cstmt.executeQuery();
+
+            if(rs.first())
+            {
+                job = new Job();
+                job = setJobModel(rs, cstmtTag);
+            }
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return job;
     }
 
     @Override

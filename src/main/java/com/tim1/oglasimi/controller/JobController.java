@@ -186,4 +186,24 @@ public class JobController
                 .headers(responseHeaders)
                 .body( applicantList );
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Job> getJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                      @PathVariable("id")
+                                      @Min( 1 )
+                                      @Max( Integer.MAX_VALUE ) int id)
+    {
+        ResultPair resultPair = checkAccess( jwt, Role.VISITOR, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if(httpStatus == HttpStatus.OK)
+        {
+            return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(jobService.getJob(id));
+        }
+
+        return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(null);
+    }
 }
