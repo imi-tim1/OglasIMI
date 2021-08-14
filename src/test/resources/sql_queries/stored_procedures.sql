@@ -309,7 +309,6 @@ DELIMITER ;
 
 -- #######################################################################
 -- Procedure job counting
-drop procedure count_jobs;
 DELIMITER // ;
 CREATE PROCEDURE count_jobs()
 BEGIN
