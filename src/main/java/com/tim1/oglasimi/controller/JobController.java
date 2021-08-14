@@ -16,8 +16,7 @@ import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tim1.oglasimi.security.SecurityConfig.JWT_CUSTOM_HTTP_HEADER;
-import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
+import static com.tim1.oglasimi.security.SecurityConfig.*;
 
 @Validated
 @RestController
@@ -65,7 +64,7 @@ public class JobController
     public ResponseEntity<?> postJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                   @RequestBody Job job)
     {
-        ResultPair resultPair = checkAccess( jwt, Role.VISITOR, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
+        ResultPair resultPair = checkAccess( jwt, Role.EMPLOYER );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
         HttpHeaders responseHeaders = new HttpHeaders();
