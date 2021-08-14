@@ -1,22 +1,31 @@
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Employer, Field, Filters, Job, Tag } from '../../_api/_data-types/interfaces';
+import { Applicant, Employer, Field, Filters, Job, Tag } from '../../_api/_data-types/interfaces';
 import { JobApiService } from '../../_api/_services/job-api.service';
+import { JWTUtil } from '../../_helpers/jwt-util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class JobService {
 
+  // Get (Filtered) Jobs
   public jobs: Job[] = [];
   public totalJobNumber: number = 0;
+
+  // Get Job
   public job: Job | null = null;
 
-  constructor(private jobApi: JobApiService) { }
+  // Get Jobs Applicants
+  public jobsApplicants: Applicant[] = [];
 
-  getFilteredJobs(filters: Filters) 
-  {
-    this.jobApi.getJobs(filters).subscribe(
+  constructor(private api: JobApiService) { }
+
+
+  // --- Methods ---
+
+  getFilteredJobs(filters: Filters) {
+    this.api.getJobs(filters).subscribe(
       // Success
       (response) => {
         if (response.body != null && response.body.jobs != null) {
@@ -47,12 +56,42 @@ export class JobService {
   }
 
   getJob(id: number) {
-    this.jobApi.getJob(id).subscribe(
+    this.api.getJob(id).subscribe(
       // Success
       (response) => {
         this.job = response.body;
         console.log('Job: ');
         console.log(this.job);
+      }
+    );
+  }
+
+  getJobsApplicants(id: number) {
+    this.api.getJobsApplicants(id).subscribe(
+      // Success
+      (response) => {
+        // 200 OK - Job postoji i lista sa aplikantima (koja moze biti prazna)
+        this.jobsApplicants = (response.body == null) ? [] : response.body;
+        console.log('Jobs Applicants:');
+        console.log(this.jobsApplicants);
+      },
+      // Error
+      (error: HttpErrorResponse) => {
+        console.log('Error: ' + error.status);
+        switch (error.status) {
+          // 401 Unautorized - Neulogovan / Neispravan token
+          case HttpStatusCode.Unauthorized:
+            JWTUtil.delete();
+            break;
+          // 403 Forbidden - Nema dozvolu
+          case HttpStatusCode.Forbidden:
+
+            break;
+          // 404 Not Found - Ne postoji Job sa datim ID-jem
+          case HttpStatusCode.NotFound:
+
+            break;
+        }
       }
     );
   }

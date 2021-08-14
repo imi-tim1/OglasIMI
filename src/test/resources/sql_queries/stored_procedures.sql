@@ -383,7 +383,7 @@ DELIMITER ;
 
 -- #######################################################################
 -- Procedure for getting specific job by id
-drop procedure get_job;
+-- drop procedure get_job;
 DELIMITER // ;
 CREATE PROCEDURE get_job(IN p_id int)
 BEGIN

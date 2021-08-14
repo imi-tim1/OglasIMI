@@ -7,7 +7,7 @@ import { JWT_HEADER_NAME } from '../../_api/_data-types/vars';
 import { LoginApiService } from '../../_api/_services/login-api.service';
 import { PasswdHash } from '../../_helpers/hash-util';
 import { JWTUtil } from '../../_helpers/jwt-util';
-import { DEFAULT_REDIRECT_ROUTE } from '../../_constants/routing.properties';
+import { RedirectRoute } from '../../_constants/routing.properties';
 import { ComponentAccessService } from './component-access.service';
 
 @Injectable({
@@ -38,7 +38,7 @@ export class LoginService {
       (response: HttpResponse<null>) => {
         JWTUtil.store(response.headers.get(JWT_HEADER_NAME));
         this.responseCode = ResponseCode.Success;
-        this.router.navigate([DEFAULT_REDIRECT_ROUTE]);
+        this.router.navigate([RedirectRoute.DEFAULT]);
       },
 
       // Login Failed
@@ -48,7 +48,7 @@ export class LoginService {
           // Session Expired
           if(JWTUtil.get() != '') {
             this.responseCode = ResponseCode.SessionExpired;
-            this.router.navigate([DEFAULT_REDIRECT_ROUTE]);
+            this.router.navigate([RedirectRoute.DEFAULT]);
           }
           // Wrong credentials
           else {
@@ -60,12 +60,12 @@ export class LoginService {
         // Forbidden
         else if (HttpStatusCode.Forbidden == error.status) {
           this.responseCode = ResponseCode.Forbidden;
-          this.router.navigate([DEFAULT_REDIRECT_ROUTE]);
+          this.router.navigate([RedirectRoute.DEFAULT]);
         }
         // Bad Request
         else if (HttpStatusCode.BadRequest == error.status) {
           JWTUtil.delete();
-          this.router.navigate([DEFAULT_REDIRECT_ROUTE]);
+          this.router.navigate([RedirectRoute.DEFAULT]);
         }
       }
     );

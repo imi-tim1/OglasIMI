@@ -50,9 +50,9 @@ export class EmployerApiService {
   // Potrebno TESTIRANJE !!!
   createEmployer(employerData: Employer): Observable<HttpResponse<null>> {
     return this.http.post<null>(
-      this.url, // api url
-      employerData, // body
-      { // options
+      this.url,
+      employerData,
+      {
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()
       });

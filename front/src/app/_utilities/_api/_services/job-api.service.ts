@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
 import { HeaderUtil, ParamUtil } from '../../_helpers/http-util';
 import { JWTUtil } from '../../_helpers/jwt-util';
-import { Filters, Job, PagedJobs } from '../_data-types/interfaces';
+import { Applicant, Filters, Job, PagedJobs } from '../_data-types/interfaces';
 import { StandardHeaders } from '../_data-types/interfaces';
 
 @Injectable({
@@ -50,5 +50,29 @@ export class JobApiService {
     );
 
     return response;
+  }
+
+  getJobsApplicants(id: number): Observable<HttpResponse<Applicant[]>>  
+  {
+    let response = this.http.get<Applicant[]>(
+      this.url + `/${id}/applicants`, 
+      { 
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+
+    return response;
+  }
+
+  createJob(jobData: Job): Observable<HttpResponse<null>>
+  {
+    return this.http.post<null>(
+      this.url,
+      jobData,
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      });
   }
 }
