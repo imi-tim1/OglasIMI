@@ -25,7 +25,7 @@ export class IdentityApiService {
       this.url, 
       { 
         headers: HeaderUtil.jwtOnlyHeaders(), 
-        observe: 'response' 
+        observe: 'response'
       }
     );
   }

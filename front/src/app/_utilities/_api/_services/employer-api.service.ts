@@ -25,4 +25,14 @@ export class EmployerApiService {
     );
   }
 
+  getEmployer(id: number): Observable<HttpResponse<Employer>> {
+    return this.http.get<Employer>(
+      this.url,
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+  }
+
 }

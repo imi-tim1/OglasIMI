@@ -15,23 +15,35 @@ export class ComponentAccessService {
 
   public redirectRoute: string = DEFAULT_REDIRECT_ROUTE;
   public allowed: boolean = false;
+  public role: UserRole = UserRole.Visitor;
+
+  public roleType = {
+    Visitor: UserRole.Visitor,
+    Applicant: UserRole.Applicant,
+    Employer: UserRole.Employer,
+    Admin: UserRole.Admin
+  }
 
   constructor(
     private api: IdentityApiService,
     private router: Router
   ){}
   
+  checkRole(role: UserRole, allowedRoles: UserRole[]) {
+    return (allowedRoles.length == 0)? true : allowedRoles.includes(role);
+  }
+
   checkAccess(allowedRoles: UserRole[]) {
     this.api.getCurrent().subscribe(
       // Success (Logged In)
       (response) => {
         JWTUtil.store(response.headers.get(JWT_HEADER_NAME));
-        const role: UserRole = JWTUtil.getRole() as UserRole;
-        this.allowed = allowedRoles.includes(role);
+        this.role = JWTUtil.getRole() as UserRole;
+        this.allowed = this.checkRole(this.role, allowedRoles);
 
         console.log('Check Access, "Success" Block'); // DEBUG
         console.log('Status: ' + response.status); // DEBUG
-        console.log('User Role: ' + role); // DEBUG
+        console.log('User Role: ' + this.role); // DEBUG
         console.log('Allowed: ' + this.allowed); // DEBUG
 
         // Not Allowed

@@ -8,6 +8,7 @@ import { EmployerApiService } from '../../_api/_services/employer-api.service';
 export class EmployerService {
 
   public employers: Employer[] = [{id: 0, name: 'Svi poslodavci'}];
+  public employer: Employer | null = null;
 
   constructor(private api: EmployerApiService) { }
 
@@ -20,6 +21,17 @@ export class EmployerService {
         this.employers = this.employers.concat((response.body == null)? [] : response.body);
         console.log('Employers: ')
         console.log(this.employers)
+      }
+    );
+  }
+
+  getEmployer(id: number) {
+    this.api.getEmployer(id).subscribe(
+      // Success
+      (response) => {
+        this.employer = response.body;
+        console.log('Employer: ')
+        console.log(this.employer)
       }
     );
   }

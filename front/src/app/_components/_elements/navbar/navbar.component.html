@@ -6,7 +6,8 @@
             </li>
         </ul>
     </div>
-    <div class="mx-3">
+    <!-- Visitor Options -->
+    <div *ngIf="this.checkRole([this.accessService.roleType.Visitor])" class="mx-3">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link text-dark" href="#">Prijava</a>

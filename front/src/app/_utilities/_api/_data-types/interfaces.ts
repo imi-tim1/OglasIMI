@@ -38,6 +38,27 @@ export interface Employer
 {
     id: number;
     name: string;
+    email?: string;
+    pictureBase64?: string;
+    phoneNumber?: string;
+    address?: string;
+    tin?: string;
+}
+
+// "id": 4,
+// "email": "laza@vass.org",
+// "pictureBase64": null,
+// "phoneNumber": "063123456",
+// "name": "Lažarus d.o.o",
+// "address": "Keba Kraba, 3",
+// "tin": "123456789"
+
+export interface Applicant
+{
+    id: number;
+    firstName: string;
+    lastName: string;
+
 }
 
 export interface City

@@ -1,2 +1,5 @@
 <app-navbar></app-navbar>
-<app-login-form></app-login-form>
+<div *ngIf="!accessService.allowed"> 
+    <h1>Loading</h1>
+</div>
+<app-login-form *ngIf="accessService.allowed"></app-login-form>

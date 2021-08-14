@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class RegisterPageComponent implements OnInit {
   constructor(private compAccess: ComponentAccessService) { }
 
   ngOnInit(): void {
-    this.compAccess.checkAccess([]);
+    this.compAccess.checkAccess([UserRole.Visitor]);
   }
 
 }
