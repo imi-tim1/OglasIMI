@@ -36,7 +36,7 @@ export interface Tag
 
 export interface Employer 
 {
-    id: number;
+    id?: number;
     name: string;
     email?: string;
     pictureBase64?: string | null;

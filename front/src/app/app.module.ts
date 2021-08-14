@@ -20,6 +20,7 @@ import { JobsListCardComponent } from './_components/_elements/jobs-list-card/jo
 import { JobsFeedComponent } from './_components/_elements/jobs-feed/jobs-feed.component';
 import { JobFiltersButtonComponent } from './_components/_elements/job-filters-button/job-filters-button.component';
 import { RegisterFormComponent } from './_components/_elements/register-form/register-form.component';
+import { TestingPageComponent } from './_components/_pages/testing-page/testing-page.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { RegisterFormComponent } from './_components/_elements/register-form/reg
     JobsListCardComponent,
     JobsFeedComponent,
     JobFiltersButtonComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    TestingPageComponent
   ],
   imports: [
     BrowserModule,
