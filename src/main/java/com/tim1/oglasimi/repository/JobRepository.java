@@ -11,4 +11,5 @@ public interface JobRepository extends CRUDRepository<Job, Integer>
 {
     List<Applicant> getJobApplicants(Integer jobId);
     JobFeed getFilteredJobs(JobFilter jobFilter);
+    boolean applyForAJob( Integer jobId, Integer uid);
 }

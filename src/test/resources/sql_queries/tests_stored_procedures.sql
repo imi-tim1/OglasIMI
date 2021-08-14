@@ -163,7 +163,19 @@ CALL delete_user(1, @deleted_successfully);
 SELECT @deleted_successfully 'Is successfully deleted?'
 //
 DELIMITER ;
---
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- get_job_applicants
+
+select j.id as 'job_id', applicant_id, employer_id, email, hashed_password
+from job j
+         left join job_application on job_application.job_id = j.id
+         left join applicant a on a.user_id = job_application.applicant_id
+         left join credentials c on j.employer_id = c.user_id
+ORDER BY job_id;
 -- #######################################################################
 
 

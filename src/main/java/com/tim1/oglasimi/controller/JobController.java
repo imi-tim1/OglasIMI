@@ -195,6 +195,38 @@ public class JobController
                 .body( applicantList );
     }
 
+    @PostMapping("{jobId}/applicants")
+    public ResponseEntity<String> applyForAJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                  @PathVariable("jobId")
+                                                  @Min( 1 )
+                                                  @Max( Integer.MAX_VALUE ) int jobId ) {
+        ResultPair resultPair = checkAccess( jwt, Role.APPLICANT );
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK ) {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( null );
+        }
+
+
+        double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+        int uid = (int) tempUid;
+        LOGGER.debug("getJobApplicants | found uid in the token: {}", uid );
+
+
+        String resultMessage = jobService.applyForAJob(uid, jobId);
+
+        return ResponseEntity
+                .status(httpStatus)
+                .headers(responseHeaders)
+                .body( resultMessage );
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<Job> getJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                       @PathVariable("id")

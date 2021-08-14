@@ -25,6 +25,7 @@ public class JobRepositoryImpl implements JobRepository
     private static final String POST_JOB_STORED_PROCEDURE = "{call post_job(?,?,?,?,?,?,?,?,?)}";
     private static final String JOB_COUNT_STORED_PROCEDURE = "{call count_jobs()}";
     private static final String GET_JOB_APPLICANTS_PROCEDURE_CALL = "{call get_job_applicants(?)}";
+    private static final String JOB_APPLY_PROCEDURE_CALL = "{call apply_for_a_job(?,?)}";
     private static final String GET_JOB_STORED_PROCEDURE = "{call get_job(?)}";
 
     @Value("${spring.datasource.url}")
