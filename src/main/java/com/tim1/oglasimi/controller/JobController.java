@@ -221,6 +221,10 @@ public class JobController
 
         String resultMessage = jobService.applyForAJob(uid, jobId);
 
+        if( resultMessage == "Unsuccessful") {
+            httpStatus = HttpStatus.CONFLICT;
+        }
+
         return ResponseEntity
                 .status(httpStatus)
                 .headers(responseHeaders)
