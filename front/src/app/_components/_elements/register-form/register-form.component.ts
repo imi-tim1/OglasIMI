@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
+import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
+
 
 @Component({
   selector: 'app-register-form',
