@@ -68,10 +68,12 @@
   <div *ngIf="selectedFieldId"> <!-- ako je izabrana oblast rada != 0  (nesto je izabrano), prikazi tagove-->
     <label for="tags">Odaberite ključne reči:</label><br>
     
-    <div *ngFor="let t of fieldService.tags">
-      <input type="checkbox" value="{{t.id}}" id="{{t.id}}"
-              (click)="toggleTag(t.id)">
-      <label for="{{t.id}}">&nbsp;&nbsp;{{t.name}}</label>
+    <div class="border border-dark" [ngStyle]="{ 'overflow': 'scroll', 'height': '100px', 'width': '200px' }">
+      <div *ngFor="let t of fieldService.tags">
+        <input type="checkbox" value="{{t.id}}" id="{{t.id}}"
+                (click)="toggleTag(t.id)">
+        <label for="{{t.id}}">&nbsp;&nbsp;{{t.name}}</label>
+      </div>
     </div>
   </div>
 
