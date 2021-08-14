@@ -1,33 +1,26 @@
 import { Injectable } from '@angular/core';
 import { City } from '../../_api/_data-types/interfaces';
+import { CityApiService } from '../../_api/_services/city-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CityService {
 
-  public cities: City[] | null = null;
+  public cities: City[] = [{id: 0, name: 'Svi gradovi'}];
 
-  constructor() { }
+  constructor(private api: CityApiService) { }
 
   getCities() {
-    this.cities = [
-      {
-        id: 0,
-        name: 'Svi gradovi'
-      },
-      {
-        id: 1,
-        name: 'Beograd'
-      },
-      {
-        id: 4,
-        name: 'Kragujevac'
-      },
-      {
-        id: 8,
-        name: 'Novi Sad'
+    this.api.getCities().subscribe(
+      // Success
+      (response) => {
+        console.log('Get Cities (Success), Body: ')
+        console.log(response.body)
+        this.cities = this.cities.concat((response.body == null)? [] : response.body);
+        console.log('Cities: ')
+        console.log(this.cities)
       }
-    ]
+    );
   }
 }

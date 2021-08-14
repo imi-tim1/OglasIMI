@@ -337,3 +337,32 @@ BEGIN
     ORDER BY post_date DESC;
 END //
 DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for job posting
+DELIMITER // ;
+CREATE PROCEDURE post_job (
+    IN p_employer_id int,
+    IN p_field_id int,
+    IN p_city_id int,
+    IN p_post_date DATETIME,
+    IN p_title varchar(30),
+    IN p_description varchar(510),
+    IN p_salary varchar(50),
+    IN p_work_from_home boolean,
+    OUT p_is_posted boolean
+)
+BEGIN
+    INSERT INTO job (employer_id, field_id, city_id, post_date, title, description, salary, work_from_home)
+    VALUES (p_employer_id, p_field_id, p_city_id, p_post_date, p_title, p_description, p_salary, p_work_from_home);
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_is_posted = TRUE;
+    END IF;
+
+END //
+DELIMITER ;
