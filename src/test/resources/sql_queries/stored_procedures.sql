@@ -233,6 +233,49 @@ DELIMITER ;
 
 
 -- #######################################################################
+-- Procedure for getting employer's job posts (without tags)
+DELIMITER // ;
+CREATE PROCEDURE employer_get_posts_without_tags(
+    IN p_employer_id INT
+)
+BEGIN
+    SELECT j.*, -- j.id, j.title,j.employer_id, j.description, j.city_id, j.field_id, j.post_date, j.salary, j.work_from_home,
+           c.name AS 'city_name',
+           f.name AS 'field_name',
+           e.name AS 'employer_name', e.phone_number, e.picture_base64, e.address, e.tin,
+           creds.email
+    FROM job j
+        JOIN employer e on e.user_id = j.employer_id
+        JOIN city c on c.id = j.city_id
+        JOIN field f on f.id = j.field_id
+        JOIN credentials creds on j.employer_id = creds.user_id
+    WHERE p_employer_id = j.employer_id;
+END //
+DELIMITER ;
+
+-- DROP PROCEDURE employer_get_posts_without_tags
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for getting tags for particular job
+DELIMITER // ;
+CREATE PROCEDURE get_tags_for_a_job(
+    IN p_job_id INT
+)
+BEGIN
+    SELECT t.*
+    FROM job_tag jt
+        JOIN tag t on jt.tag_id = t.id
+    WHERE p_job_id = jt.job_id;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
 -- Procedure for job-tag checking
 DELIMITER // ;
 CREATE PROCEDURE get_job_tag_filter

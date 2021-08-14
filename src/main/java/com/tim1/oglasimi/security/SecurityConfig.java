@@ -30,14 +30,15 @@ public class SecurityConfig {
     /**
      * Vreme trajanja tokena nakon kojeg nece biti validan
      */
-    public static final long TIME_TO_LIVE_MILLS = 25000L; // 25s // TODO decide default value; 15min is recommended val
+    public static final long TIME_TO_LIVE_MILLS = 1500000L; // 25min
 
     /**
      * Kljuc za sifrovanje signature JSON Web Token-a (JWT)
      */
     private static final String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8";
 
-    private static final String ROLE_CLAIM_NAME = "rol";
+    public static final String ROLE_CLAIM_NAME = "rol";
+    public static final String USER_ID_CLAIM_NAME = "uid";
 
     /**
      * Proverava da li je token ispravak pozivom funkcije {@link SecurityConfig#decodeJWT(String)} koja ga dekodira
@@ -159,8 +160,8 @@ public class SecurityConfig {
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         JwtBuilder builder = Jwts.builder()
-                .claim("uid", uid)
-                .claim("rol", role)
+                .claim(USER_ID_CLAIM_NAME, uid)
+                .claim(ROLE_CLAIM_NAME, role)
                 .setExpiration(
                         new Date( System.currentTimeMillis() + timeToLiveMills )
                 )

@@ -1,6 +1,7 @@
 package com.tim1.oglasimi.service;
 
 import com.tim1.oglasimi.model.Employer;
+import com.tim1.oglasimi.model.Job;
 import com.tim1.oglasimi.repository.implementation.EmployerRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,10 @@ public class EmployerService {
 
     public boolean deleteEmployer(int id) {
         return employerRepositoryImpl.delete(id);
+    }
+
+    public List<Job> getPostedJobs(int id) {
+        return employerRepositoryImpl.getPostedJobs(id);
     }
 }
 

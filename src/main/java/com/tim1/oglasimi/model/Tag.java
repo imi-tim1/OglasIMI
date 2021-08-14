@@ -45,4 +45,22 @@ public class Tag
     {
         this.name = name;
     }
+
+    public Tag() {
+    }
+
+    public Tag(int id, int fieldId, String name) {
+        this.id = id;
+        this.fieldId = fieldId;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id=" + id +
+                ", fieldId=" + fieldId +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

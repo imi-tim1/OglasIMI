@@ -1,6 +1,6 @@
 package com.tim1.oglasimi.repository.implementation;
 
-import com.tim1.oglasimi.model.Employer;
+import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.repository.EmployerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,6 +23,11 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     private static final String APPROVE_EMPLOYER_PROCEDURE_CALL = "{call approve_user(?,?)}";
     private static final String DELETE_EMPLOYER_PROCEDURE_CALL = "{call delete_user(?,?)}";
 
+    /** returns data for jobs without tag names for those jobs
+     * GET_TAGS_A_JOB_PROCEDURE_CALL is used to get remaining job data */
+    private static final String EMPLOYER_GET_POSTS_PROCEDURE_CALL = "{call employer_get_posts_without_tags(?)}";
+    private static final String GET_TAGS_A_JOB_PROCEDURE_CALL = "{call get_tags_for_a_job(?)}";
+
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
 
@@ -35,11 +41,8 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     public List<Employer> getAll() {
         List<Employer> employers = new LinkedList<>();
 
-        try (
-                Connection con = DriverManager.getConnection(
-                        databaseSourceUrl, databaseUsername, databasePassword );
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
                 CallableStatement cstmt = con.prepareCall(GET_ALL_EMPLOYERS_PROCEDURE_CALL) ) {
-
 
             ResultSet resultSet = cstmt.executeQuery();
 
@@ -58,7 +61,8 @@ public class EmployerRepositoryImpl implements EmployerRepository {
                 employers.add(tempEmployer);
             }
 
-        } catch ( SQLException e ) {
+        }
+        catch ( SQLException e ) {
             LOGGER.error("getAll | An error occurred while communicating with a database", e );
             e.printStackTrace();
         }
@@ -70,9 +74,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     public boolean create(Employer employer) {
         boolean isSuccessfullyRegistered = false;
 
-        try (
-                Connection con = DriverManager.getConnection(
-                        databaseSourceUrl, databaseUsername, databasePassword );
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
                 CallableStatement cstmt = con.prepareCall(REGISTER_EMPLOYER_PROCEDURE_CALL) ) {
 
             cstmt.setString("p_email", employer.getEmail() );
@@ -100,9 +102,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     public Employer get(Integer id) {
         Employer employer = null;
 
-        try (
-                Connection con = DriverManager.getConnection(
-                        databaseSourceUrl, databaseUsername, databasePassword );
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
                 CallableStatement cstmt = con.prepareCall(GET_EMPLOYER_PROCEDURE_CALL) ) {
 
             cstmt.setInt("p_id", id);
@@ -138,10 +138,8 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     public boolean delete(Integer id) {
         boolean isDeletedSuccessfully = false;
 
-        try (
-                Connection con = DriverManager.getConnection(
-                        databaseSourceUrl, databaseUsername, databasePassword );
-                CallableStatement cstmt = con.prepareCall(DELETE_EMPLOYER_PROCEDURE_CALL) ) {
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
+            CallableStatement cstmt = con.prepareCall(DELETE_EMPLOYER_PROCEDURE_CALL ) ) {
 
             cstmt.setInt("p_id", id);
             cstmt.registerOutParameter("p_deleted_successfully", Types.BOOLEAN);
@@ -162,9 +160,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     public boolean approve(Integer id) {
         boolean isApprovedSuccessfully = false;
 
-        try (
-                Connection con = DriverManager.getConnection(
-                        databaseSourceUrl, databaseUsername, databasePassword );
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
                 CallableStatement cstmt = con.prepareCall(APPROVE_EMPLOYER_PROCEDURE_CALL) ) {
 
             cstmt.setInt("p_id", id);
@@ -180,5 +176,82 @@ public class EmployerRepositoryImpl implements EmployerRepository {
         }
 
         return isApprovedSuccessfully;
+    }
+
+    @Override
+    public List<Job> getPostedJobs(int id) {
+        List<Job> postedJobs = null;
+
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
+              CallableStatement cstmt = con.prepareCall(EMPLOYER_GET_POSTS_PROCEDURE_CALL);
+              CallableStatement csTags = con.prepareCall(GET_TAGS_A_JOB_PROCEDURE_CALL);) {
+
+            cstmt.setInt("p_employer_id", id);
+            ResultSet rs = cstmt.executeQuery();
+
+            int jobId;
+            Job tempJob;
+            Tag tempTag;
+            List<Tag> tags;
+            postedJobs = new LinkedList<Job>();
+
+            while( rs.next() ) {
+                tempJob = new Job();
+
+                tempJob.setId( rs.getInt("id") );
+
+               tempJob.setField( new Field(
+                       rs.getInt("field_id"),
+                       rs.getString("field_name")
+               ));
+
+                tempJob.setEmployer( new Employer(
+                        rs.getInt("employer_id"),
+                            null,
+                            null,
+                        rs.getString("picture_base64"),
+                        rs.getString("phone_number"),
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("tin")
+                ));
+
+                tempJob.setCity( new City(
+                        rs.getInt("city_id"),
+                        rs.getString("city_name")
+                ));
+
+                tempJob.setPostDate( rs.getObject("post_date", LocalDateTime.class) );
+                tempJob.setDescription( rs.getString("description") );
+                tempJob.setTitle( rs.getString("title") );
+                tempJob.setSalary( rs.getString("salary") );
+                tempJob.setWorkFromHome( rs.getBoolean("work_from_home") );
+
+                csTags.setInt("p_job_id", tempJob.getId() );
+                ResultSet rsTags = csTags.executeQuery();
+
+                tags = new LinkedList<Tag>();
+
+                while( rsTags.next() ) {
+                    tempTag = new Tag(
+                            rsTags.getInt("id"),
+                            rsTags.getInt("field_id"),
+                            rsTags.getString("name")
+                    );
+
+                    tags.add( tempTag );
+                }
+                tempJob.setTags( tags );
+
+                postedJobs.add(tempJob);
+            }
+
+        }
+        catch ( SQLException e ) {
+            LOGGER.error("getAll | An error occurred while communicating with a database" );
+            e.printStackTrace();
+        }
+
+        return postedJobs;
     }
 }
