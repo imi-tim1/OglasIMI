@@ -40,4 +40,9 @@ public class JobService
     {
         return jobRepositoryImpl.get(id);
     }
+
+    public boolean deleteJob(int id)
+    {
+        return jobRepositoryImpl.delete(id);
+    }
 }

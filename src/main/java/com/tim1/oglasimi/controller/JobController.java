@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
@@ -64,10 +65,11 @@ public class JobController
     }
 
     @PostMapping
+    @Validated
     public ResponseEntity<?> postJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                  @RequestBody Job job)
+                                     @Valid @RequestBody Job job)
     {
-        ResultPair resultPair = checkAccess( jwt, Role.EMPLOYER );
+        ResultPair resultPair = checkAccess(jwt, Role.EMPLOYER);
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -211,5 +213,31 @@ public class JobController
         }
 
         return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(null);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                       @PathVariable("id")
+                                       @Min( 1 )
+                                       @Max( Integer.MAX_VALUE ) int id)
+    {
+        ResultPair resultPair = checkAccess(jwt, Role.EMPLOYER, Role.ADMIN);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( "You are not allowed to access this resource" );
+        }
+
+        boolean flag = jobService.deleteJob(id);
+
+        if(flag) return ResponseEntity.status(HttpStatus.OK).headers(responseHeaders).body(null);
+        return ResponseEntity.status(HttpStatus.CONFLICT).headers(responseHeaders).body(null);
     }
 }
