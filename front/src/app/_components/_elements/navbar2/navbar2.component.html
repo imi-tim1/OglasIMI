@@ -9,25 +9,25 @@
                 <a class="nav-link text-dark" aria-current="page" routerLink="/employers">Poslodavci</a>
             </li>
             <!-- Applicant Option Only (aplicirani poslovi) -->
-            <li *ngIf="this.checkRole([this.accessService.roleType.Applicant])" class="nav-item">
+            <li *ngIf="false" class="nav-item">
                 <a class="nav-link text-dark" aria-current="page" routerLink="/">Aplicirani poslovi</a>
             </li>
             <!-- Employer Options Only (moji oglasi, kreiraj novi oglas) -->
-            <li *ngIf="this.checkRole([this.accessService.roleType.Employer])" class="nav-item">
+            <li *ngIf="false" class="nav-item">
                 <a class="nav-link text-dark" aria-current="page" routerLink="/">Moji oglasi</a>
             </li>
-            <li *ngIf="this.checkRole([this.accessService.roleType.Employer])" class="nav-item">
+            <li *ngIf="false" class="nav-item">
                 <a class="nav-link text-dark" aria-current="page" routerLink="/">Kreiraj novi oglas</a>
             </li>
             <!-- Admin Option Only (kandidati)-->
-            <li *ngIf="this.checkRole([this.accessService.roleType.Admin])" class="nav-item">
+            <li *ngIf="false" class="nav-item">
                 <a class="nav-link text-dark" aria-current="page" routerLink="/">Kandidati</a>
             </li>
         </ul>
     </div>
 
     <!-- Visitor Options Only (prijava, registracija) -->
-    <div *ngIf="this.checkRole([this.accessService.roleType.Visitor])" class="mx-3">
+    <div *ngIf="check('login')" class="mx-3">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link text-dark" routerLink="/login">Prijava</a>
@@ -40,10 +40,10 @@
     <!-- Applicant and Employer Options (moj profil, odjava), Admin Option (odjava) -->
     <div class="mx-3">
         <ul class="navbar-nav">
-            <li *ngIf="this.checkRole([this.accessService.roleType.Applicant, this.accessService.roleType.Employer])" class="nav-item">
+            <li *ngIf="false" class="nav-item">
                 <a class="nav-link text-dark" routerLink="#">Moj profil</a>
             </li>
-            <li *ngIf="this.checkRole([this.accessService.roleType.Applicant, this.accessService.roleType.Employer, this.accessService.roleType.Admin])" class="nav-item">
+            <li *ngIf="check('logout')" class="nav-item">
                 <a class="nav-link text-dark" routerLink="/logout">Odjava</a>
             </li>
         </ul>
