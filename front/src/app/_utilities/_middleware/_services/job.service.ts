@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Applicant, Employer, Field, Filters, Job, Tag } from '../../_api/_data-types/interfaces';
+import { Applicant, Employer, Field, Filters, Job, NewJob, Tag } from '../../_api/_data-types/interfaces';
 import { JobApiService } from '../../_api/_services/job-api.service';
 import { JWTUtil } from '../../_helpers/jwt-util';
 
@@ -100,8 +100,7 @@ export class JobService {
     );
   }
 
-  // ----
-  createJob(jobData: Job) 
+  createJob(jobData: NewJob) 
   {
     this.api.createJob(jobData).subscribe(
       // Success
@@ -120,12 +119,26 @@ export class JobService {
         switch (response.status) {
           // 204 No Content
           case HttpStatusCode.NoContent:
-            
+            // Sta !!??
             break;
           default:
             break;
         }
 
+      },
+      (error: HttpErrorResponse) => {
+        console.log('ERORORORO')
+        console.log(error)
+      }
+    );
+  }
+
+  deleteJob(id: number) 
+  {
+    this.api.deleteJob(id).subscribe(
+      // Success
+      (response) => {
+        console.log('----- Delete Successful!');
       },
       (error: HttpErrorResponse) => {
         console.log('ERORORORO')

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Employer, Job } from '../../_api/_data-types/interfaces';
+import { Employer, Job, NewEmployer } from '../../_api/_data-types/interfaces';
 import { EmployerApiService } from '../../_api/_services/employer-api.service';
 
 @Injectable({
@@ -7,7 +7,7 @@ import { EmployerApiService } from '../../_api/_services/employer-api.service';
 })
 export class EmployerService {
 
-  public employers: Employer[] = [{id: 0, name: 'Svi poslodavci'}];
+  public employers: Employer[] = [];
   public employer: Employer | null = null;
   public employersJobs: Job[] = []
 
@@ -19,7 +19,7 @@ export class EmployerService {
       (response) => {
         console.log('Get Employers (Success), Body: ')
         console.log(response.body)
-        this.employers = this.employers.concat((response.body == null)? [] : response.body);
+        this.employers = (response.body == null)? [] : response.body;
         console.log('Employers: ')
         console.log(this.employers)
       }
@@ -48,7 +48,7 @@ export class EmployerService {
     );
   }
 
-  createEmployer(employerData: Employer) {
+  createEmployer(employerData: NewEmployer) {
     this.api.createEmployer(employerData).subscribe(
       // Success
       (response) => {

@@ -1,0 +1,17 @@
+<app-navbar></app-navbar>
+<br><br>
+<div class="container border border-secondary rounded-3">
+    <h3 class="text-dark">Lista Poslodavaca</h3>
+    <div class="container-fluid p-4">
+        <div class="row">
+            <div *ngFor="let emp of employerService.employers" 
+            class="col-sm-6 col-lg-3 p-2">
+                <div class="bg-white shadow-sm rounded-3" routerLink="/">
+                    <div class="row"><div class="col">{{emp.name}}</div></div>
+                    <img src="assets/images/profile/emp.png" alt="image">
+                    <!-- <img [src]="(emp.pictureBase64 != null)? emp.pictureBase64 : 'assets/emp.png'" alt="image"> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

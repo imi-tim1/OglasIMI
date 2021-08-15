@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
 import { HeaderUtil } from '../../_helpers/http-util';
-import { Employer, Job } from '../_data-types/interfaces';
+import { Employer, Job, NewEmployer } from '../_data-types/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,6 @@ export class EmployerApiService {
     );
   }
 
-  // Potrebno TESTIRANJE !!!
   getEmployer(id: number): Observable<HttpResponse<Employer>> {
     return this.http.get<Employer>(
       this.url + `/${id}`,
@@ -36,7 +35,6 @@ export class EmployerApiService {
     );
   }
 
-  // Potrebno TESTIRANJE !!!
   getEmployersJobs(id: number): Observable<HttpResponse<Job[]>> {
     return this.http.get<Job[]>(
       this.url + `/${id}/jobs`,
@@ -47,8 +45,7 @@ export class EmployerApiService {
     );
   }
 
-  // Potrebno TESTIRANJE !!!
-  createEmployer(employerData: Employer): Observable<HttpResponse<null>> {
+  createEmployer(employerData: NewEmployer): Observable<HttpResponse<null>> {
     return this.http.post<null>(
       this.url,
       employerData,
