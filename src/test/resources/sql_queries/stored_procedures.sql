@@ -177,7 +177,9 @@ CREATE PROCEDURE get_all_employers()
 BEGIN
     SELECT e.user_id, e.name, e.tin, e.address, e.picture_base64, e.phone_number, c.email
     FROM employer e
-        JOIN credentials c ON e.user_id = c.user_id;
+        JOIN credentials c ON e.user_id = c.user_id
+        JOIN user u ON e.user_id = u.id
+    WHERE u.approved = TRUE;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -269,20 +271,44 @@ DELIMITER ;
 
 
 -- #######################################################################
+-- Procedure for applying to particular job
+DELIMITER // ;
+CREATE PROCEDURE apply_for_a_job(
+    IN p_job_id INT,
+    IN p_applicant_id INT,
+    OUT p_successfully_applied INT
+)
+BEGIN
+    SET p_successfully_applied = FALSE;
+
+    INSERT INTO job_application (job_id, applicant_id, date)
+    VALUES (p_job_id, p_applicant_id, NOW() );
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_successfully_applied = TRUE;
+    END IF;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
 -- Procedure for getting employer's job posts (without tags)
 DELIMITER // ;
 CREATE PROCEDURE employer_get_posts_without_tags(
     IN p_employer_id INT
 )
 BEGIN
-    SELECT j.*, -- j.id, j.title,j.employer_id, j.description, j.city_id, j.field_id, j.post_date, j.salary, j.work_from_home,
+    SELECT j.*,
            c.name AS 'city_name',
            f.name AS 'field_name',
            e.name AS 'employer_name', e.phone_number, e.picture_base64, e.address, e.tin,
            creds.email
     FROM job j
         JOIN employer e on e.user_id = j.employer_id
-        JOIN city c on c.id = j.city_id
+        LEFT JOIN city c on c.id = j.city_id
         JOIN field f on f.id = j.field_id
         JOIN credentials creds on j.employer_id = creds.user_id
     WHERE p_employer_id = j.employer_id;
@@ -348,7 +374,7 @@ DELIMITER ;
 DELIMITER // ;
 CREATE PROCEDURE count_jobs()
 BEGIN
-    SELECT COUNT(*) AS job_num from job;
+    SELECT COUNT(*) AS job_num FROM job;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -371,7 +397,7 @@ CREATE PROCEDURE post_job (
 )
 BEGIN
     INSERT INTO job (employer_id, field_id, city_id, post_date, title, description, salary, work_from_home)
-    VALUES (p_employer_id, p_field_id, p_city_id, p_post_date, p_title, p_description, p_salary, p_work_from_home);
+    VALUES (p_employer_id, p_field_id, IF(p_city_id = 0, null, p_city_id), p_post_date, p_title, p_description, p_salary, p_work_from_home);
 
     IF ROW_COUNT() != 0
     THEN
@@ -402,3 +428,24 @@ END //
 DELIMITER ;
 
 select * from job;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for job deleting
+DELIMITER // ;
+CREATE PROCEDURE delete_job (
+    IN p_id int,
+    OUT p_is_deleted boolean
+)
+BEGIN
+    DELETE FROM job WHERE p_id = id;
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_is_deleted = TRUE;
+    END IF;
+
+END //
+DELIMITER ;

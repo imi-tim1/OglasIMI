@@ -25,8 +25,9 @@ public class JobRepositoryImpl implements JobRepository
     private static final String POST_JOB_STORED_PROCEDURE = "{call post_job(?,?,?,?,?,?,?,?,?)}";
     private static final String JOB_COUNT_STORED_PROCEDURE = "{call count_jobs()}";
     private static final String GET_JOB_APPLICANTS_PROCEDURE_CALL = "{call get_job_applicants(?)}";
-    private static final String JOB_APPLY_PROCEDURE_CALL = "{call apply_for_a_job(?,?)}";
+    private static final String JOB_APPLY_PROCEDURE_CALL = "{call apply_for_a_job(?,?,?)}";
     private static final String GET_JOB_STORED_PROCEDURE = "{call get_job(?)}";
+    private static final String DELETE_JOB_STORED_PROCEDURE = "{call delete_job(?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -169,8 +170,7 @@ public class JobRepositoryImpl implements JobRepository
             isSuccessful = cstmt.getBoolean("p_successfully_applied");
 
         } catch ( SQLException e ) {
-            LOGGER.error("approve | An error occurred while communicating with a database", e );
-            e.printStackTrace();
+            LOGGER.error("applyForAJob | An error occurred while communicating with a database", e );
         }
 
         return isSuccessful;
@@ -380,8 +380,25 @@ public class JobRepositoryImpl implements JobRepository
     }
 
     @Override
-    public boolean delete(Integer integer)
+    public boolean delete(Integer id)
     {
-        return false;
+        boolean isJobSuccessfullyDeleted = false;
+
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
+             CallableStatement cstmt = con.prepareCall(DELETE_JOB_STORED_PROCEDURE))
+        {
+            cstmt.setInt("p_id",id);
+            cstmt.registerOutParameter("p_is_deleted", Types.BOOLEAN);
+
+            cstmt.execute();
+
+            isJobSuccessfullyDeleted = cstmt.getBoolean("p_is_deleted");
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return isJobSuccessfullyDeleted;
     }
 }

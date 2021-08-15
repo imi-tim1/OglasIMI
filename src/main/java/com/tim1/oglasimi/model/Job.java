@@ -1,15 +1,14 @@
 package com.tim1.oglasimi.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.List;
-//Cao
+
 public class Job
 {
-    @Min(1)
-    @Max(Integer.MAX_VALUE)
     private int id;
 
     private Employer employer;
@@ -17,7 +16,7 @@ public class Job
     private City city;
     private List<Tag> tags;
 
-    @NotBlank @NotNull
+    @NotNull
     @DateTimeFormat
     private LocalDateTime postDate;
 

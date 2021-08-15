@@ -170,12 +170,37 @@ DELIMITER ;
 -- #######################################################################
 -- get_job_applicants
 
-select j.id as 'job_id', applicant_id, employer_id, email, hashed_password
-from job j
-         left join job_application on job_application.job_id = j.id
-         left join applicant a on a.user_id = job_application.applicant_id
-         left join credentials c on j.employer_id = c.user_id
+SELECT j.id AS 'job_id', applicant_id, employer_id, email, hashed_password
+FROM job j
+         LEFT JOIN job_application ON job_application.job_id = j.id
+         LEFT JOIN applicant a ON a.user_id = job_application.applicant_id
+         LEFT JOIN credentials c ON j.employer_id = c.user_id
 ORDER BY job_id;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- apply_for_a_job
+
+-- test call for procedure apply_for_a_job #1 successfully applied
+CALL apply_for_a_job(
+          4,
+         2,
+         @p_successfully_applied
+);
+SELECT @p_successfully_applied AS 'Is applied successfully?';
+SELECT * FROM job_application;
+--
+
+-- test call for procedure apply_for_a_job #2 unsuccessful; already applied
+CALL apply_for_a_job(
+        7,
+        2,
+        @p_successfully_applied
+    );
+SELECT @p_successfully_applied AS 'Is applied successfully?';
+SELECT * FROM job_application;
 -- #######################################################################
 
 

@@ -206,10 +206,10 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 
                 tempJob.setId( rs.getInt("id") );
 
-               tempJob.setField( new Field(
+                tempJob.setField( new Field(
                        rs.getInt("field_id"),
                        rs.getString("field_name")
-               ));
+                ));
 
                 tempJob.setEmployer( new Employer(
                         rs.getInt("employer_id"),
@@ -251,7 +251,6 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 
                 postedJobs.add(tempJob);
             }
-
         }
         catch ( SQLException e ) {
             LOGGER.error("getAll | An error occurred while communicating with a database" );

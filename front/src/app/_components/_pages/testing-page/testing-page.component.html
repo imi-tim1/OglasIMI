@@ -8,5 +8,13 @@
                 <input class="form-control" type="text" placeholder="Prezime">
             </div>
         </div>
+        <div class="row">
+            <div class="col-7 p-4">
+                <label for="f"></label>
+                <input class="form-control" type="file" placeholder="Ime" name="f" id="fajl"
+                    (input)="onFileInput()"
+                >
+            </div>
+        </div>
     </div>
 </div>

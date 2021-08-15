@@ -24,7 +24,8 @@ export class JobService {
 
   // --- Methods ---
 
-  getFilteredJobs(filters: Filters) {
+  getFilteredJobs(filters: Filters) 
+  {
     this.api.getJobs(filters).subscribe(
       // Success
       (response) => {
@@ -40,7 +41,8 @@ export class JobService {
     );
   }
 
-  getJobs() {
+  getJobs() 
+  {
     let filters: Filters = {
       title: '',
       cityId: 0,
@@ -55,7 +57,8 @@ export class JobService {
     this.getFilteredJobs(filters);
   }
 
-  getJob(id: number) {
+  getJob(id: number) 
+  {
     this.api.getJob(id).subscribe(
       // Success
       (response) => {
@@ -66,7 +69,8 @@ export class JobService {
     );
   }
 
-  getJobsApplicants(id: number) {
+  getJobsApplicants(id: number) 
+  {
     this.api.getJobsApplicants(id).subscribe(
       // Success
       (response) => {
@@ -92,6 +96,40 @@ export class JobService {
 
             break;
         }
+      }
+    );
+  }
+
+  // ----
+  createJob(jobData: Job) 
+  {
+    this.api.createJob(jobData).subscribe(
+      // Success
+      (response) => {
+        console.log(response.status);
+      }
+    );
+  }
+
+  applyToJob(id: number) 
+  {
+    this.api.applyToJob(id).subscribe(
+      // Success
+      (response) => {
+        console.log('----- Apply Successful!');
+        switch (response.status) {
+          // 204 No Content
+          case HttpStatusCode.NoContent:
+            
+            break;
+          default:
+            break;
+        }
+
+      },
+      (error: HttpErrorResponse) => {
+        console.log('ERORORORO')
+        console.log(error)
       }
     );
   }

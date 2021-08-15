@@ -43,9 +43,14 @@ public class JobService
     public String applyForAJob(int jobId, int uid) {
         boolean isSuccessful = jobRepositoryImpl.applyForAJob(uid, jobId);
 
-        if( isSuccessful)
+        if( isSuccessful )
             return "Successful";
 
         return "Unsuccessful";
+    }
+
+    public boolean deleteJob(int id)
+    {
+        return jobRepositoryImpl.delete(id);
     }
 }

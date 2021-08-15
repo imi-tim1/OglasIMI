@@ -1,11 +1,13 @@
 package com.tim1.oglasimi.controller;
 
+import com.google.gson.stream.MalformedJsonException;
 import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.model.payload.JobFeed;
 import com.tim1.oglasimi.model.payload.JobFilter;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.JobService;
+import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
@@ -66,10 +69,11 @@ public class JobController
     }
 
     @PostMapping
+    @Validated
     public ResponseEntity<?> postJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                  @RequestBody Job job)
+                                     @Valid @RequestBody Job job)
     {
-        ResultPair resultPair = checkAccess( jwt, Role.EMPLOYER );
+        ResultPair resultPair = checkAccess(jwt, Role.EMPLOYER);
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -80,14 +84,37 @@ public class JobController
             return ResponseEntity
                     .status(httpStatus)
                     .headers(responseHeaders)
-                    .body( "You are not allowed to access this resource" );
+                    .body( null );
         }
+
+        extractEmployerId(job,resultPair);
 
         boolean flag = jobService.postJob(job);
 
         if(flag) return ResponseEntity.status(HttpStatus.CREATED).headers(responseHeaders).body(null);
         return ResponseEntity.status(HttpStatus.CONFLICT).headers(responseHeaders).body(null);
     }
+
+    private void extractEmployerId(Job job, ResultPair resultPair)
+    {
+        double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+        int uid = (int) tempUid;
+
+        job.setEmployer(new Employer());
+        job.getEmployer().setId(uid);
+
+        cityValidation(job);
+    }
+
+    private void cityValidation(Job job)
+    {
+        if(job.getCity() == null)
+        {
+            job.setCity(new City());
+            job.getCity().setId(0);
+        }
+    }
+
 
     private JobFilter setJobModel(int employerId, int fieldId, int cityId, String title, List<Integer> tagList,
                             boolean workFromHome, int pageNumber, int jobsPerPage, boolean ascendingOrder)
@@ -196,7 +223,7 @@ public class JobController
     }
 
     @PostMapping("{jobId}/applicants")
-    public ResponseEntity<String> applyForAJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+    public ResponseEntity<?> applyForAJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                                   @PathVariable("jobId")
                                                   @Min( 1 )
                                                   @Max( Integer.MAX_VALUE ) int jobId ) {
@@ -221,10 +248,17 @@ public class JobController
 
         String resultMessage = jobService.applyForAJob(uid, jobId);
 
+        if( resultMessage == "Successful") {
+            httpStatus = HttpStatus.CREATED;
+        }
+        else {
+            httpStatus = HttpStatus.CONFLICT;
+        }
+
         return ResponseEntity
                 .status(httpStatus)
                 .headers(responseHeaders)
-                .body( resultMessage );
+                .body( null );
     }
 
     @GetMapping("{id}")
@@ -245,5 +279,31 @@ public class JobController
         }
 
         return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(null);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                       @PathVariable("id")
+                                       @Min( 1 )
+                                       @Max( Integer.MAX_VALUE ) int id)
+    {
+        ResultPair resultPair = checkAccess(jwt, Role.EMPLOYER, Role.ADMIN);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( "You are not allowed to access this resource" );
+        }
+
+        boolean flag = jobService.deleteJob(id);
+
+        if(flag) return ResponseEntity.status(HttpStatus.OK).headers(responseHeaders).body(null);
+        return ResponseEntity.status(HttpStatus.CONFLICT).headers(responseHeaders).body(null);
     }
 }
