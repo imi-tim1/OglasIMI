@@ -395,7 +395,7 @@ CREATE PROCEDURE post_job (
 )
 BEGIN
     INSERT INTO job (employer_id, field_id, city_id, post_date, title, description, salary, work_from_home)
-    VALUES (p_employer_id, p_field_id, p_city_id, p_post_date, p_title, p_description, p_salary, p_work_from_home);
+    VALUES (p_employer_id, p_field_id, IF(p_city_id = 0, null, p_city_id), p_post_date, p_title, p_description, p_salary, p_work_from_home);
 
     IF ROW_COUNT() != 0
     THEN
