@@ -171,6 +171,99 @@ DELIMITER ;
 
 
 -- #######################################################################
+-- Procedure for applicant registration
+DELIMITER // ;
+CREATE PROCEDURE register_applicant (
+    IN p_email VARCHAR(190),
+    IN p_hashed_password VARCHAR(300),
+    IN p_first_name VARCHAR(30),
+    IN p_last_name VARCHAR(30),
+    IN p_picture_base64 TEXT(65000),
+    IN p_phone_number VARCHAR(30),
+    OUT p_is_added BOOLEAN,
+    OUT p_already_exists BOOLEAN
+)
+leave_label:BEGIN
+
+    DECLARE v_retval INT;
+    DECLARE v_applicant_role_id INT;
+    DECLARE v_applicant_id INT;
+
+    DECLARE exit HANDLER FOR sqlexception
+        BEGIN
+            ROLLBACK;
+        END;
+    DECLARE exit HANDLER FOR sqlwarning
+        BEGIN
+            ROLLBACK;
+        END;
+
+
+    SET p_is_added = FALSE;
+    SET p_already_exists = FALSE;
+
+    -- count number of users which have the same email as user that is attempting to make
+    -- an account
+    SELECT COUNT(c.user_id)
+    INTO v_retval
+    FROM credentials c
+    WHERE c.email = p_email;
+
+    -- if provided email already exists inside database exit procedure
+    IF v_retval != 0 THEN
+        SET p_already_exists = TRUE;
+        LEAVE leave_label;
+    END IF;
+
+    -- get id for role applicant
+    SELECT id
+    INTO v_applicant_role_id
+    FROM role
+    WHERE name = 'applicant';
+
+    START TRANSACTION;
+
+    -- add applicant into table "user"
+    INSERT INTO user ( role_id, approved )
+    VALUES ( v_applicant_role_id, FALSE );
+
+    IF ROW_COUNT() = 0
+    THEN
+        ROLLBACK;
+    END IF;
+
+    -- get applicant's id
+    SELECT LAST_INSERT_ID()
+    INTO v_applicant_id;
+
+    -- add applicant's profile details into table "applicant"
+    INSERT INTO applicant (user_id, first_name, last_name, picture_base64, phone_number)
+    VALUES ( v_applicant_id, p_first_name, p_last_name, p_picture_base64, p_phone_number );
+
+    IF ROW_COUNT() = 0
+    THEN
+        ROLLBACK;
+    END IF;
+
+    -- add applicant's credentials into table "credentials"
+    INSERT INTO credentials ( user_id, email, hashed_password  )
+    VALUES ( v_applicant_id, p_email, p_hashed_password );
+
+    IF ROW_COUNT() = 0
+    THEN
+        ROLLBACK;
+    END IF;
+
+    SET p_is_added = TRUE;
+
+    COMMIT;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
 -- Procedure for getting list of all employers
 DELIMITER // ;
 CREATE PROCEDURE get_all_employers()
