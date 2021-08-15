@@ -1,4 +1,6 @@
-package com.tim1.oglasimi.model;
+package com.tim1.oglasimi.model.payload;
+
+import com.tim1.oglasimi.model.Job;
 
 public class JobFilter extends Job
 {

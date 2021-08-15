@@ -51,7 +51,7 @@ export class TestingPageComponent implements OnInit {
     // this.jobService.getJob(3); // ?
 
     // this.jobService.getJobs(); // ?
-    this.jobService.getJobs();
+    // this.jobService.getJobsApplicants(4); // OK
   }
 
 }

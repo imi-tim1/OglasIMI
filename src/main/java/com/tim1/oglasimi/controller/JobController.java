@@ -1,6 +1,8 @@
 package com.tim1.oglasimi.controller;
 
 import com.tim1.oglasimi.model.*;
+import com.tim1.oglasimi.model.payload.JobFeed;
+import com.tim1.oglasimi.model.payload.JobFilter;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.JobService;
@@ -38,15 +40,15 @@ public class JobController
 
     @GetMapping
     public ResponseEntity<JobFeed> getFilteredJobs(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                                  @RequestParam(required = false) String title,
-                                                  @RequestParam(required = false) List<Integer> tagList,
-                                                  @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int employerId,
-                                                  @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int fieldId,
-                                                  @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int cityId,
-                                                  @RequestParam @Min(1) @Max(Integer.MAX_VALUE) int pageNumber,
-                                                  @RequestParam @Min(5) @Max(Integer.MAX_VALUE) int jobsPerPage,
-                                                  @RequestParam boolean workFromHome,
-                                                  @RequestParam boolean ascendingOrder)
+                                                   @RequestParam(required = false) String title,
+                                                   @RequestParam(required = false) List<Integer> tagList,
+                                                   @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int employerId,
+                                                   @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int fieldId,
+                                                   @RequestParam @Min(0) @Max(Integer.MAX_VALUE) int cityId,
+                                                   @RequestParam @Min(1) @Max(Integer.MAX_VALUE) int pageNumber,
+                                                   @RequestParam @Min(5) @Max(Integer.MAX_VALUE) int jobsPerPage,
+                                                   @RequestParam boolean workFromHome,
+                                                   @RequestParam boolean ascendingOrder)
     {
         JobFilter jobFilter = setJobModel(employerId,fieldId,cityId,title,tagList,workFromHome,pageNumber,jobsPerPage,ascendingOrder);
 
@@ -193,6 +195,42 @@ public class JobController
                 .status(httpStatus)
                 .headers(responseHeaders)
                 .body( applicantList );
+    }
+
+    @PostMapping("{jobId}/applicants")
+    public ResponseEntity<String> applyForAJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                  @PathVariable("jobId")
+                                                  @Min( 1 )
+                                                  @Max( Integer.MAX_VALUE ) int jobId ) {
+        ResultPair resultPair = checkAccess( jwt, Role.APPLICANT );
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK ) {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body( null );
+        }
+
+
+        double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+        int uid = (int) tempUid;
+        LOGGER.debug("getJobApplicants | found uid in the token: {}", uid );
+
+
+        String resultMessage = jobService.applyForAJob(uid, jobId);
+
+        if( resultMessage == "Unsuccessful") {
+            httpStatus = HttpStatus.CONFLICT;
+        }
+
+        return ResponseEntity
+                .status(httpStatus)
+                .headers(responseHeaders)
+                .body( resultMessage );
     }
 
     @GetMapping("{id}")

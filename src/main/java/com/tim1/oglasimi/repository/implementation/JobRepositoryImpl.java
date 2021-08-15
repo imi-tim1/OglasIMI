@@ -1,6 +1,8 @@
 package com.tim1.oglasimi.repository.implementation;
 
 import com.tim1.oglasimi.model.*;
+import com.tim1.oglasimi.model.payload.JobFeed;
+import com.tim1.oglasimi.model.payload.JobFilter;
 import com.tim1.oglasimi.repository.JobRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ public class JobRepositoryImpl implements JobRepository
     private static final String POST_JOB_STORED_PROCEDURE = "{call post_job(?,?,?,?,?,?,?,?,?)}";
     private static final String JOB_COUNT_STORED_PROCEDURE = "{call count_jobs()}";
     private static final String GET_JOB_APPLICANTS_PROCEDURE_CALL = "{call get_job_applicants(?)}";
+    private static final String JOB_APPLY_PROCEDURE_CALL = "{call apply_for_a_job(?,?,?)}";
     private static final String GET_JOB_STORED_PROCEDURE = "{call get_job(?)}";
     private static final String DELETE_JOB_STORED_PROCEDURE = "{call delete_job(?,?)}";
 
@@ -149,6 +152,28 @@ public class JobRepositoryImpl implements JobRepository
         }
 
         return jobFeed;
+    }
+
+    @Override
+    public boolean applyForAJob(Integer jobId, Integer uid) {
+        boolean isSuccessful = false;
+
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
+              CallableStatement cstmt = con.prepareCall(JOB_APPLY_PROCEDURE_CALL) ) {
+
+            cstmt.setInt("p_job_id", jobId);
+            cstmt.setInt("p_applicant_id", uid);
+            cstmt.registerOutParameter("p_successfully_applied", Types.BOOLEAN);
+
+            cstmt.executeUpdate();
+
+            isSuccessful = cstmt.getBoolean("p_successfully_applied");
+
+        } catch ( SQLException e ) {
+            LOGGER.error("applyForAJob | An error occurred while communicating with a database", e );
+        }
+
+        return isSuccessful;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.tim1.oglasimi.repository;
 
-import com.tim1.oglasimi.model.LoginCredentials;
-import com.tim1.oglasimi.model.LoginResponse;
+import com.tim1.oglasimi.model.payload.LoginCredentials;
+import com.tim1.oglasimi.model.payload.LoginResponse;
 import org.springframework.stereotype.Repository;
 
 @Repository

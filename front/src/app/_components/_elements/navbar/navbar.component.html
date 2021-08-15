@@ -44,7 +44,7 @@
                 <a class="nav-link text-dark" routerLink="#">Moj profil</a>
             </li>
             <li *ngIf="this.checkRole([this.accessService.roleType.Applicant, this.accessService.roleType.Employer, this.accessService.roleType.Admin])" class="nav-item">
-                <a class="nav-link text-dark" routerLink="#">Odjava</a>
+                <a class="nav-link text-dark" routerLink="/logout">Odjava</a>
             </li>
         </ul>
     </div>

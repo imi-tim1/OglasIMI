@@ -62,10 +62,11 @@ CALL register_employer(
         'Picosoft',
         'Radoja Domanovica 12',
         '123-456-789',
-        @p_is_added
+        @p_is_added,
+    @p_already_exists
 );
 
-SELECT @p_is_added AS 'Is employer successfully registered?';
+SELECT @p_is_added AS 'Is employer successfully registered?', @p_already_exists AS 'Is email alreadly registered';
 SELECT user_id, email, approved, name, hashed_password
 FROM credentials c
     JOIN user u ON u.id = c.user_id
@@ -84,10 +85,11 @@ CALL register_employer(
         'Mir Company',
         'Radoja 15',
         '222-456-000',
-        @p_is_added
-);
+        @p_is_added,
+        @p_already_exists
+    );
 
-SELECT @p_is_added AS 'Is employer successfully registered?';
+SELECT @p_is_added AS 'Is employer successfully registered?', @p_already_exists AS 'Is email alreadly registered';
 SELECT user_id, email, approved, name, hashed_password
 FROM credentials c
          JOIN user u ON u.id = c.user_id
@@ -106,10 +108,11 @@ CALL register_employer(
         'Dar Company',
         'Doman III 3',
         '451-154-444',
-        @p_is_added
-);
+        @p_is_added,
+        @p_already_exists
+    );
 
-SELECT @p_is_added AS 'Is employer successfully registered?';
+SELECT @p_is_added AS 'Is employer successfully registered?', @p_already_exists AS 'Is email alreadly registered';
 SELECT user_id, email, approved, name, hashed_password
 FROM credentials c
          JOIN user u ON u.id = c.user_id
@@ -160,7 +163,43 @@ CALL delete_user(1, @deleted_successfully);
 SELECT @deleted_successfully 'Is successfully deleted?'
 //
 DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- get_job_applicants
+
+SELECT j.id AS 'job_id', applicant_id, employer_id, email, hashed_password
+FROM job j
+         LEFT JOIN job_application ON job_application.job_id = j.id
+         LEFT JOIN applicant a ON a.user_id = job_application.applicant_id
+         LEFT JOIN credentials c ON j.employer_id = c.user_id
+ORDER BY job_id;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- apply_for_a_job
+
+-- test call for procedure apply_for_a_job #1 successfully applied
+CALL apply_for_a_job(
+          4,
+         2,
+         @p_successfully_applied
+);
+SELECT @p_successfully_applied AS 'Is applied successfully?';
+SELECT * FROM job_application;
 --
+
+
+-- test call for procedure approve_user #2 unsuccessfully approved; user is already approved
+                             DELIMITER // ;
+CALL approve_user(1, @approved_successfully);
+SELECT @approved_successfully 'Is successfully approved?'
+    //
+DELIMITER ;
 -- #######################################################################
 
 

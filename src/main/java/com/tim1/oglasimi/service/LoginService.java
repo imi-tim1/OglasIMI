@@ -1,7 +1,7 @@
 package com.tim1.oglasimi.service;
 
-import com.tim1.oglasimi.model.LoginCredentials;
-import com.tim1.oglasimi.model.LoginResponse;
+import com.tim1.oglasimi.model.payload.LoginCredentials;
+import com.tim1.oglasimi.model.payload.LoginResponse;
 import com.tim1.oglasimi.repository.implementation.LoginRepositoryImpl;
 import com.tim1.oglasimi.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
