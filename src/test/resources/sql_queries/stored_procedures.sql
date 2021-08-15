@@ -345,7 +345,7 @@ DELIMITER ;
 DELIMITER // ;
 CREATE PROCEDURE count_jobs()
 BEGIN
-    SELECT COUNT(*) AS job_num from job;
+    SELECT COUNT(*) AS job_num FROM job;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -383,7 +383,6 @@ DELIMITER ;
 
 -- #######################################################################
 -- Procedure for getting specific job by id
-drop procedure get_job;
 DELIMITER // ;
 CREATE PROCEDURE get_job(IN p_id int)
 BEGIN
@@ -399,3 +398,24 @@ END //
 DELIMITER ;
 
 select * from job;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for job deleting
+DELIMITER // ;
+CREATE PROCEDURE delete_job (
+    IN p_id int,
+    OUT p_is_deleted boolean
+)
+BEGIN
+    DELETE FROM job WHERE p_id = id;
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_is_deleted = TRUE;
+    END IF;
+
+END //
+DELIMITER ;
