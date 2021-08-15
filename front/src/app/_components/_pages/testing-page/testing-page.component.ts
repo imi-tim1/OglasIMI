@@ -13,6 +13,8 @@ export class TestingPageComponent implements OnInit {
 
    @Input() public fajl: File | null = null;
 
+   public convertedPicture: string = '';
+
   constructor(
     public employerService: EmployerService,
     public aplicantService: ApplicantService,
@@ -20,7 +22,6 @@ export class TestingPageComponent implements OnInit {
   ) { }
 
   onFileInput() {
-    let converted = '';
     let reader = new FileReader();
 
     let inp = document.getElementById('fajl') as HTMLInputElement;
@@ -30,13 +31,23 @@ export class TestingPageComponent implements OnInit {
       return;
     }
 
+    let self = this;
+
     reader.readAsDataURL(inp.files[0]);
     reader.onload = function() {
-      converted = reader.result as string;
-      console.log(converted);
-      let len = converted.length;
+      self.convertedPicture = reader.result as string;
+      let len = self.convertedPicture.length;
+      
+      console.log(self.convertedPicture);
       console.log(`Duzina kodirane slike je: ${Math.round(len/1000)}.${Math.round(len%1000/100)} K`);
     }
+
+    console.log('this: ' + this.convertedPicture.length);
+    console.log('self: ' + self.convertedPicture.length);
+  }
+
+  printConvertedPicture() {
+    console.log(this.convertedPicture);
   }
 
   ngOnInit(): void {
@@ -48,8 +59,8 @@ export class TestingPageComponent implements OnInit {
   testEmployerService() {
     // this.employerService.getEmployers();      // OK
     // this.employerService.getEmployer(5);      // OK
-    // this.employerService.getEmployersJobs(4);    // OK
-    this.employerService.createEmployer({     // ?
+    // this.employerService.getEmployersJobs(4); // OK
+    this.employerService.createEmployer({     // OK
       name: 'Ruzno Pace d.o.o',
       address: 'Kamen 1',
       email: 'xy@z.com',
@@ -68,23 +79,30 @@ export class TestingPageComponent implements OnInit {
   }
 
   testJobService() {
-    let j: number = 4;
-    // Ceka se Back End ...
-    // this.jobService.getJob(3); // ?
+    // let j: number = 4;
 
-    // this.jobService.getJobs(); // ?
+    // this.jobService.getJob(3); // OK
+    // this.jobService.getJobs(); // OK
     // this.jobService.getJobsApplicants(j); // OK
 
-    // this.jobService.createJob({
-    //   title: 'HITNO!!! Novi oglas',
-    //   description: 'Jajjjaci posao',
-    //   employer: { id: 5 },
-    //   field: { id: 2 },
-    //   tags: [{ id: 6 }, { id: 7 }, { id: 8 }],
-    //   workFromHome: false
-    // });
+    this.jobService.createJob({ // OK
+      title: 'QWERT',
+      description: 'Najjaci posao',
+      
+      field: { id: 2, name: '' },
+      city: { id: 0, name: '' },
+      tags: [{ id: 3, name: '' }, { id: 7, name: '' }, { id: 8, name: '' }],
+      
+      salary: '',
+      workFromHome: false,
+      
+      postDate: null,
+      employer: null
+    });
 
-    this.jobService.applyToJob(j);
+    
+
+    // this.jobService.applyToJob(j);
   }
 
 }

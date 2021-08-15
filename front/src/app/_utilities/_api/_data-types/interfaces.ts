@@ -20,13 +20,13 @@ export interface Filters {
     ascendingOrder: boolean;
 }
 
-// Osnovni Entiteti
+// Osnovni Entiteti (Modeli sa svim podacima)
 
 export interface Job
 {
     title: string;
     description: string;
-    employer: Employer;
+    employer: Employer | null;
     field: Field;
     tags: Tag[];
     workFromHome: boolean;
@@ -59,13 +59,13 @@ export interface Employer
 {
     name: string;
 
-    id?: number;
-    email?: string;
-    pictureBase64?: string | null;
-    phoneNumber?: string;
-    address?: string;
-    tin?: string;
-    hashedPassword?: string;
+    id: number;
+    email: string;
+    pictureBase64: string | null;
+    phoneNumber: string;
+    address: string;
+    tin: string;
+    hashedPassword: string;
 }
 
 export interface Applicant
@@ -81,4 +81,34 @@ export interface Applicant
 export interface PagedJobs {
     totalJobNumber: number;
     jobs: Job[];
+}
+
+export interface NewJob {
+    // Obavezni podaci. Regularni format
+    title: string;
+    description: string;
+    // ... Format: Objekat, name = '', bitan samo id
+    field: Field;
+    
+    // Ne obavezni, Objekat, name = '', bitan samo id
+    city: City | null;      // null, ako nema grada
+    tags: Tag[];            // [], ako nema tagova
+    
+    salary: string;         // prazan string ako ne treba
+    workFromHome: boolean;
+    
+    // Uvek null
+    postDate: null;
+    employer: null;
+}
+
+export interface NewEmployer 
+{
+    name: string;
+    email: string;
+    phoneNumber: string;
+    tin: string;
+    address: string;
+    pictureBase64: string | null;
+    hashedPassword: string;
 }
