@@ -374,7 +374,7 @@ DELIMITER ;
 DELIMITER // ;
 CREATE PROCEDURE count_jobs()
 BEGIN
-    SELECT COUNT(*) AS job_num from job;
+    SELECT COUNT(*) AS job_num FROM job;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -397,7 +397,7 @@ CREATE PROCEDURE post_job (
 )
 BEGIN
     INSERT INTO job (employer_id, field_id, city_id, post_date, title, description, salary, work_from_home)
-    VALUES (p_employer_id, p_field_id, p_city_id, p_post_date, p_title, p_description, p_salary, p_work_from_home);
+    VALUES (p_employer_id, p_field_id, IF(p_city_id = 0, null, p_city_id), p_post_date, p_title, p_description, p_salary, p_work_from_home);
 
     IF ROW_COUNT() != 0
     THEN
@@ -428,3 +428,24 @@ END //
 DELIMITER ;
 
 select * from job;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for job deleting
+DELIMITER // ;
+CREATE PROCEDURE delete_job (
+    IN p_id int,
+    OUT p_is_deleted boolean
+)
+BEGIN
+    DELETE FROM job WHERE p_id = id;
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_is_deleted = TRUE;
+    END IF;
+
+END //
+DELIMITER ;

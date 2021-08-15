@@ -48,4 +48,9 @@ public class JobService
 
         return "Unsuccessful";
     }
+
+    public boolean deleteJob(int id)
+    {
+        return jobRepositoryImpl.delete(id);
+    }
 }

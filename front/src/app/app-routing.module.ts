@@ -7,6 +7,7 @@ import { RegisterPageComponent } from './_components/_pages/register-page/regist
 import { TestingPageComponent } from './_components/_pages/testing-page/testing-page.component';
 
 const routes: Routes = [
+  { path: 'job/:id', component: TestingPageComponent },
   { path: 'testing', component: TestingPageComponent },
   { path: 'logout', component: LogoutPageComponent },
   { path: 'login', component: LoginPageComponent },

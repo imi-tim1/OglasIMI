@@ -19,8 +19,7 @@ export class LoginService {
 
   constructor(private api: LoginApiService, private router: Router) { }
 
-  login(email: string, password: string) 
-  {
+  login(email: string, password: string) {
     console.log('Kredencijali\n');
     console.log(password);
 
@@ -32,8 +31,7 @@ export class LoginService {
     console.log('Kredencijali\n');
     console.log(body);
 
-    this.api.login(body).subscribe
-    (
+    this.api.login(body).subscribe(
       // Login Success
       (response: HttpResponse<null>) => {
         JWTUtil.store(response.headers.get(JWT_HEADER_NAME));
@@ -43,29 +41,37 @@ export class LoginService {
 
       // Login Failed
       (error: HttpErrorResponse) => {
-        // Unauthorized
-        if (HttpStatusCode.Unauthorized == error.status) {
-          // Session Expired
-          if(JWTUtil.get() != '') {
-            this.responseCode = ResponseCode.SessionExpired;
+        switch (error.status) {
+          
+          // Unauthorized
+          case HttpStatusCode.Unauthorized:
+            // Session Expired
+            if (JWTUtil.get() != '') {
+              this.responseCode = ResponseCode.SessionExpired;
+              this.router.navigate([RedirectRoute.DEFAULT]);
+            }
+            // Wrong credentials
+            else {
+              this.responseCode = ResponseCode.WrongCredentials;
+              console.log('pogresni kredencijali')
+            }
+            JWTUtil.delete();
+            break;
+
+          // Forbidden
+          case HttpStatusCode.Forbidden:
+            this.responseCode = ResponseCode.Forbidden;
+            if(JWTUtil.exists()) {
+              this.router.navigate([RedirectRoute.DEFAULT]);
+            }
+            console.log('Nalog jos nije potvrdjen');
+            break;
+          
+            // Bad Request
+          case HttpStatusCode.BadRequest:
+            JWTUtil.delete();
             this.router.navigate([RedirectRoute.DEFAULT]);
-          }
-          // Wrong credentials
-          else {
-            this.responseCode = ResponseCode.WrongCredentials;
-            console.log('pogresni kredencijali')
-          }
-          JWTUtil.delete();
-        }
-        // Forbidden
-        else if (HttpStatusCode.Forbidden == error.status) {
-          this.responseCode = ResponseCode.Forbidden;
-          this.router.navigate([RedirectRoute.DEFAULT]);
-        }
-        // Bad Request
-        else if (HttpStatusCode.BadRequest == error.status) {
-          JWTUtil.delete();
-          this.router.navigate([RedirectRoute.DEFAULT]);
+            break;
         }
       }
     );
