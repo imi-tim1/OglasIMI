@@ -51,9 +51,9 @@ export class TestingPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.testEmployerService();
+    this.testEmployerService();
     // this.testApplicantService();
-    this.testJobService();
+    // this.testJobService();
   }
 
   testEmployerService() {
@@ -61,13 +61,13 @@ export class TestingPageComponent implements OnInit {
     // this.employerService.getEmployer(5);      // OK
     // this.employerService.getEmployersJobs(4); // OK
     this.employerService.createEmployer({     // OK
-      name: 'Ruzno Pace d.o.o',
-      address: 'Kamen 1',
-      email: 'xy@z.com',
-      phoneNumber: '063555333',
+      name: 'Keba Kraba d.o.o',
+      address: 'Ulica 1',
+      email: 'keba@kraba.com',
+      phoneNumber: '063234333',
       pictureBase64: null,
-      tin: '12345670009764',
-      hashedPassword: PasswdHash.encrypt('pace')
+      tin: '1345634560009764',
+      hashedPassword: PasswdHash.encrypt('keba')
     });
   }
 
