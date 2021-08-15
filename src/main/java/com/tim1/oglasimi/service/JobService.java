@@ -4,8 +4,6 @@ import com.tim1.oglasimi.model.Applicant;
 import com.tim1.oglasimi.model.Job;
 import com.tim1.oglasimi.model.payload.JobFeed;
 import com.tim1.oglasimi.model.payload.JobFilter;
-import com.tim1.oglasimi.model.JobFeed;
-import com.tim1.oglasimi.model.JobFilter;
 import com.tim1.oglasimi.repository.implementation.JobRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,11 +1,13 @@
 package com.tim1.oglasimi.controller;
 
+import com.google.gson.stream.MalformedJsonException;
 import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.model.payload.JobFeed;
 import com.tim1.oglasimi.model.payload.JobFilter;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.JobService;
+import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,11 +87,34 @@ public class JobController
                     .body( "You are not allowed to access this resource" );
         }
 
+        extractEmployerId(job,resultPair);
+
         boolean flag = jobService.postJob(job);
 
         if(flag) return ResponseEntity.status(HttpStatus.CREATED).headers(responseHeaders).body(null);
         return ResponseEntity.status(HttpStatus.CONFLICT).headers(responseHeaders).body(null);
     }
+
+    private void extractEmployerId(Job job, ResultPair resultPair)
+    {
+        double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+        int uid = (int) tempUid;
+
+        job.setEmployer(new Employer());
+        job.getEmployer().setId(uid);
+
+        cityValidation(job);
+    }
+
+    private void cityValidation(Job job)
+    {
+        if(job.getCity() == null)
+        {
+            job.setCity(new City());
+            job.getCity().setId(0);
+        }
+    }
+
 
     private JobFilter setJobModel(int employerId, int fieldId, int cityId, String title, List<Integer> tagList,
                             boolean workFromHome, int pageNumber, int jobsPerPage, boolean ascendingOrder)
