@@ -78,7 +78,6 @@ export class JobApiService {
 
   applyToJob(id: number): Observable<HttpResponse<null>> 
   {
-    console.log(`-- Job ID: ${id}`)
     return this.http.post<null>(
       this.url + `/${id}/applicants`,
       {},
@@ -88,4 +87,16 @@ export class JobApiService {
       }
     );
   }
+
+  deleteJob(id: number): Observable<HttpResponse<null>> 
+  {
+    return this.http.delete<null>(
+      this.url + `/${id}`,
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+  }
+
 }

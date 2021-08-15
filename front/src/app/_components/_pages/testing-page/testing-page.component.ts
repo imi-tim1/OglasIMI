@@ -85,24 +85,24 @@ export class TestingPageComponent implements OnInit {
     // this.jobService.getJobs(); // OK
     // this.jobService.getJobsApplicants(j); // OK
 
-    this.jobService.createJob({ // OK
-      title: 'QWERT',
-      description: 'Najjaci posao',
+    // this.jobService.createJob({ // OK
+    //   title: 'QWERT',
+    //   description: 'flasdfjlsidjf;',
       
-      field: { id: 2, name: '' },
-      city: { id: 0, name: '' },
-      tags: [{ id: 3, name: '' }, { id: 7, name: '' }, { id: 8, name: '' }],
+    //   field: { id: 2, name: '' },
+    //   city: { id: 2, name: '' },
+    //   tags: [{ id: 3, name: '' }, { id: 7, name: '' }, { id: 8, name: '' }],
       
-      salary: '',
-      workFromHome: false,
+    //   salary: '',
+    //   workFromHome: false,
       
-      postDate: null,
-      employer: null
-    });
+    //   postDate: null,
+    //   employer: null
+    // });
 
     
-
     // this.jobService.applyToJob(j);
+    this.jobService.deleteJob(21);
   }
 
 }
