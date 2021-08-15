@@ -386,7 +386,6 @@ CREATE PROCEDURE post_job (
     IN p_employer_id int,
     IN p_field_id int,
     IN p_city_id int,
-    IN p_post_date DATETIME,
     IN p_title varchar(30),
     IN p_description varchar(510),
     IN p_salary varchar(50),
@@ -395,7 +394,8 @@ CREATE PROCEDURE post_job (
 )
 BEGIN
     INSERT INTO job (employer_id, field_id, city_id, post_date, title, description, salary, work_from_home)
-    VALUES (p_employer_id, p_field_id, IF(p_city_id = 0, null, p_city_id), p_post_date, p_title, p_description, p_salary, p_work_from_home);
+    VALUES (p_employer_id, p_field_id, IF(p_city_id = 0, null, p_city_id), NOW(), p_title, p_description, p_salary, p_work_from_home);
+    SELECT id FROM job WHERE id = LAST_INSERT_ID();
 
     IF ROW_COUNT() != 0
     THEN
@@ -409,8 +409,30 @@ DELIMITER ;
 
 
 -- #######################################################################
+-- Procedure for tag inserting
+DELIMITER // ;
+CREATE PROCEDURE insert_tag (
+    IN p_job_id int,
+    IN p_tag_id int,
+    OUT p_is_inserted boolean
+)
+BEGIN
+    INSERT INTO job_tag (job_id, tag_id)
+    VALUES (p_job_id, p_tag_id);
+    SELECT id FROM job WHERE id = LAST_INSERT_ID();
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_is_inserted = TRUE;
+    END IF;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
 -- Procedure for getting specific job by id
--- drop procedure get_job;
 DELIMITER // ;
 CREATE PROCEDURE get_job(IN p_id int)
 BEGIN
