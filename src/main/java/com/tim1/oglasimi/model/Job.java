@@ -16,7 +16,6 @@ public class Job
     private City city;
     private List<Tag> tags;
 
-    @NotNull
     @DateTimeFormat
     private LocalDateTime postDate;
 

@@ -101,15 +101,20 @@ public class JobController
         job.setEmployer(new Employer());
         job.getEmployer().setId(uid);
 
-        cityValidation(job);
+        validation(job);
     }
 
-    private void cityValidation(Job job)
+    private void validation(Job job)
     {
         if(job.getCity() == null)
         {
             job.setCity(new City());
             job.getCity().setId(0);
+        }
+
+        if(job.getSalary().equals(""))
+        {
+            job.setSalary(null);
         }
     }
 

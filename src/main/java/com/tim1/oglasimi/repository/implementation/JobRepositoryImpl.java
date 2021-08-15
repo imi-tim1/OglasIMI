@@ -22,12 +22,14 @@ public class JobRepositoryImpl implements JobRepository
 
     private static final String MASTER_STORED_PROCEDURE = "{call get_filtered_jobs(?,?,?,?,?)}";
     private static final String TAG_STORED_PROCEDURE = "{call get_tags_for_a_job(?)}";
-    private static final String POST_JOB_STORED_PROCEDURE = "{call post_job(?,?,?,?,?,?,?,?,?)}";
+    private static final String POST_JOB_STORED_PROCEDURE = "{call post_job(?,?,?,?,?,?,?,?)}";
+    private static final String INSERT_TAG_STORED_PROCEDURE = "{call insert_tag(?,?,?)}";
     private static final String JOB_COUNT_STORED_PROCEDURE = "{call count_jobs()}";
     private static final String GET_JOB_APPLICANTS_PROCEDURE_CALL = "{call get_job_applicants(?)}";
     private static final String JOB_APPLY_PROCEDURE_CALL = "{call apply_for_a_job(?,?,?)}";
     private static final String GET_JOB_STORED_PROCEDURE = "{call get_job(?)}";
     private static final String DELETE_JOB_STORED_PROCEDURE = "{call delete_job(?,?)}";
+
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -313,20 +315,50 @@ public class JobRepositoryImpl implements JobRepository
     @Override
     public boolean create(Job job)
     {
-        boolean isJobSuccessfullyPosted = false;
+        boolean isJobSuccessfullyPosted;
+        int id = 0;
 
         try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
-             CallableStatement cstmt = con.prepareCall(POST_JOB_STORED_PROCEDURE))
+             CallableStatement cstmtJob = con.prepareCall(POST_JOB_STORED_PROCEDURE);
+             CallableStatement cstmtTag = con.prepareCall(INSERT_TAG_STORED_PROCEDURE))
         {
-            setJobPostStatement(cstmt,job);
-            cstmt.registerOutParameter("p_is_posted", Types.BOOLEAN);
+            setJobPostStatement(cstmtJob,job);
+            cstmtJob.registerOutParameter("p_is_posted", Types.BOOLEAN);
 
-            cstmt.execute();
+            ResultSet rs = cstmtJob.executeQuery();
 
-            isJobSuccessfullyPosted = cstmt.getBoolean("p_is_posted");
+            isJobSuccessfullyPosted = cstmtJob.getBoolean("p_is_posted");
+
+            if(isJobSuccessfullyPosted && job.getTags() != null) // Ako je job kreiran kako treba i ako postoji lista tagova
+            {
+                boolean flag;
+
+                rs.first();
+                id = rs.getInt("id");
+
+                cstmtTag.setInt("p_job_id",id);
+                cstmtTag.registerOutParameter("p_is_inserted", Types.BOOLEAN);
+
+                for(Tag tag : job.getTags())
+                {
+                    cstmtTag.setInt("p_tag_id",tag.getId());
+                    cstmtTag.executeQuery();
+
+                    flag = cstmtTag.getBoolean("p_is_inserted");
+
+                    if(!flag) // Ako nesto nije kako treba poziva se fj-a delete koja brise job i sve sto je vezano za njega
+                    {
+                        delete(id);
+                        isJobSuccessfullyPosted = false;
+                        break;
+                    }
+                }
+            }
         }
 
         catch (SQLException e) {
+            delete(id);
+            isJobSuccessfullyPosted = false;
             LOGGER.debug("checkCredentials | An error occurred while communicating with a database", e);
             e.printStackTrace();
         }
@@ -339,7 +371,6 @@ public class JobRepositoryImpl implements JobRepository
         cstmt.setInt("p_employer_id", job.getEmployer().getId());
         cstmt.setInt("p_field_id", job.getField().getId());
         cstmt.setInt("p_city_id", job.getCity().getId());
-        cstmt.setObject("p_post_date", job.getPostDate());
         cstmt.setString("p_title", job.getTitle());
         cstmt.setString("p_description", job.getDescription());
         cstmt.setString("p_salary", job.getSalary());
