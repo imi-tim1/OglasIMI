@@ -177,7 +177,9 @@ CREATE PROCEDURE get_all_employers()
 BEGIN
     SELECT e.user_id, e.name, e.tin, e.address, e.picture_base64, e.phone_number, c.email
     FROM employer e
-        JOIN credentials c ON e.user_id = c.user_id;
+        JOIN credentials c ON e.user_id = c.user_id
+        JOIN user u ON e.user_id = u.id
+    WHERE u.approved = TRUE;
 END //
 DELIMITER ;
 -- #######################################################################

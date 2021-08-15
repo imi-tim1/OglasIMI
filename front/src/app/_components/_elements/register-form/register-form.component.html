@@ -7,7 +7,7 @@
             <div class="container">
                 <div class="row">
                   <div class="col-sm">
-                    <button type="button" class="btn btn-primary btn-lg" id="appBtn" (click)="showMeApplicantForm()">Registrujte se kao kandidat</button>
+                    <button type="button" class="btn btn-light btn-lg" id="appBtn" (click)="showMeApplicantForm()">Registrujte se kao kandidat</button>
                   </div>
                   <div class="col-sm">
                     <button type="button" class="btn btn-light btn-lg" id="empBtn" (click)="showMeEmployerForm()">Registrujte se kao poslodavac</button>
@@ -40,48 +40,64 @@
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
-                        <input type="text" id="form3Example1c" class="form-control" />
-                        <label class="form-label" for="form3Example1c">Ime</label>
+                        <input type="text" id="appFirstName" class="form-control" 
+                            [(ngModel)]="appFirstName" name="appFirstName">
+                        <label class="form-label" for="appFirstName">Ime</label>
+                        <p *ngIf="wrongAppFirstNameBool" class="small fw-bold text-danger">Ime sme sadržati samo reči i jedan razmak između reči.</p>
+                        <!--<p *ngIf="wrongAppNameBool" class="small fw-bold mt-2 pt-1 mb-0 text-danger">Ime sme sadrzati samo slova i razmake</p>-->
+                        <!--<label class="form-label" for="form3Example1c" *ngIf="appName.errors?.pattern">
+                          Ime sme sadrzati samo slova i razmake
+                        </label>-->
                       </div>
                     </div>
   
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
-                        <input type="text" id="form3Example3c" class="form-control" />
-                        <label class="form-label" for="form3Example3c">Prezime</label>
+                        <input type="text" id="appLastName" class="form-control" 
+                          [(ngModel)]="appLastName" name="appLastName"/>
+                        <label class="form-label" for="appLastName">Prezime</label>
+                        <p *ngIf="wrongAppLastNameBool" class="small fw-bold text-danger">Prezime sme sadržati samo reči i jedan razmak između reči.</p>
                       </div>
                     </div>
 
                     <div class="d-flex flex-row align-items-center mb-4">
                         <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                         <div class="form-outline flex-fill mb-0">
-                          <input type="email" id="form3Example3c" class="form-control" />
-                          <label class="form-label" for="form3Example3c">E-mail adresa</label>
+                          <input type="email" id="appEmail" class="form-control" 
+                              [(ngModel)]="appEmail" name="appEmail"/>
+                          <label class="form-label" for="appEmail">E-mail adresa</label>
+                          <p *ngIf="wrongAppEmailBool" class="small fw-bold text-danger">Unesite ispravnu e-mail adresu.</p>
                         </div>
                       </div>
 
                     <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                         <div class="form-outline flex-fill mb-0">
-                          <input type="text" id="form3Example3c" class="form-control" />
-                          <label class="form-label" for="form3Example3c">Kontakt telefon</label>
+                          <input type="text" id="appPhoneNum" class="form-control" 
+                          [(ngModel)]="appPhoneNum" name="appPhoneNum"/>
+                          <label class="form-label" for="appPhoneNum">Kontakt telefon<br>(Format: samo cifre, znak plus na početku opcion)<!--(Format: +38XXXXXXXXXX ili 06XXXXXXXX)--></label>
+                          <p *ngIf="wrongAppPhoneBool" class="small fw-bold text-danger">Unesite ispravan broj telefona. (Format: +381XXXXXX ili 06XXXXXXXX, bez crtica i tačaka)</p>
                         </div>
                   </div> 
   
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
-                        <input type="password" id="form3Example4c" class="form-control" />
-                        <label class="form-label" for="form3Example4c">Lozinka</label>
+                        <input type="password" id="appPass1" class="form-control" 
+                        [(ngModel)]="appPass1" name="appPass1"/>
+                        <label class="form-label" for="appPass1">Lozinka</label>
+                        <p *ngIf="wrongAppPass1Bool" class="small fw-bold text-danger">Lozinka mora sadržati najmanje 6 karaktera.</p>
                       </div>
                     </div>
   
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
-                        <input type="password" id="form3Example4cd" class="form-control" />
-                        <label class="form-label" for="form3Example4cd">Potvrdite lozinku</label>
+                        <input type="password" id="appPass2" class="form-control" 
+                        [(ngModel)]="appPass2" name="appPass2"/>
+                        <label class="form-label" for="appPass2">Potvrdite lozinku</label>
+                        <p *ngIf="wrongAppPass2Bool" class="small fw-bold text-danger">Lozinke se ne podudaraju.</p>
                       </div>
                     </div>
 
@@ -90,13 +106,23 @@
                         <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                         <div class="form-outline flex-fill mb-0">
                             <label>Izaberite profilnu sliku:</label>
-                            <input type="file" id="myfile" name="myfile"><br><br>
+                            <input type="file" id="appPicture" name="myfile"
+                            [(ngModel)]="appPicture" name="appPicture"><br><br>
+                            <p *ngIf="wrongAppPictureBool" class="small fw-bold text-danger">Slika je prevelika.</p>
                         </div>
                     </div>
                     
   
                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                      <button type="button" class="btn btn-primary btn-lg">Registrujte se</button>
+                      <button type="button" class="btn btn-primary btn-lg"
+                              (click)="appValidation()">Registrujte se</button>
+                    </div>
+
+                    <div class="form-check d-flex justify-content-center mb-5">
+                      <label class="form-check-label" class="small fw-bold mt-2 pt-1 mb-0" for="form2Example3">
+                          Već imate kreiran nalog? 
+                          <a href="/login" class="link-danger">Prijavite se</a>
+                      </label>
                     </div>
   
                   </form>
@@ -172,13 +198,19 @@
                               <label>Izaberite profilnu sliku:</label>
                               <input type="file" id="myfile" name="myfile"><br><br>
                           </div>
-                      </div>
-                      
+                      </div>      
     
                       <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                         <button type="button" class="btn btn-primary btn-lg">Registrujte se</button>
                       </div>
-    
+                      
+                      <div class="form-check d-flex justify-content-center mb-5">
+                        <label class="form-check-label" class="small fw-bold mt-2 pt-1 mb-0" for="form2Example3">
+                            Već imate kreiran nalog? 
+                            <a href="/login" class="link-danger">Prijavite se</a>
+                        </label>
+                      </div>
+                      
                     </form>
     
                   </div> <!-- kraj diva za poslodavca-->

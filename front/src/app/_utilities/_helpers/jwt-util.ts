@@ -34,6 +34,10 @@ export class JWTUtil
         let g = this.getPayload();
         return (g == null)? '' : g.rol;
     }
+
+    static exists() {
+        return this.get() !== '';
+    }
 }
 
 interface JWT {

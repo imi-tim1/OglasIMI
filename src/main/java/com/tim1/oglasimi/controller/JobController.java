@@ -84,7 +84,7 @@ public class JobController
             return ResponseEntity
                     .status(httpStatus)
                     .headers(responseHeaders)
-                    .body( "You are not allowed to access this resource" );
+                    .body( null );
         }
 
         extractEmployerId(job,resultPair);
@@ -228,7 +228,7 @@ public class JobController
     }
 
     @PostMapping("{jobId}/applicants")
-    public ResponseEntity<String> applyForAJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+    public ResponseEntity<?> applyForAJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                                   @PathVariable("jobId")
                                                   @Min( 1 )
                                                   @Max( Integer.MAX_VALUE ) int jobId ) {
@@ -253,14 +253,17 @@ public class JobController
 
         String resultMessage = jobService.applyForAJob(uid, jobId);
 
-        if( resultMessage == "Unsuccessful") {
+        if( resultMessage == "Successful") {
+            httpStatus = HttpStatus.CREATED;
+        }
+        else {
             httpStatus = HttpStatus.CONFLICT;
         }
 
         return ResponseEntity
                 .status(httpStatus)
                 .headers(responseHeaders)
-                .body( resultMessage );
+                .body( null );
     }
 
     @GetMapping("{id}")

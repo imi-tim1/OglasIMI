@@ -15,10 +15,10 @@ public class ControllerExceptionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(Role.class);
 
     @ExceptionHandler(ConstraintViolationException.class)
-    ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
+    ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException e) {
 
         LOGGER.warn( e.getMessage() );
 
-        return new ResponseEntity<>("Not valid due to validation error", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 }
