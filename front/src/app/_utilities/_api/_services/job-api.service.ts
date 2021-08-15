@@ -75,4 +75,17 @@ export class JobApiService {
         headers: HeaderUtil.jwtOnlyHeaders()
       });
   }
+
+  applyToJob(id: number): Observable<HttpResponse<null>> 
+  {
+    console.log(`-- Job ID: ${id}`)
+    return this.http.post<null>(
+      this.url + `/${id}/applicants`,
+      {},
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+  }
 }

@@ -8,23 +8,33 @@ export interface Creds {
     hashedPassword: string;
 }
 
-export interface Job 
+export interface Filters {
+    title: string;
+    tagList?: number[];
+    employerId: number;
+    fieldId: number;
+    cityId: number;
+    pageNumber: number;
+    jobsPerPage: number;
+    workFromHome: boolean;
+    ascendingOrder: boolean;
+}
+
+// Osnovni Entiteti
+
+export interface Job
 {
-    id: number;
+    title: string;
+    description: string;
     employer: Employer;
     field: Field;
     tags: Tag[];
-    title: string;
-    description: string;
-    salary: string;
-    city: City;
-    postDate: Date;
     workFromHome: boolean;
-}
-
-export interface PagedJobs {
-    totalJobNumber: number;
-    jobs: Job[];
+    city: City;
+    
+    id?: number;
+    salary?: string;
+    postDate?: Date;
 }
 
 export interface Field 
@@ -39,49 +49,36 @@ export interface Tag
     name: string;
 }
 
-export interface Employer 
-{
-    id?: number;
-    name: string;
-    email?: string;
-    pictureBase64?: string | null;
-    phoneNumber?: string;
-    address?: string;
-    tin?: string;
-
-    hashedPassword?: string;
-}
-
-// "id": 4,
-// "email": "laza@vass.org",
-// "pictureBase64": null,
-// "phoneNumber": "063123456",
-// "name": "Lažarus d.o.o",
-// "address": "Keba Kraba, 3",
-// "tin": "123456789"
-
-export interface Applicant
-{
-    id: number;
-    firstName: string;
-    lastName: string;
-
-}
-
 export interface City
 {
     id: number;
     name: string;
 }
 
-export interface Filters {
-    title: string;
-    tagList?: number[];
-    employerId: number;
-    fieldId: number;
-    cityId: number;
-    pageNumber: number;
-    jobsPerPage: number;
-    workFromHome: boolean;
-    ascendingOrder: boolean;
+export interface Employer 
+{
+    name: string;
+
+    id?: number;
+    email?: string;
+    pictureBase64?: string | null;
+    phoneNumber?: string;
+    address?: string;
+    tin?: string;
+    hashedPassword?: string;
+}
+
+export interface Applicant
+{
+    id: number;
+    firstName: string;
+    lastName: string;
+    // ...
+}
+
+// Prilagodjene varijante
+
+export interface PagedJobs {
+    totalJobNumber: number;
+    jobs: Job[];
 }
