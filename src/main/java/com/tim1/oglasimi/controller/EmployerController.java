@@ -48,18 +48,18 @@ public class EmployerController {
                     .body( null );
         }
 
-
         List<Employer> employers = employerService.getAllEmployers();
 
          return ResponseEntity
                 .status(HttpStatus.OK)
+                .headers(responseHeaders)
                 .body(employers);
     }
 
 
     @PostMapping
     public ResponseEntity<?> registerEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                            @Valid @RequestBody Employer employer ) {
+                                               @Valid @RequestBody Employer employer ) {
 
         HttpStatus httpStatus = checkAccess( jwt, Role.VISITOR ).getHttpStatus();
 
@@ -124,9 +124,9 @@ public class EmployerController {
 
     @PutMapping("{id}")
     public ResponseEntity<?> approveEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                                 @PathVariable("id")
-                                                 @Min( 1 )
-                                                 @Max( Integer.MAX_VALUE ) int id ) {
+                                              @PathVariable("id")
+                                              @Min( 1 )
+                                              @Max( Integer.MAX_VALUE ) int id ) {
 
         HttpStatus httpStatus = checkAccess( jwt, Role.ADMIN ).getHttpStatus();
 
@@ -206,8 +206,8 @@ public class EmployerController {
                     .body( null );
         }
 
-        double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
-        int uid = (int) tempUid;
+        /* extract uid and role from the token */
+        int uid  = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
         String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
 
         /* check if another employer is trying to access the api;

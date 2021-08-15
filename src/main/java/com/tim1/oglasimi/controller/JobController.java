@@ -60,14 +60,13 @@ public class JobController
 
         if(httpStatus == HttpStatus.OK)
         {
-            return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(jobService.getFilteredJobs(jobFilter));
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(jobService.getFilteredJobs(jobFilter));
         }
 
-        return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(null);
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
     }
 
     @PostMapping
-    @Validated
     public ResponseEntity<?> postJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                      @Valid @RequestBody Job job)
     {
@@ -95,8 +94,7 @@ public class JobController
 
     private void extractEmployerId(Job job, ResultPair resultPair)
     {
-        double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
-        int uid = (int) tempUid;
+        int uid = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
 
         job.setEmployer(new Employer());
         job.getEmployer().setId(uid);
@@ -166,9 +164,9 @@ public class JobController
 
     @GetMapping("{jobId}/applicants")
     public ResponseEntity<List<Applicant>> getJobApplicants( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                                 @PathVariable("jobId")
-                                                 @Min( 1 )
-                                                 @Max( Integer.MAX_VALUE ) int jobId ) {
+                                                             @PathVariable("jobId")
+                                                             @Min( 1 )
+                                                             @Max( Integer.MAX_VALUE ) int jobId ) {
         ResultPair resultPair = checkAccess( jwt, Role.EMPLOYER, Role.ADMIN );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
@@ -182,14 +180,14 @@ public class JobController
                     .body( null );
         }
 
-        double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
-        int uid = (int) tempUid;
+        /* extract uid and role from the token */
+
+        int uid  = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
         LOGGER.debug("getJobApplicants | found uid in the token: {}", uid );
 
         String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
         LOGGER.debug("getJobApplicants | found role in the token: {}", role );
 
-        int employerId = 0;
         List<Applicant> applicantList = null;
 
         Job job = jobService.getJob(jobId);
@@ -200,7 +198,7 @@ public class JobController
             LOGGER.warn("getJobApplicants | job with id {} does not exist", jobId );
         }
         else {
-            employerId = job.getEmployer().getId();
+            int employerId = job.getEmployer().getId();
 
             /* check if another employer is trying to access the api;
             only admin and employer himself are allowed to access list of employer's posts */
@@ -226,10 +224,10 @@ public class JobController
     }
 
     @PostMapping("{jobId}/applicants")
-    public ResponseEntity<?> applyForAJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                                  @PathVariable("jobId")
-                                                  @Min( 1 )
-                                                  @Max( Integer.MAX_VALUE ) int jobId ) {
+    public ResponseEntity<?> applyForAJob( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                           @PathVariable("jobId")
+                                           @Min( 1 )
+                                           @Max( Integer.MAX_VALUE ) int jobId ) {
         ResultPair resultPair = checkAccess( jwt, Role.APPLICANT );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
@@ -244,9 +242,13 @@ public class JobController
         }
 
 
-        double tempUid = (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
-        int uid = (int) tempUid;
-        LOGGER.debug("getJobApplicants | found uid in the token: {}", uid );
+        /* extract uid and role from the token */
+
+        int uid  = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+        LOGGER.debug("applyForAJob | found uid in the token: {}", uid );
+
+        String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
+        LOGGER.debug("applyForAJob | found role in the token: {}", role );
 
 
         String resultMessage = jobService.applyForAJob(uid, jobId);
@@ -278,10 +280,10 @@ public class JobController
 
         if(httpStatus == HttpStatus.OK)
         {
-            return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(jobService.getJob(id));
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(jobService.getJob(id));
         }
 
-        return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(null);
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
     }
 
     @DeleteMapping("{id}")
@@ -304,9 +306,19 @@ public class JobController
                     .body( null );
         }
 
+        int uid  = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+        String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
+
+        if( Role.EMPLOYER.equalsTo(role) && id != uid ) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .headers(responseHeaders)
+                    .body( null );
+        }
+
         boolean flag = jobService.deleteJob(id);
 
-        if(flag) return ResponseEntity.status(HttpStatus.OK).headers(responseHeaders).body(null);
+        if(flag) return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(responseHeaders).body(null);
         return ResponseEntity.status(HttpStatus.CONFLICT).headers(responseHeaders).body(null);
     }
 }

@@ -41,9 +41,9 @@ public class CityController
 
         if(httpStatus == HttpStatus.OK)
         {
-            return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(cityService.getAllCities());
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(cityService.getAllCities());
         }
 
-        return ResponseEntity.status(resultPair.getHttpStatus()).headers(responseHeaders).body(null);
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
     }
 }
