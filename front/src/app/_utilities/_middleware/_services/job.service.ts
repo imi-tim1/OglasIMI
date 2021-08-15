@@ -132,4 +132,18 @@ export class JobService {
       }
     );
   }
+
+  deleteJob(id: number) 
+  {
+    this.api.deleteJob(id).subscribe(
+      // Success
+      (response) => {
+        console.log('----- Delete Successful!');
+      },
+      (error: HttpErrorResponse) => {
+        console.log('ERORORORO')
+        console.log(error)
+      }
+    );
+  }
 }
