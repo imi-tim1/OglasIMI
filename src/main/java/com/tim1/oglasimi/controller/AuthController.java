@@ -24,10 +24,6 @@ public class AuthController {
         ResultPair resultPair = checkAccess( jwt, Role.VISITOR, Role.EMPLOYER, Role.APPLICANT, Role.ADMIN );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
-        if( httpStatus != HttpStatus.OK ) {
-            jwt = null;
-        }
-
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
 

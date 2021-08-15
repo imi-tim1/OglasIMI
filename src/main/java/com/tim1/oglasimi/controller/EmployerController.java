@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.tim1.oglasimi.security.SecurityConfig.*;
@@ -46,7 +45,7 @@ public class EmployerController {
             return ResponseEntity
                     .status(httpStatus)
                     .headers(responseHeaders)
-                    .body( new ArrayList<Employer>() );
+                    .body( null );
         }
 
 
@@ -59,7 +58,7 @@ public class EmployerController {
 
 
     @PostMapping
-    public ResponseEntity<String> registerEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+    public ResponseEntity<?> registerEmployer( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                             @Valid @RequestBody Employer employer ) {
 
         HttpStatus httpStatus = checkAccess( jwt, Role.VISITOR ).getHttpStatus();
@@ -71,7 +70,7 @@ public class EmployerController {
             return ResponseEntity
                     .status(httpStatus)
                     .headers(responseHeaders)
-                    .body( "You are not allowed to access this resource" );
+                    .body( null );
         }
 
         /* perform employer registration */
@@ -79,16 +78,16 @@ public class EmployerController {
 
         /* check if registration was successful or not */
         if( resultMessage == "Successful" ) {
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .headers(responseHeaders)
-                    .body(resultMessage);
+            httpStatus = HttpStatus.CREATED;
+        }
+        else {
+            httpStatus = HttpStatus.CONFLICT;
         }
 
         return ResponseEntity
-                .status(HttpStatus.CONFLICT)
+                .status(httpStatus)
                 .headers(responseHeaders)
-                .body(resultMessage);
+                .body(null);
     }
 
 

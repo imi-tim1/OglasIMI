@@ -193,13 +193,14 @@ SELECT @p_successfully_applied AS 'Is applied successfully?';
 SELECT * FROM job_application;
 --
 
-
--- test call for procedure approve_user #2 unsuccessfully approved; user is already approved
-                             DELIMITER // ;
-CALL approve_user(1, @approved_successfully);
-SELECT @approved_successfully 'Is successfully approved?'
-    //
-DELIMITER ;
+-- test call for procedure apply_for_a_job #2 unsuccessful; already applied
+CALL apply_for_a_job(
+        7,
+        2,
+        @p_successfully_applied
+    );
+SELECT @p_successfully_applied AS 'Is applied successfully?';
+SELECT * FROM job_application;
 -- #######################################################################
 
 
