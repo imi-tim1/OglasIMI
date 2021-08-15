@@ -20,9 +20,9 @@ import java.util.List;
 import static com.tim1.oglasimi.security.SecurityConfig.*;
 
 
+@Validated
 @RestController
 @RequestMapping("api/employers")
-@Validated
 public class EmployerController {
 
     private final EmployerService employerService;

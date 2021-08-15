@@ -1,13 +1,11 @@
 package com.tim1.oglasimi.controller;
 
-import com.google.gson.stream.MalformedJsonException;
 import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.model.payload.JobFeed;
 import com.tim1.oglasimi.model.payload.JobFilter;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.JobService;
-import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -303,7 +301,7 @@ public class JobController
             return ResponseEntity
                     .status(httpStatus)
                     .headers(responseHeaders)
-                    .body( "You are not allowed to access this resource" );
+                    .body( null );
         }
 
         boolean flag = jobService.deleteJob(id);

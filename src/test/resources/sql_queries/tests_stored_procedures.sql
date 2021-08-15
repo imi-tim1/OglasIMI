@@ -59,8 +59,8 @@ CALL register_employer(
         'b2e077df1d4a917166b627ec77e35895b3859f09aa68ee8ec4a954c5e025cabf8adcb2997c86f4fc2b3cbc72fd228d4941fa9510360c194d1ceb8b3fe9ee4500',
         'slika',
         '026/321-567',
-        'Picosoft',
-        'Radoja Domanovica 12',
+        'Spysoft',
+        'Redmond, WA 98052-7329, USA',
         '123-456-789',
         @p_is_added,
     @p_already_exists
@@ -101,18 +101,91 @@ DELIMITER ;
 -- test call for procedure register_employer #3 unsuccessfully registration - already exists
 DELIMITER // ;
 CALL register_employer(
-        'mirko.mirkovic@mir.ko',
+        'mirko@imejl.rs',
         '99958dbb3802e08c4dbfe26b227e19896b18589fc70cff4c4551a1d4624dfc86b5770d5fe3b120db6a5ea0f035cd0e95954802d683f45b7e62f88b25bc7bae88',
-        'slika_darka',
+        null,
         '063/333-000',
         'Dar Company',
-        'Doman III 3',
+        'Redmond, WA 98052-7329, USA',
         '451-154-444',
+        @p_is_added,
+        @p_already_exists
+);
+
+SELECT @p_is_added AS 'Is employer successfully registered?', @p_already_exists AS 'Is email alreadly registered';
+SELECT user_id, email, approved, name, hashed_password
+FROM credentials c
+         JOIN user u ON u.id = c.user_id
+         JOIN role r ON r.id = u.role_id;
+//
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- register_applicant
+
+-- test call for procedure register_applicant #1 successfully registration
+DELIMITER // ;
+CALL register_applicant(
+        'aplikat@a.p',
+        '9898feab98d2de137439666223008d3a7a2dceab84c88de3b2da46b7097fbc29bf35497ebcef3a2c2a39dd022ca7083b00c99325befe7c4a0376f2f61a65ac87',
+        'apli',
+        'kant',
+        null,
+        '987-654-321',
         @p_is_added,
         @p_already_exists
     );
 
-SELECT @p_is_added AS 'Is employer successfully registered?', @p_already_exists AS 'Is email alreadly registered';
+SELECT @p_is_added AS 'Is applicant successfully registered?', @p_already_exists AS 'Is email alreadly registered';
+SELECT user_id, email, approved, name, hashed_password
+FROM credentials c
+         JOIN user u ON u.id = c.user_id
+         JOIN role r ON r.id = u.role_id;
+SELECT * FROM applicant;
+//
+DELIMITER ;
+--
+
+-- test call for procedure register_applicant #2 successfully registration
+DELIMITER // ;
+CALL register_applicant(
+        'stevan.stevanovic@email.me',
+        '99958dbb3802e08c4dbfe26b227e19896b18589fc70cff4c4551a1d4624dfc86b5770d5fe3b120db6a5ea0f035cd0e95954802d683f45b7e62f88b25bc7bae88',
+        'Stevan',
+        'Stevanovic',
+        null,
+        '000-456-000',
+        @p_is_added,
+        @p_already_exists
+    );
+
+SELECT @p_is_added AS 'Is applicant successfully registered?', @p_already_exists AS 'Is email alreadly registered';
+SELECT user_id, email, approved, name, hashed_password
+FROM credentials c
+         JOIN user u ON u.id = c.user_id
+         JOIN role r ON r.id = u.role_id;
+SELECT * FROM applicant;
+//
+DELIMITER ;
+--
+
+-- test call for procedure register_applicant #3 unsuccessfully registration - already exists
+DELIMITER // ;
+CALL register_applicant(
+        'mirko@imejl.rs',
+        '99958dbb3802e08c4dbfe26b227e19896b18589fc70cff4c4551a1d4624dfc86b5770d5fe3b120db6a5ea0f035cd0e95954802d683f45b7e62f88b25bc7bae88',
+        'Mirko',
+        'Mirkovic',
+        null,
+        '451154444',
+        @p_is_added,
+        @p_already_exists
+    );
+
+SELECT @p_is_added AS 'Is applicant successfully registered?', @p_already_exists AS 'Is email alreadly registered';
 SELECT user_id, email, approved, name, hashed_password
 FROM credentials c
          JOIN user u ON u.id = c.user_id
