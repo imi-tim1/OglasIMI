@@ -9,7 +9,7 @@
 export enum UserRole {
     Visitor = '',
     Applicant = 'applicant',
-    Employer = 'amplyer',
+    Employer = 'employer',
     Admin = 'admin'
 }
 

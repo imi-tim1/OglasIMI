@@ -48,9 +48,12 @@ export class Navbar2Component implements OnInit {
     if (index < 0) return false;
 
     let roles = this.navs[index].allowedRoles;
+    
     let r = this.acc.checkRole(JWTUtil.getRole() as UserRole, roles);
     let b = !this.blockedNavs.includes(name);
 
+    // console.log(`Role: ${JWTUtil.getRole() as UserRole}`);
+    // console.log(`Allowed roles: ${roles}`);
     // console.log(`Nav Check: ${name}, r: ${r}, b: ${b}`);
 
     return r && b;
