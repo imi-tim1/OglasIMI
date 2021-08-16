@@ -57,9 +57,9 @@ export class RegisterFormComponent implements OnInit {
   pattPhone: RegExp = /^\+?[0-9]{9,12}$/;
   pattPassword: RegExp = /.{6,}$/;
   //---
-  pattCompanyName: RegExp = /^[0-9a-zA-Z\/ ]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  pattCompanyName: RegExp = /^[0-9a-zA-Z\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
   pattPIB: RegExp = /^[0-9]{9,20}$/;
-  pattAddr: RegExp = /^[0-9a-zA-Z\/ ]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  pattAddr: RegExp = /^[0-9a-zA-Z\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
 
 
   constructor(public applicantService: ApplicantService,
@@ -246,7 +246,7 @@ export class RegisterFormComponent implements OnInit {
             hashedPassword: PasswdHash.encrypt(this.appPass1)
           }
 
-          //this.applicantService.createApplicant(appForRegister);
+          this.applicantService.createApplicant(appForRegister);
         }
   }
 

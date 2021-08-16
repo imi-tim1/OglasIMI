@@ -18,7 +18,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployerRepositoryImpl.class);
 
     private static final String REGISTER_EMPLOYER_PROCEDURE_CALL = "{call register_employer(?,?,?,?,?,?,?,?,?)}";
-    private static final String GET_ALL_EMPLOYERS_PROCEDURE_CALL = "{call get_all_employers()}";
+    private static final String GET_ALL_EMPLOYERS_PROCEDURE_CALL = "{call get_all_employers(?)}";
     private static final String GET_EMPLOYER_PROCEDURE_CALL = "{call get_employer(?)}";
     private static final String APPROVE_EMPLOYER_PROCEDURE_CALL = "{call approve_user(?,?)}";
     private static final String DELETE_EMPLOYER_PROCEDURE_CALL = "{call delete_user(?,?)}";
@@ -37,12 +37,21 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     @Value("${spring.datasource.password}")
     private String databasePassword;
 
+    /**
+     * Returns list of all employers, approved and not approved "
+     * */
     @Override
     public List<Employer> getAll() {
+        return getAll(false);
+    }
+
+    public List<Employer> getAll(boolean notApprovedRequested) {
         List<Employer> employers = new LinkedList<>();
 
         try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
-                CallableStatement cstmt = con.prepareCall(GET_ALL_EMPLOYERS_PROCEDURE_CALL) ) {
+              CallableStatement cstmt = con.prepareCall(GET_ALL_EMPLOYERS_PROCEDURE_CALL) ) {
+
+            cstmt.setBoolean("p_not_approved_requested", notApprovedRequested );
 
             ResultSet resultSet = cstmt.executeQuery();
 
@@ -96,8 +105,8 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 
         }
         catch ( Exception e ) {
-            LOGGER.error("checkCredentials | An error occurred while communicating with a database.");
-            LOGGER.error("checkCredentials | {}", e.getMessage() );
+            LOGGER.error("create | An error occurred while communicating with a database.");
+            LOGGER.error("create | {}", e.getMessage() );
             e.printStackTrace();
         }
 

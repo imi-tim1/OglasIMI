@@ -5,6 +5,7 @@ import com.tim1.oglasimi.model.Job;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.EmployerService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,10 +34,11 @@ public class EmployerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Employer>> getEmployerList( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt ) {
-        HttpStatus httpStatus = checkAccess(
-                jwt, Role.VISITOR, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN
-        ).getHttpStatus();
+    public ResponseEntity<List<Employer>> getEmployerList( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                           @RequestParam(value = "notApprovedRequested", required = false)
+                                                           boolean notApprovedRequested) {
+        ResultPair resultPair = checkAccess( jwt, Role.VISITOR, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN );
+        HttpStatus httpStatus = resultPair.getHttpStatus();
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
@@ -48,7 +50,24 @@ public class EmployerController {
                     .body( null );
         }
 
-        List<Employer> employers = employerService.getAllEmployers();
+        /* extract role from the token */
+        String role = Role.VISITOR.toString();
+        Claims claims = resultPair.getClaims();
+        if( claims != null ) {
+            role = (String) claims.get(ROLE_CLAIM_NAME);
+        }
+
+        boolean isAdmin = false;
+
+        /* check non-admin user requested list of unapproved users */
+        if( ! Role.ADMIN.equalsTo(role) && notApprovedRequested ) {
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .headers(responseHeaders)
+                        .body(null);
+        }
+
+        List<Employer> employers = employerService.getAllEmployers(notApprovedRequested);
 
          return ResponseEntity
                 .status(HttpStatus.OK)
