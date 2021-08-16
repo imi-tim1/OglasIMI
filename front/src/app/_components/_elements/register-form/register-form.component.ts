@@ -246,7 +246,7 @@ export class RegisterFormComponent implements OnInit {
             hashedPassword: PasswdHash.encrypt(this.appPass1)
           }
 
-          //this.applicantService.createApplicant(appForRegister);
+          this.applicantService.createApplicant(appForRegister);
         }
   }
 

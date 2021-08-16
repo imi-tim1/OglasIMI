@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Applicant, Job } from '../../_api/_data-types/interfaces';
+import { Applicant, Job, NewApplicant } from '../../_api/_data-types/interfaces';
 import { ApplicantApiService } from '../../_api/_services/applicant-api.service';
 
 @Injectable({
@@ -53,7 +53,7 @@ export class ApplicantService {
   }
 
   // Potrebno TESTIRANJE !!!
-  createApplicant(applicantData: Applicant) {
+  createApplicant(applicantData: NewApplicant) {
     this.api.createApplicant(applicantData).subscribe(
       // Success
       (response) => {

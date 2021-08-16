@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
 import { HeaderUtil } from '../../_helpers/http-util';
-import { Applicant, Job } from '../_data-types/interfaces';
+import { Applicant, Job, NewApplicant } from '../_data-types/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +48,7 @@ export class ApplicantApiService {
   }
 
   // Potrebno TESTIRANJE !!!
-  createApplicant(applicantData: Applicant): Observable<HttpResponse<null>> {
+  createApplicant(applicantData: NewApplicant): Observable<HttpResponse<null>> {
     return this.http.post<null>(
       this.url, // api url
       applicantData, // body
