@@ -28,9 +28,8 @@ public class EmployerService {
         return "This email address is already in use!";
     }
 
-    public List<Employer> getAllEmployers() {
-        return employerRepositoryImpl.getAll();
-
+    public List<Employer> getAllEmployers(boolean notApprovedRequested) {
+        return employerRepositoryImpl.getAll(notApprovedRequested);
     }
 
     public Employer getEmployer(int id) {

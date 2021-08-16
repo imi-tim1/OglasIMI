@@ -25,6 +25,9 @@ import { LogoutPageComponent } from './_components/_pages/logout-page/logout-pag
 import { EmployersPageComponent } from './_components/_pages/employers-page/employers-page.component';
 import { Navbar2Component } from './_components/_elements/navbar2/navbar2.component';
 import { EmployerListCardComponent } from './_components/_elements/employer-list-card/employer-list-card.component';
+import { DashboardEmployerComponent } from './_components/_elements/dashboard-employer/dashboard-employer.component';
+import { DashboardApplicantComponent } from './_components/_elements/dashboard-applicant/dashboard-applicant.component';
+import { DashboardAdminComponent } from './_components/_elements/dashboard-admin/dashboard-admin.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,10 @@ import { EmployerListCardComponent } from './_components/_elements/employer-list
     LogoutPageComponent,
     EmployersPageComponent,
     Navbar2Component,
-    EmployerListCardComponent
+    EmployerListCardComponent,
+    DashboardEmployerComponent,
+    DashboardApplicantComponent,
+    DashboardAdminComponent
   ],
   imports: [
     BrowserModule,

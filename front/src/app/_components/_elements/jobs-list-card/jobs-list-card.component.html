@@ -1,24 +1,25 @@
-<a class="list-group-item list-group-item-action p-4"
-    routerLink="/job/{{job.id}}"
-    >
-    
-    <h6>{{job.employer!.name}}</h6>
-    <!--<button type="button" 
-        class="btn btn-outline-success" 
-        id="snd_cvbtn' + job.id + '" 
-        style="float: right;">
-        Pošalji CV
-    </button>-->
-    <h3>{{job.title}}</h3>
-    <div>{{job.description}}</div>
-    <div class="pt-4 pb-2 text-primary">{{job.city.name}}</div>
+<div class="p-3">
+    <button class="bg-white shadow rounded-3 p-4 w-100 border border-0 text-start" style="display: block; min-height: 300px;" routerLink="/job/{{job.id}}">
 
-    <span *ngFor="let t of job.tags" class="bg-warning">
-        <strong class="p-1">{{t.name}}</strong>
-    </span>
-    <h4 class="pt-4 pb-2 text-success">{{job.salary}}</h4>
+        <h6>{{job.employer!.name}}</h6>
+        <!--<button type="button"
+            class="btn btn-outline-success"
+            id="snd_cvbtn' + job.id + '"
+            style="float: right;">
+            Pošalji CV
+        </button>-->
+        <h3>{{job.title}}</h3>
+        <div>{{job.description}}</div>
+        <div class="pt-4 pb-2 text-primary">{{job.city.name}}</div>
 
-    <div *ngIf="checkDeleteBtn()">
-        <button>Obriši oglas</button>
-    </div>
-</a>
+        <span *ngFor="let t of job.tags" class="bg-warning">
+            <strong class="p-1">{{t.name}}</strong>
+        </span>
+        <h4 class="pt-4 pb-2 text-success">{{job.salary}}</h4>
+
+        <div *ngIf="checkDeleteBtn()">
+          <button>Obriši oglas</button>
+        </div>
+    </button>
+
+</div>

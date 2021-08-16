@@ -35,6 +35,11 @@ export class JWTUtil
         return (g == null)? '' : g.rol;
     }
 
+    static getID(): number {
+        let g = this.getPayload();
+        return (g == null)? 0 : g.uid;
+    }
+
     static exists() {
         return this.get() !== '';
     }
