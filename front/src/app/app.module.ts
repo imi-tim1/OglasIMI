@@ -28,6 +28,9 @@ import { EmployerListCardComponent } from './_components/_elements/employer-list
 import { DashboardEmployerComponent } from './_components/_elements/dashboard-employer/dashboard-employer.component';
 import { DashboardApplicantComponent } from './_components/_elements/dashboard-applicant/dashboard-applicant.component';
 import { DashboardAdminComponent } from './_components/_elements/dashboard-admin/dashboard-admin.component';
+import { RegistrationCardComponent } from './_components/_elements/registration-card/registration-card.component';
+import { RegistrationsListComponent } from './_components/_elements/registrations-list/registrations-list.component';
+import { EmployerInfoModalComponent } from './_components/_elements/employer-info-modal/employer-info-modal.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +56,10 @@ import { DashboardAdminComponent } from './_components/_elements/dashboard-admin
     EmployerListCardComponent,
     DashboardEmployerComponent,
     DashboardApplicantComponent,
-    DashboardAdminComponent
+    DashboardAdminComponent,
+    RegistrationCardComponent,
+    RegistrationsListComponent,
+    EmployerInfoModalComponent
   ],
   imports: [
     BrowserModule,
