@@ -159,13 +159,37 @@ public class ApplicantController {
 
         if( httpStatus != HttpStatus.OK )
         {
-            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null );
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
         }
 
         boolean isSuccessful = applicantService.approve(id);
 
         if(!isSuccessful) httpStatus = HttpStatus.CONFLICT;
 
-        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null );
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteApplicant(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                             @PathVariable("id")
+                                             @Min( 1 )
+                                             @Max( Integer.MAX_VALUE ) int id)
+    {
+        ResultPair resultPair = checkAccess(jwt,Role.ADMIN);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        }
+
+        boolean isSuccessful = applicantService.deleteApplicant(id);
+
+        if(!isSuccessful) httpStatus = HttpStatus.CONFLICT;
+
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
     }
 }

@@ -46,4 +46,9 @@ public class ApplicantService {
     {
         return applicantRepositoryImpl.approve(id);
     }
+
+    public boolean deleteApplicant(int id)
+    {
+        return applicantRepositoryImpl.delete(id);
+    }
 }

@@ -22,6 +22,7 @@ public class ApplicantRepositoryImpl implements ApplicantRepository
     private static final String APPLICATION_STORED_PROCEDURE = "{call check_application(?,?)}";
     private static final String GET_ALL_APPLICANTS_STORED_PROCEDURE = "{call get_all_applicants(?)}";
     private static final String APPROVE_STORED_PROCEDURE = "{call approve_user(?,?)}";
+    private static final String DELETE_STORED_PROCEDURE = "{call delete_user(?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -150,7 +151,7 @@ public class ApplicantRepositoryImpl implements ApplicantRepository
             if(flag) // Korisnik se prikazuje samo ako je odobren
             {
                 cstmtApplicant.setInt("p_id",id);
-                System.out.println(id);
+
                 rs = cstmtApplicant.executeQuery();
 
                 rs.first();
@@ -210,7 +211,28 @@ public class ApplicantRepositoryImpl implements ApplicantRepository
     }
 
     @Override
-    public boolean delete(Integer integer) {
-        return false;
+    public boolean delete(Integer id)
+    {
+        boolean isDeletedSuccessfully = false;
+
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
+              CallableStatement cstmt = con.prepareCall(DELETE_STORED_PROCEDURE))
+        {
+
+            cstmt.setInt("p_id", id);
+            cstmt.registerOutParameter("p_deleted_successfully", Types.BOOLEAN);
+
+            cstmt.executeUpdate();
+
+            isDeletedSuccessfully = cstmt.getBoolean("p_deleted_successfully");
+
+        }
+
+        catch ( SQLException e ) {
+            LOGGER.error("delete | An error occurred while communicating with a database", e );
+            e.printStackTrace();
+        }
+
+        return isDeletedSuccessfully;
     }
 }
