@@ -69,105 +69,18 @@ export class RegisterFormComponent implements OnInit {
   }
 
   showMeApplicantForm() {
-    if (this.showApplicantFormBool == false) //trenutno nije prikazana applicant forma
-    {
+    if (this.showApplicantFormBool == false) { //trenutno nije prikazana applicant forma
       this.showEmployerFormBool = false; //sakrij employer
       this.showApplicantFormBool = true; //prikazi applicant
-      
-      /*let a = <HTMLSelectElement>document.getElementById('appBtn');
-      a.style.backgroundColor = "blue";
-      a.style.color = "btn-light";
-      let e = <HTMLSelectElement>document.getElementById('empBtn');
-      e.style.backgroundColor = "btn-light";
-      e.style.color = "blue;"*/
-
-      console.log(this.appFirstName);
     }
   }
 
   showMeEmployerForm() {
-    if (this.showEmployerFormBool == false)//prikazi emp
-    {
+    if (this.showEmployerFormBool == false) { //prikazi emp
       this.showApplicantFormBool = false;
       this.showEmployerFormBool = true;
-
-      console.log(this.appFirstName);
-
-      /*let a = <HTMLSelectElement>document.getElementById('appBtn');
-      a.style.backgroundColor = "btn-light";
-      a.style.color = "blue;"
-      let e = <HTMLSelectElement>document.getElementById('empBtn');
-      e.style.backgroundColor = "blue";
-      e.style.color = "btn-light;"*/
     }
   }
-
-  /*firstNameValidation(): boolean {
-    let patt = new RegExp(/^[a-zA-Z ]+$/);
-    let pattMultipleSpaces = /  /;
-    let num = /^\+?[0-9]$/;
-    //this.appFirstName = this.appFirstName.trim();
-    console.log(this.appFirstName);
-
-    if (patt.test(this.appFirstName) && !pattMultipleSpaces.test(this.appFirstName))
-    {
-      console.log("DOBROOO JEEEEEEEEEEEEE");
-      this.wrongAppFirstNameBool = false;
-      return true;
-    }
-    else
-    {
-      console.log("NIJE DOBROOOOOOO");
-      //alert("Nije uneto dobro korisnicko ime!");
-      let p = <HTMLSelectElement>document.getElementById("appFirstName");
-      p.focus();
-      this.wrongAppFirstNameBool = true;
-      return false;
-    }
-  }
-  lastNameValidation() {
-    let patt = new RegExp(/^[a-zA-Z]+$/);
-    //this.appLastName = this.appLastName.trim();
-    console.log(this.appLastName);
-
-    if (patt.test(this.appLastName))
-    {
-      console.log("DOBROOO JEEEEEEEEEEEEE");
-      this.wrongAppLastNameBool = false;
-      return true;
-    }
-    else
-    {
-      console.log("NIJE DOBROOOOOOO");
-      //alert("Nije uneto dobro korisnicko ime!");
-      let p = <HTMLSelectElement>document.getElementById("appLastName");
-      p.focus();
-      this.wrongAppLastNameBool = true;
-      return false;
-    }
-  }
-
-  emailValidation() {
-    let patt = new RegExp(/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/);
-    //this.appEmail = this.appEmail.trim();
-    console.log(this.appEmail);
-
-    if (patt.test(this.appEmail))
-    {
-      console.log("DOBROOO JEEEEEEEEEEEEE");
-      this.wrongAppEmailBool = false;
-      return true;
-    }
-    else
-    {
-      console.log("NIJE DOBROOOOOOO");
-      //alert("Nije uneto dobro korisnicko ime!");
-      let p = <HTMLSelectElement>document.getElementById("appEmail");
-      p.focus();
-      this.wrongAppEmailBool = true;
-      return false;
-    }
-  }*/
 
   isAlphaWithoutMultipleSpaces(element: string): boolean {
     if (this.pattAlphaWithSpaces.test(element) && !(this.pattTwoSpaces.test(element)))
@@ -260,7 +173,7 @@ export class RegisterFormComponent implements OnInit {
   }
 
   appPasswordValidation() {
-    if (this.isCorrectPassword(this.appPass1) == true && this.isCorrectPassword(this.appPass2) == true && this.appPass1 == this.appPass2) {
+    if (this.isCorrectPassword(this.appPass1) && this.isCorrectPassword(this.appPass2) && this.appPass1 == this.appPass2) {
       console.log("dobra lozinka");
       this.wrongAppPass1Bool = false;
       this.wrongAppPass2Bool = false;
@@ -387,7 +300,7 @@ export class RegisterFormComponent implements OnInit {
   }
 
   empPassValidation() {
-    if (this.isCorrectPassword(this.empPass1) == true && this.isCorrectPassword(this.empPass2) == true && this.empPass1 == this.empPass2) {
+    if (this.isCorrectPassword(this.empPass1) && this.isCorrectPassword(this.empPass2) && this.empPass1 == this.empPass2) {
       console.log("dobra lozinka");
       this.wrongEmpPass1Bool = false;
       this.wrongEmpPass2Bool = false;
