@@ -1,0 +1,39 @@
+<p>{{jobService.job.id}}</p>
+
+<div class="container py-5 h-100">
+  <div class="row d-flex justify-content-center align-items-center h-100">
+    <div class="col-lg-8 col-xl-6">
+      <div class="card rounded-3">
+        <img src="https://mdbootstrap.com/img/Photos/new-templates/bootstrap-registration/img3.jpg" class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;" alt="Sample photo">
+        <div class="card-body p-4 p-md-5">
+          <div id="datum">
+            <small class="text-muted" style="float: right">Oglas postavljen {{jobService.job.postDate}}</small>
+          </div>
+          <br><br>
+          
+          <h1 class="mb-4 pb-2 pb-md-0 mb-md-2 px-md-2">
+            {{jobService.job.title}} 
+          </h1>
+          <span style="float: right">
+            
+          </span>
+          
+          <span>&nbsp; {{jobService.job.employer.name}}, {{jobService.job.city.name}}</span>
+         
+          <p><i>{{jobService.job.description}}</i></p>
+
+          <span *ngFor="let tag of jobService.job.tags" class="bg-warning">
+            <strong class="p-1">{{tag.name}}</strong>
+          </span> <br>
+          <strong class="bg-warning" *ngIf="jobService.job.salary != undefined">{{jobService.job.salary}}</strong><br>
+          <strong class="bg-warning" *ngIf="jobService.job.workFromHome">{{jobService.job.workFromHome}}</strong>
+         
+          
+          <button type="submit" class="btn btn-success btn-lg mb-1">Submit</button>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
