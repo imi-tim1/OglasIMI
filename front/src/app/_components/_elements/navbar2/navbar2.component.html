@@ -1,0 +1,39 @@
+<div class="navbar2 container-fluid">
+
+    <div class="row">
+        <div class="col-5 p-0">
+            <div class="d-flex flex-row">
+                <!-- Home -->
+                <a *ngIf="check('home')" class="nav2item" routerLink="/">Početna strana</a>
+                
+                <!-- User Lists -->
+                <a *ngIf="check('employers')" class="nav2item" routerLink="/employers">Poslodavci</a>
+                <a *ngIf="check('applicants')" class="nav2item" routerLink="/">Kandidati</a>
+                
+                <!-- My Jobs -->
+                <a *ngIf="check('my-jobs-app')" class="nav2item" routerLink="/">Aplicirani poslovi</a>
+                <a *ngIf="check('my-jobs-emp')" class="nav2item" routerLink="/">Moji oglasi</a>
+            </div>
+        </div>
+
+        <div class="col-2 p-0">
+            <div class="d-flex justify-content-center">
+                <!-- New Job Post -->
+                <a *ngIf="check('new-job')" class="nav2item" routerLink="/">Kreiraj novi oglas</a>
+            </div>
+        </div>
+
+        <div class="col-5 p-0">
+            <div class="d-flex flex-row-reverse">
+                <!-- My Profile -->
+                <a *ngIf="check('my-profile-app')" class="nav2item" routerLink="#">Moj profil</a>
+                <a *ngIf="check('my-profile-emp')" class="nav2item" routerLink="#">Moj profil</a>
+                
+                <!-- Login, Logout, Register-->
+                <a *ngIf="check('logout')" class="nav2item" routerLink="/logout">Odjava</a>
+                <a *ngIf="check('login')" class="nav2item" routerLink="/login">Prijava</a>
+                <a *ngIf="check('register')" class="nav2item" routerLink="/register">Registracija</a>
+            </div>
+        </div>
+    </div>
+</div>

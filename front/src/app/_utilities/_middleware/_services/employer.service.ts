@@ -19,7 +19,7 @@ export class EmployerService {
       (response) => {
         console.log('Get Employers (Success), Body: ')
         console.log(response.body)
-        this.employers = this.employers.concat((response.body == null)? [] : response.body);
+        this.employers = (response.body == null)? [] : response.body;
         console.log('Employers: ')
         console.log(this.employers)
       }

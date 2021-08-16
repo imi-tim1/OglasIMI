@@ -17,9 +17,9 @@ import javax.validation.Valid;
 import static com.tim1.oglasimi.security.SecurityConfig.JWT_CUSTOM_HTTP_HEADER;
 import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
 
+@Validated
 @RestController
 @RequestMapping("/api/login")
-@Validated
 public class LoginController {
 
     private final LoginService loginService;

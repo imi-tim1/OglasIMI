@@ -28,8 +28,8 @@ public class ApplicantController {
     }
 
     @PostMapping
-    public ResponseEntity<?> registerApplicant(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                              @Valid @RequestBody Applicant applicant ) {
+    public ResponseEntity<?> registerApplicant( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                @Valid @RequestBody Applicant applicant ) {
 
         HttpStatus httpStatus = checkAccess( jwt, Role.VISITOR ).getHttpStatus();
 

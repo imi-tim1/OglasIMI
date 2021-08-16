@@ -1,0 +1,14 @@
+.navbar2 {
+    margin-bottom: 50px;
+    background-color: rgb(216, 216, 216);
+}
+
+.nav2item { 
+    text-decoration: none;
+    color: black;
+    padding: 15px;
+}
+
+.nav2item:hover {
+    background-color: rgb(197, 197, 197);
+}
