@@ -3,7 +3,8 @@ import { EmployerService } from 'src/app/_utilities/_middleware/_services/employ
 
 @Component({
   selector: 'app-employers-page',
-  templateUrl: './employers-page.component.html',
+  templateUrl: './employers-page.component.html'
+  
 })
 export class EmployersPageComponent implements OnInit {
 

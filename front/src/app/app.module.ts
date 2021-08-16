@@ -24,6 +24,7 @@ import { TestingPageComponent } from './_components/_pages/testing-page/testing-
 import { LogoutPageComponent } from './_components/_pages/logout-page/logout-page.component';
 import { EmployersPageComponent } from './_components/_pages/employers-page/employers-page.component';
 import { Navbar2Component } from './_components/_elements/navbar2/navbar2.component';
+import { EmployerListCardComponent } from './_components/_elements/employer-list-card/employer-list-card.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { Navbar2Component } from './_components/_elements/navbar2/navbar2.compon
     TestingPageComponent,
     LogoutPageComponent,
     EmployersPageComponent,
-    Navbar2Component
+    Navbar2Component,
+    EmployerListCardComponent
   ],
   imports: [
     BrowserModule,

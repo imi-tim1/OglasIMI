@@ -1,51 +1,39 @@
-<nav class="navbar navbar-expand-lg">
-    
-    <div class="container-fluid">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link text-dark" aria-current="page" routerLink="/">Početna strana</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" aria-current="page" routerLink="/employers">Poslodavci</a>
-            </li>
-            <!-- Applicant Option Only (aplicirani poslovi) -->
-            <li *ngIf="false" class="nav-item">
-                <a class="nav-link text-dark" aria-current="page" routerLink="/">Aplicirani poslovi</a>
-            </li>
-            <!-- Employer Options Only (moji oglasi, kreiraj novi oglas) -->
-            <li *ngIf="false" class="nav-item">
-                <a class="nav-link text-dark" aria-current="page" routerLink="/">Moji oglasi</a>
-            </li>
-            <li *ngIf="false" class="nav-item">
-                <a class="nav-link text-dark" aria-current="page" routerLink="/">Kreiraj novi oglas</a>
-            </li>
-            <!-- Admin Option Only (kandidati)-->
-            <li *ngIf="false" class="nav-item">
-                <a class="nav-link text-dark" aria-current="page" routerLink="/">Kandidati</a>
-            </li>
-        </ul>
-    </div>
+<div class="navbar2 container-fluid">
 
-    <!-- Visitor Options Only (prijava, registracija) -->
-    <div *ngIf="check('login')" class="mx-3">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link text-dark" routerLink="/login">Prijava</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" routerLink="/register">Registracija</a>
-            </li>
-        </ul>
+    <div class="row">
+        <div class="col-5 p-0">
+            <div class="d-flex flex-row">
+                <!-- Home -->
+                <a *ngIf="check('home')" class="nav2item" routerLink="/">Početna strana</a>
+                
+                <!-- User Lists -->
+                <a *ngIf="check('employers')" class="nav2item" routerLink="/employers">Poslodavci</a>
+                <a *ngIf="check('applicants')" class="nav2item" routerLink="/">Kandidati</a>
+                
+                <!-- My Jobs -->
+                <a *ngIf="check('my-jobs-app')" class="nav2item" routerLink="/">Aplicirani poslovi</a>
+                <a *ngIf="check('my-jobs-emp')" class="nav2item" routerLink="/">Moji oglasi</a>
+            </div>
+        </div>
+
+        <div class="col-2 p-0">
+            <div class="d-flex justify-content-center">
+                <!-- New Job Post -->
+                <a *ngIf="check('new-job')" class="nav2item" routerLink="/">Kreiraj novi oglas</a>
+            </div>
+        </div>
+
+        <div class="col-5 p-0">
+            <div class="d-flex flex-row-reverse">
+                <!-- My Profile -->
+                <a *ngIf="check('my-profile-app')" class="nav2item" routerLink="#">Moj profil</a>
+                <a *ngIf="check('my-profile-emp')" class="nav2item" routerLink="#">Moj profil</a>
+                
+                <!-- Login, Logout, Register-->
+                <a *ngIf="check('logout')" class="nav2item" routerLink="/logout">Odjava</a>
+                <a *ngIf="check('login')" class="nav2item" routerLink="/login">Prijava</a>
+                <a *ngIf="check('register')" class="nav2item" routerLink="/register">Registracija</a>
+            </div>
+        </div>
     </div>
-    <!-- Applicant and Employer Options (moj profil, odjava), Admin Option (odjava) -->
-    <div class="mx-3">
-        <ul class="navbar-nav">
-            <li *ngIf="false" class="nav-item">
-                <a class="nav-link text-dark" routerLink="#">Moj profil</a>
-            </li>
-            <li *ngIf="check('logout')" class="nav-item">
-                <a class="nav-link text-dark" routerLink="/logout">Odjava</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+</div>
