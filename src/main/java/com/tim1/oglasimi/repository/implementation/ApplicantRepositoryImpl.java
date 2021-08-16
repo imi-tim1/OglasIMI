@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Types;
+import java.sql.*;
 import java.util.List;
 
 @Repository
@@ -19,6 +16,9 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployerRepositoryImpl.class);
 
     private static final String REGISTER_APPLICANT_PROCEDURE_CALL = "{call register_applicant(?,?,?,?,?,?,?,?)}";
+    private static final String CHECK_IF_APPROVED_STORED_PROCEDURE = "{call check_if_approved(?)}";
+    private static final String GET_APPLICANT_STORED_PROCEDURE = "{call get_applicant(?)}";
+    private static final String APPLICATION_STORED_PROCEDURE = "{call check_application(?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -68,9 +68,81 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
     }
 
     @Override
-    public Applicant get(Integer integer) {
-        return null;
+    public Applicant get(Integer id)
+    {
+        Applicant applicant = null;
+
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl, databaseUsername, databasePassword);
+             CallableStatement cstmtApproved = con.prepareCall(CHECK_IF_APPROVED_STORED_PROCEDURE);
+             CallableStatement cstmtApplicant = con.prepareCall(GET_APPLICANT_STORED_PROCEDURE))
+        {
+            ResultSet rs;
+            boolean flag;
+
+            cstmtApproved.setInt("p_id",id);
+
+            rs = cstmtApproved.executeQuery();
+            rs.first();
+
+            flag = rs.getBoolean("approved");
+
+            if(flag) // Korisnik se prikazuje samo ako je odobren
+            {
+                cstmtApplicant.setInt("p_id",id);
+                System.out.println(id);
+                rs = cstmtApplicant.executeQuery();
+
+                applicant = setApplicantModel(rs);
+            }
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return applicant;
     }
+
+    public Applicant setApplicantModel(ResultSet rs) throws SQLException
+    {
+        Applicant applicant = new Applicant();
+
+        rs.first();
+
+        applicant.setId(rs.getInt("user_id"));
+        applicant.setEmail(rs.getString("email"));
+        applicant.setFirstName(rs.getString("first_name"));
+        applicant.setLastName(rs.getString("last_name"));
+        applicant.setPictureBase64("picture_base64");
+        applicant.setPhoneNumber("phone_number");
+
+        return applicant;
+    }
+
+    // Da li je aplikant prijavljen na neki od poslodavcevih poslova
+    public boolean isApplied(int employerId, int applicantId)
+    {
+        boolean flag = false;
+
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl, databaseUsername, databasePassword);
+             CallableStatement cstmt = con.prepareCall(APPLICATION_STORED_PROCEDURE))
+        {
+            cstmt.setInt("p_employer_id",employerId);
+            cstmt.setInt("p_applicant_id",applicantId);
+
+            ResultSet rs = cstmt.executeQuery();
+
+            rs.first();
+            if(rs.getInt("count") != 0) flag = true;
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return flag;
+    }
+
 
     @Override
     public boolean update(Applicant applicant, Integer integer) {

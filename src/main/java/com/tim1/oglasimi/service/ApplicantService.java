@@ -24,4 +24,14 @@ public class ApplicantService {
 
         return "This email address is already in use!";
     }
+
+    public Applicant getApplicant(int id)
+    {
+        return applicantRepositoryImpl.get(id);
+    }
+
+    public boolean isApplied(int employerId, int applicantId)
+    {
+        return applicantRepositoryImpl.isApplied(employerId,applicantId);
+    }
 }

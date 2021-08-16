@@ -1,6 +1,7 @@
 package com.tim1.oglasimi.controller;
 
 import com.tim1.oglasimi.model.Applicant;
+import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.ApplicantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
-import static com.tim1.oglasimi.security.SecurityConfig.JWT_CUSTOM_HTTP_HEADER;
-import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
+import static com.tim1.oglasimi.security.SecurityConfig.*;
+import static com.tim1.oglasimi.security.SecurityConfig.ROLE_CLAIM_NAME;
 
 @Validated
 @RestController
@@ -58,5 +61,60 @@ public class ApplicantController {
                 .status(httpStatus)
                 .headers(responseHeaders)
                 .body(null);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Applicant> getApplicant(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                          @PathVariable("id")
+                                          @Min( 1 )
+                                          @Max( Integer.MAX_VALUE ) int id)
+    {
+        ResultPair resultPair = checkAccess(jwt, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK ) {
+            return ResponseEntity
+                    .status(httpStatus)
+                    .headers(responseHeaders)
+                    .body(null);
+        }
+
+        // Ekstraktovanje uid i role iz tokena
+        int uid  = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+        String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
+
+        if(Role.APPLICANT.equalsTo(role))
+        {
+            if(uid == id)
+            {
+                return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getApplicant(id));
+            }
+
+            resultPair.setHttpStatus(HttpStatus.FORBIDDEN);
+            httpStatus = resultPair.getHttpStatus();
+
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        }
+
+        else if(Role.EMPLOYER.equalsTo(role))
+        {
+            if(applicantService.isApplied(uid,id))
+            {
+                return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getApplicant(id));
+            }
+
+            resultPair.setHttpStatus(HttpStatus.FORBIDDEN);
+            httpStatus = resultPair.getHttpStatus();
+
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        }
+
+        else
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getApplicant(id));
+        }
     }
 }
