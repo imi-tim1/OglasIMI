@@ -26,7 +26,7 @@ export interface Job
 {
     title: string;
     description: string;
-    employer: Employer | null;
+    employer: Employer;
     field: Field;
     tags: Tag[];
     workFromHome: boolean;
