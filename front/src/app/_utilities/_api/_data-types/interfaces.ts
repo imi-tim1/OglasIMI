@@ -26,15 +26,15 @@ export interface Job
 {
     title: string;
     description: string;
-    employer: Employer | null;
+    employer: Employer;
     field: Field;
     tags: Tag[];
     workFromHome: boolean;
     city: City;
     
-    id?: number;
+    id: number;
     salary?: string;
-    postDate?: Date;
+    postDate: Date;
 }
 
 export interface Field 

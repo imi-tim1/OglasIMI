@@ -28,6 +28,8 @@ import { EmployerListCardComponent } from './_components/_elements/employer-list
 import { DashboardEmployerComponent } from './_components/_elements/dashboard-employer/dashboard-employer.component';
 import { DashboardApplicantComponent } from './_components/_elements/dashboard-applicant/dashboard-applicant.component';
 import { DashboardAdminComponent } from './_components/_elements/dashboard-admin/dashboard-admin.component';
+import { JobInfoPageComponent } from './_components/_pages/job-info-page/job-info-page.component';
+import { JobInfoCardComponent } from './_components/_elements/job-info-card/job-info-card.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { DashboardAdminComponent } from './_components/_elements/dashboard-admin
     EmployerListCardComponent,
     DashboardEmployerComponent,
     DashboardApplicantComponent,
-    DashboardAdminComponent
+    DashboardAdminComponent,
+    JobInfoPageComponent,
+    JobInfoCardComponent
   ],
   imports: [
     BrowserModule,
