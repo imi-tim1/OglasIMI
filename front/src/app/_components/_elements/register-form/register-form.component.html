@@ -106,9 +106,8 @@
                         <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                         <div class="form-outline flex-fill mb-0">
                             <label>Izaberite profilnu sliku:</label>
-                            <input type="file" id="appPicture" name="myfile"
-                            [(ngModel)]="appPicture" name="appPicture" (input)="appPictureValidation()"><br><br>
-                            <p *ngIf="wrongAppPictureBool" class="small fw-bold text-danger">Slika je prevelika.</p>
+                            <input type="file" id="appPicture" name="myfile" name="appPicture" (input)="appPictureValidation()"><br><br>
+                            <p *ngIf="wrongAppPictureBool" class="small fw-bold text-danger">Slika nije u opsegu (4kB, 45kB)</p>
                         </div>
                     </div>
                     
@@ -210,9 +209,8 @@
                           <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
                               <label>Izaberite profilnu sliku:</label>
-                              <input type="file" id="empPicture" name="myfile"
-                              [(ngModel)]="empPicture" name="empPicture" (input)="empPictureValidation()"><br><br>
-                              <p *ngIf="wrongEmpPictureBool" class="small fw-bold text-danger">Slika je prevelika.</p>
+                              <input type="file" id="empPicture" name="myfile" name="empPicture" (input)="empPictureValidation()"><br><br>
+                              <p *ngIf="wrongEmpPictureBool" class="small fw-bold text-danger">Slika nije u opsegu (4kB, 45kB)</p>
                           </div>
                       </div>      
     

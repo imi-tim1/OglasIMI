@@ -237,6 +237,16 @@ export class RegisterFormComponent implements OnInit {
     if (!(this.wrongAppFirstNameBool || this.wrongAppLastNameBool || this.wrongAppEmailBool ||
         this.wrongAppPhoneBool || this.wrongAppPass1Bool || this.wrongAppPass2Bool || this.wrongAppPictureBool)) { //sve ok, registruj ga
 
+          let appForRegister = {
+            firstName: this.appFirstName,
+            lastName: this.appLastName,
+            email: this.appEmail,
+            phoneNumber: this.appPhoneNum,
+            pictureBase64: (this.appPicture == '')? null : this.appPicture,
+            hashedPassword: PasswdHash.encrypt(this.appPass1)
+          }
+
+          //this.applicantService.createApplicant(appForRegister);
         }
   }
 
@@ -376,6 +386,8 @@ export class RegisterFormComponent implements OnInit {
               pictureBase64: (this.empPicture == '')? null : this.empPicture,
               hashedPassword: PasswdHash.encrypt(this.empPass1)
             }
+
+            this.employerService.createEmployer(empForRegister);
           }
   }
 }
