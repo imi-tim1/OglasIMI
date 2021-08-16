@@ -5,6 +5,8 @@ import com.tim1.oglasimi.repository.implementation.ApplicantRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ApplicantService {
 
@@ -33,5 +35,10 @@ public class ApplicantService {
     public boolean isApplied(int employerId, int applicantId)
     {
         return applicantRepositoryImpl.isApplied(employerId,applicantId);
+    }
+
+    public List<Applicant> getAllApplicants(boolean approved)
+    {
+        return applicantRepositoryImpl.getAll(approved);
     }
 }

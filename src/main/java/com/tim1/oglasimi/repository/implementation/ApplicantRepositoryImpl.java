@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -19,6 +20,7 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
     private static final String CHECK_IF_APPROVED_STORED_PROCEDURE = "{call check_if_approved(?)}";
     private static final String GET_APPLICANT_STORED_PROCEDURE = "{call get_applicant(?)}";
     private static final String APPLICATION_STORED_PROCEDURE = "{call check_application(?,?)}";
+    private static final String GET_ALL_APPLICANTS_STORED_PROCEDURE = "{call get_all_applicants(?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -32,6 +34,37 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
     @Override
     public List<Applicant> getAll() {
         return null;
+    }
+
+    @Override
+    public List<Applicant> getAll(boolean approved)
+    {
+        List<Applicant> applicants = null;
+
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl, databaseUsername, databasePassword);
+             CallableStatement cstmt = con.prepareCall(GET_ALL_APPLICANTS_STORED_PROCEDURE))
+        {
+            cstmt.setBoolean("p_approved",approved);
+
+            ResultSet rs = cstmt.executeQuery();
+
+            if(rs != null)
+            {
+                applicants = new ArrayList<>();
+
+                while(rs.next())
+                {
+                    Applicant applicant = setApplicantModel(rs);
+                    applicants.add(applicant);
+                }
+            }
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return applicants;
     }
 
     @Override
@@ -92,6 +125,7 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
                 System.out.println(id);
                 rs = cstmtApplicant.executeQuery();
 
+                rs.first();
                 applicant = setApplicantModel(rs);
             }
         }
@@ -106,8 +140,6 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
     public Applicant setApplicantModel(ResultSet rs) throws SQLException
     {
         Applicant applicant = new Applicant();
-
-        rs.first();
 
         applicant.setId(rs.getInt("user_id"));
         applicant.setEmail(rs.getString("email"));
