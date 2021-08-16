@@ -610,3 +610,16 @@ BEGIN
     WHERE employer_id = p_employer_id AND applicant_id = p_applicant_id;
 END //
 DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for selecting all applicants approved or not approved
+DELIMITER // ;
+CREATE PROCEDURE get_all_applicants (IN p_approved boolean)
+BEGIN
+    SELECT a.*, c.email, u.approved  FROM applicant a JOIN user u on u.id = a.user_id JOIN credentials c on a.user_id = c.user_id
+    WHERE u.approved = p_approved;
+END //
+DELIMITER ;

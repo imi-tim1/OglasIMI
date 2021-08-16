@@ -73,7 +73,18 @@ export interface Applicant
     id: number;
     firstName: string;
     lastName: string;
-    // ...
+    email: string;
+    phoneNumber: string;
+    pictureBase64: string | null;
+    hashedPassword: string;
+}
+
+export interface RegistrationBrief 
+{
+    id: number;
+    name: string;
+    email: string;
+    pictureBase64: string | null;
 }
 
 // Prilagodjene varijante

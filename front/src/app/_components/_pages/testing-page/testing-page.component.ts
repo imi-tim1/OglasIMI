@@ -1,5 +1,6 @@
 import { ThisReceiver } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { PasswdHash } from 'src/app/_utilities/_helpers/hash-util';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
@@ -11,14 +12,17 @@ import { JobService } from 'src/app/_utilities/_middleware/_services/job.service
 })
 export class TestingPageComponent implements OnInit {
 
-   @Input() public fajl: File | null = null;
+  public id: number | string | null = 0;
 
-   public convertedPicture: string = '';
+  @Input() public fajl: File | null = null;
+
+  public convertedPicture: string = '';
 
   constructor(
     public employerService: EmployerService,
     public aplicantService: ApplicantService,
-    public jobService: JobService
+    public jobService: JobService,
+    public route: ActivatedRoute
   ) { }
 
   onFileInput() {
@@ -50,9 +54,12 @@ export class TestingPageComponent implements OnInit {
     console.log(this.convertedPicture);
   }
 
-  ngOnInit(): void {
-    this.testEmployerService();
-    // this.testApplicantService();
+  ngOnInit(): void 
+  {
+    // this.id = this.route.snapshot.paramMap.get("id");
+
+    // this.testEmployerService();
+    this.testApplicantService();
     // this.testJobService();
   }
 
@@ -73,15 +80,15 @@ export class TestingPageComponent implements OnInit {
 
   testApplicantService() {
     // Ceka se Back End ...
-    this.aplicantService.getApplicants();      // ?
-    this.aplicantService.getApplicant(2);      // ?
-    this.aplicantService.getApplicantsJobs(2); // ?
+    // this.aplicantService.getApplicants();      // ?
+    this.aplicantService.getApplicant(6);      // ?
+    // this.aplicantService.getApplicantsJobs(2); // ?
   }
 
   testJobService() {
     // let j: number = 4;
 
-    // this.jobService.getJob(3); // OK
+    this.jobService.getJob(this.id as number); // OK
     // this.jobService.getJobs(); // OK
     // this.jobService.getJobsApplicants(j); // OK
 
@@ -102,7 +109,7 @@ export class TestingPageComponent implements OnInit {
 
     
     // this.jobService.applyToJob(j);
-    this.jobService.deleteJob(21);
+    // this.jobService.deleteJob(21);
   }
 
 }

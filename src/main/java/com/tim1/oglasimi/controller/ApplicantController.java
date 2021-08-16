@@ -15,6 +15,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import java.util.List;
+
 import static com.tim1.oglasimi.security.SecurityConfig.*;
 import static com.tim1.oglasimi.security.SecurityConfig.ROLE_CLAIM_NAME;
 
@@ -65,9 +67,9 @@ public class ApplicantController {
 
     @GetMapping("{id}")
     public ResponseEntity<Applicant> getApplicant(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                          @PathVariable("id")
-                                          @Min( 1 )
-                                          @Max( Integer.MAX_VALUE ) int id)
+                                                  @PathVariable("id")
+                                                  @Min( 1 )
+                                                  @Max( Integer.MAX_VALUE ) int id)
     {
         ResultPair resultPair = checkAccess(jwt, Role.APPLICANT, Role.EMPLOYER, Role.ADMIN);
         HttpStatus httpStatus = resultPair.getHttpStatus();
@@ -114,7 +116,33 @@ public class ApplicantController {
 
         else
         {
-            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getApplicant(id));
+            Applicant applicant = applicantService.getApplicant(id);
+
+            if(applicant != null) return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicant);
+
+            resultPair.setHttpStatus(HttpStatus.FORBIDDEN);
+            httpStatus = resultPair.getHttpStatus();
+
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
         }
     }
+
+    @GetMapping
+    public ResponseEntity<List<Applicant>> getAllApplicants(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                            @RequestParam boolean approved)
+    {
+        ResultPair resultPair = checkAccess(jwt,Role.ADMIN);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if(httpStatus == HttpStatus.OK)
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getAllApplicants(approved));
+        }
+
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+    }
+
 }
