@@ -17,4 +17,8 @@
         <strong class="p-1">{{t.name}}</strong>
     </span>
     <h4 class="pt-4 pb-2 text-success">{{job.salary}}</h4>
+
+    <div *ngIf="checkDeleteBtn()">
+        <button>Obriši oglas</button>
+    </div>
 </a>
