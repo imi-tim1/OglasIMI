@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ApplicantRepositoryImpl implements ApplicantRepository {
-
+public class ApplicantRepositoryImpl implements ApplicantRepository
+{
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployerRepositoryImpl.class);
 
     private static final String REGISTER_APPLICANT_PROCEDURE_CALL = "{call register_applicant(?,?,?,?,?,?,?,?)}";
@@ -21,6 +21,7 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
     private static final String GET_APPLICANT_STORED_PROCEDURE = "{call get_applicant(?)}";
     private static final String APPLICATION_STORED_PROCEDURE = "{call check_application(?,?)}";
     private static final String GET_ALL_APPLICANTS_STORED_PROCEDURE = "{call get_all_applicants(?)}";
+    private static final String APPROVE_STORED_PROCEDURE = "{call approve_user(?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -61,10 +62,37 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
         }
 
         catch (SQLException throwables) {
+            LOGGER.error("getAll | An error occurred while communicating with a database.");
             throwables.printStackTrace();
         }
 
         return applicants;
+    }
+
+    @Override
+    public boolean approve(int id)
+    {
+        boolean isApprovedSuccessfully = false;
+
+        try ( Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword );
+              CallableStatement cstmt = con.prepareCall(APPROVE_STORED_PROCEDURE))
+        {
+
+            cstmt.setInt("p_id", id);
+            cstmt.registerOutParameter("p_approved_successfully", Types.BOOLEAN);
+
+            cstmt.executeUpdate();
+
+            isApprovedSuccessfully = cstmt.getBoolean("p_approved_successfully");
+
+        }
+
+        catch ( SQLException e ) {
+            LOGGER.error("approve | An error occurred while communicating with a database", e );
+            e.printStackTrace();
+        }
+
+        return isApprovedSuccessfully;
     }
 
     @Override
@@ -131,6 +159,7 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
         }
 
         catch (SQLException throwables) {
+            LOGGER.error("get | An error occurred while communicating with a database.");
             throwables.printStackTrace();
         }
 
@@ -174,7 +203,6 @@ public class ApplicantRepositoryImpl implements ApplicantRepository {
 
         return flag;
     }
-
 
     @Override
     public boolean update(Applicant applicant, Integer integer) {

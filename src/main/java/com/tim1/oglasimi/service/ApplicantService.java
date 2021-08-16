@@ -41,4 +41,9 @@ public class ApplicantService {
     {
         return applicantRepositoryImpl.getAll(approved);
     }
+
+    public boolean approve(int id)
+    {
+        return applicantRepositoryImpl.approve(id);
+    }
 }
