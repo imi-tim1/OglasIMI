@@ -112,3 +112,13 @@ export interface NewEmployer
     pictureBase64: string | null;
     hashedPassword: string;
 }
+
+export interface NewApplicant 
+{
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    pictureBase64: string | null;
+    hashedPassword: string;
+}
