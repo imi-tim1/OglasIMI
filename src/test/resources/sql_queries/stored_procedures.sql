@@ -564,3 +564,45 @@ BEGIN
 
 END //
 DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for getting applicants
+DELIMITER // ;
+CREATE PROCEDURE get_applicant (IN p_id int)
+BEGIN
+    SELECT a.*, c.email FROM applicant a JOIN credentials c on a.user_id = c.user_id
+    WHERE p_id = a.user_id;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for checking if user is approved
+DELIMITER // ;
+CREATE PROCEDURE check_if_approved (IN p_id int)
+BEGIN
+    SELECT approved FROM user
+    WHERE p_id = id;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for checking if applicant applied on some of specific employer jobs
+DELIMITER // ;
+CREATE PROCEDURE check_application (
+    IN p_employer_id int,
+    IN p_applicant_id int
+)
+BEGIN
+    SELECT COUNT(*) AS count FROM job j JOIN job_application ja ON j.id = ja.job_id
+    WHERE employer_id = p_employer_id AND applicant_id = p_applicant_id;
+END //
+DELIMITER ;
