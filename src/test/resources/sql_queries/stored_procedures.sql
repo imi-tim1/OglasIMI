@@ -266,13 +266,15 @@ DELIMITER ;
 -- #######################################################################
 -- Procedure for getting list of all employers
 DELIMITER // ;
-CREATE PROCEDURE get_all_employers()
+CREATE PROCEDURE get_all_employers(
+    IN p_not_approved_requested BOOLEAN
+)
 BEGIN
-    SELECT e.user_id, e.name, e.tin, e.address, e.picture_base64, e.phone_number, c.email
+    SELECT e.user_id, e.name, e.tin, e.address, e.picture_base64, e.phone_number, c.email, approved
     FROM employer e
         JOIN credentials c ON e.user_id = c.user_id
         JOIN user u ON e.user_id = u.id
-    WHERE u.approved = TRUE;
+    WHERE u.approved <> p_not_approved_requested;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -288,8 +290,10 @@ CREATE PROCEDURE get_employer(
 BEGIN
     SELECT e.user_id, e.name, e.tin, e.address, e.picture_base64, e.phone_number, c.email
     FROM employer e
-             JOIN credentials c ON e.user_id = c.user_id
-    WHERE e.user_id = p_id;
+        JOIN credentials c ON e.user_id = c.user_id
+        JOIN user u on e.user_id = u.id
+    WHERE e.user_id = p_id
+        AND u.approved = TRUE;
 END //
 DELIMITER ;
 -- #######################################################################
