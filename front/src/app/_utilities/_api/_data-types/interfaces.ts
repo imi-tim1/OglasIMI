@@ -26,15 +26,15 @@ export interface Job
 {
     title: string;
     description: string;
-    employer: Employer | null;
+    employer: Employer;
     field: Field;
     tags: Tag[];
     workFromHome: boolean;
     city: City;
     
-    id?: number;
+    id: number;
     salary?: string;
-    postDate?: Date;
+    postDate: Date;
 }
 
 export interface Field 
@@ -73,7 +73,18 @@ export interface Applicant
     id: number;
     firstName: string;
     lastName: string;
-    // ...
+    email: string;
+    phoneNumber: string;
+    pictureBase64: string | null;
+    hashedPassword: string;
+}
+
+export interface RegistrationBrief 
+{
+    id: number;
+    name: string;
+    email: string;
+    pictureBase64: string | null;
 }
 
 // Prilagodjene varijante

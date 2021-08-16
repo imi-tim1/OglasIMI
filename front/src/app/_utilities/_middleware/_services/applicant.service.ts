@@ -28,7 +28,7 @@ export class ApplicantService {
   }
 
 
-  // Potrebno TESTIRANJE !!!
+  // Radi, Ostalo da se ispravi na backu da vraca Error kod admina umesto Success i null
   getApplicant(id: number) {
     this.api.getApplicant(id).subscribe(
       // Success

@@ -1,0 +1,3 @@
+<app-employer-info-modal [emp]="activeEpm!"></app-employer-info-modal>
+<app-registration-card *ngFor="let e of empService.employers" [empData]="e" (cardClick)="showRegInfo(e.id)">
+</app-registration-card>

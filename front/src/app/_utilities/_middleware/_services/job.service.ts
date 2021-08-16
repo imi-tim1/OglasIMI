@@ -14,7 +14,7 @@ export class JobService {
   public totalJobNumber: number = 0;
 
   // Get Job
-  public job: Job | null = null;
+  public job!: Job;
 
   // Get Jobs Applicants
   public jobsApplicants: Applicant[] = [];
@@ -62,7 +62,7 @@ export class JobService {
     this.api.getJob(id).subscribe(
       // Success
       (response) => {
-        this.job = response.body;
+        this.job = response.body!;
         console.log('Job: ');
         console.log(this.job);
       }
