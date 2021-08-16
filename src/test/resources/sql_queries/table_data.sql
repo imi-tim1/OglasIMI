@@ -11,7 +11,10 @@ VALUES (1, TRUE),
        (2, TRUE),
        (3, TRUE),
        (3, TRUE),
-       (2, FALSE);
+       (2, FALSE),
+       (3, TRUE),
+       (3, TRUE),
+       (3, TRUE);
 
 INSERT INTO credentials (user_id, email, hashed_password)
 VALUES (1, 'misas@ad.min', '283d0cb1289e2dccb8c1ee70c5c3382d2ec25e160742ca2bcb67971dcba3d28ffa920e6bf7b37fe939e29100d96849c61f61338c5dab27943beda77137b85151'),
@@ -19,11 +22,17 @@ VALUES (1, 'misas@ad.min', '283d0cb1289e2dccb8c1ee70c5c3382d2ec25e160742ca2bcb67
        (3, 'pera@wuiii.com', '3a772c82dc28af481ff4099526353598f8ada4d243ddd0ae182a3ac631b7a6432afe0d215108e28a4fcd2ad61a70c8d45e97d87ba36665f8c55c18dc524105ea'),
        (4, 'laza@vass.org', 'f3c2eedfc3c558e50972dcb4d909ca391a79dd2acca9d3fc750fffe6db03a3a1431713da854fbb8bc48a2c6ffdb6f699c5cf6f6885652c6cd730ed5f9005523f'),
        (5, 'mika@yahoo.rs', 'a7fce35f48a350ae1125a3ca4e0af6e37316a9ed4555b146b9f663d52c33eda09a49aa813c9d36c1a617c2453156bb273c93eb68ece01ca7c38e5f247794104c'),
-       (6, 'mirko@imejl.rs', '99958dbb3802e08c4dbfe26b227e19896b18589fc70cff4c4551a1d4624dfc86b5770d5fe3b120db6a5ea0f035cd0e95954802d683f45b7e62f88b25bc7bae88');
+       (6, 'mirko@imejl.rs', '99958dbb3802e08c4dbfe26b227e19896b18589fc70cff4c4551a1d4624dfc86b5770d5fe3b120db6a5ea0f035cd0e95954802d683f45b7e62f88b25bc7bae88'),
+       (7, 'slavko@imejl.rs', '99958dbb3802e08c4dbfe26b227e19896b18589fc70cff4c4551a1d4624dfc86b5770d5fe3b120db6a5ea0f035cd0e95954802d683f45b7e62f88b25bc7bae88'),
+       (8, 'marko@imejl.rs', '99958dbb3802e08c4dbfe26b227e19896b18589fc70cff4c4551a1d4624dfc86b5770d5fe3b120db6a5ea0f035cd0e95954802d683f45b7e62f88b25bc7bae88'),
+       (9, 'zarko@imejl.rs', '99958dbb3802e08c4dbfe26b227e19896b18589fc70cff4c4551a1d4624dfc86b5770d5fe3b120db6a5ea0f035cd0e95954802d683f45b7e62f88b25bc7bae88');
 
 INSERT INTO employer (user_id, name, tin, address, picture_base64, phone_number)
 VALUES (4, 'Lažarus d.o.o', '123456789', 'Keba Kraba, 3', NULL, '063123456'),
-       (5, 'Perperix', '987654321', 'Lignjoslav, 8/B', NULL, '065987654');
+       (5, 'Perperix', '987654321', 'Lignjoslav, 8/B', NULL, '065987654'),
+       (7, 'Slavko d.o.o', '123456789', 'Keba Kraba, 3', NULL, '063123456'),
+       (8, 'Marko d.o.o', '123456789', 'Keba Kraba, 3', NULL, '063123456'),
+       (9, 'Žarko d.o.o', '123456789', 'Keba Kraba, 3', NULL, '063123456');
 
 INSERT INTO applicant (user_id, first_name, last_name, picture_base64, phone_number)
 VALUES (3, 'Pera', 'Peric', NULL, '060111222'),
