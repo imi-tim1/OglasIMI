@@ -1,3 +1,32 @@
-<app-employer-info-modal [emp]="activeEpm!"></app-employer-info-modal>
-<app-registration-card *ngFor="let e of empService.employers" [empData]="e" (cardClick)="showRegInfo(e.id)">
-</app-registration-card>
+<!-- <app-employer-info-modal [emp]="activeEpm!"></app-employer-info-modal> -->
+<div class="container-fluid px-5 d-flex row">
+
+    <div class="col">
+        <h3 class="text-center">Registracije na čekanju</h3>
+        <br>
+    </div>
+
+    <div class="row">
+        <!-- Lista -->
+        <div class="col p-4 mx-3 border border-secondary rounded-3" style="height: 70vh;">
+            <div style="height: 100%; overflow: scroll;">
+                <div class="d-flex flex-column">
+                    <app-registration-card *ngFor="let e of empService.employers" [empData]="e"
+                        (cardClick)="showRegInfo(e.id)">
+                    </app-registration-card>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prazan prikaz -->
+        <div *ngIf="!activeEmp" class="col mx-3 border border-secondary rounded-3">
+            <div class="d-flex flex-column align-items-center">
+                <h5 class="p-4">Nije izabrana ni jedna prijava</h5>
+            </div>
+        </div>
+
+        <!-- Prikaz -->
+        <app-employer-info-card class="col" *ngIf="activeEmp" [emp]="activeEmp"></app-employer-info-card>
+        <!-- <app-applicant-info-card *ngIf="false"></app-applicant-info-card> -->
+    </div>
+</div>
