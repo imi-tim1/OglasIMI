@@ -82,7 +82,7 @@ CREATE TABLE employer
 (
     user_id INT,
     name VARCHAR(30) NOT NULL,
-    tin VARCHAR(20) NOT NULL,
+    tin VARCHAR(13) NOT NULL,
     address VARCHAR(50) NOT NULL,
     picture_base64 TEXT(65000),
     phone_number VARCHAR(30) NOT NULL,
