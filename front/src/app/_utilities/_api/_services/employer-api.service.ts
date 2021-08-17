@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
@@ -15,12 +15,16 @@ export class EmployerApiService {
 
   constructor(private http: HttpClient) { }
 
-  getEmployers(): Observable<HttpResponse<Employer[]>> {
+  getEmployers(notApprovedRequested: boolean): Observable<HttpResponse<Employer[]>> {
+    let par: HttpParams = new HttpParams();
+    par = par.set('notApprovedRequested', notApprovedRequested);
+    
     return this.http.get<Employer[]>(
       this.url,
       {
         observe: 'response',
-        headers: HeaderUtil.jwtOnlyHeaders()
+        headers: HeaderUtil.jwtOnlyHeaders(),
+        params: par
       }
     );
   }

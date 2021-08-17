@@ -13,8 +13,8 @@ export class EmployerService {
 
   constructor(private api: EmployerApiService) { }
 
-  getEmployers() {
-    this.api.getEmployers().subscribe(
+  getEmployers(notApproved?: boolean) {
+    this.api.getEmployers((notApproved == undefined)? false : notApproved).subscribe(
       // Success
       (response) => {
         console.log('Get Employers (Success), Body: ')

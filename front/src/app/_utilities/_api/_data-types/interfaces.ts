@@ -98,15 +98,15 @@ export interface NewJob {
     // Obavezni podaci. Regularni format
     title: string;
     description: string;
-    // ... Format: Objekat, name = '', bitan samo id
-    field: Field;
+    workFromHome: boolean;
+    field: Field; // Format: Objekat, name = '', bitan samo id
+    
     
     // Ne obavezni, Objekat, name = '', bitan samo id
     city: City | null;      // null, ako nema grada
     tags: Tag[];            // [], ako nema tagova
     
     salary: string;         // prazan string ako ne treba
-    workFromHome: boolean;
     
     // Uvek null
     postDate: null;

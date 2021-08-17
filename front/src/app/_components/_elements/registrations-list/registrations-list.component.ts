@@ -5,11 +5,11 @@ import { EmployerService } from 'src/app/_utilities/_middleware/_services/employ
 
 @Component({
   selector: 'app-registrations-list',
-  templateUrl: './registrations-list.component.html',
+  templateUrl:   './registrations-list.component.html',
 })
 export class RegistrationsListComponent implements OnInit {
 
-  public activeEpm: Employer | undefined = undefined;
+  public activeEmp: Employer | undefined = undefined;
 
   constructor(
     public empService: EmployerService
@@ -17,11 +17,19 @@ export class RegistrationsListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.empService.getEmployers();
+    this.empService.getEmployers(true);
   }
 
   showRegInfo(id: number) {
-    this.activeEpm = this.empService.employers.find(j => j.id == id);
+    this.activeEmp = this.empService.employers.find(j => j.id == id);
+    if (this.activeEmp == undefined) {
+      // menjaj activeApp
+    }
+  }
+
+  hideRegInfo() {
+    this.activeEmp = undefined;
+    // this.activeApp = undefined;
   }
 
 }

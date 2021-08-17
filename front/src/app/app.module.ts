@@ -33,6 +33,8 @@ import { JobInfoCardComponent } from './_components/_elements/job-info-card/job-
 import { RegistrationCardComponent } from './_components/_elements/registration-card/registration-card.component';
 import { RegistrationsListComponent } from './_components/_elements/registrations-list/registrations-list.component';
 import { EmployerInfoModalComponent } from './_components/_elements/employer-info-modal/employer-info-modal.component';
+import { EmployerInfoCardComponent } from './_components/_elements/employer-info-card/employer-info-card.component';
+import { ApplicantInfoCardComponent } from './_components/_elements/applicant-info-card/applicant-info-card.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +66,9 @@ import { EmployerInfoModalComponent } from './_components/_elements/employer-inf
     DashboardAdminComponent,
     RegistrationCardComponent,
     RegistrationsListComponent,
-    EmployerInfoModalComponent
+    EmployerInfoModalComponent,
+    EmployerInfoCardComponent,
+    ApplicantInfoCardComponent
   ],
   imports: [
     BrowserModule,
