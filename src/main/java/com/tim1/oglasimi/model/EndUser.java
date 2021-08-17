@@ -12,8 +12,8 @@ public class EndUser extends User {
     private String pictureBase64;
 
     @NotBlank
-    @Pattern(regexp = "^[0-9 ()\\-/]+$")
-    @Size( min = 9, max = 30, message = "The length for phone number must be between 9 and 30 characters" )
+    @Pattern(regexp = "^\\+?[0-9]+$")
+    @Size( min = 9, max = 12, message = "The length for phone number must be between 9 and 12 characters" )
     private String phoneNumber;
 
     public EndUser() {
