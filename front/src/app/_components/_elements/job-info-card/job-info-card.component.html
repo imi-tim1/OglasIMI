@@ -1,5 +1,3 @@
-<p>{{jobService.job.id}}</p>
-
 <div class="container py-5 h-100">
   <div class="row d-flex justify-content-center align-items-center h-100">
     <div class="col-lg-8 col-xl-6">
@@ -23,14 +21,26 @@
           <p><i>{{jobService.job.description}}</i></p>
 
           <span *ngFor="let tag of jobService.job.tags" class="bg-warning">
-            <strong class="p-1">{{tag.name}}</strong>
+            <strong class="p-1">{{tag.name}}&nbsp;</strong>
           </span> <br>
           <strong class="bg-warning" *ngIf="jobService.job.salary != undefined">{{jobService.job.salary}}</strong><br>
           <strong class="bg-warning" *ngIf="jobService.job.workFromHome">{{jobService.job.workFromHome}}</strong>
          
           
-          <button type="submit" class="btn btn-success btn-lg mb-1">Submit</button>
+          <!--  Only Applicant can see this button  -->
+          <!--<button *ngIf="isApplicant()" 
+           type="submit" class="btn btn-success btn-lg mb-1">Prijavi se</button>-->
 
+          <a *ngIf="isApplicant()" class="btn btn-success" 
+          href="mailto:{{(employerService.employer)? employerService.employer.email : ''}}?Subject=Prijava%20za%20posao" target="_top"
+          (click)="applyMe()">
+            Prijavi se</a>
+
+            <!-- Oni ce da nam posalju da li je ovaj applicant vec prijavljen na job,
+              to ispitujemo u Initu i u zavisnosti od toga (ne)prikazujemo dugmence.
+              U slucaju da nam uz dati job salju mail employera, pozivamo 
+              jobService.job.employer.email umesto employerService.employer.email 
+              i onInit nece sadrzati this.employerService.getEmployer(this.jobService.job.employer.id);-->
 
         </div>
       </div>
