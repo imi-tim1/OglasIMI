@@ -11,14 +11,11 @@ import { NavbarComponent } from './_components/_elements/navbar/navbar.component
 import { FooterComponent } from './_components/_elements/footer/footer.component';
 import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
 import { RegisterPageComponent } from './_components/_pages/register-page/register-page.component';
-import { ApplicantRegisterFormComponent } from './_components/_elements/applicant-register-form/applicant-register-form.component';
-import { EmployerRegisterFormComponent } from './_components/_elements/employer-register-form/employer-register-form.component';
 import { HomePageComponent } from './_components/_pages/home-page/home-page.component';
 import { JobsListComponent } from './_components/_elements/jobs-list/jobs-list.component';
 import { JobsFiltersComponent } from './_components/_elements/jobs-filters/jobs-filters.component';
 import { JobsListCardComponent } from './_components/_elements/jobs-list-card/jobs-list-card.component';
 import { JobsFeedComponent } from './_components/_elements/jobs-feed/jobs-feed.component';
-import { JobFiltersButtonComponent } from './_components/_elements/job-filters-button/job-filters-button.component';
 import { RegisterFormComponent } from './_components/_elements/register-form/register-form.component';
 import { TestingPageComponent } from './_components/_pages/testing-page/testing-page.component';
 import { LogoutPageComponent } from './_components/_pages/logout-page/logout-page.component';
@@ -35,6 +32,7 @@ import { RegistrationsListComponent } from './_components/_elements/registration
 import { EmployerInfoModalComponent } from './_components/_elements/employer-info-modal/employer-info-modal.component';
 import { EmployerInfoCardComponent } from './_components/_elements/employer-info-card/employer-info-card.component';
 import { ApplicantInfoCardComponent } from './_components/_elements/applicant-info-card/applicant-info-card.component';
+import { CreateJobPageComponent } from './_components/_pages/create-job-page/create-job-page.component';
 
 @NgModule({
   declarations: [
@@ -44,14 +42,11 @@ import { ApplicantInfoCardComponent } from './_components/_elements/applicant-in
     FooterComponent,
     LoginFormComponent,
     RegisterPageComponent,
-    ApplicantRegisterFormComponent,
-    EmployerRegisterFormComponent,
     HomePageComponent,
     JobsListComponent,
     JobsFiltersComponent,
     JobsListCardComponent,
     JobsFeedComponent,
-    JobFiltersButtonComponent,
     RegisterFormComponent,
     TestingPageComponent,
     LogoutPageComponent,
@@ -68,7 +63,8 @@ import { ApplicantInfoCardComponent } from './_components/_elements/applicant-in
     RegistrationsListComponent,
     EmployerInfoModalComponent,
     EmployerInfoCardComponent,
-    ApplicantInfoCardComponent
+    ApplicantInfoCardComponent,
+    CreateJobPageComponent
   ],
   imports: [
     BrowserModule,
