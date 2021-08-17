@@ -80,9 +80,9 @@ export class TestingPageComponent implements OnInit {
 
   testApplicantService() {
     // Ceka se Back End ...
-    // this.aplicantService.getApplicants();      // ?
-    this.aplicantService.getApplicant(6);      // ?
-    // this.aplicantService.getApplicantsJobs(2); // ?
+    // this.aplicantService.getApplicants();      // OK
+    // this.aplicantService.getApplicant(2);      // OK
+    this.aplicantService.getApplicantsJobs(2); // ?
   }
 
   testJobService() {

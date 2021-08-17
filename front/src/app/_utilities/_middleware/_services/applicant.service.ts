@@ -14,8 +14,8 @@ export class ApplicantService {
   constructor(private api: ApplicantApiService) { }
 
   // Potrebno TESTIRANJE !!!
-  getApplicants() {
-    this.api.getApplicants().subscribe(
+  getApplicants(notApproved?: boolean) {
+    this.api.getApplicants((notApproved == undefined)? false : notApproved).subscribe(
       // Success
       (response) => {
         console.log('Get Applicants (Success), Body: ')
@@ -47,7 +47,7 @@ export class ApplicantService {
       (response) => {
         this.applicantsJobs = (response.body == null)? [] : response.body;
         console.log('Applicants Jobs: ')
-        console.log(this.applicant)
+        console.log(this.applicantsJobs)
       }
     );
   }

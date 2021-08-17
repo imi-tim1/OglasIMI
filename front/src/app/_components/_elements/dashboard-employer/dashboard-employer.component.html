@@ -1,2 +1,5 @@
-<app-employer-info-card></app-employer-info-card>
+<app-navbar2></app-navbar2>
+<div class="container">
+    <app-employer-info-card [emp]="empService.employer!"></app-employer-info-card>
+</div>
 <app-jobs-list [empJobs]="true"></app-jobs-list>

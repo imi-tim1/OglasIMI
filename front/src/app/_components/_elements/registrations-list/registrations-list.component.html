@@ -1,32 +1,62 @@
 <!-- <app-employer-info-modal [emp]="activeEpm!"></app-employer-info-modal> -->
-<div class="container-fluid px-5 d-flex row">
+<div class="container-fluid px-5">
 
     <div class="col">
         <h3 class="text-center">Registracije na čekanju</h3>
         <br>
     </div>
 
-    <div class="row">
+    <div class="row p-0">
         <!-- Lista -->
-        <div class="col p-4 mx-3 border border-secondary rounded-3" style="height: 70vh;">
-            <div style="height: 100%; overflow: scroll;">
-                <div class="d-flex flex-column">
-                    <app-registration-card *ngFor="let e of empService.employers" [empData]="e"
-                        (cardClick)="showRegInfo(e.id)">
-                    </app-registration-card>
+        <div class="col p-3">
+            <div class="p-4 border border-secondary rounded-3">
+
+            </div>
+            <div class="my-4 p-4 border border-secondary rounded-3" style="height: 100%;">
+                <div style="height: 100%; overflow: scroll;">
+                    <!-- Employers -->
+                    <div *ngIf="true" class="d-flex flex-column">
+                        <app-registration-card *ngFor="let e of empService.employers" [empData]="e"
+                            (cardClick)="showRegInfo(e.id)">
+                        </app-registration-card>
+                    </div>
+                    <!-- Applicants -->
+                    <div *ngIf="true" class="d-flex flex-column">
+                        <app-registration-card *ngFor="let a of appService.applicants" [appData]="a"
+                            (cardClick)="showRegInfo(a.id)">
+                        </app-registration-card>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Prazan prikaz -->
-        <div *ngIf="!activeEmp" class="col mx-3 border border-secondary rounded-3">
-            <div class="d-flex flex-column align-items-center">
-                <h5 class="p-4">Nije izabrana ni jedna prijava</h5>
+        <div class="col p-3">
+            <!-- Prazan prikaz -->
+            <div *ngIf="!activeEmp" class="border border-secondary rounded-3">
+                <div class="d-flex flex-column align-items-center">
+                    <h5 class="p-4">Nije izabrana ni jedna prijava</h5>
+                </div>
+            </div>
+
+            <!-- Prikaz -->
+            <div *ngIf="activeEmp || activeApp">
+                
+                <!-- Employer -->
+                <app-employer-info-card class="col" 
+                    *ngIf="activeEmp" [emp]="activeEmp">
+                </app-employer-info-card>
+                
+                <!-- Applicant -->
+                <app-applicant-info-card class="col" 
+                    *ngIf="activeApp" [app]="activeApp">
+                </app-applicant-info-card>
+                
+                <!-- Approve / Reject -->
+                <div class="my-4 border border-secondary rounded-3 d-flex">
+                    <button class="btn btn-lg btn-success flex-fill rounded-0" (click)="onApprove()">Prihvati</button>
+                    <button class="btn btn-lg btn-danger flex-fill rounded-0" (click)="onReject()">Odbaci</button>
+                </div>
             </div>
         </div>
-
-        <!-- Prikaz -->
-        <app-employer-info-card class="col" *ngIf="activeEmp" [emp]="activeEmp"></app-employer-info-card>
-        <!-- <app-applicant-info-card *ngIf="false"></app-applicant-info-card> -->
     </div>
 </div>
