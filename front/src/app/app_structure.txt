@@ -10,3 +10,7 @@
     > auth       ?
 
 
+GET api/applicants/[id] sada vraca 404 Not Found ukoliko ne postoji aplikat sa tim id-em
+PUT api/applicants/[id] sada vraca 204 No Countent ukoliko je sve proslo ok
+DELETE api/applicants/[id] sada vraca 204 No Countent ukoliko je sve proslo ok
+GET api/jobs/[id] sada vraca 404 Not Found ukoliko ne postoji job sa tim id-em
