@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 public class Employer extends EndUser {
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-ZšŠđĐčČćĆžŽ \\-]+$")
+    @Pattern(regexp = "^[a-zA-ZšŠđĐčČćĆžŽ .\"'\\-]+$")
     @Size( min = 1, max = 30)
     private String name;
 
@@ -18,7 +18,7 @@ public class Employer extends EndUser {
 
     @NotBlank
     @Pattern(regexp = "^[0-9]+$")
-    @Size( min = 9, max = 13 )
+    @Size( min = 9, max = 9 )
     private String tin;
 
     public Employer() {
