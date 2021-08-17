@@ -183,13 +183,13 @@ public class JobRepositoryImpl implements JobRepository
         List<Applicant> jobApplicants = null;
 
         try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
-              CallableStatement cstmt = con.prepareCall(GET_JOB_APPLICANTS_PROCEDURE_CALL); ) {
+              CallableStatement cstmt = con.prepareCall(GET_JOB_APPLICANTS_PROCEDURE_CALL)) {
 
             cstmt.setInt("p_job_id", jobId);
             ResultSet rs = cstmt.executeQuery();
 
             Applicant tempApplicant;
-            jobApplicants = new LinkedList<Applicant>();
+            jobApplicants = new LinkedList<>();
 
             while( rs.next() ) {
                 tempApplicant = new Applicant();
@@ -394,6 +394,7 @@ public class JobRepositoryImpl implements JobRepository
             {
                 job = new Job();
                 job = setJobModel(rs, cstmtTag);
+                job.getEmployer().setEmail(rs.getString("email"));
             }
         }
 

@@ -535,18 +535,17 @@ DELIMITER ;
 DELIMITER // ;
 CREATE PROCEDURE get_job(IN p_id int)
 BEGIN
-    SELECT j.*,
+    SELECT t2.*, t1.email FROM credentials t1 JOIN (SELECT j.*,
            f.id f_id, f.name f_name,
            c.id c_id, c.name c_name,
            e.user_id, e.name e_name, e.tin, e.address, e.picture_base64,e.phone_number
-    from job j left join field f on j.field_id = f.id
-               left join city c on c.id = j.city_id
-               left join employer e on e.user_id = j.employer_id
-    WHERE p_id = j.id;
+    FROM job j LEFT JOIN field f ON j.field_id = f.id
+               LEFT JOIN city c ON c.id = j.city_id
+               LEFT JOIN employer e ON e.user_id = j.employer_id
+    WHERE p_id = j.id) t2 ON t1.user_id = t2.user_id;
 END //
 DELIMITER ;
-
--- select * from job;
+select * from job;
 -- #######################################################################
 
 

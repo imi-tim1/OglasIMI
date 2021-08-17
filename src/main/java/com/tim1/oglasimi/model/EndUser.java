@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 
 public class EndUser extends User {
 
-    @Pattern(regexp = "^[a-zA-z0-9+/=]+$")
+    @Pattern(regexp = "^[a-zA-z0-9+/=:;,]+$")
     @Size( min = 5000, max = 65000,
             message = "The length for base64 encoded picture must be between 5000 and 65000 characters" )
     private String pictureBase64;
