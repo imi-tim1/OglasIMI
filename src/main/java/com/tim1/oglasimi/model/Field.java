@@ -9,9 +9,17 @@ public class Field
     private int id;
 
     @NotBlank
-    @NotNull
+    @Pattern(regexp = "^[a-zA-Z \\-]+$")
     @Size( min = 2, max = 30, message = "The length of name must be between 2 and 30 characters" )
     private String name;
+
+    public Field() {
+    }
+
+    public Field(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public int getId()
     {
@@ -33,12 +41,4 @@ public class Field
         this.name = name;
     }
 
-
-    public Field() {
-    }
-
-    public Field(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 }

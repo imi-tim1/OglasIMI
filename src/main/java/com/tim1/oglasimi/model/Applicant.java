@@ -1,17 +1,17 @@
 package com.tim1.oglasimi.model;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class Applicant extends EndUser {
-    @NotNull
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z \\-]+$")
     @Size( min = 1, max = 30)
     private String firstName;
 
-    @NotNull
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z \\-]+$")
     @Size( min = 1, max = 30)
     private String lastName;
 

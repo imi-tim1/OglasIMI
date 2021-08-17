@@ -8,10 +8,18 @@ public class City
     @Max(Integer.MAX_VALUE)
     private int id;
 
-    @NotBlank @NotNull
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z \\-]+$")
     @Size( min = 2, max = 30, message = "The length of name must be between 2 and 30 characters" )
     private String name;
 
+    public City() {
+    }
+
+    public City(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public int getId()
     {
@@ -33,11 +41,4 @@ public class City
         this.name = name;
     }
 
-    public City() {
-    }
-
-    public City(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 }

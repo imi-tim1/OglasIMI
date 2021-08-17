@@ -13,12 +13,11 @@ public class User {
 
 
     @NotBlank
-    @NotNull
     @Email( message = "Email address is not valid" )
     private String email;
 
-    @NotNull
     @NotBlank
+    @Pattern(regexp = "^[0-9a-f]+$")
     @Size( max = 300, message = "Hashed password length exceeded maximum allowed length" )
     private String hashedPassword;
 
