@@ -1,7 +1,6 @@
 package com.tim1.oglasimi.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
@@ -9,6 +8,8 @@ import java.util.List;
 
 public class Job
 {
+    @Min(0)
+    @Max(Integer.MAX_VALUE)
     private int id;
 
     private Employer employer;
@@ -17,18 +18,47 @@ public class Job
     private List<Tag> tags;
 
     @DateTimeFormat
+    @PastOrPresent
     private LocalDateTime postDate;
 
-    @NotBlank @NotNull
+    @NotBlank
     @Size( min = 3, max = 50, message = "The length of title must be between 3 and 50 characters" )
     private String title;
 
-    @NotBlank @NotNull
+    @NotBlank
     @Size(min = 10, max = 500, message = "The length of description must be between 10 and 500 characters")
     private String description;
 
+    @Size(min = 4, max = 50)
     private String salary;
+
     private boolean workFromHome;
+
+    public Job() {
+    }
+
+    public Job(
+            int id,
+            Employer employer,
+            Field field,
+            City city,
+            List<Tag> tags,
+            LocalDateTime postDate,
+            String title,
+            String description,
+            String salary,
+            boolean workFromHome ) {
+        this.id = id;
+        this.employer = employer;
+        this.field = field;
+        this.city = city;
+        this.tags = tags;
+        this.postDate = postDate;
+        this.title = title;
+        this.description = description;
+        this.salary = salary;
+        this.workFromHome = workFromHome;
+    }
 
     public int getId() {
         return id;
@@ -110,29 +140,4 @@ public class Job
         this.workFromHome = workFromHome;
     }
 
-    public Job() {
-    }
-
-    public Job(
-            int id,
-            Employer employer,
-            Field field,
-            City city,
-            List<Tag> tags,
-            LocalDateTime postDate,
-            String title,
-            String description,
-            String salary,
-            boolean workFromHome ) {
-        this.id = id;
-        this.employer = employer;
-        this.field = field;
-        this.city = city;
-        this.tags = tags;
-        this.postDate = postDate;
-        this.title = title;
-        this.description = description;
-        this.salary = salary;
-        this.workFromHome = workFromHome;
-    }
 }

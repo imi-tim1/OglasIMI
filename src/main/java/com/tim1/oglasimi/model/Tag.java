@@ -12,9 +12,19 @@ public class Tag
     @Max(Integer.MAX_VALUE)
     private int fieldId;
 
-    @NotBlank @NotNull
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z0-9 \\-]+$")
     @Size( min = 2, max = 30, message = "The length of name must be between 2 and 30 characters" )
     private String name;
+
+    public Tag() {
+    }
+
+    public Tag(int id, int fieldId, String name) {
+        this.id = id;
+        this.fieldId = fieldId;
+        this.name = name;
+    }
 
     public int getId()
     {
@@ -46,14 +56,6 @@ public class Tag
         this.name = name;
     }
 
-    public Tag() {
-    }
-
-    public Tag(int id, int fieldId, String name) {
-        this.id = id;
-        this.fieldId = fieldId;
-        this.name = name;
-    }
 
     @Override
     public String toString() {

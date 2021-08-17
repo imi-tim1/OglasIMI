@@ -1,20 +1,24 @@
 package com.tim1.oglasimi.model;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class Employer extends EndUser {
 
-    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z \\-]+$")
     @Size( min = 1, max = 30)
     private String name;
 
-    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^[0-9a-zA-Z() ,\\-.'/&:]+$")
     @Size( min = 1, max = 50 )
     private String address;
 
-    @NotNull
-    @Size( min = 9, max = 20 )
+    @NotBlank
+    @Pattern(regexp = "^[0-9]+$")
+    @Size( min = 9, max = 13 )
     private String tin;
 
     public Employer() {

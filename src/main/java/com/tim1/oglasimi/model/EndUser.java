@@ -1,15 +1,18 @@
 package com.tim1.oglasimi.model;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class EndUser extends User {
 
+    @Pattern(regexp = "^[a-zA-z0-9+/=]+$")
     @Size( min = 5000, max = 65000,
             message = "The length for base64 encoded picture must be between 5000 and 65000 characters" )
     private String pictureBase64;
 
-    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^[0-9 ()\\-/]+$")
     @Size( min = 9, max = 30, message = "The length for phone number must be between 9 and 30 characters" )
     private String phoneNumber;
 
