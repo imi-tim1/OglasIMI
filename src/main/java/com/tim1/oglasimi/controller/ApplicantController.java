@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-
 import java.util.List;
 
 import static com.tim1.oglasimi.security.SecurityConfig.*;
-import static com.tim1.oglasimi.security.SecurityConfig.ROLE_CLAIM_NAME;
 
 @Validated
 @RestController
@@ -88,43 +86,21 @@ public class ApplicantController {
         int uid  = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
         String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
 
-        if(Role.APPLICANT.equalsTo(role))
+        if(Role.APPLICANT.equalsTo(role) && uid != id)
         {
-            if(uid == id)
-            {
-                return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getApplicant(id));
-            }
-
-            resultPair.setHttpStatus(HttpStatus.FORBIDDEN);
-            httpStatus = resultPair.getHttpStatus();
-
-            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body(null);
         }
 
-        else if(Role.EMPLOYER.equalsTo(role))
+        else if(Role.EMPLOYER.equalsTo(role) && ! applicantService.isApplied(uid,id))
         {
-            if(applicantService.isApplied(uid,id))
-            {
-                return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getApplicant(id));
-            }
-
-            resultPair.setHttpStatus(HttpStatus.FORBIDDEN);
-            httpStatus = resultPair.getHttpStatus();
-
-            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body(null);
         }
 
-        else
-        {
-            Applicant applicant = applicantService.getApplicant(id);
+        Applicant applicant = applicantService.getApplicant(id);
 
-            if(applicant != null) return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicant);
+        if(applicant != null) return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicant);
 
-            resultPair.setHttpStatus(HttpStatus.FORBIDDEN);
-            httpStatus = resultPair.getHttpStatus();
-
-            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(responseHeaders).body(null);
     }
 
     @GetMapping
@@ -166,7 +142,7 @@ public class ApplicantController {
 
         if(!isSuccessful) httpStatus = HttpStatus.CONFLICT;
 
-        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(responseHeaders).body(null);
     }
 
     @DeleteMapping("{id}")
@@ -190,6 +166,6 @@ public class ApplicantController {
 
         if(!isSuccessful) httpStatus = HttpStatus.CONFLICT;
 
-        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(responseHeaders).body(null);
     }
 }

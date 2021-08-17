@@ -18,7 +18,7 @@ import java.util.List;
 @Repository
 public class JobRepositoryImpl implements JobRepository
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmployerRepositoryImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JobRepositoryImpl.class);
 
     private static final String MASTER_STORED_PROCEDURE = "{call get_filtered_jobs(?,?,?,?,?)}";
     private static final String TAG_STORED_PROCEDURE = "{call get_tags_for_a_job(?)}";
@@ -359,7 +359,7 @@ public class JobRepositoryImpl implements JobRepository
         catch (SQLException e) {
             delete(id);
             isJobSuccessfullyPosted = false;
-            LOGGER.debug("checkCredentials | An error occurred while communicating with a database", e);
+            LOGGER.debug("create | An error occurred while communicating with a database", e);
             e.printStackTrace();
         }
 

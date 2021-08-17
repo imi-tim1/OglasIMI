@@ -283,7 +283,7 @@ public class JobController
             return ResponseEntity.status(httpStatus).headers(responseHeaders).body(jobService.getJob(id));
         }
 
-        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(responseHeaders).body(null);
     }
 
     @DeleteMapping("{id}")

@@ -137,7 +137,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
             }
 
         } catch ( SQLException e ) {
-            LOGGER.error("getAll | An error occurred while communicating with a database", e );
+            LOGGER.error("get | An error occurred while communicating with a database", e );
             e.printStackTrace();
         }
 
@@ -262,7 +262,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
             }
         }
         catch ( SQLException e ) {
-            LOGGER.error("getAll | An error occurred while communicating with a database" );
+            LOGGER.error("getPostedJobs | An error occurred while communicating with a database" );
             e.printStackTrace();
         }
 

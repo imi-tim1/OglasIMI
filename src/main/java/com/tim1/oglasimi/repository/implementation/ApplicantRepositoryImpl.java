@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public class ApplicantRepositoryImpl implements ApplicantRepository
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmployerRepositoryImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicantRepositoryImpl.class);
 
     private static final String REGISTER_APPLICANT_PROCEDURE_CALL = "{call register_applicant(?,?,?,?,?,?,?,?)}";
     private static final String CHECK_IF_APPROVED_STORED_PROCEDURE = "{call check_if_approved(?)}";
@@ -144,18 +144,20 @@ public class ApplicantRepositoryImpl implements ApplicantRepository
             cstmtApproved.setInt("p_id",id);
 
             rs = cstmtApproved.executeQuery();
-            rs.first();
 
-            flag = rs.getBoolean("approved");
+            if( rs.first() ) {
 
-            if(flag) // Korisnik se prikazuje samo ako je odobren
-            {
-                cstmtApplicant.setInt("p_id",id);
+                flag = rs.getBoolean("approved");
 
-                rs = cstmtApplicant.executeQuery();
+                if (flag) // Korisnik se prikazuje samo ako je odobren
+                {
+                    cstmtApplicant.setInt("p_id", id);
 
-                rs.first();
-                applicant = setApplicantModel(rs);
+                    rs = cstmtApplicant.executeQuery();
+
+                    rs.first();
+                    applicant = setApplicantModel(rs);
+                }
             }
         }
 
