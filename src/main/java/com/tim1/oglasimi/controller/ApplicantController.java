@@ -114,7 +114,7 @@ public class ApplicantController {
 
         if(httpStatus == HttpStatus.OK)
         {
-            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getAllApplicants(notApprovedRequested));
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getAllApplicants(!notApprovedRequested));
         }
 
         return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
