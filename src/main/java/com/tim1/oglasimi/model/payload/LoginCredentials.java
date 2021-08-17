@@ -2,17 +2,19 @@ package com.tim1.oglasimi.model.payload;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class LoginCredentials {
 
     @NotBlank
-    @NotNull
+    @Pattern(regexp = "^[a-zA-Z .\\-@!#$%&'*+-/=?^_`{|}~\"(),:;<>\\[\\]]+$")
+    @Size( max = 320 )
     @Email( message = "Email address is not valid" )
     private String email;
 
-    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^[0-9a-f]+$")
     @Size( max = 300, message = "Hashed password length exceeded maximum allowed length" )
     private String hashedPassword;
 

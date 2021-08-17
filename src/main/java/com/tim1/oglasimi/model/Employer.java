@@ -7,12 +7,12 @@ import javax.validation.constraints.Size;
 public class Employer extends EndUser {
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z \\-]+$")
+    @Pattern(regexp = "^[a-zA-ZšŠđĐčČćĆžŽ \\-]+$")
     @Size( min = 1, max = 30)
     private String name;
 
     @NotBlank
-    @Pattern(regexp = "^[0-9a-zA-Z() ,\\-.'/&:]+$")
+    @Pattern(regexp = "^[0-9a-zA-Z()šŠđĐčČćĆžŽ ,\\-.'/&:]+$")
     @Size( min = 1, max = 50 )
     private String address;
 

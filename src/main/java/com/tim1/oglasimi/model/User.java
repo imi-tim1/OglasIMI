@@ -13,6 +13,8 @@ public class User {
 
 
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z .\\-@!#$%&'*+-/=?^_`{|}~\"(),:;<>\\[\\]]+$")
+    @Size( max = 320 )
     @Email( message = "Email address is not valid" )
     private String email;
 
@@ -45,7 +47,7 @@ public class User {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.toLowerCase();
     }
 
     @JsonIgnore
