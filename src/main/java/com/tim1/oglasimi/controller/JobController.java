@@ -278,12 +278,18 @@ public class JobController
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
 
-        if(httpStatus == HttpStatus.OK)
+        if(httpStatus != HttpStatus.OK)
         {
-            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(jobService.getJob(id));
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(responseHeaders).body(null);
+        Job job = jobService.getJob(id);
+
+        if( job == null ) {
+            httpStatus = HttpStatus.NOT_FOUND;
+        }
+
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(job);
     }
 
     @DeleteMapping("{id}")
