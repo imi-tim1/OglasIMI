@@ -104,7 +104,7 @@ public class ApplicantController {
 
     @GetMapping
     public ResponseEntity<List<Applicant>> getAllApplicants(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                                            @RequestParam boolean approved)
+                                                            @RequestParam boolean notApprovedRequested)
     {
         ResultPair resultPair = checkAccess(jwt,Role.ADMIN);
         HttpStatus httpStatus = resultPair.getHttpStatus();
@@ -114,7 +114,7 @@ public class ApplicantController {
 
         if(httpStatus == HttpStatus.OK)
         {
-            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getAllApplicants(approved));
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getAllApplicants(notApprovedRequested));
         }
 
         return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);

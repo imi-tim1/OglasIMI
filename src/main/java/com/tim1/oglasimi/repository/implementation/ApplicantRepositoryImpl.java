@@ -180,8 +180,8 @@ public class ApplicantRepositoryImpl implements ApplicantRepository
         applicant.setEmail(rs.getString("email"));
         applicant.setFirstName(rs.getString("first_name"));
         applicant.setLastName(rs.getString("last_name"));
-        applicant.setPictureBase64("picture_base64");
-        applicant.setPhoneNumber("phone_number");
+        applicant.setPictureBase64(rs.getString("picture_base64"));
+        applicant.setPhoneNumber(rs.getString("phone_number"));
 
         return applicant;
     }
