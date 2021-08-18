@@ -32,9 +32,5 @@ export class JobsListComponent implements OnInit {
     else
       this.jobService.getJobs();
   }
-
-  // addJob(jobs: Jobs) {
-  // this.jobService.addJob();
-  // }
-
+  
 }

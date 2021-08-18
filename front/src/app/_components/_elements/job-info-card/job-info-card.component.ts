@@ -24,10 +24,6 @@ export class JobInfoCardComponent implements OnInit {
     //this.employerService.getEmployer(this.jobService.job.employer.id);
   }
 
-  stampaj() {
-    console.log(" STAMPAJ  id: " + this.id);
-  }
-
   isApplicant() {
     return JWTUtil.getRole() as UserRole == UserRole.Applicant;
   }

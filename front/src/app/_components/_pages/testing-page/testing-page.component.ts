@@ -59,14 +59,14 @@ export class TestingPageComponent implements OnInit {
     // this.id = this.route.snapshot.paramMap.get("id");
 
     this.testEmployerService();
-    this.testApplicantService();
+    // this.testApplicantService();
     // this.testJobService();
   }
 
   testEmployerService() {
     // this.employerService.getEmployers();      // OK
     // this.employerService.getEmployer(5);      // OK
-    // this.employerService.getEmployersJobs(4); // OK
+    this.employerService.getEmployersJobs(4); // OK
     // this.employerService.createEmployer({     // OK
     //   name: 'Keba Kraba d.o.o',
     //   address: 'Ulica 1',
