@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 

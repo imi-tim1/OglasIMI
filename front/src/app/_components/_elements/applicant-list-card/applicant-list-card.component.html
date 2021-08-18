@@ -1,6 +1,12 @@
-<div class="p-2 text-center">
-    <button class="bg-white border-0 shadow rounded-3" routerLink="{{'employer/' + data.id}}" style="max-width: 220px; padding: 10px">
-        <h5 class="text-center text-break">{{data.firstName + ' ' + data.lastName}}</h5>
-        <img [src]="(data.pictureBase64 == null)? defaultPicture : data.pictureBase64" alt="image" width="200px">
+<div class="py-1 w-50">
+    <button class="d-flex align-items-start text-start w-100 p-2 bg-white rounded-3 shadow-sm border border-1" 
+    routerLink="{{'/employer/' + data.id}}" style="height: 10em;">
+        <img [src]="(data.pictureBase64 == null)? defaultPicture : data.pictureBase64" 
+        alt="[image]" class="border h-100">
+        <div class="px-3 py-2">
+            <h5 class="">{{data.firstName + ' ' + data.lastName}}</h5>
+            <div>{{data.email}}</div>
+            <div>Tel. {{data.phoneNumber}}</div>
+        </div>
     </button>
 </div>
