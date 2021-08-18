@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
+import { Employer } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { DEFAULT_PROFILE_PICTURE } from 'src/app/_utilities/_constants/raw-data';
 
 @Component({
@@ -7,8 +8,7 @@ import { DEFAULT_PROFILE_PICTURE } from 'src/app/_utilities/_constants/raw-data'
 })
 export class EmployerListCardComponent implements OnInit {
 
-  @Input() public name: string = '';
-  @Input() public picture!: string | null;
+  @Input() public data!: Employer;
 
   public defaultPicture: string = DEFAULT_PROFILE_PICTURE;
 

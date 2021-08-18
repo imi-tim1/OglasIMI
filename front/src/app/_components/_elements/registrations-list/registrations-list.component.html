@@ -1,27 +1,38 @@
 <!-- <app-employer-info-modal [emp]="activeEpm!"></app-employer-info-modal> -->
-<div class="container-fluid px-5">
+<div class="container">
 
     <div class="col">
-        <h3 class="text-center">Registracije na čekanju</h3>
+        <h3 class="text-center">Registracije na čekanju 
+            ({{empService.employers.length + appService.applicants.length}})</h3>
         <br>
     </div>
 
     <div class="row p-0">
         <!-- Lista -->
-        <div class="col p-3">
-            <div class="p-4 border border-secondary rounded-3">
-
+        <div class="col-6 p-3">
+            <!-- List Type -->
+            <div class="d-flex border border-secondary rounded-3">
+                <button class="btn btn-lg flex-fill
+                    {{(!empListAcitive)? 'btn-secondary' : 'btn-outline-secondary border-0'}}" 
+                    (click)="onAppListSelect()">
+                    Kandidati
+                </button>
+                <button class="btn btn-lg flex-fill
+                    {{(empListAcitive)? 'btn-secondary' : 'btn-outline-secondary border-0'}}" 
+                    (click)="onEmpListSelect()">
+                    Poslodavci
+                </button>
             </div>
-            <div class="my-4 p-4 border border-secondary rounded-3" style="height: 100%;">
-                <div style="height: 100%; overflow: scroll;">
+            <div class="my-4 p-4 pe-2 border border-secondary rounded-3" style="height: 60vh;">
+                <div style="height: 100%; overflow: scroll;" class="pe-2">
                     <!-- Employers -->
-                    <div *ngIf="true" class="d-flex flex-column">
+                    <div *ngIf="empListAcitive" class="d-flex flex-column">
                         <app-registration-card *ngFor="let e of empService.employers" [empData]="e"
                             (cardClick)="showRegInfo(e.id)">
                         </app-registration-card>
                     </div>
                     <!-- Applicants -->
-                    <div *ngIf="true" class="d-flex flex-column">
+                    <div *ngIf="!empListAcitive" class="d-flex flex-column">
                         <app-registration-card *ngFor="let a of appService.applicants" [appData]="a"
                             (cardClick)="showRegInfo(a.id)">
                         </app-registration-card>
@@ -30,24 +41,24 @@
             </div>
         </div>
 
-        <div class="col p-3">
+        <div class="col-6 p-3">
             <!-- Prazan prikaz -->
-            <div *ngIf="!activeEmp" class="border border-secondary rounded-3">
+            <div *ngIf="!activeEmp && !activeApp" class="border border-secondary rounded-3">
                 <div class="d-flex flex-column align-items-center">
                     <h5 class="p-4">Nije izabrana ni jedna prijava</h5>
                 </div>
             </div>
 
             <!-- Prikaz -->
-            <div *ngIf="activeEmp || activeApp">
+            <div *ngIf="activeEmp || activeApp" class="">
                 
                 <!-- Employer -->
-                <app-employer-info-card class="col" 
+                <app-employer-info-card class="" 
                     *ngIf="activeEmp" [emp]="activeEmp">
                 </app-employer-info-card>
                 
                 <!-- Applicant -->
-                <app-applicant-info-card class="col" 
+                <app-applicant-info-card class="" 
                     *ngIf="activeApp" [app]="activeApp">
                 </app-applicant-info-card>
                 

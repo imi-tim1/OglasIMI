@@ -100,12 +100,13 @@ export class JobService {
     );
   }
 
-  createJob(jobData: NewJob) 
+  createJob(jobData: NewJob, self?: any, successCallback?: Function) 
   {
     this.api.createJob(jobData).subscribe(
       // Success
       (response) => {
         console.log(response.status);
+        if(self && successCallback) successCallback(self);
       }
     );
   }
