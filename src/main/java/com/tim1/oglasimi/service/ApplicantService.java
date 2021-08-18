@@ -1,6 +1,7 @@
 package com.tim1.oglasimi.service;
 
 import com.tim1.oglasimi.model.Applicant;
+import com.tim1.oglasimi.model.Job;
 import com.tim1.oglasimi.repository.implementation.ApplicantRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,5 +51,10 @@ public class ApplicantService {
     public boolean deleteApplicant(int id)
     {
         return applicantRepositoryImpl.delete(id);
+    }
+
+    public List<Job> getAppliedJobs(int id)
+    {
+        return applicantRepositoryImpl.getAppliedJobs(id);
     }
 }

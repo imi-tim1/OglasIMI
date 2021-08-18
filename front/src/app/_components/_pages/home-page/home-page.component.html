@@ -1,3 +1,4 @@
-<app-jobs-feed *ngIf="isVisitor() || isApplicant() || isEmployer()" class="mx-auto" style="width: 200px;"></app-jobs-feed>
-
+<app-jobs-feed *ngIf="isVisitor()" class="mx-auto" style="width: 200px;"></app-jobs-feed>
+<app-dashboard-applicant *ngIf="isApplicant()"></app-dashboard-applicant>
+<app-dashboard-employer *ngIf="isEmployer()"></app-dashboard-employer>
 <app-dashboard-admin *ngIf="isAdmin()"></app-dashboard-admin>

@@ -13,7 +13,7 @@ public class Tag
     private int fieldId;
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9 \\-]+$")
+    @Pattern(regexp = "^[a-zA-Z0-9šŠđĐčČćĆžŽ \\-]+$")
     @Size( min = 2, max = 30, message = "The length of name must be between 2 and 30 characters" )
     private String name;
 

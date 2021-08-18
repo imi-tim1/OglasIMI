@@ -1,6 +1,6 @@
 package com.tim1.oglasimi.repository.implementation;
 
-import com.tim1.oglasimi.model.Applicant;
+import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.repository.ApplicantRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class ApplicantRepositoryImpl implements ApplicantRepository
     private static final String GET_ALL_APPLICANTS_STORED_PROCEDURE = "{call get_all_applicants(?)}";
     private static final String APPROVE_STORED_PROCEDURE = "{call approve_user(?,?)}";
     private static final String DELETE_STORED_PROCEDURE = "{call delete_user(?,?)}";
+    private static final String JOBS_APPLICANT_APPLIED_STORED_PROCEDURE = "{call get_jobs_applicant_applied_on(?)}";
+    private static final String TAG_STORED_PROCEDURE = "{call get_tags_for_a_job(?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -177,8 +180,8 @@ public class ApplicantRepositoryImpl implements ApplicantRepository
         applicant.setEmail(rs.getString("email"));
         applicant.setFirstName(rs.getString("first_name"));
         applicant.setLastName(rs.getString("last_name"));
-        applicant.setPictureBase64("picture_base64");
-        applicant.setPhoneNumber("phone_number");
+        applicant.setPictureBase64(rs.getString("picture_base64"));
+        applicant.setPhoneNumber(rs.getString("phone_number"));
 
         return applicant;
     }
@@ -236,5 +239,95 @@ public class ApplicantRepositoryImpl implements ApplicantRepository
         }
 
         return isDeletedSuccessfully;
+    }
+
+    @Override
+    public List<Job> getAppliedJobs(int id)
+    {
+        List<Job> jobs = null;
+
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl, databaseUsername, databasePassword);
+             CallableStatement cstmt = con.prepareCall(JOBS_APPLICANT_APPLIED_STORED_PROCEDURE);
+             CallableStatement cstmtTag = con.prepareCall(TAG_STORED_PROCEDURE))
+        {
+            cstmt.setInt("p_id",id);
+
+            ResultSet rs = cstmt.executeQuery();
+
+            if(rs.first())
+            {
+                jobs = new ArrayList<>();
+
+                rs.beforeFirst();
+                while(rs.next())
+                {
+                    Job tempJob;
+                    tempJob = setJobModel(rs,cstmtTag);
+
+                    jobs.add(tempJob);
+                }
+            }
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return jobs;
+    }
+
+    public Job setJobModel(ResultSet rsMaster, CallableStatement cstmtTag) throws SQLException
+    {
+        Tag tempTag;
+        Job tempJob = new Job();
+        List<Tag> tags = new ArrayList<>();
+
+        Employer employer = new Employer();
+        employer.setId(rsMaster.getInt("employer_id"));
+        employer.setName(rsMaster.getString("e_name"));
+        employer.setTin(rsMaster.getString("tin"));
+        employer.setAddress(rsMaster.getString("address"));
+        employer.setPictureBase64(rsMaster.getString("picture_base64"));
+        employer.setPhoneNumber(rsMaster.getString("phone_number"));
+        employer.setEmail(rsMaster.getString("email"));
+
+        Field field = new Field();
+        field.setId(rsMaster.getInt("field_id"));
+        field.setName(rsMaster.getString("f_name"));
+
+        City city = new City();
+        city.setId(rsMaster.getInt("city_id"));
+        city.setName(rsMaster.getString("c_name"));
+
+        tempJob.setId(rsMaster.getInt("id"));
+        tempJob.setPostDate(rsMaster.getObject("post_date", LocalDateTime.class));
+        tempJob.setTitle(rsMaster.getString("title"));
+        tempJob.setDescription(rsMaster.getString("description"));
+        tempJob.setSalary(rsMaster.getString("salary"));
+        tempJob.setEmployer(employer);
+        tempJob.setField(field);
+        tempJob.setCity(city);
+        tempJob.setWorkFromHome(rsMaster.getBoolean("work_from_home"));
+
+        cstmtTag.setInt("p_job_id",tempJob.getId());
+        ResultSet rsTag = cstmtTag.executeQuery();
+
+        if(rsTag != null)
+        {
+            rsTag.beforeFirst();
+            while(rsTag.next())
+            {
+                tempTag = new Tag();
+                tempTag.setId(rsTag.getInt("id"));
+                tempTag.setFieldId(rsTag.getInt("field_id"));
+                tempTag.setName(rsTag.getString("name"));
+
+                tags.add(tempTag);
+            }
+
+            tempJob.setTags(tags);
+        }
+
+        return tempJob;
     }
 }

@@ -1,6 +1,7 @@
 package com.tim1.oglasimi.controller;
 
 import com.tim1.oglasimi.model.Applicant;
+import com.tim1.oglasimi.model.Job;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.ApplicantService;
@@ -50,7 +51,7 @@ public class ApplicantController {
         String resultMessage = applicantService.registerApplicant( applicant );
 
         /* check if registration was successful or not */
-        if( resultMessage == "Successful" ) {
+        if( resultMessage.equals("Successful") ) {
             httpStatus = HttpStatus.CREATED;
         }
         else {
@@ -75,11 +76,9 @@ public class ApplicantController {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
 
-        if( httpStatus != HttpStatus.OK ) {
-            return ResponseEntity
-                    .status(httpStatus)
-                    .headers(responseHeaders)
-                    .body(null);
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
         }
 
         // Ekstraktovanje uid i role iz tokena
@@ -91,7 +90,7 @@ public class ApplicantController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body(null);
         }
 
-        else if(Role.EMPLOYER.equalsTo(role) && ! applicantService.isApplied(uid,id))
+        else if(Role.EMPLOYER.equalsTo(role) && !applicantService.isApplied(uid,id))
         {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body(null);
         }
@@ -105,7 +104,7 @@ public class ApplicantController {
 
     @GetMapping
     public ResponseEntity<List<Applicant>> getAllApplicants(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                                            @RequestParam boolean approved)
+                                                            @RequestParam boolean notApprovedRequested)
     {
         ResultPair resultPair = checkAccess(jwt,Role.ADMIN);
         HttpStatus httpStatus = resultPair.getHttpStatus();
@@ -115,7 +114,7 @@ public class ApplicantController {
 
         if(httpStatus == HttpStatus.OK)
         {
-            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getAllApplicants(approved));
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(applicantService.getAllApplicants(!notApprovedRequested));
         }
 
         return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
@@ -140,9 +139,10 @@ public class ApplicantController {
 
         boolean isSuccessful = applicantService.approve(id);
 
-        if(!isSuccessful) httpStatus = HttpStatus.CONFLICT;
+        if(isSuccessful) httpStatus = HttpStatus.NO_CONTENT;
+        else httpStatus = HttpStatus.CONFLICT;
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(responseHeaders).body(null);
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
     }
 
     @DeleteMapping("{id}")
@@ -164,8 +164,42 @@ public class ApplicantController {
 
         boolean isSuccessful = applicantService.deleteApplicant(id);
 
-        if(!isSuccessful) httpStatus = HttpStatus.CONFLICT;
+        if(isSuccessful) httpStatus = HttpStatus.NO_CONTENT;
+        else httpStatus = HttpStatus.CONFLICT;
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(responseHeaders).body(null);
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+    }
+
+    @GetMapping("{id}/jobs")
+    public ResponseEntity<List<Job>> getListOfJobs(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                   @PathVariable("id")
+                                                   @Min( 1 )
+                                                   @Max( Integer.MAX_VALUE ) int id)
+    {
+        ResultPair resultPair = checkAccess(jwt, Role.APPLICANT, Role.ADMIN);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        }
+
+        // Ekstraktovanje uid i role iz tokena
+        int uid  = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+        String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
+
+        if(Role.APPLICANT.equalsTo(role) && uid != id)
+        {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body(null);
+        }
+
+        List<Job> jobs = applicantService.getAppliedJobs(id);
+
+        if(jobs != null) return ResponseEntity.status(httpStatus).headers(responseHeaders).body(jobs);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(responseHeaders).body(null);
     }
 }

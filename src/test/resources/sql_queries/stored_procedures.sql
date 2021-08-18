@@ -622,3 +622,23 @@ BEGIN
     WHERE u.approved = p_approved;
 END //
 DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for getting all jobs that applicant applied on
+DELIMITER // ;
+CREATE PROCEDURE get_jobs_applicant_applied_on (IN p_id int)
+BEGIN
+    SELECT t2.*, t1.email FROM credentials t1 JOIN (SELECT j.*,
+           f.id f_id, f.name f_name,
+           c.id c_id, c.name c_name,
+           e.user_id, e.name e_name, e.tin, e.address, e.picture_base64,e.phone_number
+    FROM job_application a JOIN job j ON a.job_id = j.id
+                           LEFT JOIN field f ON j.field_id = f.id
+                           LEFT JOIN city c ON c.id = j.city_id
+                           LEFT JOIN employer e ON e.user_id = j.employer_id
+    WHERE applicant_id = p_id) t2 ON t1.user_id = t2.user_id;
+END //
+DELIMITER ;

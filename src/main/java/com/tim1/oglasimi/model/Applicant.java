@@ -6,12 +6,12 @@ import javax.validation.constraints.Size;
 
 public class Applicant extends EndUser {
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z \\-]+$")
+    @Pattern(regexp = "^[a-zA-ZšŠđĐčČćĆžŽ \\-]+$")
     @Size( min = 1, max = 30)
     private String firstName;
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z \\-]+$")
+    @Pattern(regexp = "^[a-zA-šŠđĐčČćĆžŽ \\-]+$")
     @Size( min = 1, max = 30)
     private String lastName;
 
