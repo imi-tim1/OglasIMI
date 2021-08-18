@@ -226,7 +226,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
                             null,
                         rs.getString("picture_base64"),
                         rs.getString("phone_number"),
-                        rs.getString("name"),
+                        rs.getString("employer_name"),
                         rs.getString("address"),
                         rs.getString("tin")
                 ));
