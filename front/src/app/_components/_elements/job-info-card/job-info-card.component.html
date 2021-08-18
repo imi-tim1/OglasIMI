@@ -2,7 +2,7 @@
   <div class="card rounded-3 shadow-sm">
     <div class="card-body p-4 p-md-5">
       <div id="datum">
-        <small class="text-muted" style="float: right">Oglas postavljen {{jobService.job.postDate}}</small>
+        <small class="text-muted" style="float: right">Oglas postavljen {{jobService.job.postDate.toString().substr(0, 10)}}</small>
       </div>
       
       <h1 class="mb-4 pb-2 pb-md-0 mb-md-2 px-md-2">

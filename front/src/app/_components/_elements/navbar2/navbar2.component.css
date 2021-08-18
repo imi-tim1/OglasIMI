@@ -1,14 +1,14 @@
 .navbar2 {
     margin-bottom: 50px;
-    background-color: rgb(216, 216, 216);
+    background-color: rgb(57, 64, 105);
 }
 
 .nav2item { 
     text-decoration: none;
-    color: black;
+    color: white;
     padding: 15px;
 }
 
 .nav2item:hover {
-    background-color: rgb(197, 197, 197);
+    background-color: rgb(100, 109, 160);
 }

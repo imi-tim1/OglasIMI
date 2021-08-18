@@ -11,10 +11,15 @@ import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 export class JobsListCardComponent implements OnInit {
 
   @Input() public job!: Job;
+  public descriptonLength: number = 300;
 
   constructor() { }
 
   ngOnInit(): void {
+    // Skracivanje opisa
+    let len = this.job.description.length;
+    if(len > this.descriptonLength)
+      this.job.description = this.job.description.substr(0, this.descriptonLength) + '......';
   }
   
   checkDeleteBtn(): boolean {
