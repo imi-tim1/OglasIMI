@@ -20,7 +20,7 @@ export class ApplicantService {
       (response) => {
         console.log('Get Applicants (Success), Body: ')
         console.log(response.body)
-        this.applicants = this.applicants.concat((response.body == null)? [] : response.body);
+        this.applicants = (response.body == null)? [] : response.body;
         console.log('Applicants: ')
         console.log(this.applicants)
       }
@@ -40,7 +40,6 @@ export class ApplicantService {
     );
   }
 
-  // Potrebno TESTIRANJE !!!
   getApplicantsJobs(id: number) {
     this.api.getApplicantsJobs(id).subscribe(
       // Success
@@ -52,12 +51,31 @@ export class ApplicantService {
     );
   }
 
-  // Potrebno TESTIRANJE !!!
   createApplicant(applicantData: NewApplicant) {
     this.api.createApplicant(applicantData).subscribe(
       // Success
       (response) => {
         console.log('New Applicant Added, status: ' + response.status);
+      }
+    );
+  }
+
+  deleteApplicant(id: number, self?: any, successCallback?: Function) {
+    this.api.deleteApplicant(id).subscribe(
+      // Success
+      (response) => {
+        console.log('Deleted Employer, status: ' + response.status);
+        if(self && successCallback) successCallback(self);
+      }
+    );
+  }
+
+  approveApplicant(id: number, self?: any, successCallback?: Function) {
+    this.api.approveApplicant(id).subscribe(
+      // Success
+      (response) => {
+        console.log('Deleted Employer, status: ' + response.status);
+        if(self && successCallback) successCallback(self);
       }
     );
   }

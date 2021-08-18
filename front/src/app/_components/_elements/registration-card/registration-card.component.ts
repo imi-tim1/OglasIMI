@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Applicant, Employer, RegistrationBrief } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { DEFAULT_PROFILE_PICTURE } from 'src/app/_utilities/_constants/raw-data';
-import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 
 @Component({
   selector: 'app-registration-card',

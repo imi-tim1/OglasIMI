@@ -59,7 +59,29 @@ export class ApplicantApiService {
       { // options
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()
-      });
+      }
+    );
+  }
+
+  deleteApplicant(id: number): Observable<HttpResponse<null>> {
+    return this.http.delete<null>(
+      this.url + `/${id}`,
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+  }
+
+  approveApplicant(id: number): Observable<HttpResponse<null>> {
+    return this.http.put<null>(
+      this.url + `/${id}`,
+      {},
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
   }
   
 }

@@ -56,4 +56,24 @@ export class EmployerService {
       }
     );
   }
+
+  deleteEmployer(id: number, self?: any, successCallback?: Function) {
+    this.api.deleteEmployer(id).subscribe(
+      // Success
+      (response) => {
+        console.log('Deleted Employer, status: ' + response.status);
+        if(self && successCallback) successCallback(self);
+      }
+    );
+  }
+
+  approveEmployer(id: number, self?: any, successCallback?: Function) {
+    this.api.approveEmployer(id).subscribe(
+      // Success
+      (response) => {
+        console.log('Approve Employer, status: ' + response.status);
+        if(self && successCallback) successCallback(self);
+      }
+    );
+  }
 }
