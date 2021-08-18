@@ -12,8 +12,11 @@
         <div>{{job.description}}</div>
         <div class="pt-4 pb-2 text-primary">{{job.city.name}}</div>
 
-        <span *ngFor="let t of job.tags" class="bg-warning">
+        <span *ngFor="let t of job.tags" class="bg-warning me-2">
             <strong class="p-1">{{t.name}}</strong>
+        </span>
+        <span *ngIf="job.workFromHome" class="bg-info me-2">
+            <strong class="p-1">rad od kuće</strong>
         </span>
         <h4 class="pt-4 pb-2 text-success">{{job.salary}}</h4>
 

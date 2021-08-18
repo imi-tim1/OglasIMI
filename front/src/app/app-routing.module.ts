@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: 'login', component: LoginPageComponent,                 data: { allowedRoles: [UserRole.Visitor] }},
   { path: 'register', component: RegisterPageComponent,           data: { allowedRoles: [UserRole.Visitor] }},
   { path: '', component: HomePageComponent,                       data: { allowedRoles: [] }},
-  { path: 'new-job', component: CreateJobPageComponent,           data: { allowedRoles: [UserRole.Employer] }}
+  { path: 'new-job', component: CreateJobPageComponent,           data: { allowedRoles: [UserRole.Employer] }},
   { path: 'jobs-feed', component: JobsFeedComponent}
 ];
 
