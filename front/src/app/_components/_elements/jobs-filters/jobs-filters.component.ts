@@ -14,23 +14,8 @@ import { Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
 
 })
 export class JobsFiltersComponent implements OnInit {
-
-  //@Input() public jobName: string = '';
-  //@Input() public workFromHome: boolean = false;
-
-  //@Input() public city!: City;
   
   public filtersFromPage!: Filters;
-  /*= {
-    title: '',
-    employerId: 0,
-    fieldId: 0,
-    cityId: 0,
-    pageNumber: 1,
-    jobsPerPage: 5,
-    workFromHome: false,
-    ascendingOrder: false
-  }*/
 
   public checkedTags: number[] = [];
   jobName: string = '';
@@ -40,7 +25,6 @@ export class JobsFiltersComponent implements OnInit {
   selectedFieldId: number = 0;
   selectedEmployerId: number = 0;
   showMoreBool: boolean = false;
-  //checkedWorkFromHome: boolean = false; DRUGA VARIJANTA
 
   constructor(public jobService: JobService,
               public fieldService: FieldService,
@@ -51,7 +35,6 @@ export class JobsFiltersComponent implements OnInit {
     this.fieldService.getFields();
     this.cityService.getCities();
     this.employerService.getEmployers();
-    //this.fieldService.getTags(this.selectedFieldId);
   }
 
   showMore() {
@@ -63,8 +46,6 @@ export class JobsFiltersComponent implements OnInit {
       p.innerHTML = "Prikaži samo osnovne filtere";
     
     this.showMoreBool = !this.showMoreBool;
-
-    //this.fieldService.getTags(this.selectedFieldId);
   }
 
   onSearch() {
@@ -84,18 +65,6 @@ export class JobsFiltersComponent implements OnInit {
       this.filtersFromPage.tagList = this.checkedTags;
 
     this.jobService.getFilteredJobs(this.filtersFromPage);
-
-   /* let data = {
-      title: this.jobName,
-      field: this.field,
-      tags: this.tags[],
-      city: this.city,
-
-      workFromHome: this.workFromHome
-    }
-
-    this.jobService.getFilteredJobs(data);
-    */
   }
 
   toggleTag(tagID: number) {
@@ -132,17 +101,4 @@ export class JobsFiltersComponent implements OnInit {
       this.fieldService.getTags(this.selectedFieldId);
     }
   }
-
-  /*printSelVal() {
-    console.log(this.selectedValueCity);
-  }*/
-
-  /*wfh() {
-    //this.checkedWorkFromHome = !this.checkedWorkFromHome; DRUGA VARIJANTA
-    console.log(this.workFromHome);
-  }
-
-  showTags() {
-    this.fieldService.getTags(this.selectedFieldId);
-  }*/
 }

@@ -8,6 +8,7 @@
 <div>
   <label for="fields">Oblast rada:&nbsp;</label>
   <select [(ngModel)]="selectedFieldId">
+    <option value="0">Sve oblasti</option>
     <option *ngFor="let f of fieldService.fields"
           [ngValue]="f.id"
           (click)="getNewTags()">
@@ -21,6 +22,7 @@
 <div>
   <label for="cities">Grad:&nbsp;</label>
   <select [(ngModel)]="selectedCityId">
+    <option value="0">Svi gradovi</option>
     <option *ngFor="let c of cityService.cities"
           [ngValue]="c.id">
           {{c.name}}
@@ -49,6 +51,7 @@
   <div>
     <label for="employers">Poslodavac:&nbsp;</label>
     <select [(ngModel)]="selectedEmployerId">
+      <option value="0">Svi poslodavci</option>
       <option *ngFor="let e of employerService.employers"
             [ngValue]="e.id">
             {{e.name}}

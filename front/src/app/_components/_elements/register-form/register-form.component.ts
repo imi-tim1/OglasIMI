@@ -1,5 +1,4 @@
-import { stringify } from '@angular/compiler/src/util';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PasswdHash } from 'src/app/_utilities/_helpers/hash-util';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
@@ -51,15 +50,15 @@ export class RegisterFormComponent implements OnInit {
   wrongEmpPictureBool: boolean = false;
 
 
-  pattAlphaWithSpaces: RegExp = /^[a-zA-Z ]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  pattAlphaWithSpaces: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ ]+$/; //i da ne bude vise od 2 spejsa uzastopno
   pattTwoSpaces: RegExp = /  /;
   pattEmail: RegExp = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
   pattPhone: RegExp = /^\+?[0-9]{9,12}$/;
   pattPassword: RegExp = /.{6,}$/;
   //---
-  pattCompanyName: RegExp = /^[0-9a-zA-Z\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
-  pattPIB: RegExp = /^[0-9]{9,20}$/;
-  pattAddr: RegExp = /^[0-9a-zA-Z\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  pattPIB: RegExp = /^[0-9]{9,13}$/;
+  pattAddr: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
 
 
   constructor(public applicantService: ApplicantService,

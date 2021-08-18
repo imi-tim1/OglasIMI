@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
-import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 
 @Component({
   selector: 'app-job-info-card',
@@ -12,8 +11,7 @@ export class JobInfoCardComponent implements OnInit {
 
   @Input() id: number = 0;
 
-  constructor(public jobService: JobService,
-              public employerService: EmployerService) { }
+  constructor(public jobService: JobService) { }
 
   ngOnInit(): void {
     console.log("id: " + this.id);
@@ -35,7 +33,7 @@ export class JobInfoCardComponent implements OnInit {
   }
 
   applyMe() {
-    console.log(this.employerService.employer?.email);
+    //console.log(this.employerService.employer?.email);
     this.jobService.applyToJob(this.id);
   }
 

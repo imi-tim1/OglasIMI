@@ -7,7 +7,7 @@ import { CityApiService } from '../../_api/_services/city-api.service';
 })
 export class CityService {
 
-  public cities: City[] = [{id: 0, name: 'Svi gradovi'}];
+  public cities: City[] = [];
 
   constructor(private api: CityApiService) { }
 
@@ -17,7 +17,7 @@ export class CityService {
       (response) => {
         console.log('Get Cities (Success), Body: ')
         console.log(response.body)
-        this.cities = this.cities.concat((response.body == null)? [] : response.body);
+        this.cities = (response.body == null)? [] : response.body;
         console.log('Cities: ')
         console.log(this.cities)
       }

@@ -32,7 +32,7 @@
            type="submit" class="btn btn-success btn-lg mb-1">Prijavi se</button>-->
 
           <a *ngIf="isApplicant()" class="btn btn-success" 
-          href="mailto:{{(employerService.employer)? employerService.employer.email : ''}}?Subject=Prijava%20za%20posao" target="_top"
+          href="mailto:{{(jobService.job)? jobService.job.employer.email : ''}}?Subject=Prijava%20za%20posao" target="_top"
           (click)="applyMe()">
             Prijavi se</a>
 
