@@ -2,7 +2,7 @@
 
 <div class="container">
 
-  <div class="card mb-4">
+  <div class="card mb-5 pb-5">
     <div class="card-header px-2">
         <h4 class="mb-0 p-3">Kreirajte oglas za posao</h4>
     </div>
@@ -11,9 +11,10 @@
       <div class="row m-4">
         <div class="col">
           <div class="form-outline pe-5">
-            <label class="form-label" for="jobName">Ukucajte naziv radnog mesta:</label>
-            <input type="text" id="jobName" name="jobName" class="form-control" 
-                        [(ngModel)]="jobName" placeholder="Radno mesto"/>
+            <label class="form-label" for="jobTitle">Unesite naziv radnog mesta:</label>
+            <input type="text" id="jobTitle" name="jobTitle" class="form-control" 
+                        [(ngModel)]="jobTitle" placeholder="Radno mesto"/><br>
+            <p *ngIf="wrongJobTitleBool" class="small fw-bold text-danger">Unesite/korigujte naziv radnog mesta.</p>
           </div>
         </div>
         <div class="col">
@@ -21,6 +22,7 @@
             <br>
             <label>Izaberite grad (opciono):&nbsp;&nbsp;</label>
             <select [(ngModel)]="selectedCityId">
+              <option value="0" style="font-weight: bold !important">Grad</option>
               <option *ngFor="let c of cityService.cities"
                           [ngValue]="c.id">
                           {{c.name}}
@@ -36,15 +38,16 @@
           <div class="col">
             <div class="form-outline mt-5 ps-3">
               <label>Izaberite oblast rada:&nbsp;&nbsp;</label>
-                <select [(ngModel)]="selectedFieldId">
+                <select id="field" [(ngModel)]="selectedFieldId">
                   <option *ngFor="let f of fieldService.fields"
                             [ngValue]="f.id"
                             (click)="getNewTags()">
                             {{f.name}}
                   </option>
                 </select>
-              </div>
+              <p *ngIf="wrongFieldIdBool" class="small fw-bold text-danger">Izaberite oblast rada</p>
             </div>
+          </div>
           <div class="col pt-5 ms-5">
           <div class="form-outline" class="d-flex justify-content-start">
               <label for="tags">Izaberite ključne reči (opciono):&nbsp;</label><br>
@@ -68,25 +71,66 @@
           <label class="form-label" for="form6Example7">Opis posla:</label>
             <textarea class="form-control" rows="4"
               id="description" name="description" [(ngModel)]="description"></textarea>
+            <p *ngIf="wrongDescBool" class="small fw-bold text-danger">Opis posla mora sadržati bar 15 karaktera.</p>
         </div>
       </div>
       <div class="col">
         <div class="form-outline m-4">
           <label class="form-label" for="form6Example7">Plata (opciono):</label>
-          <div class="row" style="background-color: blue;">
-            <div class="col" style="background-color: blue;">
-
+          <div class="row mt-2">
+            <div class="col">
+                <input type="text" id="salaryFrom" name="salaryFrom" [(ngModel)]="salaryFrom" placeholder="Od (ukucajte iznos)">
             </div>
             <div class="col">
-
+              <input type="text" id="salaryTo" name="salaryTo" [(ngModel)]="salaryTo" placeholder="Do (ukucajte iznos)">
             </div>
             <div class="col">
-
+              <label class="form-label" for="salaryFrom">Valuta:&nbsp;</label>
+              <select [(ngModel)]="selectedCurrencyName" (click)="stampaj()">
+                <option value="RSD">RSD</option>
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+                <option value="AUD">AUD</option>
+                <option value="SEK">SEK</option>
+                <option value="CHF">CHF</option>
+              </select>
             </div>
           </div>
+
+          <div class="row mt-4 ps-5">
+            <div class="d-flex justify-content-start">
+              <select [(ngModel)]="selectedWeekMonthYear">
+                  <option value="nedeljno">nedeljno</option>
+                  <option value="mesečno">mesečno</option>
+                  <option value="godišnje">godišnje</option>
+              </select>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+
+    <div class="row m-5">
+      <div class="d-flex justify-content-start">
+        <label>Da li je moguć rad od kuće? (štiklirajte)&nbsp;&nbsp;&nbsp;</label>
+        <input type="checkbox" id="wfhCheck" name="wfhCheck" [(ngModel)]="wfhCheckBool">
+      </div>
+    </div>
+    
+
+    <div class="mt-5">
+      <div class="d-flex justify-content-center">
+        <button type="button" class="btn btn-success btn-lg" id="postIt" name="postIt" (click)="validation()">POSTAVI OGLAS</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<app-footer></app-footer>
             <!--
             <div class="form-outline mb-4">
               <label class="form-label" for="jobName">Ukucajte naziv radnog mesta:</label>
@@ -121,9 +165,4 @@
             </div>
           -->
      
-        </div>
-    </div>
-
-  </div>
-
-<app-footer></app-footer>
+        
