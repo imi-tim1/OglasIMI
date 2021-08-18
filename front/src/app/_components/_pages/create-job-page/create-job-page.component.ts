@@ -43,7 +43,7 @@ export class CreateJobPageComponent implements OnInit {
 
   salary: string = '';
 
-  pattTitle: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\ \/\(\\\)\-\*\%\#\\[\]\"\,\.]+$/;
+  pattTitle: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\ \/\\\(\)\[\]\-\*\.\,\'\"\#\+\%\?\!]+$/;
   pattTwoSpaces: RegExp = /  /;
 
 

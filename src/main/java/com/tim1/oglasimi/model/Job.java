@@ -29,7 +29,7 @@ public class Job
     @Size(min = 10, max = 500, message = "The length of description must be between 10 and 500 characters")
     private String description;
 
-    @Size(min = 4, max = 50)
+    @Size(min = 0, max = 50)
     private String salary;
 
     private boolean workFromHome;
