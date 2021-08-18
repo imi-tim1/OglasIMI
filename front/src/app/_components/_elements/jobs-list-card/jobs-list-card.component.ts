@@ -16,11 +16,6 @@ export class JobsListCardComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-  showJob() {
-    //vodi na stranicu gde je dati job
-    //moze umesto ovoga samo routerLink ?
-  }
   
   checkDeleteBtn(): boolean {
     return (JWTUtil.getRole() == UserRole.Admin); //vrati true ako je admin

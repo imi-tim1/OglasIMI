@@ -3,6 +3,9 @@ import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 import { FieldService } from 'src/app/_utilities/_middleware/_services/field.service';
 import { CityService } from 'src/app/_utilities/_middleware/_services/city.service';
+import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
+import { Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-job-page',
@@ -17,11 +20,13 @@ export class CreateJobPageComponent implements OnInit {
 
   constructor(public accessService: ComponentAccessService,
               public fieldService: FieldService,
-              public cityService: CityService) { }
+              public cityService: CityService,
+              public jobService: JobService,
+              public router: Router) { }
 
   selectedCityId: number = 0;
   selectedFieldId: number = 0;
-  public checkedTags: number[] = [];
+  public checkedTags: Tag[] = [];
   jobTitle: string = '';
   description: string = '';
   salaryFrom: string = '';
@@ -34,6 +39,9 @@ export class CreateJobPageComponent implements OnInit {
   wrongJobTitleBool: boolean = false;
   wrongFieldIdBool: boolean = false; //nije izabrano nista, 0 je
   wrongDescBool: boolean = false;
+  wrongSalaryBool: boolean = false;
+
+  salary: string = '';
 
   pattTitle: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\ \/\(\\\)\-\*\%\#\\[\]\"\,\.]+$/;
   pattTwoSpaces: RegExp = /  /;
@@ -59,7 +67,7 @@ export class CreateJobPageComponent implements OnInit {
     let pom: boolean = false;
 
     for (let t of this.checkedTags)
-      if (t == tagID) //tag je vec cekiran, izbaci ga iz niza
+      if (t.id == tagID) //tag je vec cekiran, izbaci ga iz niza
       {
         let ind: number = this.checkedTags.indexOf(t);
         this.checkedTags.splice(ind, 1);
@@ -67,10 +75,11 @@ export class CreateJobPageComponent implements OnInit {
 
         return;
       }
-      if(pom == false) //tag nije bio cekiran
-        this.checkedTags.push(tagID);
+      if(pom == false) {//tag nije bio cekiran 
+        this.checkedTags.push({id: tagID, name: ''});
+      }
 
-      console.log(this.checkedTags);
+      //console.log(this.checkedTags);
   }
 
   getNewTags() {
@@ -117,6 +126,58 @@ export class CreateJobPageComponent implements OnInit {
     }
   }
 
+  salaryValidation() {
+    this.salary = '';
+
+    if (this.salaryFrom == '' && this.salaryTo == '') { //salji prazan salary string
+      this.wrongSalaryBool = false; //sve ok
+      this.salary = '';
+    }
+    else if (this.salaryFrom != '' && this.salaryTo == '') { //uneo samo pocetnu
+      if (this.salaryFrom[0] == '0') { //greska
+        console.log("losa donja granica plate");
+        (<HTMLSelectElement>document.getElementById('salaryFrom')).focus();
+        this.wrongSalaryBool = true;
+        return;
+      }
+      else { //hteo samo pocetnu da unese i uneo ispravno, salji
+        this.wrongSalaryBool = false;
+        this.salary = this.salaryFrom + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
+        return;
+      }
+    }
+    else if (this.salaryFrom == '' && this.salaryTo != '') { //uneo samo krajnju
+      if (this.salaryTo[0] == '0') { //greska
+        console.log("losa gornja granica plate");
+        (<HTMLSelectElement>document.getElementById('salaryTo')).focus();
+        this.wrongSalaryBool = true;
+        return;
+      }
+      else { //hteo samo krajnu da unese i uneo ispravno, salji
+        this.wrongSalaryBool = false;
+        this.salary = this.salaryTo + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
+        return; 
+      }
+    }
+    else {//obe vrednosti su ukucane -> proveri ispravnost
+      if (this.salaryFrom[0] == '0') { //greska
+        console.log("losa donja granica plate");
+        (<HTMLSelectElement>document.getElementById('salaryFrom')).focus();
+        this.wrongSalaryBool = true;
+        return;
+      }
+      if (this.salaryTo[0] == '0') {
+        console.log("losa gornja granica plate");
+        (<HTMLSelectElement>document.getElementById('salaryTo')).focus();
+        this.wrongSalaryBool = true;
+        return;
+      }
+      //sve ok znaci
+      this.wrongSalaryBool = false;
+      this.salary = this.salaryFrom + " - " + this.salaryTo + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
+    }
+  }
+
   validation() {
     // obavezno za popunjavanje
     this.jobTitle = this.jobTitle.trim();
@@ -128,7 +189,35 @@ export class CreateJobPageComponent implements OnInit {
 
     //neobavezno
     //za grad nema validacije
+    //niz checkedTags sa njihovim id-evima skupljen
+    this.salaryFrom = this.salaryFrom.trim();
+    this.salaryTo = this.salaryTo.trim();
+    this.salaryValidation();
+    console.log("MOLIM TE: " + this.salary)
 
+    if (!(this.wrongJobTitleBool || this.wrongFieldIdBool || this.wrongDescBool ||
+          this.wrongSalaryBool)) { //sve ok, postavi oglas
+            
+            let newJob = {
+              title: this.jobTitle,
+              description: this.description,
+              workFromHome: this.wfhCheckBool,
+              field: {
+                id: this.selectedFieldId,
+                name: ''
+              },
+              city: (this.selectedCityId == 0)? null : {
+                id: this.selectedCityId,
+                name: ''
+              },
+              tags: (this.checkedTags.length == 0)? [] : this.checkedTags,
+              salary: this.salary,
+              postDate: null,
+              employer: null
+            }
+
+            this.jobService.createJob(newJob, this, this.cbSuccess);
+          }
   }
 
   stampaj() {
@@ -141,6 +230,7 @@ export class CreateJobPageComponent implements OnInit {
   }
 
   cbSuccess(self: any) {
-
+    alert('Uspešno ste postavili oglas!');
+    self.router.navigate(['']); //redirekt na home-page
   }
 }
