@@ -14,7 +14,7 @@ export class DashboardApplicantComponent implements OnInit {
   constructor(public appService: ApplicantService) { }
 
   ngOnInit(): void {
-    this.appService.getApplicant(JWTUtil.getID());
+    this.appService.getApplicant(JWTUtil.getID(), this, this.cbSuccess);
   }
 
   // API Callbacks
