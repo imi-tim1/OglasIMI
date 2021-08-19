@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Applicant } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
@@ -12,6 +13,7 @@ import { JobService } from 'src/app/_utilities/_middleware/_services/job.service
 export class JobInfoPageComponent implements OnInit {
 
   public jobID: number = 0;
+  public applicants: Applicant[] = [];
 
   constructor(
     public activatedRoute: ActivatedRoute,
@@ -26,7 +28,13 @@ export class JobInfoPageComponent implements OnInit {
     let p = this.activatedRoute.snapshot.paramMap.get("id");
     if (p != null) this.jobID = p as unknown as number;
 
-    this.jobService.getJobsApplicants(this.jobID);
+    this.jobService.getJobsApplicants(this.jobID, this, this.cbSuccess);
+  }
+
+  // API Callbacks
+
+  cbSuccess(self: any, applicants?: Applicant[]) {
+    if(applicants) self.applicants = applicants;
   }
 
 }

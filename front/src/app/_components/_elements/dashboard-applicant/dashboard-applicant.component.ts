@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Applicant } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 
@@ -8,12 +9,18 @@ import { ApplicantService } from 'src/app/_utilities/_middleware/_services/appli
 })
 export class DashboardApplicantComponent implements OnInit {
 
-  
+  public applicant: Applicant | null = null;
 
   constructor(public appService: ApplicantService) { }
 
   ngOnInit(): void {
     this.appService.getApplicant(JWTUtil.getID());
+  }
+
+  // API Callbacks
+
+  cbSuccess(self: any, applicant?: Applicant | null) {
+    if(applicant) self.applicant = applicant;
   }
 
 }

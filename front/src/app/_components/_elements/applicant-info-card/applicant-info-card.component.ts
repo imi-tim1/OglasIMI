@@ -8,7 +8,7 @@ import { DEFAULT_PROFILE_PICTURE } from 'src/app/_utilities/_constants/raw-data'
 })
 export class ApplicantInfoCardComponent implements OnInit {
 
-  @Input() public app!: Applicant;
+  @Input() public app: Applicant | null = null;
 
   public defaultPicture: string = DEFAULT_PROFILE_PICTURE;
 

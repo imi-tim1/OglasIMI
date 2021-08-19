@@ -13,7 +13,7 @@ export class EmployerService {
 
   constructor(private api: EmployerApiService) { }
 
-  getEmployers(notApproved?: boolean) {
+  getEmployers(notApproved?: boolean, self?: any, successCallback?: Function) {
     this.api.getEmployers((notApproved == undefined)? false : notApproved).subscribe(
       // Success
       (response) => {
@@ -22,17 +22,24 @@ export class EmployerService {
         this.employers = (response.body == null)? [] : response.body;
         console.log('Employers: ')
         console.log(this.employers)
+
+        // Callback
+        if(response.body)
+          if(self && successCallback) { successCallback(self, response.body) };
       }
     );
   }
 
-  getEmployer(id: number) {
+  getEmployer(id: number, self?: any, successCallback?: Function) {
     this.api.getEmployer(id).subscribe(
       // Success
       (response) => {
         this.employer = response.body;
         console.log('Employer: ')
         console.log(this.employer)
+
+        // Callback
+        if(self && successCallback) { successCallback(self, response.body) };
       }
     );
   }
@@ -45,7 +52,10 @@ export class EmployerService {
         console.log('Employers Jobs: ')
         console.log(this.employersJobs)
         // Callback
-        if(self && successCallback) successCallback(self);
+        if(response.body) {
+          console.log('get emps jobs, body OK')
+          if(self && successCallback) { console.log('get emps jobs, OK'); successCallback(self, response.body)};
+        }
       }
     );
   }
