@@ -40,13 +40,15 @@ export class ApplicantService {
     );
   }
 
-  getApplicantsJobs(id: number) {
+  getApplicantsJobs(id: number, self?: any, successCallback?: Function) {
     this.api.getApplicantsJobs(id).subscribe(
       // Success
       (response) => {
         this.applicantsJobs = (response.body == null)? [] : response.body;
         console.log('Applicants Jobs: ')
         console.log(this.applicantsJobs)
+        // Callback
+        if(self && successCallback) successCallback(self);
       }
     );
   }

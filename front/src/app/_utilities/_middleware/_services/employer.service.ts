@@ -37,13 +37,15 @@ export class EmployerService {
     );
   }
 
-  getEmployersJobs(id: number) {
+  getEmployersJobs(id: number, self?: any, successCallback?: Function) {
     this.api.getEmployersJobs(id).subscribe(
       // Success
       (response) => {
         this.employersJobs = (response.body == null)? [] : response.body;
         console.log('Employers Jobs: ')
         console.log(this.employersJobs)
+        // Callback
+        if(self && successCallback) successCallback(self);
       }
     );
   }
@@ -62,6 +64,7 @@ export class EmployerService {
       // Success
       (response) => {
         console.log('Deleted Employer, status: ' + response.status);
+        // Callback
         if(self && successCallback) successCallback(self);
       }
     );
@@ -72,6 +75,7 @@ export class EmployerService {
       // Success
       (response) => {
         console.log('Approve Employer, status: ' + response.status);
+        // Callback
         if(self && successCallback) successCallback(self);
       }
     );

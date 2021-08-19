@@ -24,7 +24,7 @@ export class JobService {
 
   // --- Methods ---
 
-  getFilteredJobs(filters: Filters) 
+  getFilteredJobs(filters: Filters, self?: any, successCallback?: Function) 
   {
     this.api.getJobs(filters).subscribe(
       // Success
@@ -37,11 +37,14 @@ export class JobService {
         console.log('Jobs: ')
         console.log(this.jobs)
         console.log(this.totalJobNumber)
+
+        // Callback
+        if(self && successCallback) successCallback(self);
       }
     );
   }
 
-  getJobs() 
+  getJobs(self?: any, successCallback?: Function) 
   {
     let filters: Filters = {
       title: '',
@@ -54,7 +57,7 @@ export class JobService {
       ascendingOrder: false
     };
 
-    this.getFilteredJobs(filters);
+    this.getFilteredJobs(filters, self, successCallback);
   }
 
   getJob(id: number) 
