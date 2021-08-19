@@ -13,6 +13,7 @@ import { JobService } from 'src/app/_utilities/_middleware/_services/job.service
 })
 export class JobsListComponent implements OnInit {
 
+  @Input() public uid: number = 0;
   @Input() public empJobs: boolean = false;
   @Input() public appJobs: boolean = false;
 
@@ -26,9 +27,9 @@ export class JobsListComponent implements OnInit {
     console.log(`emp: ${this.empJobs}, app: ${this.appJobs}`);
 
     if (this.empJobs)
-      this.empService.getEmployersJobs(JWTUtil.getID());
+      this.empService.getEmployersJobs((this.uid == 0)? JWTUtil.getID() : this.uid);
     else if (this.appJobs)
-      this.appService.getApplicantsJobs(JWTUtil.getID());
+      this.appService.getApplicantsJobs((this.uid == 0)? JWTUtil.getID() : this.uid);
     else
       this.jobService.getJobs();
   }

@@ -1,6 +1,7 @@
 <app-navbar2 [blockedNavs]="['employers']"></app-navbar2>
 
-<div class="container border border-secondary rounded-3">
+<div *ngIf="appService.applicants.length > 0" class="container">
+    <h2 class="text-center pt-4 pb-5">Lista Poslodavaca</h2>
     <div class="p-4">
         <div class="d-flex flex-wrap flex-column">
             <app-applicant-list-card class="" *ngFor="let ap of appService.applicants" [data]="ap"></app-applicant-list-card>

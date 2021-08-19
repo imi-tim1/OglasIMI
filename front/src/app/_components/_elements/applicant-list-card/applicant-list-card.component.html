@@ -1,12 +1,12 @@
 <div class="pb-2">
-    <button class="d-flex align-items-start text-start w-100 p-2 bg-white rounded-3 shadow-sm border border-1" 
+    <button class="d-flex align-items-start text-start w-100 p-2 bg-white rounded-3 shadow border border-1" 
     routerLink="{{'/applicant/' + data.id}}" style="height: 10em;">
         <img [src]="(data.pictureBase64 == null)? defaultPicture : data.pictureBase64" 
         alt="[image]" class="border h-100">
         <div class="px-3 py-2">
-            <h5 class="">{{data.firstName + ' ' + data.lastName}}</h5>
-            <div>{{data.email}}</div>
-            <div>Tel. {{data.phoneNumber}}</div>
+            <h3 class="">{{data.firstName + ' ' + data.lastName}}</h3>
+            <h5>{{data.email}}</h5>
+            <h5>Tel. {{data.phoneNumber}}</h5>
         </div>
     </button>
 </div>

@@ -1,1 +1,12 @@
-<app-applicant-info-card></app-applicant-info-card>
+<app-navbar2></app-navbar2>
+
+<div *ngIf="appService.applicant" class="container">
+    <div class="w-50 container">
+        <app-applicant-info-card [app]="appService.applicant"></app-applicant-info-card>
+    </div>
+    <br>
+    <h3 *ngIf="isMe()" class="text-center pt-5">Moji oglasi</h3>
+    <h3 *ngIf="!isMe()" class="text-center pt-5">Oglasi na koje je kandidat prijavljen</h3>
+    <app-jobs-list [appJobs]='true' [uid]="appService.applicant.id"></app-jobs-list>
+</div>
+
