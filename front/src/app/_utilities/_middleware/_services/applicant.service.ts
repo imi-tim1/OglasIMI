@@ -14,7 +14,7 @@ export class ApplicantService {
   constructor(private api: ApplicantApiService) { }
 
   // Potrebno TESTIRANJE !!!
-  getApplicants(notApproved?: boolean) {
+  getApplicants(notApproved?: boolean, self?: any, successCallback?: Function) {
     this.api.getApplicants((notApproved == undefined)? false : notApproved).subscribe(
       // Success
       (response) => {
@@ -23,19 +23,25 @@ export class ApplicantService {
         this.applicants = (response.body == null)? [] : response.body;
         console.log('Applicants: ')
         console.log(this.applicants)
+
+        // Callback
+        if(response.body)
+          if(self && successCallback) successCallback(self, response.body);
       }
     );
   }
 
 
   // Radi, Ostalo da se ispravi na backu da vraca Error kod admina umesto Success i null
-  getApplicant(id: number) {
+  getApplicant(id: number, self?: any, successCallback?: Function) {
     this.api.getApplicant(id).subscribe(
       // Success
       (response) => {
         this.applicant = response.body;
         console.log('Applicant: ')
         console.log(this.applicant)
+        // Callback
+        if(self && successCallback) successCallback(self, response.body);
       }
     );
   }
@@ -48,7 +54,8 @@ export class ApplicantService {
         console.log('Applicants Jobs: ')
         console.log(this.applicantsJobs)
         // Callback
-        if(self && successCallback) successCallback(self);
+        if(response.body)
+          if(self && successCallback) successCallback(self, response.body);
       }
     );
   }

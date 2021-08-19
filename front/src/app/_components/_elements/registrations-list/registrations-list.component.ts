@@ -15,7 +15,10 @@ export class RegistrationsListComponent implements OnInit {
   public activeEmp: Employer | undefined = undefined;
   public activeApp: Applicant | undefined = undefined;
 
-  public activeIndex: number = -1;
+  public employers: Employer[] = [];
+  public applicants: Applicant[] = [];
+
+  // public activeIndex: number = -1;
 
   constructor(
     public route: ActivatedRoute,
@@ -25,13 +28,14 @@ export class RegistrationsListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.fetchRegs();
+    this.empService.getEmployers(true, this, this.cbSuccessGetEmployers);
+    this.appService.getApplicants(true, this, this.cbSuccessGetApplicants);
   }
 
   showRegInfo(id: number) {
-    this.activeEmp = this.empService.employers.find(x => x.id == id);
+    this.activeEmp = this.employers.find(x => x.id == id);
     if (!this.activeEmp)
-      this.activeApp = this.appService.applicants.find(x => x.id == id);
+      this.activeApp = this.applicants.find(x => x.id == id);
   }
 
   hideRegInfo() {
@@ -39,21 +43,15 @@ export class RegistrationsListComponent implements OnInit {
     this.activeApp = undefined;
   }
 
-  fetchRegs() {
-    console.log('>>> Fetching registrations ...');
-    this.empService.getEmployers(true);
-    this.appService.getApplicants(true);
-  }
-
   // Prihvatanje / Odbacivanje
 
   onApprove() {
     if(this.activeEmp) {
-      this.empService.approveEmployer(this.activeEmp.id, this, this.cbSuccess);
+      this.empService.approveEmployer(this.activeEmp.id, this, this.cbSuccessPutDeleteEmployer);
       console.log('Approve registration for user with id ' + this.activeEmp.id);
     }
     else if(this.activeApp) {
-      this.appService.approveApplicant(this.activeApp.id, this, this.cbSuccess)
+      this.appService.approveApplicant(this.activeApp.id, this, this.cbSuccessPutDeleteApplicant)
       console.log('Approve registration for user with id ' + this.activeApp.id);
     }
 
@@ -62,11 +60,11 @@ export class RegistrationsListComponent implements OnInit {
 
   onReject() {
     if(this.activeEmp) {
-      this.empService.deleteEmployer(this.activeEmp.id, this, this.cbSuccess);
+      this.empService.deleteEmployer(this.activeEmp.id, this, this.cbSuccessPutDeleteEmployer);
       console.log('Reject registration for user with id ' + this.activeEmp.id);
     }
     else if(this.activeApp) {
-      this.appService.deleteApplicant(this.activeApp.id, this, this.cbSuccess);
+      this.appService.deleteApplicant(this.activeApp.id, this, this.cbSuccessPutDeleteApplicant);
       console.log('Reject registration for user with id ' + this.activeApp.id);
     }
 
@@ -87,10 +85,20 @@ export class RegistrationsListComponent implements OnInit {
 
   // API Callbacks
 
-  cbSuccess(self: any) {
-    console.log('>>> Fetching registrations (Callback) ...');
-    self.empService.getEmployers(true);
-    self.appService.getApplicants(true);
+  cbSuccessGetApplicants(self: any, applicants?: Applicant[]) {
+    if(applicants) self.applicants = applicants;
+  }
+
+  cbSuccessGetEmployers(self: any, employers?: Employer[]) {
+    if(employers) self.employers = employers;
+  }
+
+  cbSuccessPutDeleteApplicant(self: any) {
+    self.appService.getApplicants(true, self, self.cbSuccessGetApplicants);
+  }
+
+  cbSuccessPutDeleteEmployer(self: any) {
+    self.empService.getEmployers(true, self, self.cbSuccessGetEmployers);
   }
 
 }

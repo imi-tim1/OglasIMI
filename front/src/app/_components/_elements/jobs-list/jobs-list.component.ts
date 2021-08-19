@@ -14,8 +14,9 @@ import { JobService } from 'src/app/_utilities/_middleware/_services/job.service
   templateUrl: './jobs-list.component.html',
 })
 export class JobsListComponent implements OnInit {
-
-  public listLoaded: boolean = false;
+  
+  public jobs: Job[] = [];
+  public jobsNum: number = 0;
 
   @Input() public uid: number = 0;
   @Input() public empJobs: boolean = false;
@@ -40,8 +41,9 @@ export class JobsListComponent implements OnInit {
 
   // API Callbacks
 
-  cbSuccess(self: any) {
-    self.listLoaded = true;
+  cbSuccess(self: any, jobs?: Job[], jobsNum?: number) {
+    if(jobs) self.jobs = jobs;
+    if(jobsNum) self.jobsNum = jobsNum;
   }
   
 }

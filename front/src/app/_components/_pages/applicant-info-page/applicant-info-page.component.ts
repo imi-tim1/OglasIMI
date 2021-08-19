@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Applicant } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
@@ -12,6 +13,7 @@ import { EmployerService } from 'src/app/_utilities/_middleware/_services/employ
 export class ApplicantInfoPageComponent implements OnInit {
 
   public appID: number = 0;
+  public applicant: Applicant | null = null;
 
   constructor(
     public activatedRoute: ActivatedRoute,
@@ -26,10 +28,18 @@ export class ApplicantInfoPageComponent implements OnInit {
     let p = this.activatedRoute.snapshot.paramMap.get("id");
     if (p != null) this.appID = p as unknown as number;
 
-    this.appService.getApplicant(this.appID);
+    this.appService.getApplicant(this.appID, this, this.cbSuccess);
   }
 
   isMe(): boolean {
     return JWTUtil.getID() == this.appID;
   }
+
+  // API Callbacks
+
+  cbSuccess(self: any, applicant: Applicant | null) {
+    self.applicant = applicant;
+    self.appID = (applicant)? applicant.id : 0;
+  }
+
 }

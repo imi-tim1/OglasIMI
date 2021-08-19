@@ -1,12 +1,12 @@
 <app-navbar2></app-navbar2>
 
-<div *ngIf="empService.employer" class="container">
+<div *ngIf="employer" class="container">
     <div class="w-50 container">
-        <app-employer-info-card [emp]="empService.employer"></app-employer-info-card>
+        <app-employer-info-card [emp]="employer"></app-employer-info-card>
     </div>
     <br>
     <h3 *ngIf="isMe()" class="text-center pt-5">Moji oglasi</h3>
     <h3 *ngIf="!isMe()" class="text-center pt-5">Oglasi poslodavca</h3>
-    <app-jobs-list [empJobs]='true' [uid]="empService.employer.id"></app-jobs-list>
+    <app-jobs-list [empJobs]='true' [uid]="empID"></app-jobs-list>
 </div>
 

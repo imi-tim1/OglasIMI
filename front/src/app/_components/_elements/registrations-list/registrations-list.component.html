@@ -3,7 +3,7 @@
 
     <div class="col">
         <h3 class="text-center">Registracije na čekanju 
-            ({{empService.employers.length + appService.applicants.length}})</h3>
+            ({{employers.length + applicants.length}})</h3>
         <br>
     </div>
 
@@ -27,13 +27,13 @@
                 <div style="height: 100%; overflow: scroll;" class="pe-2">
                     <!-- Employers -->
                     <div *ngIf="empListAcitive" class="d-flex flex-column">
-                        <app-registration-card *ngFor="let e of empService.employers" [empData]="e"
+                        <app-registration-card *ngFor="let e of employers" [empData]="e"
                             (cardClick)="showRegInfo(e.id)">
                         </app-registration-card>
                     </div>
                     <!-- Applicants -->
                     <div *ngIf="!empListAcitive" class="d-flex flex-column">
-                        <app-registration-card *ngFor="let a of appService.applicants" [appData]="a"
+                        <app-registration-card *ngFor="let a of applicants" [appData]="a"
                             (cardClick)="showRegInfo(a.id)">
                         </app-registration-card>
                     </div>
@@ -45,7 +45,7 @@
             <!-- Prazan prikaz -->
             <div *ngIf="!activeEmp && !activeApp" class="border border-secondary rounded-3">
                 <div class="d-flex flex-column align-items-center">
-                    <h5 class="p-4">Nije izabrana ni jedna prijava</h5>
+                    <h5 class="p-4">Nije izabrana nijedna prijava</h5>
                 </div>
             </div>
 

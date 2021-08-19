@@ -32,14 +32,14 @@ export class JobService {
         if (response.body != null && response.body.jobs != null) {
           this.jobs = response.body.jobs;
           this.totalJobNumber = response.body.totalJobNumber;
+
+          // Callback
+          if(self && successCallback) successCallback(self, response.body.jobs, response.body.totalJobNumber);
         }
 
         console.log('Jobs: ')
         console.log(this.jobs)
         console.log(this.totalJobNumber)
-
-        // Callback
-        if(self && successCallback) successCallback(self);
       }
     );
   }
@@ -72,7 +72,7 @@ export class JobService {
     );
   }
 
-  getJobsApplicants(id: number) 
+  getJobsApplicants(id: number, self?: any, successCallback?: Function) 
   {
     this.api.getJobsApplicants(id).subscribe(
       // Success
@@ -81,6 +81,8 @@ export class JobService {
         this.jobsApplicants = (response.body == null) ? [] : response.body;
         console.log('Jobs Applicants:');
         console.log(this.jobsApplicants);
+        if(response.body)
+          if(self && successCallback) successCallback(self, response.body);
       },
       // Error
       (error: HttpErrorResponse) => {

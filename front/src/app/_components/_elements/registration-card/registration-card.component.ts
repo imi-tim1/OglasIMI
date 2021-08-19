@@ -21,7 +21,7 @@ export class RegistrationCardComponent implements OnInit {
 
   ngOnInit(): void 
   {
-    if(this.empData != null) {
+    if(this.empData) {
       this.brief = {
         id: this.empData.id,
         name: this.empData.name,
@@ -29,7 +29,7 @@ export class RegistrationCardComponent implements OnInit {
         pictureBase64: this.empData.pictureBase64
       }
     }
-    else if (this.appData != null) {
+    else if (this.appData) {
       this.brief = {
         id: this.appData.id,
         name: this.appData.firstName + ' ' + this.appData.lastName,
