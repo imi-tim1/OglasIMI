@@ -1,39 +1,43 @@
 <div class="p-3">
-    <button class="bg-white shadow rounded-3 p-4 w-100 border border-0 text-start" style="display: block;;" routerLink="/job/{{job.id}}">
+    <button class="bg-white shadow rounded-3 p-4 w-100 border border-0 text-start" style="display: block;;"
+        routerLink="/job/{{job.id}}">
 
-        <h6>{{job.employer!.name}}</h6>
         <!--<button type="button"
             class="btn btn-outline-success"
             id="snd_cvbtn' + job.id + '"
             style="float: right;">
             Pošalji CV
         </button>-->
-        <h3>{{job.title}}</h3>
-        <div>{{job.description}}</div>
-        <div class="pt-4 pb-2 text-primary">{{job.city.name}}</div>
+        <h6>{{job.employer!.name}}</h6>
+        <h3 class="">{{job.title}}</h3>
+        <div class="pt-2 pb-3">{{job.description}}</div>
+        <div class="text-primary">{{job.city.name}}</div>
 
         <!-- <span *ngIf="job.salary" class="me-2" style="background-color: rgb(132, 236, 188);">
             <strong class="p-1">{{job.salary}}</strong>
         </span> -->
 
-        <!-- Rad od kuce -->
-        <span *ngIf="job.workFromHome" class="bg-info me-2">
-            <strong class="p-1">rad od kuće</strong>
-        </span>
+        <!-- Rad od kuce / Tagovi -->
+        <div class="d-flex flex-wrap pt-3 pb-3">
 
-        <!-- Tagovi -->
-        <div class="py-1">
-            <span *ngFor="let t of job.tags" class="bg-warning me-2">
-                <strong class="p-1">{{t.name}}</strong>
+            <span *ngIf="job.workFromHome" class="pe-2">
+                <strong class="bg-info p-1">rad od kuće</strong>
             </span>
+
+            <span *ngFor="let t of job.tags" class="pe-2">
+                <strong class="bg-warning p-1">{{t.name}}</strong>
+            </span>
+
         </div>
-        <span *ngIf="job.salary" class="me-2" style="background-color: rgb(132, 236, 188);">
-            <strong class="p-1">{{job.salary}}</strong>
+
+        <!-- Plata -->
+        <span *ngIf="job.salary" class="" style="color: rgb(46, 194, 149);">
+            <strong class="">{{job.salary}}</strong>
         </span>
         <!-- <h4 class="pt-4 pb-2 text-success"></h4> -->
 
         <div *ngIf="checkDeleteBtn()">
-          <button>Obriši oglas</button>
+            <button>Obriši oglas</button>
         </div>
     </button>
 
