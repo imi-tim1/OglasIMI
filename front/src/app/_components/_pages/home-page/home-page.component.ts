@@ -9,10 +9,9 @@ import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services
 })
 export class HomePageComponent implements OnInit {
 
-  constructor(public accessService: ComponentAccessService) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.accessService.checkAccess([]);
   }
 
   isVisitor() {

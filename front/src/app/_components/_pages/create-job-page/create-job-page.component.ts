@@ -5,7 +5,7 @@ import { FieldService } from 'src/app/_utilities/_middleware/_services/field.ser
 import { CityService } from 'src/app/_utilities/_middleware/_services/city.service';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 import { Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-job-page',
@@ -14,11 +14,8 @@ import { Router } from '@angular/router';
 })
 export class CreateJobPageComponent implements OnInit {
 
-  public allowedRoles: UserRole[] = [
-    UserRole.Employer
-  ]
-
   constructor(public accessService: ComponentAccessService,
+              public activatedRoute: ActivatedRoute,
               public fieldService: FieldService,
               public cityService: CityService,
               public jobService: JobService,
@@ -50,7 +47,8 @@ export class CreateJobPageComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.accessService.checkAccess(this.allowedRoles);
+    // Check access
+    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles);
 
     this.fieldService.fields = [];
     this.fieldService.tags = [];

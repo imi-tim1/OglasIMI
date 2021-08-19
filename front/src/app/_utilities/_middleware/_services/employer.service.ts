@@ -1,3 +1,4 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Employer, Job, NewEmployer } from '../../_api/_data-types/interfaces';
 import { EmployerApiService } from '../../_api/_services/employer-api.service';
@@ -60,11 +61,18 @@ export class EmployerService {
     );
   }
 
-  createEmployer(employerData: NewEmployer) {
+  createEmployer(employerData: NewEmployer, self?: any, 
+                 successCallback?: Function, conflictCallback?: Function) {
     this.api.createEmployer(employerData).subscribe(
       // Success
       (response) => {
         console.log('New Employer Added, status: ' + response.status);
+        if(self && successCallback) successCallback(self);
+      },
+      (error: HttpErrorResponse) => {
+        if(error.status == HttpStatusCode.Conflict) {
+          if(self && conflictCallback) conflictCallback(self);
+        }
       }
     );
   }

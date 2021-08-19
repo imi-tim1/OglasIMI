@@ -19,7 +19,9 @@ export class ApplicantsPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Check Access
     this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles);
+    
     this.appService.getApplicants(undefined, this, this.cbSuccess);
   }
 

@@ -1,3 +1,4 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Applicant, Job, NewApplicant } from '../../_api/_data-types/interfaces';
 import { ApplicantApiService } from '../../_api/_services/applicant-api.service';
@@ -60,11 +61,18 @@ export class ApplicantService {
     );
   }
 
-  createApplicant(applicantData: NewApplicant) {
+  createApplicant(applicantData: NewApplicant, self?: any, 
+                  successCallback?: Function, conflictCallback?: Function) {
     this.api.createApplicant(applicantData).subscribe(
       // Success
       (response) => {
         console.log('New Applicant Added, status: ' + response.status);
+        if(self && successCallback) successCallback(self);
+      },
+      (error: HttpErrorResponse) => {
+        if(error.status == HttpStatusCode.Conflict) {
+          if(self && conflictCallback) conflictCallback(self);
+        }
       }
     );
   }

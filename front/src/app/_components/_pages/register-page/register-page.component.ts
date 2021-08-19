@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 
@@ -8,13 +9,12 @@ import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services
 })
 export class RegisterPageComponent implements OnInit {
 
-  public allowedRoles: UserRole[] = [
-    UserRole.Visitor
-  ]
-
-  constructor(public accessService: ComponentAccessService) { }
+  constructor(public accessService: ComponentAccessService,
+              public activatedRoute: ActivatedRoute          
+    ) { }
 
   ngOnInit(): void {
-    this.accessService.checkAccess(this.allowedRoles);
+    // Check access
+    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles);
   }
 }

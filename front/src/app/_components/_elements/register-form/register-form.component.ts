@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { PasswdHash } from 'src/app/_utilities/_helpers/hash-util';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
@@ -61,7 +62,9 @@ export class RegisterFormComponent implements OnInit {
 
 
   constructor(public applicantService: ApplicantService,
-              public employerService: EmployerService) { }
+              public employerService: EmployerService,
+              public router: Router
+              ) { }
 
   ngOnInit(): void {
   }
@@ -244,7 +247,7 @@ export class RegisterFormComponent implements OnInit {
             hashedPassword: PasswdHash.encrypt(this.appPass1)
           }
 
-          this.applicantService.createApplicant(appForRegister);
+          this.applicantService.createApplicant(appForRegister, this, this.cbSuccess, this.cbConflict);
         }
   }
 
@@ -385,7 +388,19 @@ export class RegisterFormComponent implements OnInit {
               hashedPassword: PasswdHash.encrypt(this.empPass1)
             }
 
-            this.employerService.createEmployer(empForRegister);
+            this.employerService.createEmployer(empForRegister, this, this.cbSuccess, this.cbConflict);
           }
   }
+
+  ////////////////////// API Callbacks //////////////////////////////
+
+  cbSuccess(self: any) {
+    alert('Uspešno ste registrovani. Moći ćete da se prijavite čim administrator potvrdi Vašu registraciju.');
+    self.router.navigate(['login']);
+  }
+
+  cbConflict(self: any) {
+    alert('Nalog sa unetim email-om već postoji!');
+  }
+
 }

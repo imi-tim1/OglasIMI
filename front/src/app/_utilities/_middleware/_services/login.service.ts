@@ -15,11 +15,10 @@ import { ComponentAccessService } from './component-access.service';
 })
 export class LoginService {
 
-  public responseCode: ResponseCode = ResponseCode.Unknown;
-
   constructor(private api: LoginApiService, private router: Router) { }
 
-  login(email: string, password: string) {
+  login(email: string, password: string, self?: any, 
+        callbackSuccess?: Function, callbackWrongCredentials?: Function, callbackNotApproved?: Function) {
     console.log('Kredencijali\n');
     console.log(password);
 
@@ -35,39 +34,35 @@ export class LoginService {
       // Login Success
       (response: HttpResponse<null>) => {
         JWTUtil.store(response.headers.get(JWT_HEADER_NAME));
-        this.responseCode = ResponseCode.Success;
-        this.router.navigate([RedirectRoute.DEFAULT]);
+        if(self && callbackSuccess) callbackSuccess(self);
       },
-
       // Login Failed
       (error: HttpErrorResponse) => {
         switch (error.status) {
           
           // Unauthorized
           case HttpStatusCode.Unauthorized:
-            // Session Expired
-            if (JWTUtil.get() != '') {
-              this.responseCode = ResponseCode.SessionExpired;
-              this.router.navigate([RedirectRoute.DEFAULT]);
-            }
-            // Wrong credentials
-            else {
-              this.responseCode = ResponseCode.WrongCredentials;
-              console.log('pogresni kredencijali')
+            // Wrong Credentials
+            if(JWTUtil.get() == '') {
+              console.log('pogresna sifra ili email');
+              if(self && callbackWrongCredentials) callbackWrongCredentials(self);
             }
             JWTUtil.delete();
             break;
 
           // Forbidden
           case HttpStatusCode.Forbidden:
-            this.responseCode = ResponseCode.Forbidden;
             if(JWTUtil.exists()) {
               this.router.navigate([RedirectRoute.DEFAULT]);
             }
-            console.log('Nalog jos nije potvrdjen');
+            else {
+              // Not Approved
+              console.log('Nalog jos nije potvrdjen');
+              if(self && callbackNotApproved) callbackNotApproved(self);
+            }
             break;
           
-            // Bad Request
+          // Bad Request
           case HttpStatusCode.BadRequest:
             JWTUtil.delete();
             this.router.navigate([RedirectRoute.DEFAULT]);

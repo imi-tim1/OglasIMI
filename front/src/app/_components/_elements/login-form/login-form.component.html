@@ -23,7 +23,9 @@
   
             <div class="text-center text-lg-start mt-4 pt-2">
                 <!-- Text - Pogresna lozinka -->
-                <p *ngIf="checkLoginFailed()" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Lozinka ili e-mail su pogrešni </p>
+                <p *ngIf="wrongCreds" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Lozinka ili e-mail su pogrešni </p>
+                <!-- Text - Nepotvrdjena registracija -->
+                <p *ngIf="notApproved" class="small fw-bold mt-2 pt-1 mb-0 text-danger"> Vaša registracija još uvek nije potvrđena </p>
                 <br>
 
                 <button 
