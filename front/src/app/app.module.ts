@@ -36,6 +36,7 @@ import { EmployerInfoPageComponent } from './_components/_pages/employer-info-pa
 import { ApplicantInfoPageComponent } from './_components/_pages/applicant-info-page/applicant-info-page.component';
 import { ApplicantsPageComponent } from './_components/_pages/applicants-page/applicants-page.component';
 import { ApplicantListCardComponent } from './_components/_elements/applicant-list-card/applicant-list-card.component';
+import { SearchJobsPageComponent } from './_components/_pages/search-jobs-page/search-jobs-page.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { ApplicantListCardComponent } from './_components/_elements/applicant-li
     EmployerInfoPageComponent,
     ApplicantInfoPageComponent,
     ApplicantsPageComponent,
-    ApplicantListCardComponent
+    ApplicantListCardComponent,
+    SearchJobsPageComponent
   ],
   imports: [
     BrowserModule,

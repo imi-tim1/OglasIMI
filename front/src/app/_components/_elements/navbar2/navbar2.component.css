@@ -12,3 +12,7 @@
 .nav2item:hover {
     background-color: rgb(100, 109, 160);
 }
+
+.nav-active {
+    background-color: rgb(100, 109, 160);
+}

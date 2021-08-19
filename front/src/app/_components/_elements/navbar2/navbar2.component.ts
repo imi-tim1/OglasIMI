@@ -10,12 +10,14 @@ import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services
 })
 export class Navbar2Component implements OnInit {
 
-  @Input() public blockedNavs: string[] = [];
+  @Input() public activeNav: string = "";
 
   public navs: Nav[] = [
     // All
     { name: 'home', allowedRoles: [] },
     { name: 'employers', allowedRoles: [] },
+
+    { name: 'jobs-feed', allowedRoles: [UserRole.Employer, UserRole.Admin] },
 
     // Logged In
     { name: 'logout', allowedRoles: [UserRole.Admin, UserRole.Employer, UserRole.Applicant] },
@@ -30,7 +32,6 @@ export class Navbar2Component implements OnInit {
 
     // Employer
     { name: 'new-job', allowedRoles: [UserRole.Employer] },
-    { name: 'my-jobs-emp', allowedRoles: [UserRole.Employer] },
     { name: 'my-jobs-my-profile-app', allowedRoles: [UserRole.Employer] },
 
     // Admin
@@ -49,14 +50,11 @@ export class Navbar2Component implements OnInit {
 
     let roles = this.navs[index].allowedRoles;
     
-    let r = this.acc.checkRole(JWTUtil.getRole() as UserRole, roles);
-    let b = !this.blockedNavs.includes(name);
+    return this.acc.checkRole(JWTUtil.getRole() as UserRole, roles);
+  }
 
-    // console.log(`Role: ${JWTUtil.getRole() as UserRole}`);
-    // console.log(`Allowed roles: ${roles}`);
-    // console.log(`Nav Check: ${name}, r: ${r}, b: ${b}`);
-
-    return r && b;
+  checkActive(name: string): boolean {
+    return name == this.activeNav;
   }
 
 }
