@@ -21,9 +21,4 @@ export class JobsListCardComponent implements OnInit {
     if(len > this.descriptonLength)
       this.job.description = this.job.description.substr(0, this.descriptonLength) + '......';
   }
-  
-  checkDeleteBtn(): boolean {
-    return (JWTUtil.getRole() == UserRole.Admin); //vrati true ako je admin
-  }
-
 }

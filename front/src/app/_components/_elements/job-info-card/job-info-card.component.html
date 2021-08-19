@@ -24,19 +24,17 @@
      
       
       <!--  Only Applicant can see this button  -->
-      <button *ngIf="isApplicant()" type="submit" class="btn btn-success btn-lg mb-1" (click)="applyMe()">
-        PRIJAVI SE
-      </button>
+      <a *ngIf="isApplicant()" class="btn btn-success btn-lg mb-1" 
+      href="mailto:{{(jobService.job)? jobService.job.employer.email : ''}}?Subject=Prijava%20za%20posao" target="_top"
+      (click)="applyMe()">
+        PRIJAVI SE</a>
 
       <!-- Only Admin can see this button -->
       <button *ngIf="isAdmin()" type="submit" class="btn btn-danger btn-lg mb-1" (click)="deleteThisJob()">
         OBRIŠI OGLAS
       </button>
 
-      <a *ngIf="isApplicant()" class="btn btn-success" 
-      href="mailto:{{(jobService.job)? jobService.job.employer.email : ''}}?Subject=Prijava%20za%20posao" target="_top"
-      (click)="applyMe()">
-        Prijavi se</a>
+      
 
         <!-- Oni ce da nam posalju da li je ovaj applicant vec prijavljen na job,
           to ispitujemo u Initu i u zavisnosti od toga (ne)prikazujemo dugmence.
