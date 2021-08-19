@@ -6,8 +6,7 @@ import { EmployerService } from 'src/app/_utilities/_middleware/_services/employ
 
 @Component({
   selector: 'app-register-form',
-  templateUrl: './register-form.component.html',
-  styleUrls: ['./register-form.component.css']
+  templateUrl: './register-form.component.html'
 })
 export class RegisterFormComponent implements OnInit {
 
