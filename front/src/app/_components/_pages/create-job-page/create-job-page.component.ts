@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 import { FieldService } from 'src/app/_utilities/_middleware/_services/field.service';
 import { CityService } from 'src/app/_utilities/_middleware/_services/city.service';
@@ -44,8 +43,6 @@ export class CreateJobPageComponent implements OnInit {
   pattTwoSpaces: RegExp = /  /;
 
 
-
-
   ngOnInit(): void {
     // Check access
     this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles);
@@ -76,8 +73,6 @@ export class CreateJobPageComponent implements OnInit {
       if(pom == false) {//tag nije bio cekiran 
         this.checkedTags.push({id: tagID, name: ''});
       }
-
-      //console.log(this.checkedTags);
   }
 
   getNewTags() {
@@ -138,11 +133,8 @@ export class CreateJobPageComponent implements OnInit {
         this.wrongSalaryBool = true;
         return;
       }
-      else { //hteo samo pocetnu da unese i uneo ispravno, salji
-        this.wrongSalaryBool = false;
-        this.salary = this.salaryFrom + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
-        return;
-      }
+      this.wrongSalaryBool = false; //hteo samo pocetnu da unese i uneo ispravno, salji
+      this.salary = this.salaryFrom + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
     }
     else if (this.salaryFrom == '' && this.salaryTo != '') { //uneo samo krajnju
       if (this.salaryTo[0] == '0') { //greska
@@ -151,11 +143,8 @@ export class CreateJobPageComponent implements OnInit {
         this.wrongSalaryBool = true;
         return;
       }
-      else { //hteo samo krajnu da unese i uneo ispravno, salji
-        this.wrongSalaryBool = false;
-        this.salary = this.salaryTo + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
-        return; 
-      }
+      this.wrongSalaryBool = false; //hteo samo krajnu da unese i uneo ispravno, salji
+      this.salary = this.salaryTo + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
     }
     else {//obe vrednosti su ukucane -> proveri ispravnost
       if (this.salaryFrom[0] == '0') { //greska
@@ -191,7 +180,7 @@ export class CreateJobPageComponent implements OnInit {
     this.salaryFrom = this.salaryFrom.trim();
     this.salaryTo = this.salaryTo.trim();
     this.salaryValidation();
-    console.log("MOLIM TE: " + this.salary)
+    console.log("salary: " + this.salary)
 
     if (!(this.wrongJobTitleBool || this.wrongFieldIdBool || this.wrongDescBool ||
           this.wrongSalaryBool)) { //sve ok, postavi oglas
