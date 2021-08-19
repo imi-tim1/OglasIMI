@@ -15,7 +15,7 @@ import { JobService } from 'src/app/_utilities/_middleware/_services/job.service
 })
 export class JobsListComponent implements OnInit {
   
-  public jobs: Job[] = [];
+  @Input() public jobs: Job[] = [];
   public jobsNum: number = 0;
 
   @Input() public uid: number = 0;

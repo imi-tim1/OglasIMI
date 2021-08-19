@@ -33,8 +33,13 @@ export class JobService {
           this.jobs = response.body.jobs;
           this.totalJobNumber = response.body.totalJobNumber;
 
+          console.log('getFilteredJobs, NIJE NULL')
+
           // Callback
-          if(self && successCallback) successCallback(self, response.body.jobs, response.body.totalJobNumber);
+          if(self && successCallback) { 
+            console.log('>>>>>> uso');
+            successCallback(self, response.body.jobs, response.body.totalJobNumber);
+          }
         }
 
         console.log('Jobs: ')

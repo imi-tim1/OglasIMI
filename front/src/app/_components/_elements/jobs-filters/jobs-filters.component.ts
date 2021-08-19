@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { City } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { City, Job } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 import { CityService } from 'src/app/_utilities/_middleware/_services/city.service';
 import { FieldService } from 'src/app/_utilities/_middleware/_services/field.service';
@@ -15,6 +15,9 @@ import { Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
 })
 export class JobsFiltersComponent implements OnInit {
   
+  public jobs: Job[] = [];
+  @Output() public jobsArrival = new EventEmitter();
+
   public filtersFromPage!: Filters;
 
   public checkedTags: number[] = [];
@@ -51,7 +54,7 @@ export class JobsFiltersComponent implements OnInit {
   onSearch() {
 
     this.filtersFromPage = {
-      title: this.jobName,
+      title: this.jobName.trim(),
       employerId: this.selectedEmployerId,
       fieldId: this.selectedFieldId,
       cityId: this.selectedCityId,
@@ -64,7 +67,7 @@ export class JobsFiltersComponent implements OnInit {
     if (this.checkedTags.length > 0)
       this.filtersFromPage.tagList = this.checkedTags;
 
-    this.jobService.getFilteredJobs(this.filtersFromPage);
+    this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessGetJobs);
   }
 
   toggleTag(tagID: number) {
@@ -101,4 +104,13 @@ export class JobsFiltersComponent implements OnInit {
       this.fieldService.getTags(this.selectedFieldId);
     }
   }
+
+  // API Callbacks
+
+  cbSuccessGetJobs(self: any, jobs?: Job[], jobsNumber?: number) {
+    console.log('cbSuccess !!!!')
+    if(jobs) self.jobs = jobs;
+    self.jobsArrival.emit(self.jobs);
+  }
+
 }
