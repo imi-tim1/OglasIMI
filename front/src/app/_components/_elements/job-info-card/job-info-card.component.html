@@ -24,8 +24,14 @@
      
       
       <!--  Only Applicant can see this button  -->
-      <!--<button *ngIf="isApplicant()" 
-       type="submit" class="btn btn-success btn-lg mb-1">Prijavi se</button>-->
+      <button *ngIf="isApplicant()" type="submit" class="btn btn-success btn-lg mb-1" (click)="applyMe()">
+        PRIJAVI SE
+      </button>
+
+      <!-- Only Admin can see this button -->
+      <button *ngIf="isAdmin()" type="submit" class="btn btn-danger btn-lg mb-1" (click)="deleteThisJob()">
+        OBRIŠI OGLAS
+      </button>
 
       <a *ngIf="isApplicant()" class="btn btn-success" 
       href="mailto:{{(jobService.job)? jobService.job.employer.email : ''}}?Subject=Prijava%20za%20posao" target="_top"

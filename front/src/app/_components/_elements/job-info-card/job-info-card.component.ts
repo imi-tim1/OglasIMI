@@ -28,9 +28,18 @@ export class JobInfoCardComponent implements OnInit {
     return JWTUtil.getRole() as UserRole == UserRole.Applicant;
   }
 
+  isAdmin() {
+    return JWTUtil.getRole() as UserRole == UserRole.Admin;
+  }
+
   applyMe() {
     //console.log(this.employerService.employer?.email);
     this.jobService.applyToJob(this.id);
+  }
+
+  deleteThisJob() {
+    this.jobService.deleteJob(this.id);
+    alert('Uspešno ste obrisali oglas.');
   }
 
 }

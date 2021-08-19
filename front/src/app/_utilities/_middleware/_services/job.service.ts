@@ -134,12 +134,13 @@ export class JobService {
     );
   }
 
-  deleteJob(id: number) 
+  deleteJob(id: number, self?: any, successCallback?: Function) 
   {
     this.api.deleteJob(id).subscribe(
       // Success
       (response) => {
         console.log('----- Delete Successful!');
+        if(self && successCallback) successCallback(self);
       },
       (error: HttpErrorResponse) => {
         console.log('ERORORORO')
