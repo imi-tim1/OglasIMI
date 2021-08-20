@@ -56,13 +56,13 @@ export class RegisterFormComponent implements OnInit {
   //pattEmail: RegExp = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
   pattEmail: RegExp = /^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/;
   //pattPhone: RegExp = /^\+?[0-9]{9,12}$/;
-  pattPhone: RegExp = /^((\+[0-9]{1,3})|0)[1-9]{2}[0-9]{6,7}$/; 
+  pattPhone: RegExp = /^((\+[0-9]{1,3})|0)[1-9]{2}[0-9]{6,7}$/;
   pattPassword: RegExp = /.{6,}$/;
   //---
   //pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
   pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\"\'\(\)\+\&]+$/;
   pattPIB: RegExp = /^[0-9]{9}$/;
-  pattAddr: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\'\(\)\&]+$/;; //i da ne bude vise od 2 spejsa uzastopno
+  pattAddr: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\'\(\)\&]+$/; //i da ne bude vise od 2 spejsa uzastopno
 
 
   constructor(public applicantService: ApplicantService,
@@ -218,7 +218,7 @@ export class RegisterFormComponent implements OnInit {
       }
 
       self.wrongAppPictureBool = false;
-      
+
       console.log(self.appPicture);
       console.log(`Duzina kodirane slike je: ${Math.round(len/1000)}.${Math.round(len%1000/100)} K`);
     }
@@ -355,7 +355,7 @@ export class RegisterFormComponent implements OnInit {
       }
 
       self.wrongEmpPictureBool = false;
-      
+
       console.log(self.empPicture);
       console.log(`Duzina kodirane slike je: ${Math.round(len/1000)}.${Math.round(len%1000/100)} K`);
     }
