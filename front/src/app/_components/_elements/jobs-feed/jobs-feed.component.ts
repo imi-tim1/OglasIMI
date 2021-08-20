@@ -7,18 +7,18 @@ import { Job } from 'src/app/_utilities/_api/_data-types/interfaces';
 })
 export class JobsFeedComponent implements OnInit {
 
-  public jobs: Job[] | null = null;
+  // public jobs: Job[] | null = null;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  catchJobsFromEvent(data: any) 
-  {
-    console.log('>>>> Event Catched');
-    console.log(data);
-    this.jobs = data;
-  }
+  // catchJobsFromEvent(data: any) 
+  // {
+  //   console.log('>>>> Event Catched');
+  //   console.log(data);
+  //   this.jobs = data;
+  // }
 
 }

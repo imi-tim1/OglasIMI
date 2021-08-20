@@ -16,9 +16,14 @@ import { Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
 export class JobsFiltersComponent implements OnInit {
   
   public jobs: Job[] = [];
-  @Output() public jobsArrival = new EventEmitter();
+  // @Output() public jobsArrival = new EventEmitter();
 
   public filtersFromPage!: Filters;
+
+  public currentPage: number = 1;
+  public totalJobsNum: number = 0
+  public totalPagesNum: number = 0 
+  public jobsPerPage: number = 5;
 
   public checkedTags: number[] = [];
   jobName: string = '';
@@ -38,6 +43,8 @@ export class JobsFiltersComponent implements OnInit {
     this.fieldService.getFields();
     this.cityService.getCities();
     this.employerService.getEmployers();
+
+    this.jobService.getJobs(this, this.cbSuccessGetJobs);
   }
 
   showMore() {
@@ -51,18 +58,22 @@ export class JobsFiltersComponent implements OnInit {
     this.showMoreBool = !this.showMoreBool;
   }
 
-  onSearch() {
-
+  packFilters(pageNum?: number) {
     this.filtersFromPage = {
       title: this.jobName.trim(),
       employerId: this.selectedEmployerId,
       fieldId: this.selectedFieldId,
       cityId: this.selectedCityId,
-      pageNumber: 1,
-      jobsPerPage: 5,
+      pageNumber: (pageNum)? pageNum : 1,
+      jobsPerPage: this.jobsPerPage,
       workFromHome: this.workFromHome,
       ascendingOrder: false
     }
+  }
+
+  onSearch() {
+
+    this.packFilters();
 
     if (this.checkedTags.length > 0)
       this.filtersFromPage.tagList = this.checkedTags;
@@ -105,12 +116,40 @@ export class JobsFiltersComponent implements OnInit {
     }
   }
 
+  loadNextPage() {
+    if(this.currentPage == this.totalPagesNum)
+      return;
+    
+      this.packFilters(this.currentPage + 1);
+    this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessNextPage);
+  }
+
+  loadPreviousPage() {
+    if(this.currentPage == 1)
+      return;
+    
+    this.packFilters(this.currentPage - 1);
+    this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessPreviousPage);
+  }
+
   // API Callbacks
 
   cbSuccessGetJobs(self: any, jobs?: Job[], jobsNumber?: number) {
-    console.log('cbSuccess !!!!')
     if(jobs) self.jobs = jobs;
-    self.jobsArrival.emit(self.jobs);
+    self.currentPage = 1;
+    self.totalJobsNum = jobsNumber;
+    self.totalPagesNum =  Math.ceil(self.totalJobsNum / self.jobsPerPage)
+    // self.jobsArrival.emit(self.jobs);
+  }
+
+  cbSuccessNextPage(self: any, jobs?: Job[], jobsNumber?: number) {
+    if(jobs) self.jobs = jobs;
+    self.currentPage++;
+  }
+
+  cbSuccessPreviousPage(self: any, jobs?: Job[], jobsNumber?: number) {
+    if(jobs) self.jobs = jobs;
+    self.currentPage--;
   }
 
 }
