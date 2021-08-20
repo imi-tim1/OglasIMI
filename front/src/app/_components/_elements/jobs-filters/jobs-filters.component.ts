@@ -32,7 +32,7 @@ export class JobsFiltersComponent implements OnInit {
   selectedCityId: number = 0;
   selectedFieldId: number = 0;
   selectedEmployerId: number = 0;
-  showMoreBool: boolean = false;
+  public showMoreBool: boolean = false;
 
   constructor(public jobService: JobService,
               public fieldService: FieldService,
@@ -110,10 +110,16 @@ export class JobsFiltersComponent implements OnInit {
   }
 
   getNewTags() {
+    this.checkedTags = [];
+    console.log('selected f id:' + this.selectedFieldId)
+
     if(this.selectedFieldId > 0) {
-      this.checkedTags = [];
       this.fieldService.tags = [];
       this.fieldService.getTags(this.selectedFieldId);
+    }
+    else {
+      console.log('BRISIIII')
+      this.fieldService.tags = [];
     }
   }
 
