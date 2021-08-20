@@ -41,6 +41,7 @@ export class CreateJobPageComponent implements OnInit {
 
   pattTitle: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\ \/\\\(\)\[\]\-\*\.\,\'\"\#\+\%\?\!]+$/;
   pattTwoSpaces: RegExp = /  /;
+  pattMoney: RegExp = /^[0-9]+$/;
 
 
   ngOnInit(): void {
@@ -126,7 +127,7 @@ export class CreateJobPageComponent implements OnInit {
       this.wrongSalaryBool = false; //sve ok
       this.salary = '';
     }
-    else if (this.salaryFrom != '' && this.salaryTo == '') { //uneo samo pocetnu
+    else if (this.salaryFrom != '' && this.salaryTo == '' && this.pattMoney.test(this.salaryFrom)) { //uneo samo pocetnu
       if (this.salaryFrom[0] == '0') { //greska
         console.log("losa donja granica plate");
         (<HTMLSelectElement>document.getElementById('salaryFrom')).focus();
@@ -136,7 +137,7 @@ export class CreateJobPageComponent implements OnInit {
       this.wrongSalaryBool = false; //hteo samo pocetnu da unese i uneo ispravno, salji
       this.salary = this.salaryFrom + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
     }
-    else if (this.salaryFrom == '' && this.salaryTo != '') { //uneo samo krajnju
+    else if (this.salaryFrom == '' && this.salaryTo != '' && this.pattMoney.test(this.salaryTo)) { //uneo samo krajnju
       if (this.salaryTo[0] == '0') { //greska
         console.log("losa gornja granica plate");
         (<HTMLSelectElement>document.getElementById('salaryTo')).focus();
@@ -147,15 +148,20 @@ export class CreateJobPageComponent implements OnInit {
       this.salary = this.salaryTo + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
     }
     else {//obe vrednosti su ukucane -> proveri ispravnost
-      if (this.salaryFrom[0] == '0') { //greska
+      if (!(this.pattMoney.test(this.salaryFrom)) || this.salaryFrom[0] == '0') { //greska
         console.log("losa donja granica plate");
         (<HTMLSelectElement>document.getElementById('salaryFrom')).focus();
         this.wrongSalaryBool = true;
         return;
       }
-      if (this.salaryTo[0] == '0') {
+      if (!(this.pattMoney.test(this.salaryTo)) || this.salaryTo[0] == '0') {
         console.log("losa gornja granica plate");
         (<HTMLSelectElement>document.getElementById('salaryTo')).focus();
+        this.wrongSalaryBool = true;
+        return;
+      }
+      if (parseInt(this.salaryFrom) > parseInt(this.salaryTo)) {
+        (<HTMLSelectElement>document.getElementById('salaryFrom')).focus();
         this.wrongSalaryBool = true;
         return;
       }
