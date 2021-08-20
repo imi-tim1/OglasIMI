@@ -2,55 +2,58 @@
   <!-- Izbor: Kao kandidat, Kao poslodavac -->
   <br>
   <h3 class="text-center">Registrujte se</h3>
-
-  <div class="d-flex border border-secondary rounded-3">
-    <button class="btn btn-lg flex-fill
-            {{(true)? 'btn-secondary' : 'btn-outline-secondary border-0'}}" (click)="showMeApplicantForm()">
-      Kao kandidat
-    </button>
-    <button class="btn btn-lg flex-fill
-            {{(false)? 'btn-secondary' : 'btn-outline-secondary border-0'}}" (click)="showMeEmployerForm()">
-      Kao poslodavc
-    </button>
+  <div class="row justify-content-center py-3">
+    <div class="col-8 p-0">
+      <div class="d-flex border border-secondary rounded-3">
+        <button class="btn btn-lg flex-fill
+              {{(showApplicantFormBool)? 'btn-secondary' : 'btn-outline-secondary border-0'}}"
+          (click)="showMeApplicantForm()">
+          Kao kandidat
+        </button>
+        <button class="btn btn-lg flex-fill
+              {{(!showApplicantFormBool)? 'btn-secondary' : 'btn-outline-secondary border-0'}}"
+          (click)="showMeEmployerForm()">
+          Kao poslodavc
+        </button>
+      </div>
+    </div>
   </div>
 
   <div class="text-black">
     <div class="row justify-content-center">
 
       <!-- ---- APPLICANT - BEGIN ---- -->
-      <div *ngIf="showApplicantFormBool" class="col-8 bg-white border rounded-3 shadow-sm p-3">
-        <p class="text-center h2 fw-bold mb-5 mx-1 mx-md-4 mt-4">Registracija kandidata</p>
+      <div *ngIf="showApplicantFormBool" class="col-8 bg-white border rounded-3 shadow-sm p-5">
+        <p class="text-center h2 fw-bold mb-5 mx-1 mx-md-4">Registracija kandidata</p>
 
         <form class="mx-1 mx-md-4">
           <!-- Ime i prezime -->
-          <div class="d-flex flex-row">
-            <div class="flex-fill mb-0 p-2">
+          <div class="row">
+            <div class="col-6 p-2">
               <input type="text" id="appFirstName" class="form-control" [(ngModel)]="appFirstName" name="appFirstName">
               <label class="form-label" for="appFirstName">Ime</label>
               <p *ngIf="wrongAppFirstNameBool" class="small fw-bold text-danger">Unesite ispravno ime.</p>
             </div>
-            <div class="flex-fill mb-0 p-2">
+            <div class="col-6 p-2">
               <input type="text" id="appLastName" class="form-control" [(ngModel)]="appLastName" name="appLastName" />
               <label class="form-label" for="appLastName">Prezime</label>
               <p *ngIf="wrongAppLastNameBool" class="small fw-bold text-danger">Unesite ispravno prezime.</p>
             </div>
           </div>
 
-          <!-- Email -->
-          <div class="d-flex flex-row">
-            <div class="flex-fill mb-0 p-2">
+          <div class="row">
+            <!-- Email -->
+            <div class="col-6 p-2">
               <input type="email" id="appEmail" class="form-control" [(ngModel)]="appEmail" name="appEmail" />
               <label class="form-label" for="appEmail">E-mail adresa</label>
               <p *ngIf="wrongAppEmailBool" class="small fw-bold text-danger">Unesite ispravnu e-mail adresu.</p>
             </div>
-          </div>
 
-          <!-- Telefon -->
-          <div class="d-flex flex-row">
-            <div class="flex-fill mb-0 p-2">
+            <!-- Telefon -->
+            <div class="col-6 p-2">
               <input type="text" id="appPhoneNum" class="form-control" [(ngModel)]="appPhoneNum" name="appPhoneNum" />
-              <label class="form-label" for="appPhoneNum">Kontakt telefon<br>(Format: samo cifre, znak plus na
-                početku opcion)
+              <label class="form-label" for="appPhoneNum">Kontakt telefon <br> (Format: samo cifre, znak plus na početku
+                opcion)
                 <!--(Format: +38XXXXXXXXXX ili 06XXXXXXXX)-->
               </label>
               <p *ngIf="wrongAppPhoneBool" class="small fw-bold text-danger">Unesite ispravan broj telefona.
@@ -58,26 +61,24 @@
             </div>
           </div>
 
-          <!-- Lozinka 1. -->
-          <div class="d-flex flex-row">
-            <div class="flex-fill mb-0 p-2">
+          <div class="row">
+            <!-- Lozinka 1. -->
+            <div class="col-6 p-2">
               <input type="password" id="appPass1" class="form-control" [(ngModel)]="appPass1" name="appPass1" />
               <label class="form-label" for="appPass1">Lozinka</label>
               <p *ngIf="wrongAppPass1Bool" class="small fw-bold text-danger">Lozinka se mora sastojati od najmanje 6
                 karaktera.</p>
             </div>
-          </div>
 
-          <!-- Lozinka 2. -->
-          <div class="d-flex flex-row">
-            <div class="flex-fill mb-0 p-2">
+            <!-- Lozinka 2. -->
+            <div class="col-6 p-2">
               <input type="password" id="appPass2" class="form-control" [(ngModel)]="appPass2" name="appPass2" />
               <label class="form-label" for="appPass2">Potvrdite lozinku</label>
               <p *ngIf="wrongAppPass2Bool" class="small fw-bold text-danger">Lozinke se ne podudaraju.</p>
             </div>
           </div>
 
-
+          <!-- Slika -->
           <div class="d-flex flex-row">
             <div class="flex-fill mb-0 p-2 pt-3 py-5">
               <label>Izaberite profilnu sliku:</label>
@@ -88,10 +89,9 @@
             </div>
           </div>
 
-
+          <!-- Dugme - Registruj se -->
           <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-            <button type="button" class="btn btn-primary btn-lg" (click)="appValidation()">Registrujte
-              se</button>
+            <button type="button" class="btn btn-primary btn-lg" (click)="appValidation()">Registrujte se</button>
           </div>
 
           <div class="form-check d-flex justify-content-center mb-5">
@@ -100,16 +100,13 @@
               <a href="/login" class="link-danger">Prijavite se</a>
             </label>
           </div>
-
         </form>
-
       </div>
       <!-- APPLICANT - END -->
 
 
       <!-- ---- EMPLOYER - BEGIN ---- -->
-      <div *ngIf="!showApplicantFormBool" class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-        <!-- div za poslodavca -->
+      <div *ngIf="!showApplicantFormBool" class="col-8 bg-white border rounded-3 shadow-sm p-3">
 
         <p class="text-center h2 fw-bold mb-5 mx-1 mx-md-4 mt-4">Registracija poslodavca</p>
 
