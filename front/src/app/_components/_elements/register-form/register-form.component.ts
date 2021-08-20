@@ -50,15 +50,19 @@ export class RegisterFormComponent implements OnInit {
   wrongEmpPictureBool: boolean = false;
 
 
-  pattAlphaWithSpaces: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ ]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  //pattAlphaWithSpaces: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ \-\\]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  pattAlphaWithSpaces: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ]+([ \-][a-zA-ZšŠđĐčČćĆžŽ]+)*$/;
   pattTwoSpaces: RegExp = /  /;
-  pattEmail: RegExp = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
-  pattPhone: RegExp = /^\+?[0-9]{9,12}$/;
+  //pattEmail: RegExp = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+  pattEmail: RegExp = /^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/;
+  //pattPhone: RegExp = /^\+?[0-9]{9,12}$/;
+  pattPhone: RegExp = /^((\+[0-9]{1,3})|0)[1-9]{2}[0-9]{6,7}$/; 
   pattPassword: RegExp = /.{6,}$/;
   //---
-  pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
-  pattPIB: RegExp = /^[0-9]{9,13}$/;
-  pattAddr: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  //pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\"\'\(\)\+\&]+$/;
+  pattPIB: RegExp = /^[0-9]{9}$/;
+  pattAddr: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\'\(\)\&]+$/;; //i da ne bude vise od 2 spejsa uzastopno
 
 
   constructor(public applicantService: ApplicantService,
@@ -90,7 +94,7 @@ export class RegisterFormComponent implements OnInit {
   }
 
   isCorrectEmail(element: string): boolean {
-    if (this.pattEmail.test(element))
+    if (this.pattEmail.test(element.toLowerCase()))
       return true;
     return false;
   }
