@@ -5,22 +5,26 @@
         <small class="text-muted" style="float: right">Oglas postavljen {{jobService.job.postDate.toString().substr(0, 10)}}</small>
       </div>
       
-      <h1 class="mb-4 pb-2 pb-md-0 mb-md-2 px-md-2">
+      <h5 class="mb-4">&nbsp; {{jobService.job.employer.name}}, {{jobService.job.city.name}}</h5>
+     
+
+      <h1 class="mb-5 pb-2 pb-md-0 mb-md-2 px-md-2">
         {{jobService.job.title}}
       </h1>
       <span style="float: right">
         
       </span>
       
-      <span>&nbsp; {{jobService.job.employer.name}}, {{jobService.job.city.name}}</span>
-     
+      
       <p><i>{{jobService.job.description}}</i></p>
 
-      <span *ngFor="let tag of jobService.job.tags" class="bg-warning">
-        <strong class="p-1">{{tag.name}}&nbsp;</strong>
+      <span *ngFor="let tag of jobService.job.tags" class="pe-2">
+        <strong class="bg-warning p-1">{{tag.name}}</strong>
       </span> <br>
-      <strong class="bg-warning" *ngIf="jobService.job.salary != undefined">{{jobService.job.salary}}</strong><br>
-      <strong class="bg-warning" *ngIf="jobService.job.workFromHome">{{jobService.job.workFromHome}}</strong>
+      <strong *ngIf="jobService.job.salary != undefined" style="color: rgb(46, 194, 149);">
+            {{jobService.job.salary}}
+      </strong><br>
+      <strong class="bg-info p-1" *ngIf="jobService.job.workFromHome">rad od kuće</strong>
      
       
       <!--  Only Applicant can see this button  -->
