@@ -12,10 +12,10 @@ public class User {
     private int id;
 
 
+
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z .\\-@!#$%&'*+-/=?^_`{|}~\"(),:;<>\\[\\]]+$")
+    @Pattern(regexp = "^[a-zA-Z0-9]+([\\.\\-\\+][a-zA-Z0-9]+)*@([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}$")
     @Size( max = 320 )
-    @Email( message = "Email address is not valid" )
     private String email;
 
     @NotBlank

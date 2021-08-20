@@ -26,7 +26,7 @@ public class Job
     private String title;
 
     @NotBlank
-    @Size(min = 10, max = 500, message = "The length of description must be between 10 and 500 characters")
+    @Size(min = 10, max = 10000, message = "The length of description must be between 10 and 10000 characters")
     private String description;
 
     @Size(min = 0, max = 50)
