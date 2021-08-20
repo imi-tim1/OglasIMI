@@ -82,8 +82,7 @@
 
 </div>
 
-<button (click)="loadPreviousPage()">Load next page</button>
+<button (click)="loadPreviousPage()"> <<< </button>
+<button (click)="loadNextPage()"> >>> </button>
 
 <app-jobs-list [jobs]="(jobs)? jobs : []"></app-jobs-list>
-
-<button (click)="loadNextPage()">Load next page</button>

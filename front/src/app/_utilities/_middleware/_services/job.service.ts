@@ -40,11 +40,14 @@ export class JobService {
             console.log('>>>>>> uso');
             successCallback(self, response.body.jobs, response.body.totalJobNumber);
           }
-        }
 
-        console.log('Jobs: ')
-        console.log(this.jobs)
-        console.log(this.totalJobNumber)
+          console.log('Jobs: ')
+          console.log(response.body.jobs)
+          console.log('broj: ' + response.body.totalJobNumber)
+        }
+        else {
+          console.log('Body is empty')
+        }
       }
     );
   }

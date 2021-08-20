@@ -69,15 +69,16 @@ export class JobsFiltersComponent implements OnInit {
       workFromHome: this.workFromHome,
       ascendingOrder: false
     }
-  }
-
-  onSearch() {
-
-    this.packFilters();
 
     if (this.checkedTags.length > 0)
       this.filtersFromPage.tagList = this.checkedTags;
 
+    console.log(' ----- Filters from page ----- ')
+    console.log(this.filtersFromPage)
+  }
+
+  onSearch() {
+    this.packFilters();
     this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessGetJobs);
   }
 
@@ -117,16 +118,20 @@ export class JobsFiltersComponent implements OnInit {
   }
 
   loadNextPage() {
-    if(this.currentPage == this.totalPagesNum)
+    if(this.currentPage >= this.totalPagesNum) {
+      this.currentPage = this.totalPagesNum;
       return;
+    }
     
       this.packFilters(this.currentPage + 1);
     this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessNextPage);
   }
 
   loadPreviousPage() {
-    if(this.currentPage == 1)
+    if(this.currentPage <= 1) {
+      this.currentPage = 1;
       return;
+    }
     
     this.packFilters(this.currentPage - 1);
     this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessPreviousPage);
@@ -138,18 +143,25 @@ export class JobsFiltersComponent implements OnInit {
     if(jobs) self.jobs = jobs;
     self.currentPage = 1;
     self.totalJobsNum = jobsNumber;
-    self.totalPagesNum =  Math.ceil(self.totalJobsNum / self.jobsPerPage)
+    self.totalPagesNum =  Math.ceil(self.totalJobsNum / self.jobsPerPage);
+
+    console.log(`total pages: ${self.totalPagesNum}, total jobs: ${self.totalJobsNum}, jpp: ${self.jobsPerPage}`);
+
     // self.jobsArrival.emit(self.jobs);
   }
 
   cbSuccessNextPage(self: any, jobs?: Job[], jobsNumber?: number) {
     if(jobs) self.jobs = jobs;
     self.currentPage++;
+
+    console.log(`${self.currentPage - 1} -> ${self.currentPage}`);
   }
 
   cbSuccessPreviousPage(self: any, jobs?: Job[], jobsNumber?: number) {
     if(jobs) self.jobs = jobs;
     self.currentPage--;
+
+    console.log(`${self.currentPage + 1} -> ${self.currentPage}`)
   }
 
 }
