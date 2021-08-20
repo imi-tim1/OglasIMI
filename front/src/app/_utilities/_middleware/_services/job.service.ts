@@ -68,7 +68,7 @@ export class JobService {
     this.getFilteredJobs(filters, self, successCallback);
   }
 
-  getJob(id: number) 
+  getJob(id: number, self?: any, successCallback?: Function) 
   {
     this.api.getJob(id).subscribe(
       // Success
@@ -76,6 +76,7 @@ export class JobService {
         this.job = response.body!;
         console.log('Job: ');
         console.log(this.job);
+        if(self && successCallback) successCallback(self, response.body);
       }
     );
   }

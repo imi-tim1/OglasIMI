@@ -3,14 +3,17 @@ import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 import { Router } from '@angular/router';
+import { Job } from 'src/app/_utilities/_api/_data-types/interfaces';
 
 @Component({
   selector: 'app-job-info-card',
   templateUrl: './job-info-card.component.html',
+  styleUrls: ['./job-info-card.component.css']
 })
 export class JobInfoCardComponent implements OnInit {
 
   @Input() id: number = 0;
+  public job: Job | null = null;
 
   constructor(public jobService: JobService,
               public router: Router) { }
@@ -18,7 +21,7 @@ export class JobInfoCardComponent implements OnInit {
   ngOnInit(): void {
     console.log("id: " + this.id);
 
-    this.jobService.getJob(this.id);
+    this.jobService.getJob(this.id, this, this.cbSuccessGetJobs);
 
     console.log("drugi put id: " + this.id);
     //console.log("NESTO PRE EMPLOYER ID-A"); 
@@ -40,12 +43,18 @@ export class JobInfoCardComponent implements OnInit {
   }
 
   deleteThisJob() {
-    this.jobService.deleteJob(this.id, this, this.cbSuccess);
+    this.jobService.deleteJob(this.id, this, this.cbSuccessApply);
   }
 
-  cbSuccess(self: any) {
+  // API Callbacks
+
+  cbSuccessApply(self: any) {
     alert('Uspešno ste obrisali oglas!');
     self.router.navigate(['']); //redirekt na home-page
+  }
+
+  cbSuccessGetJobs(self: any, job: Job | null) {
+    self.job = job;
   }
 
 }

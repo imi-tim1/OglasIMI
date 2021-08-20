@@ -1,50 +1,64 @@
-<div class="container p-0">
+<div *ngIf="job" class="container p-0">
   <div class="card rounded-3 shadow-sm">
     <div class="card-body p-4 p-md-5">
-      <div id="datum">
-        <small class="text-muted" style="float: right">Oglas postavljen {{jobService.job.postDate.toString().substr(0, 10)}}</small>
+
+      <!-- Podaci neki -->
+      <div class="d-flex">
+        <h1 class="me-auto">{{job.title}}</h1>
+        <h5 class=""><a class="a" routerLink="/employer/{{job.employer.id}}">{{job.employer.name}}</a></h5>
       </div>
-      
-      <h5 class="mb-4">&nbsp; {{jobService.job.employer.name}}, {{jobService.job.city.name}}</h5>
-     
 
-      <h1 class="mb-5 pb-2 pb-md-0 mb-md-2 px-md-2">
-        {{jobService.job.title}}
-      </h1>
-      <span style="float: right">
-        
-      </span>
-      
-      
-      <p><i>{{jobService.job.description}}</i></p>
+      <div *ngIf="job.city" class="text-primary">{{job.city.name}}</div>
 
-      <span *ngFor="let tag of jobService.job.tags" class="pe-2">
-        <strong class="bg-warning p-1">{{tag.name}}</strong>
-      </span> <br>
-      <strong *ngIf="jobService.job.salary != undefined" style="color: rgb(46, 194, 149);">
-            {{jobService.job.salary}}
-      </strong><br>
-      <strong class="bg-info p-1" *ngIf="jobService.job.workFromHome">rad od kuće</strong>
-     
-      
-      <!--  Only Applicant can see this button  -->
-      <a *ngIf="isApplicant()" class="btn btn-success btn-lg mb-1" 
-      href="mailto:{{(jobService.job)? jobService.job.employer.email : ''}}?Subject=Prijava%20za%20posao" target="_top"
-      (click)="applyMe()">
-        PRIJAVI SE</a>
+      <br>
 
-      <!-- Only Admin can see this button -->
-      <button *ngIf="isAdmin()" type="submit" class="btn btn-danger btn-lg mb-1" (click)="deleteThisJob()">
-        OBRIŠI OGLAS
-      </button>
+      <!-- Plata -->
+      <strong *ngIf="job.salary" class="" style="color: rgb(15, 131, 73);">{{job.salary}}</strong>
 
-      
+      <div class="d-flex flex-wrap pt-3 pb-3">
+        <!-- Rad od kuce -->
+        <span *ngIf="job.workFromHome" class="pe-2">
+          <strong class="bg-info p-1">rad od kuće</strong>
+        </span>
 
-        <!-- Oni ce da nam posalju da li je ovaj applicant vec prijavljen na job,
+        <!-- Tagovi -->
+        <span *ngFor="let t of job.tags" class="pe-2">
+          <strong class="bg-warning p-1">{{t.name}}</strong>
+        </span>
+
+      </div>
+
+      <br><hr>
+
+      <!-- Opis -->
+      <div class="pt-4 pb-3">{{job.description}}</div>
+
+
+      <div class="d-flex align-items-end pt-4">
+        <!-- Datum -->
+        <small class="text-muted me-auto" style="float: right">Oglas postavljen
+          {{job.postDate.toString().substr(0,10)}}</small>
+
+        <!-- Applicant - Apply Btn -->
+        <a *ngIf="isApplicant()" class="btn btn-success btn-lg shadow"
+          href="mailto:{{(job)? job.employer.email : ''}}?Subject=Prijava%20za%20posao" target="_top"
+          (click)="applyMe()">
+          PRIJAVI SE
+        </a>
+
+        <!-- Admin - Delete Btn -->
+        <button *ngIf="isAdmin()" type="submit" class="btn btn-danger btn-lg mb-1" (click)="deleteThisJob()">
+          OBRIŠI OGLAS
+        </button>
+
+      </div>
+
+
+      <!-- Oni ce da nam posalju da li je ovaj applicant vec prijavljen na job,
           to ispitujemo u Initu i u zavisnosti od toga (ne)prikazujemo dugmence.
           U slucaju da nam uz dati job salju mail employera, pozivamo 
-          jobService.job.employer.email umesto employerService.employer.email 
-          i onInit nece sadrzati this.employerService.getEmployer(this.jobService.job.employer.id);-->
+          job.employer.email umesto employerService.employer.email 
+          i onInit nece sadrzati this.employerService.getEmployer(this.job.employer.id);-->
 
     </div>
   </div>
