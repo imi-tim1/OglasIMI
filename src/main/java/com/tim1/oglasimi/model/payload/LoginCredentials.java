@@ -1,6 +1,5 @@
 package com.tim1.oglasimi.model.payload;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -8,7 +7,7 @@ import javax.validation.constraints.Size;
 public class LoginCredentials {
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9]+([\\.\\-\\+][a-zA-Z0-9]+)*@([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}$")
+    @Pattern(regexp = "^[a-zA-Z0-9]+([.\\-+][a-zA-Z0-9]+)*@([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}$")
     @Size( max = 320 )
     private String email;
 

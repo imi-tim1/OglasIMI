@@ -8,7 +8,7 @@ public class Employer extends EndUser {
 
     @NotBlank
     @Pattern(regexp = "^[0-9a-zA-ZšŠđĐčČćĆžŽ/ \\-,.\"'()+&]+$")
-    @Size( min = 1, max = 30)
+    @Size( min = 1, max = 50)
     private String name;
 
     @NotBlank
