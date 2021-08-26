@@ -150,7 +150,7 @@ public class JobController
         else tags = null;
 
         if(title.equals("")) title = "default";
-        title = Pattern.quote(title);
+        else title = Pattern.quote(title);
 
         jobFilter.setEmployer(employer);
         jobFilter.setField(field);
