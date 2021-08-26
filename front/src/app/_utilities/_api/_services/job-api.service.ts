@@ -99,4 +99,10 @@ export class JobApiService {
     )
   }
 
+  // ---- Comments ----
+
+  getJobComments() {
+    
+  }
+
 }

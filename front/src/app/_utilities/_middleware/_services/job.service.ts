@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Applicant, Employer, Field, Filters, Job, NewJob, Tag } from '../../_api/_data-types/interfaces';
+import { Applicant, Employer, Field, Filters, Job, JobComment, NewJob, Tag } from '../../_api/_data-types/interfaces';
 import { JobApiService } from '../../_api/_services/job-api.service';
 import { JWTUtil } from '../../_helpers/jwt-util';
 
@@ -162,4 +162,30 @@ export class JobService {
       }
     );
   }
+
+  // ---- Comments ----
+
+  getJobComments(id: number, self?: any, successCallback?: Function) 
+  {
+    // this.api.getJobComments(id).subscribe(
+    //   // Success
+    //   (response) => {
+    //     if(self && successCallback) successCallback(self);
+    //   },
+    //   (error: HttpErrorResponse) => {
+    //     console.log('ERORORORO')
+    //     console.log(error)
+    //   }
+    // );
+
+    let c: JobComment[] = [
+      { id: 1, postDate: new Date(), text: "Komentar je komentar je komentar je komentar je komentarje komentar je komentar je komentar je komentar je komentar je komentar je komentar je komentar." },
+      { id: 2, postDate: new Date(), text: "Komentar je komentar je komentar." },
+      { id: 3, postDate: new Date(), text: "Komentar je komentar je komentar." },
+      { id: 4, postDate: new Date(), text: "Komentar je komentar je komentar." },
+      { id: 5, postDate: new Date(), text: "Komentar je komentar je komentar." }
+    ]
+    if(successCallback && self) successCallback(self, c);
+  }
+
 }

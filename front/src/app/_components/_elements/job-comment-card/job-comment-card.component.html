@@ -1,1 +1,9 @@
-<p>job-comment-card works!</p>
+<div *ngIf="data" class="pb-2">
+    <div class="d-flex align-items-start text-start w-100 p-2 bg-white rounded-3 shadow border border-1" >
+        <div class="px-3 py-2  me-auto">
+            <h6>{{data.id}}</h6>
+            <h6>{{data.text}}</h6>
+        </div>
+        <button (click)="onReplayClick()" class="btn btn-warning shadow-sm align-self-end">Odgovori</button>
+    </div>
+</div>
