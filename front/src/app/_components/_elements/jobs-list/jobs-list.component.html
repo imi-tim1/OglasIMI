@@ -1,18 +1,14 @@
-<div class="container border border-secondary rounded-3">
+<div *ngIf="jobs.length > 0" class="container">
     <div class="p-4">
-        <!-- Employers Jobs -->
-        <div class="d-flex flex-column flex-wrap" *ngIf="empJobs && !appJobs">
-            <app-jobs-list-card *ngFor="let j of empService.employersJobs" [job]="j"></app-jobs-list-card>
-        </div>
-
-        <!-- Applicants Jobs -->
-        <div class="d-flex flex-column flex-wrap" *ngIf="!empJobs && appJobs">
-            <app-jobs-list-card *ngFor="let j of appService.applicantsJobs" [job]="j"></app-jobs-list-card>
-        </div>
-        
-        <!-- All Jobs -->
-        <div class="d-flex flex-column flex-wrap" *ngIf="!empJobs && !appJobs">
-            <app-jobs-list-card *ngFor="let j of jobService.jobs" [job]="j"></app-jobs-list-card>
+        <!-- Jobs -->
+        <div class="d-flex flex-column flex-wrap">
+            <app-jobs-list-card *ngFor="let j of jobs" [job]="j"></app-jobs-list-card>
         </div>
     </div>
+</div>
+
+<div *ngIf="jobs.length == 0" class="container border rounded-3 mt-5">
+    <h5 class="text-center p-3">
+        Nema oglasa
+    </h5>
 </div>

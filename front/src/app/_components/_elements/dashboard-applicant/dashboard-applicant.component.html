@@ -1,2 +1,10 @@
-<app-navbar2></app-navbar2>
-<app-jobs-list [appJobs]="true"></app-jobs-list>
+<app-navbar2 [activeNav]="'my-jobs-app'"></app-navbar2>
+
+<div *ngIf="applicant" class="container">
+    <div class="w-50 container">
+        <app-applicant-info-card [app]="applicant"></app-applicant-info-card>
+    </div>
+    <br>
+    <h3 class="text-center pt-5">Moji oglasi</h3>
+    <app-jobs-list [appJobs]='true' [uid]="applicant.id"></app-jobs-list>
+</div>

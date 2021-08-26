@@ -100,7 +100,7 @@ CREATE TABLE job
     city_id INT,
     post_date DATETIME NOT NULL,
     title VARCHAR(50) NOT NULL,
-    description VARCHAR(510) NOT NULL,
+    description TEXT(10000) NOT NULL,
     salary VARCHAR(50),
     work_from_home BOOLEAN,
     CONSTRAINT FOREIGN KEY (employer_id) REFERENCES employer (user_id)

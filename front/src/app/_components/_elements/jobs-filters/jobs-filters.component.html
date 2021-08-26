@@ -1,81 +1,96 @@
-<div>
-  <input type="text" id="jobName" name="jobName" [(ngModel)]="jobName"
-     placeholder="Radno mesto (pozicija)">
-</div>
+<div class="container">
 
-<br><br>
+  <!-- ------- Row 1 ------- -->
+  <div class="row pb-3">
 
-<div>
-  <label for="fields">Oblast rada:&nbsp;</label>
-  <select [(ngModel)]="selectedFieldId">
-    <option *ngFor="let f of fieldService.fields"
-          [ngValue]="f.id"
-          (click)="getNewTags()">
+    <!-- Naziv oglasa -->
+    <div class="col-3">
+      <input type="text" id="jobName" name="jobName" [(ngModel)]="jobName" placeholder="Radno mesto (pozicija)"
+        class="form-control">
+    </div>
+
+    <!-- Oblast rada -->
+    <div class="col-3">
+      <!-- <label for="fields">Oblast rada:&nbsp;</label> -->
+      <select [(ngModel)]="selectedFieldId" class="form-select">
+        <option value="0" (click)="getNewTags()">Oblast rada</option>
+        <option *ngFor="let f of fieldService.fields" [ngValue]="f.id" (click)="getNewTags()">
           {{f.name}}
-    </option>
-  </select>
-</div>
+        </option>
+      </select>
+    </div>
 
-<br><br>
-
-<div>
-  <label for="cities">Grad:&nbsp;</label>
-  <select [(ngModel)]="selectedCityId">
-    <option *ngFor="let c of cityService.cities"
-          [ngValue]="c.id">
+    <!-- Grad -->
+    <div class="col-3">
+      <!-- <label for="cities">Grad:&nbsp;</label> -->
+      <select [(ngModel)]="selectedCityId" class="form-select">
+        <option value="0">Grad</option>
+        <option *ngFor="let c of cityService.cities" [ngValue]="c.id">
           {{c.name}}
-    </option>
-  </select>
-</div>
+        </option>
+      </select>
+    </div>
 
-<br><br>
+    <!-- Pretraga -->
+    <div class="col-3">
+      <button id="searchBtn" class="btn btn-success w-100" (click)="onSearch();">Pretraga</button>
+    </div>
 
-<div>
-  <button id="searchBtn" (click)="onSearch();">Pretraga</button>
-</div>
-
-<br><br>
-
-<div>
-  <button id="showMore" (click)="showMore()">
-    Prikaži sve filtere
-  </button>
-</div>
-
-<br><br>
-
-<div *ngIf="showMoreBool">
-  
-  <div>
-    <label for="employers">Poslodavac:&nbsp;</label>
-    <select [(ngModel)]="selectedEmployerId">
-      <option *ngFor="let e of employerService.employers"
-            [ngValue]="e.id">
-            {{e.name}}
-      </option>
-    </select>
   </div>
-  
 
-  <br><br>
+  <!-- ------- Row 2 ------- -->
+  <div class="row">
 
-  <label for="workFromHome">Rad od kuće:&nbsp;&nbsp;</label>
-  <input type="checkbox" id="workFromHome" name="workFromHome" 
-        [(ngModel)]="workFromHome"> <!-- (click)="wfh()" -->
-  <br><br>
+    <!-- Poslodavac -->
+    <div class="col-3">
+      <!-- <label for="employers">Poslodavac:&nbsp;</label> -->
+      <select [(ngModel)]="selectedEmployerId" class="form-select">
+        <option value="0">Poslodavac</option>
+        <option *ngFor="let e of employerService.employers" [ngValue]="e.id">
+          {{e.name}}
+        </option>
+      </select>
+    </div>
 
+    <!-- Tagovi -->
+    <div *ngIf="true" class="col-6">
+      <div class="d-flex border rounded-2">
+        <!-- ako je izabrana oblast rada != 0  (nesto je izabrano), prikazi tagove-->
+        <div for="tags" class="text-nowrap p-2">Ključne reči</div>
 
-  <div *ngIf="selectedFieldId"> <!-- ako je izabrana oblast rada != 0  (nesto je izabrano), prikazi tagove-->
-    <label for="tags">Izaberite ključne reči:</label><br>
-    
-    <div class="border border-dark" [ngStyle]="{ 'overflow': 'scroll', 'height': '100px', 'width': '200px' }">
-      <div *ngFor="let t of fieldService.tags">
-        <input type="checkbox" value="{{t.id}}" id="{{t.id}}"
-                (click)="toggleTag(t.id)">
-        <label for="{{t.id}}">&nbsp;&nbsp;{{t.name}}</label>
+        <div class="d-flex flex-grow-1 p-2" style="overflow: scroll;">
+          <!-- Tag -->
+          <div *ngFor="let t of fieldService.tags" class="d-flex align-items-center bg-white border rounded-1 me-2 px-2">
+            <input type="checkbox" value="{{t.id}}" id="{{t.id}}" (click)="toggleTag(t.id)">
+            <label class="text-nowrap" for="{{t.id}}">&nbsp;&nbsp;{{t.name}}</label>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- Rad od kuce -->
+    <div class="col-3">
+      <label for="workFromHome">Rad od kuće:&nbsp;&nbsp;</label>
+      <input type="checkbox" id="workFromHome" name="workFromHome" [(ngModel)]="workFromHome"> <!-- (click)="wfh()" -->
+    </div>
+
   </div>
+
+  <!-- ------- Row 3 ------- -->
+  <!-- <div *ngIf="!showMoreBool" class="row">
+    <button id="showMore" (click)="showMore()">
+      Prikaži sve filtere
+    </button>
+  </div> -->
 
 </div>
 
+<br><br>
+
+<div class="container d-flex justify-content-center">
+  <button (click)="loadPreviousPage()"> prethodna </button>
+  <span class="text-center p-2" style="width: 50px;"> {{totalPagesNum}} </span>
+  <button (click)="loadNextPage()"> sledeca </button>
+</div>
+
+<app-jobs-list [jobs]="(jobs)? jobs : []"></app-jobs-list>

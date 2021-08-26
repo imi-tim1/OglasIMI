@@ -1,5 +1,5 @@
-import { stringify } from '@angular/compiler/src/util';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { PasswdHash } from 'src/app/_utilities/_helpers/hash-util';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
@@ -7,8 +7,7 @@ import { EmployerService } from 'src/app/_utilities/_middleware/_services/employ
 
 @Component({
   selector: 'app-register-form',
-  templateUrl: './register-form.component.html',
-  styleUrls: ['./register-form.component.css']
+  templateUrl: './register-form.component.html'
 })
 export class RegisterFormComponent implements OnInit {
 
@@ -51,19 +50,25 @@ export class RegisterFormComponent implements OnInit {
   wrongEmpPictureBool: boolean = false;
 
 
-  pattAlphaWithSpaces: RegExp = /^[a-zA-Z ]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  //pattAlphaWithSpaces: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ \-\\]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  pattAlphaWithSpaces: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ]+([ \-][a-zA-ZšŠđĐčČćĆžŽ]+)*$/;
   pattTwoSpaces: RegExp = /  /;
-  pattEmail: RegExp = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
-  pattPhone: RegExp = /^\+?[0-9]{9,12}$/;
+  //pattEmail: RegExp = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+  pattEmail: RegExp = /^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/;
+  //pattPhone: RegExp = /^\+?[0-9]{9,12}$/;
+  pattPhone: RegExp = /^((\+[0-9]{1,3})|0)[1-9]{2}[0-9]{6,7}$/;
   pattPassword: RegExp = /.{6,}$/;
   //---
-  pattCompanyName: RegExp = /^[0-9a-zA-Z\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
-  pattPIB: RegExp = /^[0-9]{9,20}$/;
-  pattAddr: RegExp = /^[0-9a-zA-Z\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  //pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\"\'\(\)\+\&]+$/;
+  pattPIB: RegExp = /^[0-9]{9}$/;
+  pattAddr: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\'\(\)\&]+$/; //i da ne bude vise od 2 spejsa uzastopno
 
 
   constructor(public applicantService: ApplicantService,
-              public employerService: EmployerService) { }
+              public employerService: EmployerService,
+              public router: Router
+              ) { }
 
   ngOnInit(): void {
   }
@@ -89,7 +94,7 @@ export class RegisterFormComponent implements OnInit {
   }
 
   isCorrectEmail(element: string): boolean {
-    if (this.pattEmail.test(element))
+    if (this.pattEmail.test(element.toLowerCase()))
       return true;
     return false;
   }
@@ -213,7 +218,7 @@ export class RegisterFormComponent implements OnInit {
       }
 
       self.wrongAppPictureBool = false;
-      
+
       console.log(self.appPicture);
       console.log(`Duzina kodirane slike je: ${Math.round(len/1000)}.${Math.round(len%1000/100)} K`);
     }
@@ -246,7 +251,7 @@ export class RegisterFormComponent implements OnInit {
             hashedPassword: PasswdHash.encrypt(this.appPass1)
           }
 
-          this.applicantService.createApplicant(appForRegister);
+          this.applicantService.createApplicant(appForRegister, this, this.cbSuccess, this.cbConflict);
         }
   }
 
@@ -350,7 +355,7 @@ export class RegisterFormComponent implements OnInit {
       }
 
       self.wrongEmpPictureBool = false;
-      
+
       console.log(self.empPicture);
       console.log(`Duzina kodirane slike je: ${Math.round(len/1000)}.${Math.round(len%1000/100)} K`);
     }
@@ -387,7 +392,19 @@ export class RegisterFormComponent implements OnInit {
               hashedPassword: PasswdHash.encrypt(this.empPass1)
             }
 
-            this.employerService.createEmployer(empForRegister);
+            this.employerService.createEmployer(empForRegister, this, this.cbSuccess, this.cbConflict);
           }
   }
+
+  ////////////////////// API Callbacks //////////////////////////////
+
+  cbSuccess(self: any) {
+    alert('Uspešno ste registrovani. Moći ćete da se prijavite čim administrator potvrdi Vašu registraciju.');
+    self.router.navigate(['login']);
+  }
+
+  cbConflict(self: any) {
+    alert('Nalog sa unetim email-om već postoji!');
+  }
+
 }

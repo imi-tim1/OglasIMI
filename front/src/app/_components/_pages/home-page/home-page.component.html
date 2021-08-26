@@ -1,3 +1,17 @@
-<app-jobs-feed *ngIf="isVisitor() || isApplicant() || isEmployer()" class="mx-auto" style="width: 200px;"></app-jobs-feed>
+<app-navbar2 [activeNav]="'home'"></app-navbar2>
 
+<!-- Naslov : COL -->
+<div *ngIf="isVisitor() || isApplicant()" class="col text-center pt-4 pb-5">
+    <h1 class="p-3 pb-2"><strong class="display-1"># Klik Do Posla</strong></h1>
+    <h5 class="p-3 pt-1"><i class="bg-warning px-1">Brz</i> i <i class="bg-warning px-1">pouzdan</i> način za
+        pronalaženje idealnog posla.</h5>
+
+    <br><br>
+</div>
+
+<app-jobs-feed *ngIf="isVisitor()" class="mx-auto" style="width: 200px;"></app-jobs-feed>
+<app-jobs-feed *ngIf="isApplicant()"></app-jobs-feed>
+<app-dashboard-employer *ngIf="isEmployer()"></app-dashboard-employer>
 <app-dashboard-admin *ngIf="isAdmin()"></app-dashboard-admin>
+
+<app-footer></app-footer>

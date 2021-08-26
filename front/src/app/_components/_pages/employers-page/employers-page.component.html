@@ -1,12 +1,10 @@
-<app-navbar2 [blockedNavs]="['employers']"></app-navbar2>
+<app-navbar2 [activeNav]="'employers'"></app-navbar2>
 
-<div class="container border border-secondary rounded-3">
-    <h3 class="text-dark">Lista Poslodavaca</h3>
+<div *ngIf="employers.length > 0" class="container">
+    <h2 class="text-center pt-4 pb-5">Lista poslodavaca</h2>
     <div class="p-4">
         <div class="d-flex flex-wrap justify-content-center">
-            <app-employer-list-card class="" *ngFor="let emp of employerService.employers"
-                [name]="emp.name" [picture]="emp.pictureBase64">
-            </app-employer-list-card>
+            <app-employer-list-card class="" *ngFor="let emp of employers" [data]="emp"></app-employer-list-card>
         </div>
     </div>
 </div>

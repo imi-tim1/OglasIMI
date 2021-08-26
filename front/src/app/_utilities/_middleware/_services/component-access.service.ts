@@ -33,7 +33,7 @@ export class ComponentAccessService {
     return (allowedRoles.length == 0)? true : allowedRoles.includes(role);
   }
 
-  checkAccess(allowedRoles: UserRole[]) {
+  checkAccess(allowedRoles: UserRole[], self?: any, callbackForbidden?: Function, callbackUnauthorized?: Function) {
     this.api.getCurrent().subscribe(
       // Success (Logged In)
       (response) => {
@@ -41,29 +41,23 @@ export class ComponentAccessService {
         this.role = JWTUtil.getRole() as UserRole;
         this.allowed = this.checkRole(this.role, allowedRoles);
 
-        console.log('Check Access, "Success" Block'); // DEBUG
-        console.log('Status: ' + response.status); // DEBUG
-        console.log('User Role: ' + this.role); // DEBUG
-        console.log('Allowed: ' + this.allowed); // DEBUG
-
         // Not Allowed
         if (!this.allowed) {
-          console.log('Redirecting to "' + this.redirectRoute + '"...'); // DEBUG
-          this.router.navigate([this.redirectRoute]);
+          // Callback (Forbidden) / Navigate
+          if(self && callbackForbidden) callbackForbidden(self);
+          else this.router.navigate([this.redirectRoute]);
         }
       },
       // Error (Not Logged In)
       (error: HttpErrorResponse) => {
 
-        if (HttpStatusCode.Unauthorized == error.status) {
-          JWTUtil.delete();
-        }
+        if (HttpStatusCode.Unauthorized == error.status) JWTUtil.delete();
 
-        console.log('Check Access, "Error" Block'); // DEBUG
-        console.log('Status: ' + error.status); // DEBUG
-
-        console.log('Redirecting to "' + this.redirectRoute + '"...'); // DEBUG
-        this.router.navigate([this.redirectRoute]);
+        // Callback (Unauthorized/Forbidden) / Navigate
+        if(self)
+          if(callbackUnauthorized) callbackUnauthorized(self); 
+          else if(callbackForbidden) callbackForbidden(self);
+        else this.router.navigate([this.redirectRoute]);
       }
     );
   }

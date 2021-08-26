@@ -9,7 +9,7 @@ public class City
     private int id;
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-ZšŠđĐčČćĆžŽ \\-]+$")
+    @Pattern(regexp = "^[a-zA-ZšŠđĐčČćĆžŽ \\-']+$")
     @Size( min = 2, max = 30, message = "The length of name must be between 2 and 30 characters" )
     private String name;
 

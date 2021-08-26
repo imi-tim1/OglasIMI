@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Applicant } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
+import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
+import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 
 
 @Component({
@@ -9,14 +13,28 @@ import { ActivatedRoute } from '@angular/router';
 export class JobInfoPageComponent implements OnInit {
 
   public jobID: number = 0;
+  public applicants: Applicant[] = [];
 
-  constructor(public route: ActivatedRoute) { }
+  constructor(
+    public activatedRoute: ActivatedRoute,
+    public accessService: ComponentAccessService,
+    public jobService: JobService
+  ) { }
 
   ngOnInit(): void {
-    let p = this.route.snapshot.paramMap.get("id");
+    // Check access
+    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles);
 
-    if (p != null)
-      this.jobID = p as unknown as number;
+    let p = this.activatedRoute.snapshot.paramMap.get("id");
+    if (p != null) this.jobID = p as unknown as number;
+
+    this.jobService.getJobsApplicants(this.jobID, this, this.cbSuccess);
+  }
+
+  // API Callbacks
+
+  cbSuccess(self: any, applicants?: Applicant[]) {
+    if(applicants) self.applicants = applicants;
   }
 
 }

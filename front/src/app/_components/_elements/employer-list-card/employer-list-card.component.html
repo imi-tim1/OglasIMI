@@ -1,10 +1,6 @@
-<div class="p-2">
-    <div class="bg-white shadow rounded-3 p-3" routerLink="/" style="width: 284px;">
-        <div class="row">
-            <div class="col">
-                <h4>{{name}}</h4>
-            </div>
-        </div>
-        <img [src]="(picture == null)? defaultPicture : picture" alt="image" width="250px">
-    </div>
+<div class="p-2 text-center">
+    <button class="bg-white border-0 shadow rounded-3" routerLink="{{'/employer/' + data.id}}" style="max-width: 220px; padding: 10px">
+        <h5 class="text-center text-break">{{data.name}}</h5>
+        <img [src]="(data.pictureBase64 == null)? defaultPicture : data.pictureBase64" alt="image" width="200px">
+    </button>
 </div>

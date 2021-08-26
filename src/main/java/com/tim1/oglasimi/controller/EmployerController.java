@@ -212,7 +212,7 @@ public class EmployerController {
                                                    @PathVariable("id")
                                                    @Min( 1 )
                                                    @Max( Integer.MAX_VALUE ) int id ) {
-        ResultPair resultPair = checkAccess( jwt, Role.EMPLOYER, Role.ADMIN );
+        ResultPair resultPair = checkAccess( jwt, Role.EMPLOYER, Role.ADMIN, Role.APPLICANT, Role.VISITOR );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -225,20 +225,11 @@ public class EmployerController {
                     .body( null );
         }
 
-        /* extract uid and role from the token */
-        int uid  = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
-        String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
-
-        /* check if another employer is trying to access the api;
-        only admin and employer himself are allowed to access list of employer's posts */
-        if( Role.EMPLOYER.equalsTo(role) && id != uid ) {
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .headers(responseHeaders)
-                    .body( null );
-        }
-
         List<Job> postedJobs = employerService.getPostedJobs(id);
+
+        if( postedJobs == null) {
+            httpStatus = HttpStatus.NOT_FOUND;
+        }
 
         return ResponseEntity
                 .status(httpStatus)

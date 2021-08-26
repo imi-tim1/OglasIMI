@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
@@ -15,12 +15,16 @@ export class ApplicantApiService {
   constructor(private http: HttpClient) { }
 
   // Potrebno TESTIRANJE !!!
-  getApplicants(): Observable<HttpResponse<Applicant[]>> {
+  getApplicants(notApprovedRequested: boolean): Observable<HttpResponse<Applicant[]>> {
+    let par: HttpParams = new HttpParams();
+    par = par.set('notApprovedRequested', notApprovedRequested);
+    
     return this.http.get<Applicant[]>(
       this.url,
       {
         observe: 'response',
-        headers: HeaderUtil.jwtOnlyHeaders()
+        headers: HeaderUtil.jwtOnlyHeaders(),
+        params: par
       }
     );
   }
@@ -55,7 +59,29 @@ export class ApplicantApiService {
       { // options
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()
-      });
+      }
+    );
+  }
+
+  deleteApplicant(id: number): Observable<HttpResponse<null>> {
+    return this.http.delete<null>(
+      this.url + `/${id}`,
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+  }
+
+  approveApplicant(id: number): Observable<HttpResponse<null>> {
+    return this.http.put<null>(
+      this.url + `/${id}`,
+      {},
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
   }
   
 }

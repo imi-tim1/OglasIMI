@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { City } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { City, Job } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 import { CityService } from 'src/app/_utilities/_middleware/_services/city.service';
 import { FieldService } from 'src/app/_utilities/_middleware/_services/field.service';
@@ -14,23 +14,16 @@ import { Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
 
 })
 export class JobsFiltersComponent implements OnInit {
-
-  //@Input() public jobName: string = '';
-  //@Input() public workFromHome: boolean = false;
-
-  //@Input() public city!: City;
   
+  public jobs: Job[] = [];
+  // @Output() public jobsArrival = new EventEmitter();
+
   public filtersFromPage!: Filters;
-  /*= {
-    title: '',
-    employerId: 0,
-    fieldId: 0,
-    cityId: 0,
-    pageNumber: 1,
-    jobsPerPage: 5,
-    workFromHome: false,
-    ascendingOrder: false
-  }*/
+
+  public currentPage: number = 1;
+  public totalJobsNum: number = 0
+  public totalPagesNum: number = 0 
+  public jobsPerPage: number = 5;
 
   public checkedTags: number[] = [];
   jobName: string = '';
@@ -39,8 +32,7 @@ export class JobsFiltersComponent implements OnInit {
   selectedCityId: number = 0;
   selectedFieldId: number = 0;
   selectedEmployerId: number = 0;
-  showMoreBool: boolean = false;
-  //checkedWorkFromHome: boolean = false; DRUGA VARIJANTA
+  public showMoreBool: boolean = false;
 
   constructor(public jobService: JobService,
               public fieldService: FieldService,
@@ -51,7 +43,8 @@ export class JobsFiltersComponent implements OnInit {
     this.fieldService.getFields();
     this.cityService.getCities();
     this.employerService.getEmployers();
-    //this.fieldService.getTags(this.selectedFieldId);
+
+    this.jobService.getJobs(this, this.cbSuccessGetJobs);
   }
 
   showMore() {
@@ -63,19 +56,16 @@ export class JobsFiltersComponent implements OnInit {
       p.innerHTML = "Prikaži samo osnovne filtere";
     
     this.showMoreBool = !this.showMoreBool;
-
-    //this.fieldService.getTags(this.selectedFieldId);
   }
 
-  onSearch() {
-
+  packFilters(pageNum?: number) {
     this.filtersFromPage = {
-      title: this.jobName,
+      title: this.jobName.trim(),
       employerId: this.selectedEmployerId,
       fieldId: this.selectedFieldId,
       cityId: this.selectedCityId,
-      pageNumber: 1,
-      jobsPerPage: 5,
+      pageNumber: (pageNum)? pageNum : 1,
+      jobsPerPage: this.jobsPerPage,
       workFromHome: this.workFromHome,
       ascendingOrder: false
     }
@@ -83,19 +73,13 @@ export class JobsFiltersComponent implements OnInit {
     if (this.checkedTags.length > 0)
       this.filtersFromPage.tagList = this.checkedTags;
 
-    this.jobService.getFilteredJobs(this.filtersFromPage);
+    console.log(' ----- Filters from page ----- ')
+    console.log(this.filtersFromPage)
+  }
 
-   /* let data = {
-      title: this.jobName,
-      field: this.field,
-      tags: this.tags[],
-      city: this.city,
-
-      workFromHome: this.workFromHome
-    }
-
-    this.jobService.getFilteredJobs(data);
-    */
+  onSearch() {
+    this.packFilters();
+    this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessGetJobs);
   }
 
   toggleTag(tagID: number) {
@@ -126,23 +110,64 @@ export class JobsFiltersComponent implements OnInit {
   }
 
   getNewTags() {
+    this.checkedTags = [];
+    console.log('selected f id:' + this.selectedFieldId)
+
     if(this.selectedFieldId > 0) {
-      this.checkedTags = [];
       this.fieldService.tags = [];
       this.fieldService.getTags(this.selectedFieldId);
     }
+    else {
+      console.log('BRISIIII')
+      this.fieldService.tags = [];
+    }
   }
 
-  /*printSelVal() {
-    console.log(this.selectedValueCity);
-  }*/
-
-  /*wfh() {
-    //this.checkedWorkFromHome = !this.checkedWorkFromHome; DRUGA VARIJANTA
-    console.log(this.workFromHome);
+  loadNextPage() {
+    if(this.currentPage >= this.totalPagesNum) {
+      this.currentPage = this.totalPagesNum;
+      return;
+    }
+    
+      this.packFilters(this.currentPage + 1);
+    this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessNextPage);
   }
 
-  showTags() {
-    this.fieldService.getTags(this.selectedFieldId);
-  }*/
+  loadPreviousPage() {
+    if(this.currentPage <= 1) {
+      this.currentPage = 1;
+      return;
+    }
+    
+    this.packFilters(this.currentPage - 1);
+    this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessPreviousPage);
+  }
+
+  // API Callbacks
+
+  cbSuccessGetJobs(self: any, jobs?: Job[], jobsNumber?: number) {
+    if(jobs) self.jobs = jobs;
+    self.currentPage = 1;
+    self.totalJobsNum = jobsNumber;
+    self.totalPagesNum =  Math.ceil(self.totalJobsNum / self.jobsPerPage);
+
+    console.log(`total pages: ${self.totalPagesNum}, total jobs: ${self.totalJobsNum}, jpp: ${self.jobsPerPage}`);
+
+    // self.jobsArrival.emit(self.jobs);
+  }
+
+  cbSuccessNextPage(self: any, jobs?: Job[], jobsNumber?: number) {
+    if(jobs) self.jobs = jobs;
+    self.currentPage++;
+
+    console.log(`${self.currentPage - 1} -> ${self.currentPage}`);
+  }
+
+  cbSuccessPreviousPage(self: any, jobs?: Job[], jobsNumber?: number) {
+    if(jobs) self.jobs = jobs;
+    self.currentPage--;
+
+    console.log(`${self.currentPage + 1} -> ${self.currentPage}`)
+  }
+
 }

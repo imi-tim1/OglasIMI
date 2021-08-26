@@ -56,7 +56,29 @@ export class EmployerApiService {
       {
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()
-      });
+      }
+    );
+  }
+
+  deleteEmployer(id: number): Observable<HttpResponse<null>> {
+    return this.http.delete<null>(
+      this.url + `/${id}`,
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+  }
+
+  approveEmployer(id: number): Observable<HttpResponse<null>> {
+    return this.http.put<null>(
+      this.url + `/${id}`,
+      {},
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
   }
 
 }

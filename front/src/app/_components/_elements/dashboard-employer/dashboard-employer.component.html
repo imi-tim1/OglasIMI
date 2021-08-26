@@ -1,2 +1,8 @@
-<app-employer-info-card></app-employer-info-card>
-<app-jobs-list [empJobs]="true"></app-jobs-list>
+<div *ngIf="empService.employer" class="container">
+    <div class="w-50 container">
+        <app-employer-info-card [emp]="empService.employer"></app-employer-info-card>
+    </div>
+    <br>
+    <h3 class="text-center pt-5">Moji oglasi</h3>
+    <app-jobs-list [empJobs]='true' [uid]="empService.employer.id"></app-jobs-list>
+</div>

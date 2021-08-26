@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Applicant, Employer, RegistrationBrief } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { DEFAULT_PROFILE_PICTURE } from 'src/app/_utilities/_constants/raw-data';
-import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 
 @Component({
   selector: 'app-registration-card',
@@ -22,7 +21,7 @@ export class RegistrationCardComponent implements OnInit {
 
   ngOnInit(): void 
   {
-    if(this.empData != null) {
+    if(this.empData) {
       this.brief = {
         id: this.empData.id,
         name: this.empData.name,
@@ -30,7 +29,7 @@ export class RegistrationCardComponent implements OnInit {
         pictureBase64: this.empData.pictureBase64
       }
     }
-    else if (this.appData != null) {
+    else if (this.appData) {
       this.brief = {
         id: this.appData.id,
         name: this.appData.firstName + ' ' + this.appData.lastName,

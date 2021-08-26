@@ -58,37 +58,40 @@ export class TestingPageComponent implements OnInit {
   {
     // this.id = this.route.snapshot.paramMap.get("id");
 
-    // this.testEmployerService();
-    this.testApplicantService();
+    this.testEmployerService();
+    // this.testApplicantService();
     // this.testJobService();
   }
 
   testEmployerService() {
     // this.employerService.getEmployers();      // OK
     // this.employerService.getEmployer(5);      // OK
-    // this.employerService.getEmployersJobs(4); // OK
-    this.employerService.createEmployer({     // OK
-      name: 'Keba Kraba d.o.o',
-      address: 'Ulica 1',
-      email: 'keba@kraba.com',
-      phoneNumber: '063234333',
-      pictureBase64: null,
-      tin: '1345634560009764',
-      hashedPassword: PasswdHash.encrypt('keba')
-    });
+    this.employerService.getEmployersJobs(4); // OK
+    // this.employerService.createEmployer({     // OK
+    //   name: 'Keba Kraba d.o.o',
+    //   address: 'Ulica 1',
+    //   email: 'keba@kraba.com',
+    //   phoneNumber: '063234333',
+    //   pictureBase64: null,
+    //   tin: '1345634560009764',
+    //   hashedPassword: PasswdHash.encrypt('keba')
+    // });
+    // this.employerService.deleteEmployer(12);
+    // this.employerService.approveEmployer(13);
   }
 
   testApplicantService() {
-    // Ceka se Back End ...
-    // this.aplicantService.getApplicants();      // ?
-    this.aplicantService.getApplicant(6);      // ?
-    // this.aplicantService.getApplicantsJobs(2); // ?
+    // this.aplicantService.getApplicants();      // OK
+    // this.aplicantService.getApplicant(2);      // OK
+    // this.aplicantService.getApplicantsJobs(2); // OK
+    // this.aplicantService.deleteApplicant(20);
+    // this.aplicantService.approveApplicant(21);
   }
 
   testJobService() {
     // let j: number = 4;
 
-    this.jobService.getJob(this.id as number); // OK
+    // this.jobService.getJob(this.id as number); // OK
     // this.jobService.getJobs(); // OK
     // this.jobService.getJobsApplicants(j); // OK
 

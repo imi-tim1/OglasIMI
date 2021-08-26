@@ -1,1 +1,13 @@
-<p>applicant-info-card works!</p>
+<div *ngIf="app" class="row w-100 p-4 bg-white border border-secondary rounded-3">
+    <div class="col-4 p-0">
+        <img [src]="(app.pictureBase64 != null)? app.pictureBase64 : defaultPicture" alt="[image]"
+        style="width: 100%;"
+        class="border rounded-3">
+    </div>
+
+    <div class="col-8 p-0">
+        <h3 class="px-4 text-wrap py-2">{{app.firstName + ' ' + app.lastName}}</h3>
+        <h5 class="px-4 text-wrap">{{app.phoneNumber}}</h5>
+        <h5 class="px-4 text-break">{{app.email}}</h5>
+    </div>
+</div>
