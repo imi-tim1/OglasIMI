@@ -21,8 +21,10 @@ export class JobApiService {
     let par: HttpParams = new HttpParams();
     let key: keyof typeof filters;
     for (key in filters) {
-      if(filters[key] != undefined)
-        par = par.set(key, (typeof filters[key] == 'object')? ParamUtil.toString(filters[key]) : filters[key])
+      let x = filters[key];
+      if(x != undefined) {
+        par = par.set(key, (typeof x == typeof [])? (x as number[]).join(', ') : (x as string | number | boolean));
+      }
     }
 
     console.log(par.toString());
@@ -102,7 +104,7 @@ export class JobApiService {
   // ---- Comments ----
 
   getJobComments() {
-    
+
   }
 
 }
