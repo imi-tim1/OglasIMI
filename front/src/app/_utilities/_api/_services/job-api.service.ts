@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse, HttpParamsOptions, HttpParameterCodec } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
@@ -18,12 +18,15 @@ export class JobApiService {
 
   getJobs(filters: Filters): Observable<HttpResponse<PagedJobs>> 
   {
-    let par: HttpParams = new HttpParams();
+    let par: HttpParams = new HttpParams({ 
+      encoder: { encodeKey: k=>k, encodeValue: v=>encodeURIComponent(v),
+                decodeKey: k=>k, decodeValue: v=>decodeURIComponent(v) } 
+    });
     let key: keyof typeof filters;
     for (key in filters) {
       let x = filters[key];
       if(x != undefined) {
-        par = par.set(key, (typeof x == typeof [])? (x as number[]).join(', ') : (x as string | number | boolean));
+        par = par.set(key, (typeof x == typeof [])? (x as number[]).join(',') : (x as string | number | boolean));
       }
     }
 
