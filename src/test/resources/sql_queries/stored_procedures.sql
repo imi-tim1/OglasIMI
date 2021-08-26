@@ -450,15 +450,15 @@ BEGIN
            f.id f_id, f.name f_name,
            c.id c_id, c.name c_name,
            e.user_id, e.name e_name, e.tin, e.address, e.picture_base64,e.phone_number
-    from job j left join field f on j.field_id = f.id
-               left join city c on c.id = j.city_id
-               left join employer e on e.user_id = j.employer_id
+    FROM job j LEFT JOIN field f ON j.field_id = f.id
+               LEFT JOIN city c ON c.id = j.city_id
+               LEFT JOIN employer e ON e.user_id = j.employer_id
     WHERE
         (p_field_id = 0 OR p_field_id = field_id)
       AND (p_employer_id = 0 OR p_employer_id = employer_id)
       AND (p_city_id = 0 OR p_city_id = city_id)
-      AND (p_title is NULL OR p_title = 'default' OR title RLIKE(CONCAT(p_title,'+')))
-      AND (p_work_from_home = false OR p_work_from_home = work_from_home)
+      AND (p_title IS NULL OR p_title = 'default' OR title RLIKE(CONCAT(p_title,'+')))
+      AND (p_work_from_home = FALSE OR p_work_from_home = work_from_home)
     ORDER BY post_date DESC;
 END //
 DELIMITER ;
