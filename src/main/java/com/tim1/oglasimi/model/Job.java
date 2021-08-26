@@ -22,6 +22,7 @@ public class Job
     private LocalDateTime postDate;
 
     @NotBlank
+    @Pattern(regexp = "^[0-9a-zA-ZšŠđĐčČćĆžŽ /()\\[\\]\\-*.,'\"#+%?!]+$")
     @Size( min = 3, max = 50, message = "The length of title must be between 3 and 50 characters" )
     private String title;
 
