@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { JobComment } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { faReply, faTimes } from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-job-comment-card',
@@ -7,8 +9,19 @@ import { JobComment } from 'src/app/_utilities/_api/_data-types/interfaces';
 })
 export class JobCommentCardComponent implements OnInit {
 
+  // State
   @Input() public data: JobComment | null = null;
+  @Input() public replayState: boolean = false;
+
+  // Events
   @Output() replayClick = new EventEmitter();
+
+  // Auth
+  @Input() public canReplay: boolean = false;
+
+  // Fontawesome
+  iconReplay = faReply;
+  iconReplayStop = faTimes;
 
   constructor() { }
 

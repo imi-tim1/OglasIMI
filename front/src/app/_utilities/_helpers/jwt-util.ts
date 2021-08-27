@@ -1,3 +1,5 @@
+import { UserRole } from "../_api/_data-types/enums";
+
 export class JWTUtil
 {
     static localStorageKey: string = 'Json-Web-Token';
@@ -33,6 +35,10 @@ export class JWTUtil
     static getRole(): string {
         let g = this.getPayload();
         return (g == null)? '' : g.rol;
+    }
+
+    static getUserRole(): UserRole {
+        return this.getRole() as UserRole;
     }
 
     static getID(): number {

@@ -4,6 +4,8 @@
             <h6>{{data.id}}</h6>
             <h6>{{data.text}}</h6>
         </div>
-        <button (click)="onReplayClick()" class="btn btn-warning shadow-sm align-self-end">Odgovori</button>
+        <button *ngIf="canReplay" (click)="onReplayClick()" class="btn border align-self-end"> 
+            <fa-icon [icon]="(!replayState)? iconReplay : iconReplayStop"></fa-icon> 
+        </button>
     </div>
 </div>

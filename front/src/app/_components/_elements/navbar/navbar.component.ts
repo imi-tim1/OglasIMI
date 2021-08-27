@@ -16,6 +16,6 @@ export class NavbarComponent implements OnInit {
   }
 
   checkRole(allowedRoles: UserRole[]) {
-    return this.accessService.checkRole(JWTUtil.getRole() as UserRole, allowedRoles);
+    return this.accessService.checkRole(JWTUtil.getUserRole(), allowedRoles);
   }
 }

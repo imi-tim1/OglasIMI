@@ -1,6 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { JobComment } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Job, JobComment } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
+import { faLocationArrow, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
+import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
+import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 
 @Component({
   selector: 'app-job-comments-list',
@@ -11,15 +15,25 @@ export class JobCommentsListComponent implements OnInit {
   @Input() public jobID: number = 0;
   public comments: JobComment[] = [];
 
-  // New Comment
+  // State - New Comment
   public newCommentCardActive: boolean = false;
   public newCommentText: string = '';
 
-  // Replay
+  // State - Replay
   public activeReplayCommentID: number = 0;
   public replayText: string = '';
 
-  constructor(private jobService: JobService) { }
+  // Auth
+  isOwner: boolean = false;
+
+  // Fontawesome
+  iconReplaySend = faCheck;
+  iconNewComment = faPlus;
+
+  constructor(
+    private jobService: JobService,
+    public employerService: EmployerService
+  ) { }
 
   ngOnInit(): void {
     this.jobService.getJobComments(this.jobID, this, this.cbGetCommentsSuccess);
@@ -67,6 +81,24 @@ export class JobCommentsListComponent implements OnInit {
     self.comments = data;
     console.log('Comments')
     console.log(self.comments);
+
+    // Auth - Da li je trenutni korisnik vlasnik oglasa?
+    self.employerService.getEmployersJobs(JWTUtil.getID(), self, 
+    (self: any, jobs: Job[]) => {
+      let ok = jobs.find(j => j.id == self.jobID) != undefined;
+      console.log('>>>>> Ownership: ' + ok);
+      self.isOwner = ok;
+    });
+  }
+
+  // --- Auth ---
+
+  canReplay() {
+    return JWTUtil.getUserRole() == UserRole.Employer && this.isOwner;
+  }
+
+  canComment() {
+    return JWTUtil.getUserRole() == UserRole.Visitor;
   }
 
 }

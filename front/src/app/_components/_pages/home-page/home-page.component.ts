@@ -15,19 +15,19 @@ export class HomePageComponent implements OnInit {
   }
 
   isVisitor() {
-    return JWTUtil.getRole() as UserRole == UserRole.Visitor;
+    return JWTUtil.getUserRole() == UserRole.Visitor;
   }
 
   isApplicant() {
-    return JWTUtil.getRole() as UserRole == UserRole.Applicant;
+    return JWTUtil.getUserRole() == UserRole.Applicant;
   }
 
   isEmployer() {
-    return JWTUtil.getRole() as UserRole == UserRole.Employer;
+    return JWTUtil.getUserRole() == UserRole.Employer;
   }
 
   isAdmin() {
-    return JWTUtil.getRole() as UserRole == UserRole.Admin;
+    return JWTUtil.getUserRole() == UserRole.Admin;
   }
 
 }

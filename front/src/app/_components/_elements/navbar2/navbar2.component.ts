@@ -50,7 +50,7 @@ export class Navbar2Component implements OnInit {
 
     let roles = this.navs[index].allowedRoles;
     
-    return this.acc.checkRole(JWTUtil.getRole() as UserRole, roles);
+    return this.acc.checkRole(JWTUtil.getUserRole(), roles);
   }
 
   checkActive(name: string): boolean {

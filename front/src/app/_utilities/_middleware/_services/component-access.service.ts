@@ -38,7 +38,7 @@ export class ComponentAccessService {
       // Success (Logged In)
       (response) => {
         JWTUtil.store(response.headers.get(JWT_HEADER_NAME));
-        this.role = JWTUtil.getRole() as UserRole;
+        this.role = JWTUtil.getUserRole();
         this.allowed = this.checkRole(this.role, allowedRoles);
 
         // Not Allowed

@@ -13,7 +13,7 @@ import { JobService } from 'src/app/_utilities/_middleware/_services/job.service
 export class JobInfoPageComponent implements OnInit {
 
   public jobID: number = 0;
-  public applicants: Applicant[] = [];
+  public applicants: Applicant[] | null = null;
 
   constructor(
     public activatedRoute: ActivatedRoute,
@@ -34,7 +34,7 @@ export class JobInfoPageComponent implements OnInit {
   // API Callbacks
 
   cbSuccess(self: any, applicants?: Applicant[]) {
-    if(applicants) self.applicants = applicants;
+    self.applicants = applicants;
   }
 
 }
