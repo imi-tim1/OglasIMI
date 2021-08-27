@@ -1,7 +1,7 @@
 <app-navbar2 [activeNav]="'my-jobs-app'"></app-navbar2>
 
 <div *ngIf="applicant" class="container">
-    <div class="w-50 container">
+    <div class="container" style="max-width: 45em;">
         <app-applicant-info-card [app]="applicant"></app-applicant-info-card>
     </div>
     <br>

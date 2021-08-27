@@ -98,4 +98,14 @@ export class EmployerService {
       }
     );
   }
+
+  getEmployersRating(id: number, self?: any, successCallback?: Function) {
+    this.api.getEmployersRating(id).subscribe(
+      // Success
+      (response) => {
+        // Callback
+        if(self && successCallback) successCallback(self, response.body);
+      }
+    );
+  }
 }

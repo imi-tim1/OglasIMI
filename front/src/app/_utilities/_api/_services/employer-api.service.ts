@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
 import { HeaderUtil } from '../../_helpers/http-util';
-import { Employer, Job, NewEmployer } from '../_data-types/interfaces';
+import { Employer, Job, NewEmployer, RatingResponse } from '../_data-types/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +74,16 @@ export class EmployerApiService {
     return this.http.put<null>(
       this.url + `/${id}`,
       {},
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+  }
+
+  getEmployersRating(id: number): Observable<HttpResponse<RatingResponse>> {
+    return this.http.get<RatingResponse>(
+      this.url + `/${id}/rating`,
       {
         observe: 'response',
         headers: HeaderUtil.jwtOnlyHeaders()

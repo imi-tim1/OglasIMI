@@ -1,4 +1,4 @@
-<div class="navbar2 container-fluid">
+<div class="navbar2 container-fluid shadow">
 
     <div class="row">
         <!-- Leva strana -->
@@ -6,7 +6,9 @@
             <div class="d-flex flex-row">
 
                 <!-- Home -->
-                <a *ngIf="check('home')" class="nav2item {{(checkActive('home')?'nav-active':'')}}" routerLink="/">Početna strana</a>
+                <a *ngIf="check('home')" class="nav2item {{(checkActive('home')?'nav-active':'')}}" routerLink="/">
+                    <fa-icon [icon]="iconHouse" [size]="'2x'"></fa-icon>
+                </a>
                 
                 <!-- User Lists -->
                 <a *ngIf="check('employers')" class="nav2item {{(checkActive('employers')?'nav-active':'')}}" routerLink="/employers">Poslodavci</a>

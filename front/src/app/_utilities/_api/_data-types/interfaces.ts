@@ -87,6 +87,12 @@ export interface JobComment
     postDate: Date;
 }
 
+export interface RatingResponse 
+{
+    rating: number;
+    alreadyRated: boolean;
+}
+
 export interface RegistrationBrief 
 {
     id: number;
