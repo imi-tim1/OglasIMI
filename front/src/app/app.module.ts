@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppComponent } from './app.component';
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
@@ -83,7 +84,8 @@ import { JobCommentsListComponent } from './_components/_elements/job-comments-l
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
