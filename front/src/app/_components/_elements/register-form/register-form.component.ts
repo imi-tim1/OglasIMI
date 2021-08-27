@@ -56,7 +56,7 @@ export class RegisterFormComponent implements OnInit {
   //pattEmail: RegExp = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
   pattEmail: RegExp = /^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/;
   //pattPhone: RegExp = /^\+?[0-9]{9,12}$/;
-  pattPhone: RegExp = /^((\+[0-9]{1,3})|0)[1-9]{2}[0-9]{6,7}$/;
+  pattPhone: RegExp = /^((\+[0-9]{1,3})|0)[1-9][0-9][0-9]{6,7}$/;
   pattPassword: RegExp = /.{6,}$/;
   //---
   //pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno

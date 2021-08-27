@@ -37,8 +37,8 @@
         <div class="row  h-100">
           <div class="col">
             <div class="form-outline mt-5 ps-3">
-              <label>Izaberite oblast rada:&nbsp;&nbsp;</label>
                 <select id="field" [(ngModel)]="selectedFieldId">
+                  <option value="0">Oblast rada</option>
                   <option *ngFor="let f of fieldService.fields"
                             [ngValue]="f.id"
                             (click)="getNewTags()">
