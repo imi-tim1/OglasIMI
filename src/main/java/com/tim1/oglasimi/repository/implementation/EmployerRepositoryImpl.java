@@ -307,8 +307,8 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 
                 if(isApplicant)
                 {
-                    cstmt.setInt("p_employer_id",employerId);
-                    cstmt.setInt("p_applicant_id",applicantId);
+                    cstmtRated.setInt("p_employer_id",employerId);
+                    cstmtRated.setInt("p_applicant_id",applicantId);
 
                     rs = cstmtRated.executeQuery();
                     rs.first();
