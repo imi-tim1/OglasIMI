@@ -143,8 +143,8 @@ CREATE TABLE job_tag
 
 CREATE TABLE rating
 (
-    applicant_id INT NOT NULL,
     employer_id INT NOT NULL,
+    applicant_id INT NOT NULL,
     feedback_value LONG NOT NULL,
     CONSTRAINT PRIMARY KEY (applicant_id, employer_id),
     CONSTRAINT FOREIGN KEY (applicant_id) REFERENCES applicant (user_id)

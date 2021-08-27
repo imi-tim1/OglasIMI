@@ -669,7 +669,7 @@ CREATE PROCEDURE rate_employer (
     OUT p_is_rated boolean
 )
 BEGIN
-    INSERT INTO rating
+    INSERT INTO rating (employer_id,applicant_id,feedback_value)
     VALUES (p_employer_id,p_applicant_id,p_feedback_value);
 
     IF ROW_COUNT() != 0
