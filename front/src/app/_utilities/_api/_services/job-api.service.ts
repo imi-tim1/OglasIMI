@@ -110,4 +110,12 @@ export class JobApiService {
 
   }
 
+  postNewJobComment() {
+
+  }
+
+  deleteJobComment() {
+    
+  }
+
 }

@@ -81,10 +81,10 @@ export interface Applicant
 
 export interface JobComment
 {
-    id?: number;
-    parentId?: number;
+    id: number;
+    parentId: number;
     text: string;
-    postDate?: Date;
+    postDate: Date;
 }
 
 export interface RegistrationBrief 

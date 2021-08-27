@@ -2,7 +2,7 @@
     <h3 class="text-center p-3 pt-5">Komentari
         <span *ngIf="canComment()" class="ps-4">
             <button (click)="toggleNewCommentCard()" class="btn btn-success shadow-sm align-self-center">
-                <fa-icon [icon]="iconNewComment"></fa-icon>
+                <fa-icon [icon]="(newCommentCardActive)? iconNewCommentStop : iconNewComment"></fa-icon>
             </button>
         </span>
     </h3>
@@ -10,11 +10,14 @@
     <div class="container p-2 pb-0">
         <!-- New Comment -->
         <div *ngIf="canComment() && newCommentCardActive" class="pb-4">
-            <div class="d-flex align-items-start text-start w-100 p-2 bg-white rounded-3 shadow border border-1">
+            <div class="d-flex align-items-start text-start w-100 p-2 bg-white 
+                        rounded-3 shadow border border-1 border-success">
                 <div class="px-3 py-2 flex-fill">
                     <textarea [(ngModel)]="replayText" type="text" class="w-100"></textarea>
                 </div>
-                <button (click)="sendNewComment()" class="btn btn-warning shadow-sm align-self-center">>></button>
+                <button (click)="sendNewComment()" class="btn btn-success shadow-sm align-self-center">
+                    <fa-icon [icon]="iconSend"></fa-icon>
+                </button>
             </div>
         </div>
 
@@ -26,6 +29,7 @@
                                       [data]="c"
                                       [replayState]="activeReplayCommentID == c.id"
                                       [canReplay]="canReplay()"
+                                      [canDelete]="canDelete()"
                 ></app-job-comment-card>
 
                 <!-- Replay Card -->

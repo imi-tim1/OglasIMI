@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Job, JobComment } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
-import { faLocationArrow, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
+import { faPaperPlane, faCheck, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-job-comments-list',
@@ -29,6 +29,8 @@ export class JobCommentsListComponent implements OnInit {
   // Fontawesome
   iconReplaySend = faCheck;
   iconNewComment = faPlus;
+  iconNewCommentStop = faMinus;
+  iconSend = faPaperPlane;
 
   constructor(
     private jobService: JobService,
@@ -36,7 +38,7 @@ export class JobCommentsListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.jobService.getJobComments(this.jobID, this, this.cbGetCommentsSuccess);
+    this.fetchComments();
   }
 
 
@@ -47,11 +49,19 @@ export class JobCommentsListComponent implements OnInit {
     this.replayText = '';
   }
 
-  sendNewComment() {
+  fetchComments() {
+    this.jobService.getJobComments(this.jobID, this, this.cbGetCommentsSuccess);
+  }
+
+  sendNewComment() { ///// <<<<<< !!!!!!
     let c: JobComment = {
+      id: 0,
       text: this.replayText,
-      parentId: this.activeReplayCommentID
+      parentId: this.activeReplayCommentID,
+      postDate: new Date()
     };
+
+    // TODO: Callback fn za uspesno dodat komentar
   }
 
   // --- Replay ---
@@ -67,10 +77,12 @@ export class JobCommentsListComponent implements OnInit {
     this.activeReplayCommentID = forComment;
   }
 
-  sendReplay() {
+  sendReplay() { ///// <<<<<< !!!!!!
     let c: JobComment = {
+      id: 0,
       text: this.replayText,
-      parentId: this.activeReplayCommentID
+      parentId: this.activeReplayCommentID,
+      postDate: new Date()
     };
     // new comment
   }
@@ -78,6 +90,21 @@ export class JobCommentsListComponent implements OnInit {
   // --- API Callbacks ---
   
   cbGetCommentsSuccess(self: any, data: JobComment[]) {
+    let c = [], r = [];
+    for (let d of data) {
+      if(d.parentId == 0) c.push(d);
+      else r.push(d);
+    }
+
+    data = [];
+    for (let cd of c) {
+      data.push(cd);
+      for (let rd of r) {
+        if(rd.parentId == cd.id)
+          data.push(rd);
+      }
+    }
+
     self.comments = data;
     console.log('Comments')
     console.log(self.comments);
@@ -98,7 +125,11 @@ export class JobCommentsListComponent implements OnInit {
   }
 
   canComment() {
-    return JWTUtil.getUserRole() == UserRole.Visitor;
+    return JWTUtil.getUserRole() == UserRole.Applicant;
+  }
+
+  canDelete() {
+    return JWTUtil.getUserRole() == UserRole.Admin;
   }
 
 }

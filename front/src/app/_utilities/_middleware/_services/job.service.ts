@@ -179,13 +179,21 @@ export class JobService {
     // );
 
     let c: JobComment[] = [
-      { id: 1, postDate: new Date(), text: "Komentar je komentar je komentar je komentar je komentarje komentar je komentar je komentar je komentar je komentar je komentar je komentar je komentar." },
-      { id: 2, postDate: new Date(), text: "Komentar je komentar je komentar." },
-      { id: 3, postDate: new Date(), text: "Komentar je komentar je komentar." },
-      { id: 4, postDate: new Date(), text: "Komentar je komentar je komentar." },
-      { id: 5, postDate: new Date(), text: "Komentar je komentar je komentar." }
+      { id: 1, parentId: 0, postDate: new Date(), text: "Komentar je komentar je komentar je komentar je komentarje komentar je komentar je komentar je komentar je komentar je komentar je komentar je komentar." },
+      { id: 2, parentId: 4, postDate: new Date(), text: "Komentar je komentar je komentar." },
+      { id: 3, parentId: 1, postDate: new Date(), text: "Komentar je komentar je komentar." },
+      { id: 4, parentId: 0, postDate: new Date(), text: "Komentar je komentar je komentar." },
+      { id: 5, parentId: 4, postDate: new Date(), text: "Komentar je komentar je komentar." }
     ]
     if(successCallback && self) successCallback(self, c);
+  }
+
+  postNewJobComment() {
+
+  }
+
+  deleteJobComment() {
+
   }
 
 }
