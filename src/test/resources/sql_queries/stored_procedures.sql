@@ -660,15 +660,22 @@ DELIMITER ;
 
 
 -- #######################################################################
--- Procedure for checking if applicant is
+-- Procedure for employer rating
 DELIMITER // ;
-CREATE PROCEDURE check_if_applied
-(
+CREATE PROCEDURE rate_employer (
     IN p_employer_id int,
-    IN p_applicant_id int
+    IN p_applicant_id int,
+    IN p_feedback_value double,
+    OUT p_is_rated boolean
 )
 BEGIN
-    SELECT COUNT(*) AS count FROM job_application ja JOIN job j ON ja.job_id = j.id
-    WHERE j.employer_id = p_employer_id AND ja.applicant_id = p_applicant_id;
+    INSERT INTO rating
+    VALUES (p_employer_id,p_applicant_id,p_feedback_value);
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_is_rated = TRUE;
+    END IF;
+
 END //
 DELIMITER ;
