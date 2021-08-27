@@ -12,7 +12,7 @@ public class EndUser extends User {
     private String pictureBase64;
 
     @NotBlank
-    @Pattern(regexp = "^((\\+[0-9]{1,3})|0)[1-9]{2}[0-9]{6,7}$")
+    @Pattern(regexp = "^((\\+[0-9]{1,3})|0)[1-9][0-9][0-9]{6,7}$")
     @Size( min = 9, max = 13 )
     private String phoneNumber;
 
