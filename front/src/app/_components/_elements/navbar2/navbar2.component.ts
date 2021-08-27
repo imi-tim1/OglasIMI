@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { faHome, faHouseUser } from '@fortawesome/free-solid-svg-icons';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
@@ -37,6 +38,10 @@ export class Navbar2Component implements OnInit {
     // Admin
     { name: 'applicants', allowedRoles: [UserRole.Admin] }
   ];
+
+  // Fontawesome
+  iconHouse = faHome;
+  iconHouseUser = faHouseUser;
 
   constructor(public acc: ComponentAccessService) { }
 
