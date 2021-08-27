@@ -679,3 +679,18 @@ BEGIN
 
 END //
 DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+DELIMITER // ;
+CREATE PROCEDURE check_if_rated (
+    IN p_employer_id int,
+    IN p_applicant_id int
+)
+BEGIN
+    SELECT COUNT(*) AS count from rating
+    WHERE p_employer_id = employer_id AND p_applicant_id = applicant_id;
+END //
+DELIMITER ;

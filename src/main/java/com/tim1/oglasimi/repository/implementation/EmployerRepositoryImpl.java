@@ -27,6 +27,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     private static final String GET_FEEDBACK_VALUES_STORED_PROCEDURE = "{call get_feedback_values(?)}";
     private static final String APPLICATION_STORED_PROCEDURE = "{call check_application(?,?)}";
     private static final String RATE_EMPLOYER_STORED_PROCEDURE = "{call rate_employer(?,?,?,?)}";
+    private static final String IS_RATED_STORED_PROCEDURE = "{call check_if_rated(?,?)}";
 
     /** returns data for jobs without tag names for those jobs
      * GET_TAGS_A_JOB_PROCEDURE_CALL is used to get remaining job data */
@@ -280,7 +281,8 @@ public class EmployerRepositoryImpl implements EmployerRepository {
         RatingResponse ratingResponse = null;
 
         try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
-              CallableStatement cstmt = con.prepareCall(GET_FEEDBACK_VALUES_STORED_PROCEDURE))
+              CallableStatement cstmt = con.prepareCall(GET_FEEDBACK_VALUES_STORED_PROCEDURE);
+              CallableStatement cstmtRated = con.prepareCall(IS_RATED_STORED_PROCEDURE))
         {
             cstmt.setInt("p_id",employerId);
             ResultSet rs = cstmt.executeQuery();
@@ -305,7 +307,15 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 
                 if(isApplicant)
                 {
-                    if(isApplied(employerId,applicantId)) ratingResponse.setAlreadyRated(true);
+                    cstmt.setInt("p_employer_id",employerId);
+                    cstmt.setInt("p_applicant_id",applicantId);
+
+                    rs = cstmtRated.executeQuery();
+                    rs.first();
+
+                    int count = rs.getInt("count");
+
+                    if(count != 0) ratingResponse.setAlreadyRated(true);
                 }
             }
         }
