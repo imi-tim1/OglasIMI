@@ -45,7 +45,7 @@
                 </div>
             </div>
             <!-- Rate Option -->
-            <div *ngIf="showRateOption && !allreadyRated" class="row">
+            <div *ngIf="showRateOption && canRate()" class="row">
                 <div class="col">
                     <span *ngFor="let i of [1,2,3,4,5]" class="btn" (click)="clickRateStar(i)">
                         <fa-icon [icon]="(i <= myRating)? iconStar : iconStarEmpty" [size]="'lg'"></fa-icon>
