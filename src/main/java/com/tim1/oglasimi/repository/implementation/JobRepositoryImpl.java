@@ -24,7 +24,6 @@ public class JobRepositoryImpl implements JobRepository
     private static final String TAG_STORED_PROCEDURE = "{call get_tags_for_a_job(?)}";
     private static final String POST_JOB_STORED_PROCEDURE = "{call post_job(?,?,?,?,?,?,?,?)}";
     private static final String INSERT_TAG_STORED_PROCEDURE = "{call insert_tag(?,?,?)}";
-    private static final String JOB_COUNT_STORED_PROCEDURE = "{call count_jobs()}";
     private static final String GET_JOB_APPLICANTS_PROCEDURE_CALL = "{call get_job_applicants(?)}";
     private static final String JOB_APPLY_PROCEDURE_CALL = "{call apply_for_a_job(?,?,?)}";
     private static final String GET_JOB_STORED_PROCEDURE = "{call get_job(?)}";
@@ -50,8 +49,7 @@ public class JobRepositoryImpl implements JobRepository
 
         try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
              CallableStatement cstmtMaster = con.prepareCall(MASTER_STORED_PROCEDURE);
-             CallableStatement cstmtTag = con.prepareCall(TAG_STORED_PROCEDURE);
-             CallableStatement cstmtCount = con.prepareCall(JOB_COUNT_STORED_PROCEDURE))
+             CallableStatement cstmtTag = con.prepareCall(TAG_STORED_PROCEDURE))
         {
             setStatement(cstmtMaster,jobFilter);
             ResultSet rsMaster = cstmtMaster.executeQuery(); // Glavna tabela sa uobicajenim filterima
@@ -140,13 +138,14 @@ public class JobRepositoryImpl implements JobRepository
                     }
                 }
             }
-            ResultSet rsCount = cstmtCount.executeQuery();
-            rsCount.first();
 
-            int totalJobNumber = rsCount.getInt("job_num");
+            int count = 0;
+
+            rsMaster.beforeFirst();
+            while(rsMaster.next()) count++;
 
             jobFeed.setJobs(jobList);
-            jobFeed.setTotalJobNumber(totalJobNumber);
+            jobFeed.setTotalJobNumber(count);
         }
 
         catch (SQLException throwables) {

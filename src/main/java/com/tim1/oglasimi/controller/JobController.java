@@ -9,6 +9,7 @@ import com.tim1.oglasimi.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.spel.ast.Literal;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static com.tim1.oglasimi.security.SecurityConfig.*;
 
@@ -148,6 +150,7 @@ public class JobController
         else tags = null;
 
         if(title.equals("")) title = "default";
+        else title = Pattern.quote(title);
 
         jobFilter.setEmployer(employer);
         jobFilter.setField(field);
@@ -253,7 +256,7 @@ public class JobController
 
         String resultMessage = jobService.applyForAJob(uid, jobId);
 
-        if( resultMessage == "Successful") {
+        if( resultMessage.equals("Successful") ) {
             httpStatus = HttpStatus.CREATED;
         }
         else {

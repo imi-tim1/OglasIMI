@@ -79,6 +79,14 @@ export interface Applicant
     hashedPassword: string;
 }
 
+export interface JobComment
+{
+    id?: number;
+    parentId?: number;
+    text: string;
+    postDate?: Date;
+}
+
 export interface RegistrationBrief 
 {
     id: number;

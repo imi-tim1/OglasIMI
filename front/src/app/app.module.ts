@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppComponent } from './app.component';
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
@@ -37,6 +38,8 @@ import { ApplicantInfoPageComponent } from './_components/_pages/applicant-info-
 import { ApplicantsPageComponent } from './_components/_pages/applicants-page/applicants-page.component';
 import { ApplicantListCardComponent } from './_components/_elements/applicant-list-card/applicant-list-card.component';
 import { SearchJobsPageComponent } from './_components/_pages/search-jobs-page/search-jobs-page.component';
+import { JobCommentCardComponent } from './_components/_elements/job-comment-card/job-comment-card.component';
+import { JobCommentsListComponent } from './_components/_elements/job-comments-list/job-comments-list.component';
 
 @NgModule({
   declarations: [
@@ -72,14 +75,17 @@ import { SearchJobsPageComponent } from './_components/_pages/search-jobs-page/s
     ApplicantInfoPageComponent,
     ApplicantsPageComponent,
     ApplicantListCardComponent,
-    SearchJobsPageComponent
+    SearchJobsPageComponent,
+    JobCommentCardComponent,
+    JobCommentsListComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
