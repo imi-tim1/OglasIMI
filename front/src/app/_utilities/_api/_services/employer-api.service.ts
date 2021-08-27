@@ -91,4 +91,19 @@ export class EmployerApiService {
     );
   }
 
+  rateEmployer(id: number, rating: number): Observable<HttpResponse<null>> {
+    let par: HttpParams = new HttpParams();
+    par = par.set('feedbackValue', rating);
+
+    return this.http.post<null>(
+      this.url + `/${id}/rating`,
+      {},
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders(),
+        params: par
+      }
+    );
+  }
+
 }

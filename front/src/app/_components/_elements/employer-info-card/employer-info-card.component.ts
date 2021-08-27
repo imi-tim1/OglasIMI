@@ -6,6 +6,7 @@ import { DEFAULT_PROFILE_PICTURE } from 'src/app/_utilities/_constants/raw-data'
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
+import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 
 @Component({
   selector: 'app-employer-info-card',
@@ -15,7 +16,7 @@ export class EmployerInfoCardComponent implements OnInit {
 
   @Input() public emp: Employer | null = null;
   @Input() public rating: number = -1;
-  @Input() public rateDissabled: boolean = false;
+  @Input() public rateDissabled: boolean = true;
 
   public myRating: number = 0;
   public showRateOption: boolean = false;
@@ -38,9 +39,8 @@ export class EmployerInfoCardComponent implements OnInit {
 
   // --- Actions ---
 
-  fetchRating() 
-  {
-    if(!this.emp)
+  fetchRating() {
+    if (!this.emp)
       return;
 
     this.employerService.getEmployersRating(this.emp.id, this, this.cbSuccessGetRating);
@@ -56,36 +56,37 @@ export class EmployerInfoCardComponent implements OnInit {
   }
 
   sendMyRating() {
-    // TODO: API Call ->
-    this.cbSuccessRate(this); // TEMP
+    if (!this.emp)
+      return;
+
+    this.employerService.rateEmployer(this.emp.id, this.myRating, this, this.cbSuccessRate);
   }
 
   // --- Auth ---
 
   canRate() {
-    return !this.allreadyRated && !this.rateDissabled;
+    return !this.allreadyRated && !this.rateDissabled && JWTUtil.getUserRole() == UserRole.Applicant;
   }
 
   // --- API Callbacks ---
 
-  cbSuccessGetRating(self: any, data: RatingResponse) 
-  {
+  cbSuccessGetRating(self: any, data: RatingResponse) {
     self.rating = data.rating;
     self.allreadyRated = data.alreadyRated;
 
-    self.applicantService.getApplicantsJobs(JWTUtil.getID(), self, 
-      (self: any, data: Job[]) => 
-      {
+    self.applicantService.getApplicantsJobs(JWTUtil.getID(), self,
+      (self: any, data: Job[]) => {
         self.rateDissabled = !(data.find(j => j.employer.id == self.emp.id) != undefined);
+        console.log(self.allreadyRated);
+        console.log(self.rateDissabled);
+        console.log(self.canRate());
       }
     );
   }
 
-  cbSuccessRate(self: any) 
-  {
+  cbSuccessRate(self: any) {
     self.showRateOption = false;
-    // this.fetchRating(); // TODO
-    this.allreadyRated = true; // TEMP
+    self.fetchRating();
   }
 
 }

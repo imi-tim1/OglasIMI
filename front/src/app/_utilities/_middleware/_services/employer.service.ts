@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Employer, Job, NewEmployer } from '../../_api/_data-types/interfaces';
+import { Employer, Job, NewEmployer, RatingResponse } from '../../_api/_data-types/interfaces';
 import { EmployerApiService } from '../../_api/_services/employer-api.service';
 
 @Injectable({
@@ -15,18 +15,18 @@ export class EmployerService {
   constructor(private api: EmployerApiService) { }
 
   getEmployers(notApproved?: boolean, self?: any, successCallback?: Function) {
-    this.api.getEmployers((notApproved == undefined)? false : notApproved).subscribe(
+    this.api.getEmployers((notApproved == undefined) ? false : notApproved).subscribe(
       // Success
       (response) => {
         console.log('Get Employers (Success), Body: ')
         console.log(response.body)
-        this.employers = (response.body == null)? [] : response.body;
+        this.employers = (response.body == null) ? [] : response.body;
         console.log('Employers: ')
         console.log(this.employers)
 
         // Callback
-        if(response.body)
-          if(self && successCallback) { successCallback(self, response.body) };
+        if (response.body)
+          if (self && successCallback) { successCallback(self, response.body) };
       }
     );
   }
@@ -40,7 +40,7 @@ export class EmployerService {
         console.log(this.employer)
 
         // Callback
-        if(self && successCallback) { successCallback(self, response.body) };
+        if (self && successCallback) { successCallback(self, response.body) };
       }
     );
   }
@@ -49,29 +49,29 @@ export class EmployerService {
     this.api.getEmployersJobs(id).subscribe(
       // Success
       (response) => {
-        this.employersJobs = (response.body == null)? [] : response.body;
+        this.employersJobs = (response.body == null) ? [] : response.body;
         console.log('Employers Jobs: ')
         console.log(this.employersJobs)
         // Callback
-        if(response.body) {
+        if (response.body) {
           console.log('get emps jobs, body OK')
-          if(self && successCallback) { console.log('get emps jobs, OK'); successCallback(self, response.body)};
+          if (self && successCallback) { console.log('get emps jobs, OK'); successCallback(self, response.body) };
         }
       }
     );
   }
 
-  createEmployer(employerData: NewEmployer, self?: any, 
-                 successCallback?: Function, conflictCallback?: Function) {
+  createEmployer(employerData: NewEmployer, self?: any,
+    successCallback?: Function, conflictCallback?: Function) {
     this.api.createEmployer(employerData).subscribe(
       // Success
       (response) => {
         console.log('New Employer Added, status: ' + response.status);
-        if(self && successCallback) successCallback(self);
+        if (self && successCallback) successCallback(self);
       },
       (error: HttpErrorResponse) => {
-        if(error.status == HttpStatusCode.Conflict) {
-          if(self && conflictCallback) conflictCallback(self);
+        if (error.status == HttpStatusCode.Conflict) {
+          if (self && conflictCallback) conflictCallback(self);
         }
       }
     );
@@ -83,7 +83,7 @@ export class EmployerService {
       (response) => {
         console.log('Deleted Employer, status: ' + response.status);
         // Callback
-        if(self && successCallback) successCallback(self);
+        if (self && successCallback) successCallback(self);
       }
     );
   }
@@ -94,7 +94,7 @@ export class EmployerService {
       (response) => {
         console.log('Approve Employer, status: ' + response.status);
         // Callback
-        if(self && successCallback) successCallback(self);
+        if (self && successCallback) successCallback(self);
       }
     );
   }
@@ -104,7 +104,18 @@ export class EmployerService {
       // Success
       (response) => {
         // Callback
-        if(self && successCallback) successCallback(self, response.body);
+        if (response.body)
+          if (self && successCallback) successCallback(self, response.body);
+      }
+    );
+  }
+
+  rateEmployer(id: number, rating: number, self?: any, successCallback?: Function) {
+    this.api.rateEmployer(id, rating).subscribe(
+      // Success
+      (response) => {
+        // Callback
+        if (self && successCallback) successCallback(self);
       }
     );
   }
