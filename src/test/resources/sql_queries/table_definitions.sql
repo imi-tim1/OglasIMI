@@ -140,3 +140,47 @@ CREATE TABLE job_tag
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+CREATE TABLE rating
+(
+    applicant_id INT NOT NULL,
+    employer_id INT NOT NULL,
+    feedback_value LONG NOT NULL,
+    CONSTRAINT PRIMARY KEY (applicant_id, employer_id),
+    CONSTRAINT FOREIGN KEY (applicant_id) REFERENCES applicant (user_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (employer_id) REFERENCES employer (user_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE t_like
+(
+    applicant_id INT NOT NULL,
+    job_id INT NOT NULL,
+    CONSTRAINT PRIMARY KEY (applicant_id, job_id),
+    CONSTRAINT FOREIGN KEY (applicant_id) REFERENCES applicant (user_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (job_id) REFERENCES job (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE comment
+(
+    id INT NOT NULL,
+    author_id INT NOT NULL,
+    job_id INT NOT NULL,
+    parent_id INT,
+    text varchar(200),
+    post_date DATETIME,
+    CONSTRAINT PRIMARY KEY (id),
+    CONSTRAINT FOREIGN KEY (author_id) REFERENCES user (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (job_id) REFERENCES job (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
