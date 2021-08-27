@@ -1,7 +1,7 @@
 <app-navbar2></app-navbar2>
 
 <div *ngIf="employer" class="container">
-    <div class="w-50 container">
+    <div class="container" style="max-width: 45em;">
         <app-employer-info-card [emp]="employer"></app-employer-info-card>
     </div>
     <br>
@@ -10,3 +10,4 @@
     <app-jobs-list [empJobs]='true' [uid]="empID"></app-jobs-list>
 </div>
 
+<app-footer></app-footer>

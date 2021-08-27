@@ -1,15 +1,58 @@
-<div *ngIf="emp" class="row w-100 p-4 bg-white border border-secondary rounded-3" style="min-width: 600px">
-    <div class="col-4 p-0">
-        <img [src]="(emp.pictureBase64 != null)? emp.pictureBase64 : defaultPicture" alt="[image]"
-        style="width: 100%;"
-        class="border rounded-3">
-    </div>
+<div *ngIf="emp" class="w-100 p-4 bg-white border border-secondary rounded-3">
+    <div class="row p-0 m-0">
+        <div class="col-sm-4 col-12 p-0">
+            <img [src]="(emp.pictureBase64 != null)? emp.pictureBase64 : defaultPicture" alt="[image]"
+                style="width: 100%;" class="border rounded-3">
+            
+        </div>
 
-    <div class="col-8 p-0">
-        <h3 class="px-4 text-wrap py-2">{{emp.name}}</h3>
-        <h5 class="px-4 text-wrap">{{emp.address}}</h5>
-        <h5 class="px-4 text-wrap">PIB: {{emp.tin}}</h5>
-        <h5 class="px-4 text-wrap">{{emp.phoneNumber}}</h5>
-        <h5 class="px-4 text-break">{{emp.email}}</h5>
+        <!-- <div class="col-8 p-0">
+            <h3 class="px-4 text-wrap py-2">{{emp.name}}</h3>
+            <h5 class="px-4 text-wrap">{{emp.address}}</h5>
+            <h5 class="px-4 text-wrap">PIB: {{emp.tin}}</h5>
+            <h5 class="px-4 text-wrap">{{emp.phoneNumber}}</h5>
+            <h5 class="px-4 text-break">{{emp.email}}</h5>
+        </div> -->
+
+        <div class="col-sm-8 col-12 p-0 ps-5">
+            <h3 class="text-wrap py-2">{{emp.name}}</h3>
+            <div class="row">
+                <div class="col-sm-6 col-12 p-2">
+                    <h5 class="text-break">{{emp.address}}</h5>
+                </div>
+                <div class="col-sm-6 col-12 p-2">
+                    <h5 class="text-wrap">PIB: {{emp.tin}}</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-12 p-2">
+                    <h5 class="text-wrap">{{emp.phoneNumber}}</h5>
+                </div>
+                <div class="col-sm-6 col-12 p-2">
+                    <h5 class="text-break">{{emp.email}}</h5>
+                </div>
+            </div>
+            <!-- Rating + Show RateOpt Button -->
+            <div class="row">
+                <div *ngIf="rating >= 0" class="col">
+                    <h4 class="py-3 m-0">
+                        <fa-icon [icon]="(allreadyRated)? iconStar : iconStarEmpty"></fa-icon>
+                        {{rating}}
+                    </h4>
+                </div>
+                <div *ngIf="canRate()" class="col py-3">
+                    <button (click)="toggleRateOption()" class="btn btn-warning shadow-sm">Ocenite</button>
+                </div>
+            </div>
+            <!-- Rate Option -->
+            <div *ngIf="showRateOption && !allreadyRated" class="row">
+                <div class="col">
+                    <span *ngFor="let i of [1,2,3,4,5]" class="btn" (click)="clickRateStar(i)">
+                        <fa-icon [icon]="(i <= myRating)? iconStar : iconStarEmpty" [size]="'lg'"></fa-icon>
+                    </span>
+                    <span><button (click)="sendMyRating()" class="btn btn-success shadow-sm">OK</button></span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
