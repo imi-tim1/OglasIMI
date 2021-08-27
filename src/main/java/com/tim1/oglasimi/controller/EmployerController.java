@@ -242,7 +242,7 @@ public class EmployerController {
     public ResponseEntity<RatingResponse> getRating(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                                     @PathVariable("id")
                                                     @Min(1)
-                                                    @Max(Integer.MAX_VALUE ) int id)
+                                                    @Max(Integer.MAX_VALUE ) int employerId)
     {
         ResultPair resultPair = checkAccess(jwt, Role.VISITOR, Role.EMPLOYER, Role.APPLICANT, Role.ADMIN);
         HttpStatus httpStatus = resultPair.getHttpStatus();
@@ -255,18 +255,46 @@ public class EmployerController {
             return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
         }
 
-        int applicant_id = 0;
+        int applicantId = 0;
         boolean isApplicant = false;
 
         if(resultPair.getClaims() != null)
         {
             // Ekstraktovanje uid i role iz tokena
-            applicant_id = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+            applicantId = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
             String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
 
             if(Role.APPLICANT.equalsTo(role)) isApplicant = true;
         }
 
-        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(employerService.getRating(id,applicant_id,isApplicant));
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(employerService.getRating(employerId,applicantId,isApplicant));
+    }
+
+    @PostMapping("{id}/rating")
+    public ResponseEntity<?> rate(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                  @PathVariable("id")
+                                  @Min(1)
+                                  @Max(Integer.MAX_VALUE ) int employerId,
+                                  @RequestParam @Min(0) @Max(5) double feedbackValue)
+    {
+        ResultPair resultPair = checkAccess(jwt,Role.APPLICANT);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        }
+
+        int applicantId = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+
+        boolean isSuccessful = employerService.rate(employerId,applicantId,feedbackValue);
+
+        if(isSuccessful) httpStatus = HttpStatus.NO_CONTENT;
+        else httpStatus = HttpStatus.CONFLICT;
+
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
     }
 }
