@@ -2,6 +2,7 @@ package com.tim1.oglasimi.service;
 
 import com.tim1.oglasimi.model.Employer;
 import com.tim1.oglasimi.model.Job;
+import com.tim1.oglasimi.model.payload.RatingResponse;
 import com.tim1.oglasimi.repository.implementation.EmployerRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,11 @@ public class EmployerService {
 
     public List<Job> getPostedJobs(int id) {
         return employerRepositoryImpl.getPostedJobs(id);
+    }
+
+    public RatingResponse getRating(int employerId, int applicantId, boolean isApplied)
+    {
+        return employerRepositoryImpl.getRating(employerId,applicantId,isApplied);
     }
 }
 

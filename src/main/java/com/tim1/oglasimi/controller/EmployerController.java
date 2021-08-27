@@ -2,6 +2,7 @@ package com.tim1.oglasimi.controller;
 
 import com.tim1.oglasimi.model.Employer;
 import com.tim1.oglasimi.model.Job;
+import com.tim1.oglasimi.model.payload.RatingResponse;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.EmployerService;
@@ -96,7 +97,7 @@ public class EmployerController {
         String resultMessage = employerService.registerEmployer( employer );
 
         /* check if registration was successful or not */
-        if( resultMessage == "Successful" ) {
+        if( resultMessage.equals("Successful")) {
             httpStatus = HttpStatus.CREATED;
         }
         else {
@@ -235,5 +236,37 @@ public class EmployerController {
                 .status(httpStatus)
                 .headers(responseHeaders)
                 .body( postedJobs );
+    }
+
+    @GetMapping("{id}/rating")
+    public ResponseEntity<RatingResponse> getRating(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                    @PathVariable("id")
+                                                    @Min(1)
+                                                    @Max(Integer.MAX_VALUE ) int id)
+    {
+        ResultPair resultPair = checkAccess(jwt, Role.VISITOR, Role.EMPLOYER, Role.APPLICANT, Role.ADMIN);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        }
+
+        int applicant_id = 0;
+        boolean isApplicant = false;
+
+        if(resultPair.getClaims() != null)
+        {
+            // Ekstraktovanje uid i role iz tokena
+            applicant_id = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+            String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
+
+            if(Role.APPLICANT.equalsTo(role)) isApplicant = true;
+        }
+
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(employerService.getRating(id,applicant_id,isApplicant));
     }
 }

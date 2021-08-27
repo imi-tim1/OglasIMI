@@ -642,3 +642,33 @@ BEGIN
     WHERE applicant_id = p_id) t2 ON t1.user_id = t2.user_id;
 END //
 DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for getting feedback values
+DELIMITER // ;
+CREATE PROCEDURE get_feedback_values (IN p_id int)
+BEGIN
+    SELECT * FROM rating
+    WHERE p_id = employer_id;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for checking if applicant is
+DELIMITER // ;
+CREATE PROCEDURE check_if_applied
+(
+    IN p_employer_id int,
+    IN p_applicant_id int
+)
+BEGIN
+    SELECT COUNT(*) AS count FROM job_application ja JOIN job j ON ja.job_id = j.id
+    WHERE j.employer_id = p_employer_id AND ja.applicant_id = p_applicant_id;
+END //
+DELIMITER ;

@@ -1,6 +1,7 @@
 package com.tim1.oglasimi.repository.implementation;
 
 import com.tim1.oglasimi.model.*;
+import com.tim1.oglasimi.model.payload.RatingResponse;
 import com.tim1.oglasimi.repository.EmployerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,6 +24,8 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     private static final String GET_EMPLOYER_PROCEDURE_CALL = "{call get_employer(?)}";
     private static final String APPROVE_EMPLOYER_PROCEDURE_CALL = "{call approve_user(?,?)}";
     private static final String DELETE_EMPLOYER_PROCEDURE_CALL = "{call delete_user(?,?)}";
+    private static final String GET_FEEDBACK_VALUES_STORED_PROCEDURE = "{call get_feedback_values(?)}";
+    private static final String CHECK_IF_APPLIED_STORED_PROCEDURE = "{call check_if_applied(?,?)}";
 
     /** returns data for jobs without tag names for those jobs
      * GET_TAGS_A_JOB_PROCEDURE_CALL is used to get remaining job data */
@@ -199,7 +203,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 
         try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
               CallableStatement cstmt = con.prepareCall(EMPLOYER_GET_POSTS_PROCEDURE_CALL);
-              CallableStatement csTags = con.prepareCall(GET_TAGS_A_JOB_PROCEDURE_CALL);) {
+              CallableStatement csTags = con.prepareCall(GET_TAGS_A_JOB_PROCEDURE_CALL)) {
 
             cstmt.setInt("p_employer_id", id);
             ResultSet rs = cstmt.executeQuery();
@@ -208,7 +212,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
             Job tempJob;
             Tag tempTag;
             List<Tag> tags;
-            postedJobs = new LinkedList<Job>();
+            postedJobs = new LinkedList<>();
 
             while( rs.next() ) {
                 tempJob = new Job();
@@ -245,7 +249,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
                 csTags.setInt("p_job_id", tempJob.getId() );
                 ResultSet rsTags = csTags.executeQuery();
 
-                tags = new LinkedList<Tag>();
+                tags = new LinkedList<>();
 
                 while( rsTags.next() ) {
                     tempTag = new Tag(
@@ -267,5 +271,60 @@ public class EmployerRepositoryImpl implements EmployerRepository {
         }
 
         return postedJobs;
+    }
+
+    @Override
+    public RatingResponse getRating(int employerId, int applicantId, boolean isApplicant)
+    {
+        RatingResponse ratingResponse = null;
+
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
+              CallableStatement cstmt = con.prepareCall(GET_FEEDBACK_VALUES_STORED_PROCEDURE);
+              CallableStatement cstmtCheck = con.prepareCall(CHECK_IF_APPLIED_STORED_PROCEDURE))
+        {
+            cstmt.setInt("p_id",employerId);
+            ResultSet rs = cstmt.executeQuery();
+
+            if(rs.first())
+            {
+                ratingResponse = new RatingResponse();
+                ratingResponse.setRating(-1);
+
+                double tmpSum = 0;
+                int counter = 0;
+
+                rs.beforeFirst();
+                while(rs.next())
+                {
+                    counter++;
+                    tmpSum += rs.getDouble("feedback_value");
+                }
+
+                ratingResponse.setRating(tmpSum/counter);
+                ratingResponse.setAlreadyRated(false);
+
+                if(isApplicant)
+                {
+                    cstmtCheck.setInt("p_employer_id",employerId);
+                    cstmtCheck.setInt("p_applicant_id",applicantId);
+
+                    rs = cstmtCheck.executeQuery();
+
+                    if(rs != null)
+                    {
+                        rs.first();
+                        int count = rs.getInt("count");
+
+                        if(count != 0) ratingResponse.setAlreadyRated(true);
+                    }
+                }
+            }
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return ratingResponse;
     }
 }
