@@ -28,6 +28,7 @@ public class JobRepositoryImpl implements JobRepository
     private static final String JOB_APPLY_PROCEDURE_CALL = "{call apply_for_a_job(?,?,?)}";
     private static final String GET_JOB_STORED_PROCEDURE = "{call get_job(?)}";
     private static final String DELETE_JOB_STORED_PROCEDURE = "{call delete_job(?,?)}";
+    private static final String GET_ALL_COMMENTS_STORED_PROCEDURE = "{call get_all_comments(?)}";
 
 
     @Value("${spring.datasource.url}")
@@ -431,5 +432,50 @@ public class JobRepositoryImpl implements JobRepository
         }
 
         return isJobSuccessfullyDeleted;
+    }
+
+    @Override
+    public List<Comment> getAllComments(int jobId)
+    {
+        List<Comment> commentList = null;
+
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
+             CallableStatement cstmt = con.prepareCall(GET_ALL_COMMENTS_STORED_PROCEDURE))
+        {
+            cstmt.setInt("p_job_id", jobId);
+            ResultSet rs = cstmt.executeQuery();
+
+            if(rs.first())
+            {
+                commentList = new ArrayList<>();
+
+                rs.beforeFirst();
+                while(rs.next())
+                {
+                    Comment tempComment = new Comment();
+
+                    tempComment.setId(rs.getInt("id"));
+                    tempComment.setParentId(rs.getInt("parent_id"));
+                    tempComment.setText(rs.getString("text"));
+                    tempComment.setPostDate(rs.getObject("post_date",LocalDateTime.class));
+
+                    String tmpEmployerName = rs.getString("name");
+                    if(tmpEmployerName == null)
+                    {
+                        tempComment.setAuthorName(rs.getString("f_name") + " " + rs.getString("l_name"));
+                    }
+
+                    else tempComment.setAuthorName(tmpEmployerName);
+
+                    commentList.add(tempComment);
+                }
+            }
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return commentList;
     }
 }

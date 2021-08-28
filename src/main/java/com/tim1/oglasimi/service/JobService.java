@@ -1,6 +1,7 @@
 package com.tim1.oglasimi.service;
 
 import com.tim1.oglasimi.model.Applicant;
+import com.tim1.oglasimi.model.Comment;
 import com.tim1.oglasimi.model.Job;
 import com.tim1.oglasimi.model.payload.JobFeed;
 import com.tim1.oglasimi.model.payload.JobFilter;
@@ -52,5 +53,9 @@ public class JobService
     public boolean deleteJob(int id)
     {
         return jobRepositoryImpl.delete(id);
+    }
+
+    public List<Comment> getAllComments(int jobId) {
+        return jobRepositoryImpl.getAllComments(jobId);
     }
 }
