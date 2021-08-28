@@ -72,7 +72,7 @@ VALUES (4, 1, 1, '2021-05-03 02:36:54.480', 'C Senior Dev', 'Opis1', '1500 - 200
        (5, 2, 3, '2021-02-01 03:20:8.360', 'Prodavac buketa', 'Opis4', '500,000 RSD (Godisnje)', FALSE),
        (4, 1, NULL, '2021-02-11 08:38:20.420', 'JS Dev', 'Opis5', '800 € (Mesecno)', TRUE),
        (4, 1, 2, '2021-03-05 12:23:18.520', 'Python Dev', 'Opis6', '1800 - 2000 € (Mesecno)', FALSE),
-       (5, 2, 4, '2021-03-05 12:23:18.520', 'Potreban basovan', 'Opis7', '180 - 200 € (Mesecno)', FALSE);
+       (5, 2, 4, '2021-03-05 12:23:18.520', 'Potreban bastovan', 'Opis7', '180 - 200 € (Mesecno)', FALSE);
 
 INSERT INTO job_tag (job_id, tag_id)
 VALUES (1, 1),
@@ -94,3 +94,9 @@ INSERT INTO rating (applicant_id, employer_id, feedback_value)
 VALUES (3,4,4),
        (2,5,3),
        (3,5,4);
+
+INSERT INTO comment (author_id, job_id, parent_id, text, post_date)
+VALUES (3,4,null,'Komentar1','2021-05-08 07:36:2.420'),
+       (2,4,null,'Kako ide poso?','2021-07-08 07:36:2.420'),
+       (5,4,2,'Borba','2021-07-08 08:36:2.420'),
+       (3,1,null,'Komentar2','2021-09-08 08:36:2.420');

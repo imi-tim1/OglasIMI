@@ -170,7 +170,7 @@ CREATE TABLE t_like
 
 CREATE TABLE comment
 (
-    id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
     author_id INT NOT NULL,
     job_id INT NOT NULL,
     parent_id INT,
