@@ -2,20 +2,10 @@
     <button class="bg-white shadow rounded-3 p-4 w-100 border border-0 text-start" style="display: block;"
         routerLink="/job/{{job.id}}">
 
-        <!--<button type="button"
-            class="btn btn-outline-success"
-            id="snd_cvbtn' + job.id + '"
-            style="float: right;">
-            Pošalji CV
-        </button>-->
         <h6>{{job.employer!.name}}</h6>
         <h3 class="">{{job.title}}</h3>
         <div class="pt-2 pb-3">{{job.description}}</div>
         <div class="text-primary">{{job.city.name}}</div>
-
-        <!-- <span *ngIf="job.salary" class="me-2" style="background-color: rgb(132, 236, 188);">
-            <strong class="p-1">{{job.salary}}</strong>
-        </span> -->
 
         <!-- Rad od kuce / Tagovi -->
         <div class="d-flex flex-wrap pt-3 pb-3">
@@ -34,7 +24,6 @@
         <span *ngIf="job.salary" class="" style="color: rgb(46, 194, 149);">
             <strong class="">{{job.salary}}</strong>
         </span>
-        <!-- <h4 class="pt-4 pb-2 text-success"></h4> -->
         
     </button>
 

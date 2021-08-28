@@ -93,34 +93,23 @@ export class JobsFiltersComponent implements OnInit {
       {
         console.log('Brisanje');
         let ind: number = this.checkedTags.indexOf(t);
-        /*let arr1 = this.checkedTags.splice(0, ind);
-        let arr2 = this.checkedTags.splice(ind + 1);
-        let arr = arr1.concat(arr2);*/
         this.checkedTags.splice(ind, 1);
         pom = true; 
-
-        console.log(this.checkedTags);
         return;
       }
       if(pom == false) //tag nije bio cekiran
         this.checkedTags.push(tagID);
-
-      console.log('Dodavanje');
-      console.log(this.checkedTags);
   }
 
   getNewTags() {
     this.checkedTags = [];
-    console.log('selected f id:' + this.selectedFieldId)
 
     if(this.selectedFieldId > 0) {
       this.fieldService.tags = [];
       this.fieldService.getTags(this.selectedFieldId);
     }
-    else {
-      console.log('BRISIIII')
+    else 
       this.fieldService.tags = [];
-    }
   }
 
   loadNextPage() {
@@ -129,7 +118,7 @@ export class JobsFiltersComponent implements OnInit {
       return;
     }
     
-      this.packFilters(this.currentPage + 1);
+    this.packFilters(this.currentPage + 1);
     this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessNextPage);
   }
 
