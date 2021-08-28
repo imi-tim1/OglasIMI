@@ -8,7 +8,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppComponent } from './app.component';
 import { LoginPageComponent } from './_components/_pages/login-page/login-page.component';
-import { NavbarComponent } from './_components/_elements/navbar/navbar.component';
 import { FooterComponent } from './_components/_elements/footer/footer.component';
 import { LoginFormComponent } from './_components/_elements/login-form/login-form.component';
 import { RegisterPageComponent } from './_components/_pages/register-page/register-page.component';
@@ -45,7 +44,6 @@ import { JobCommentsListComponent } from './_components/_elements/job-comments-l
   declarations: [
     AppComponent,
     LoginPageComponent,
-    NavbarComponent,
     FooterComponent,
     LoginFormComponent,
     RegisterPageComponent,
