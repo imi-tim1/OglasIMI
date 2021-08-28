@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Applicant } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
@@ -10,6 +10,9 @@ import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services
 })
 export class ApplicantsPageComponent implements OnInit {
 
+  // Page Auth
+  public pageLoaded: boolean = false;
+
   public applicants: Applicant[] = [];
 
   constructor(
@@ -18,16 +21,23 @@ export class ApplicantsPageComponent implements OnInit {
     public appService: ApplicantService
   ) { }
 
-  ngOnInit(): void {
-    // Check Access
-    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles);
-    
-    this.appService.getApplicants(undefined, this, this.cbSuccess);
+  // INIT - Auth Success Callback
+  cbInit(self: any) 
+  {
+    self.pageLoaded = true;
+
+    // GET Applicants
+    self.appService.getApplicants(undefined, self, self.cbSuccessGetApplicants);
   }
 
-  // API Callbacks
+  ngOnInit(): void {
+    // Check Access
+    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles, this, this.cbInit);
+  }
 
-  cbSuccess(self: any, applicants?: Applicant[]) {
+  // --- API Callbacks ---
+
+  cbSuccessGetApplicants(self: any, applicants?: Applicant[]) {
     if(applicants) self.applicants = applicants;
   }
 

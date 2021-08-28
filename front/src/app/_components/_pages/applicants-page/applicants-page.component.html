@@ -1,10 +1,16 @@
-<app-navbar2 [activeNav]="'applicants'"></app-navbar2>
+<div style="min-height: 100vh; position: relative;">
 
-<div *ngIf="applicants.length > 0" class="container">
-    <h2 class="text-center pt-4 pb-5">Lista kandidata</h2>
-    <div class="p-4">
-        <div class="d-flex flex-wrap flex-column">
-            <app-applicant-list-card class="" *ngFor="let ap of applicants" [data]="ap"></app-applicant-list-card>
+    <app-navbar2 [activeNav]="'applicants'"></app-navbar2>
+
+    <div *ngIf="applicants.length > 0" class="container">
+        <h2 class="text-center pt-4 pb-5">Lista kandidata</h2>
+        <div class="p-4">
+            <div class="d-flex flex-wrap flex-column">
+                <app-applicant-list-card class="" *ngFor="let ap of applicants" [data]="ap"></app-applicant-list-card>
+            </div>
         </div>
     </div>
+
+    <app-footer></app-footer>
+    
 </div>
