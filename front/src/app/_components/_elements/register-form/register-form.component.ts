@@ -49,18 +49,12 @@ export class RegisterFormComponent implements OnInit {
   wrongEmpPass2Bool: boolean = false;
   wrongEmpPictureBool: boolean = false;
 
-
-  //pattAlphaWithSpaces: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ \-\\]+$/; //i da ne bude vise od 2 spejsa uzastopno
   pattAlphaWithSpaces: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ]+([ \-][a-zA-ZšŠđĐčČćĆžŽ]+)*$/;
   pattTwoSpaces: RegExp = /  /;
-  //pattEmail: RegExp = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
   pattEmail: RegExp = /^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/;
-  //pattPhone: RegExp = /^\+?[0-9]{9,12}$/;
   pattPhone: RegExp = /^((\+[0-9]{1,3})|0)[1-9][0-9][0-9]{6,7}$/;
   pattPassword: RegExp = /.{6,}$/;
-  //---
-  //pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.]+$/; //i da ne bude vise od 2 spejsa uzastopno
-  pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\"\'\(\)\+\&]+$/;
+  pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\"\'\(\)\+\&]+$/; //i da ne bude vise od 2 spejsa uzastopno
   pattPIB: RegExp = /^[0-9]{9}$/;
   pattAddr: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\'\(\)\&]+$/; //i da ne bude vise od 2 spejsa uzastopno
 
@@ -134,44 +128,36 @@ export class RegisterFormComponent implements OnInit {
 
   firstNameValidation() {
     if (this.isAlphaWithoutMultipleSpaces(this.appFirstName) == true) {
-      console.log("dobro ime");
       this.wrongAppFirstNameBool = false;
-      return; //return true;
+      return;
     }
-    console.log("lose ime");
     (<HTMLSelectElement>document.getElementById('appFirstName')).focus();
-    this.wrongAppFirstNameBool = true; //return false;
+    this.wrongAppFirstNameBool = true;
   }
 
   lastNameValidation() {
     if (this.isAlphaWithoutMultipleSpaces(this.appLastName) == true) {
-      console.log("dobro prezime");
       this.wrongAppLastNameBool = false;
       return;
     }
-    console.log("lose prezime");
     (<HTMLSelectElement>document.getElementById('appLastName')).focus();
     this.wrongAppLastNameBool = true;
   }
 
   appEmailValidation() {
     if (this.isCorrectEmail(this.appEmail) == true) {
-      console.log("dobar mejl");
       this.wrongAppEmailBool = false;
       return;
     }
-    console.log("los mejl");
     (<HTMLSelectElement>document.getElementById('appEmail')).focus();
     this.wrongAppEmailBool = true;
   }
 
   appPhoneValidation() {
     if (this.isCorrectPhoneNumber(this.appPhoneNum) == true) {
-      console.log("dobar broj telefona");
       this.wrongAppPhoneBool = false;
       return;
     }
-    console.log("los broj telefona");
     console.log(this.appPhoneNum);
     (<HTMLSelectElement>document.getElementById('appPhoneNum')).focus();
     this.wrongAppPhoneBool = true;
@@ -179,12 +165,10 @@ export class RegisterFormComponent implements OnInit {
 
   appPasswordValidation() {
     if (this.isCorrectPassword(this.appPass1) && this.isCorrectPassword(this.appPass2) && this.appPass1 == this.appPass2) {
-      console.log("dobra lozinka");
       this.wrongAppPass1Bool = false;
       this.wrongAppPass2Bool = false;
       return;
     }
-    console.log("losa lozinka");
     console.log(this.appPass1);
     this.appPass1 = ''; //brisi obe ukucane lozinke
     this.appPass2 = '';
@@ -219,12 +203,9 @@ export class RegisterFormComponent implements OnInit {
 
       self.wrongAppPictureBool = false;
 
-      console.log(self.appPicture);
-      console.log(`Duzina kodirane slike je: ${Math.round(len/1000)}.${Math.round(len%1000/100)} K`);
+      //console.log(self.appPicture);
+      //console.log(`Duzina kodirane slike je: ${Math.round(len/1000)}.${Math.round(len%1000/100)} K`);
     }
-
-    console.log('this: ' + this.appPicture.length);
-    console.log('self: ' + self.appPicture.length);
   }
 
 
@@ -260,68 +241,55 @@ export class RegisterFormComponent implements OnInit {
 
   companyNameValidation() {
     if (this.isCorrectCompanyName(this.empCompanyName) == true) {
-      console.log("dobro ime");
       this.wrongEmpCompanyNameBool = false;
       return; //return true;
     }
-    console.log("lose ime");
     (<HTMLSelectElement>document.getElementById('empCompanyName')).focus();
     this.wrongEmpCompanyNameBool = true; //return false;
   }
 
   empEmailValidation() {
     if (this.isCorrectEmail(this.empEmail) == true) {
-      console.log("dobar mejl");
       this.wrongEmpEmailBool = false;
       return;
     }
-    console.log("los mejl");
     (<HTMLSelectElement>document.getElementById('empEmail')).focus();
     this.wrongEmpEmailBool = true;
   }
 
   empPhoneValidation() {
     if (this.isCorrectPhoneNumber(this.empPhoneNum) == true) {
-      console.log("dobar broj telefona");
       this.wrongEmpPhoneBool = false;
       return;
     }
-    console.log("los broj telefona");
-    console.log(this.empPhoneNum);
     (<HTMLSelectElement>document.getElementById('empPhoneNum')).focus();
     this.wrongEmpPhoneBool = true;
   }
 
   empPIBValidation() {
     if (this.isCorrectPIB(this.empPIB) == true) {
-      console.log("dobar pib");
       this.wrongEmpPIBBool = false;
       return;
     }
-    console.log("los pib");
     (<HTMLSelectElement>document.getElementById('empPIB')).focus();
     this.wrongEmpPIBBool = true;
   }
 
   empAddrValidation() {
     if (this.isCorrectAddr(this.empAddr) == true) {
-      console.log("dobra adresa");
       this.wrongEmpAddrBool = false;
       return;
     }
-    console.log("losa adresa");
     (<HTMLSelectElement>document.getElementById('empAddr')).focus();
     this.wrongEmpAddrBool = true;
   }
 
   empPassValidation() {
     if (this.isCorrectPassword(this.empPass1) && this.isCorrectPassword(this.empPass2) && this.empPass1 == this.empPass2) {
-      console.log("dobra lozinka");
       this.wrongEmpPass1Bool = false;
       this.wrongEmpPass2Bool = false;
       return;
     }
-    console.log("losa lozinka");
     console.log(this.empPass1);
     this.empPass1 = ''; //brisi obe ukucane lozinke
     this.empPass2 = '';
@@ -356,12 +324,9 @@ export class RegisterFormComponent implements OnInit {
 
       self.wrongEmpPictureBool = false;
 
-      console.log(self.empPicture);
-      console.log(`Duzina kodirane slike je: ${Math.round(len/1000)}.${Math.round(len%1000/100)} K`);
+      //console.log(self.empPicture);
+      //console.log(`Duzina kodirane slike je: ${Math.round(len/1000)}.${Math.round(len%1000/100)} K`);
     }
-
-    console.log('this: ' + this.empPicture.length);
-    console.log('self: ' + self.empPicture.length);
   }
 
 
