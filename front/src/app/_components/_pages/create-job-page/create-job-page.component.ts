@@ -58,7 +58,7 @@ export class CreateJobPageComponent implements OnInit {
 
   toggleTag(tagID: number) {
 
-    console.log('Tag ID: ' + tagID);
+    //console.log('Tag ID: ' + tagID);
 
     let pom: boolean = false;
 
@@ -85,36 +85,27 @@ export class CreateJobPageComponent implements OnInit {
   }
 
   titleValidation() {
-    if (this.pattTitle.test(this.jobTitle) && !(this.pattTwoSpaces.test(this.jobTitle))) {
-      console.log("dobro radno mesto");
+    if (this.pattTitle.test(this.jobTitle) && !(this.pattTwoSpaces.test(this.jobTitle)))
       this.wrongJobTitleBool = false;
-    }
     else {
-      console.log("lose ime radnog mesta");
       (<HTMLSelectElement>document.getElementById('jobTitle')).focus();
       this.wrongJobTitleBool = true;
     }
   }
 
   fieldIdValidation() {
-    if (this.selectedFieldId > 0) {
-      console.log("oblast rada odabrana: " + this.selectedFieldId);
+    if (this.selectedFieldId > 0)
       this.wrongFieldIdBool = false;
-    }
     else {
-      console.log("oblast rada nije izabrana: " + this.selectedFieldId);
       (<HTMLSelectElement>document.getElementById('field')).focus();
       this.wrongFieldIdBool = true;
     }
   }
 
   descriptionValidation() {
-    if (this.description.length >= 15) {
-      console.log("ok desc");
+    if (this.description.length >= 15) 
       this.wrongDescBool = false;
-    }
     else {
-      console.log("kratak desc");
       (<HTMLSelectElement>document.getElementById('description')).focus();
       this.wrongDescBool = true;
     }
@@ -129,7 +120,6 @@ export class CreateJobPageComponent implements OnInit {
     }
     else if (this.salaryFrom != '' && this.salaryTo == '' && this.pattMoney.test(this.salaryFrom)) { //uneo samo pocetnu
       if (this.salaryFrom[0] == '0') { //greska
-        console.log("losa donja granica plate");
         (<HTMLSelectElement>document.getElementById('salaryFrom')).focus();
         this.wrongSalaryBool = true;
         return;
@@ -139,7 +129,6 @@ export class CreateJobPageComponent implements OnInit {
     }
     else if (this.salaryFrom == '' && this.salaryTo != '' && this.pattMoney.test(this.salaryTo)) { //uneo samo krajnju
       if (this.salaryTo[0] == '0') { //greska
-        console.log("losa gornja granica plate");
         (<HTMLSelectElement>document.getElementById('salaryTo')).focus();
         this.wrongSalaryBool = true;
         return;
@@ -149,13 +138,11 @@ export class CreateJobPageComponent implements OnInit {
     }
     else {//obe vrednosti su ukucane -> proveri ispravnost
       if (!(this.pattMoney.test(this.salaryFrom)) || this.salaryFrom[0] == '0') { //greska
-        console.log("losa donja granica plate");
         (<HTMLSelectElement>document.getElementById('salaryFrom')).focus();
         this.wrongSalaryBool = true;
         return;
       }
       if (!(this.pattMoney.test(this.salaryTo)) || this.salaryTo[0] == '0') {
-        console.log("losa gornja granica plate");
         (<HTMLSelectElement>document.getElementById('salaryTo')).focus();
         this.wrongSalaryBool = true;
         return;
@@ -178,15 +165,11 @@ export class CreateJobPageComponent implements OnInit {
     this.titleValidation();
     this.fieldIdValidation();
     this.descriptionValidation();
-    //this.workFromHomeValidation(); ne postoji jer ako ne cekira nista nemoguc je rad od kuce
 
     //neobavezno
-    //za grad nema validacije
-    //niz checkedTags sa njihovim id-evima skupljen
     this.salaryFrom = this.salaryFrom.trim();
     this.salaryTo = this.salaryTo.trim();
     this.salaryValidation();
-    console.log("salary: " + this.salary)
 
     if (!(this.wrongJobTitleBool || this.wrongFieldIdBool || this.wrongDescBool ||
           this.wrongSalaryBool)) { //sve ok, postavi oglas
