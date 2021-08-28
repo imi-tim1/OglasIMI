@@ -21,7 +21,7 @@ export class ApplicantsPageComponent implements OnInit {
     public appService: ApplicantService
   ) { }
 
-  // INIT - Auth Success Callback
+  // --- INIT - Auth Success Callback ---
   cbInit(self: any) 
   {
     self.pageLoaded = true;

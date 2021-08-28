@@ -1,12 +1,17 @@
-<app-navbar2></app-navbar2>
-
-<div *ngIf="applicant" class="container">
-    <div class="container" style="max-width: 45em;">
-        <app-applicant-info-card [app]="applicant"></app-applicant-info-card>
+<div style="min-height: 100vh; position: relative;">
+    
+    <app-navbar></app-navbar>
+    
+    <div *ngIf="applicant" class="container">
+        <div class="container" style="max-width: 45em;">
+            <app-applicant-info-card [app]="applicant"></app-applicant-info-card>
+        </div>
+        <br>
+        <h3 *ngIf="isMe()" class="text-center pt-5">Moji oglasi</h3>
+        <h3 *ngIf="!isMe()" class="text-center pt-5">Oglasi na koje je kandidat prijavljen</h3>
+        <app-jobs-list [appJobs]='true' [uid]="applicant.id"></app-jobs-list>
     </div>
-    <br>
-    <h3 *ngIf="isMe()" class="text-center pt-5">Moji oglasi</h3>
-    <h3 *ngIf="!isMe()" class="text-center pt-5">Oglasi na koje je kandidat prijavljen</h3>
-    <app-jobs-list [appJobs]='true' [uid]="applicant.id"></app-jobs-list>
+
 </div>
+
 

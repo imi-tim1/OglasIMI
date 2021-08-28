@@ -12,6 +12,9 @@ import { EmployerService } from 'src/app/_utilities/_middleware/_services/employ
 })
 export class ApplicantInfoPageComponent implements OnInit {
 
+  // Page Auth
+  public pageLoaded: boolean = false;
+
   public appID: number = 0;
   public applicant: Applicant | null = null;
 
@@ -21,14 +24,22 @@ export class ApplicantInfoPageComponent implements OnInit {
     public appService: ApplicantService
   ) { }
 
+  // --- INIT - Auth Success Callback ---
+  cbInit(self: any)
+  {
+    self.pageLoaded = true;
+    
+    // Extract and Save appID from route url
+    let p = self.activatedRoute.snapshot.paramMap.get("id");
+    if (p != null) self.appID = p as unknown as number;
+    
+    // GET Applicant with appID
+    self.appService.getApplicant(self.appID, self, self.cbSuccess);
+  }
+
   ngOnInit(): void {
     // Check access
-    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles);
-
-    let p = this.activatedRoute.snapshot.paramMap.get("id");
-    if (p != null) this.appID = p as unknown as number;
-
-    this.appService.getApplicant(this.appID, this, this.cbSuccess);
+    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles, this, this.cbInit);
   }
 
   isMe(): boolean {
