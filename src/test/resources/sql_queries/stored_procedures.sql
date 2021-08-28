@@ -684,6 +684,7 @@ DELIMITER ;
 
 
 -- #######################################################################
+-- Procedure for checking if appliacant already rated employer
 DELIMITER // ;
 CREATE PROCEDURE check_if_rated (
     IN p_employer_id int,
@@ -692,5 +693,21 @@ CREATE PROCEDURE check_if_rated (
 BEGIN
     SELECT COUNT(*) AS count from rating
     WHERE p_employer_id = employer_id AND p_applicant_id = applicant_id;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for getting all comments on a specific job
+DELIMITER // ;
+CREATE PROCEDURE get_all_comments (
+    IN p_job_id int
+)
+BEGIN
+    SELECT c.*, a.first_name AS f_name, a.last_name AS l_name, e.name AS name
+    FROM comment c LEFT JOIN applicant a ON c.author_id = a.user_id LEFT JOIN employer e on c.author_id = e.user_id
+    WHERE p_job_id = job_id;
 END //
 DELIMITER ;
