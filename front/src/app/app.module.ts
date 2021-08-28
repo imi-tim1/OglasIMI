@@ -20,7 +20,7 @@ import { RegisterFormComponent } from './_components/_elements/register-form/reg
 import { TestingPageComponent } from './_components/_pages/testing-page/testing-page.component';
 import { LogoutPageComponent } from './_components/_pages/logout-page/logout-page.component';
 import { EmployersPageComponent } from './_components/_pages/employers-page/employers-page.component';
-import { Navbar2Component } from './_components/_elements/navbar2/navbar2.component';
+import { NavbarComponent } from './_components/_elements/navbar/navbar.component';
 import { EmployerListCardComponent } from './_components/_elements/employer-list-card/employer-list-card.component';
 import { DashboardEmployerComponent } from './_components/_elements/dashboard-employer/dashboard-employer.component';
 import { DashboardApplicantComponent } from './_components/_elements/dashboard-applicant/dashboard-applicant.component';
@@ -56,7 +56,7 @@ import { JobCommentsListComponent } from './_components/_elements/job-comments-l
     TestingPageComponent,
     LogoutPageComponent,
     EmployersPageComponent,
-    Navbar2Component,
+    NavbarComponent,
     EmployerListCardComponent,
     DashboardEmployerComponent,
     DashboardApplicantComponent,

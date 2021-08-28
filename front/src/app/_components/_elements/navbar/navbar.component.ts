@@ -5,11 +5,11 @@ import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 
 @Component({
-  selector: 'app-navbar2',
-  templateUrl: './navbar2.component.html',
-  styleUrls: ['./navbar2.component.css']
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.css']
 })
-export class Navbar2Component implements OnInit {
+export class NavbarComponent implements OnInit {
 
   @Input() public activeNav: string = "";
 
