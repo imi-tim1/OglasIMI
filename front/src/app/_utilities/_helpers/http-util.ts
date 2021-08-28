@@ -18,13 +18,13 @@ export class HeaderUtil
         return new HttpHeaders(obj);
     }
 
-    static stdResponseOptions() 
-    {
-        return {
-            observe: 'response',
-            headers: this.jwtOnlyHeaders()
-        }
-    }
+    // static stdResponseOptions() 
+    // {
+    //     return {
+    //         observe: 'response',
+    //         headers: this.jwtOnlyHeaders()
+    //     }
+    // }
 
     // static jwtOnlyHeaders(jwt: string): HttpHeaders
     // {

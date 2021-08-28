@@ -2,4 +2,4 @@ export const DEFAULT_PROFILE_PICTURE: string = 'data:image/png;base64,iVBORw0KGg
 
 
 
-export const CURRENCIES: string[] = ['RSD', 'EUR', 'USD'];
+// export const CURRENCIES: string[] = ['RSD', 'EUR', 'USD'];
