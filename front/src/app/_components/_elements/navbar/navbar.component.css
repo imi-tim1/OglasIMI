@@ -1,17 +1,19 @@
-.navbar2 {
+.nav-bar {
     margin-bottom: 50px;
     background-color: rgb(57, 64, 105);
 }
 
-.nav2item { 
+.nav-bar .d-flex {
+    height: 100%;
+}
+
+.nav-item { 
     text-decoration: none;
     color: white;
     padding: 15px;
-    /* height: 3.5em;
-    width: 3.5em; */
 }
 
-.nav2item:hover {
+.nav-item:hover {
     background-color: rgb(100, 109, 160);
 }
 

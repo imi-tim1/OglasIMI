@@ -1,36 +1,40 @@
-<app-navbar></app-navbar>
-
-<app-job-info-card [id]="jobID" (checkedOwnership)="null"></app-job-info-card>
-
-<div class="container p-0">
-    <div class="row">
-        <div *ngIf="applicants" class="col">
-            <!-- Lista kandidata za ovaj posao -->
-            <div *ngIf="applicants.length > 0">
-                <h3 class="text-center p-3 pt-5">Kandidati prijavljeni na posao</h3>
-                <div class="container p-0">
-                    <div class="p-2 pb-0">
-                        <div class="d-flex flex-wrap flex-column">
-                            <app-applicant-list-card class="" *ngFor="let ap of applicants" [data]="ap">
-                            </app-applicant-list-card>
+<div style="min-height: 100vh; position: relative;">
+    
+    <app-navbar></app-navbar>
+    
+    <app-job-info-card [id]="jobID" (checkedOwnership)="null"></app-job-info-card>
+    
+    <div class="container p-0">
+        <div class="row">
+            <div *ngIf="applicants" class="col">
+                <!-- Lista kandidata za ovaj posao -->
+                <div *ngIf="applicants.length > 0">
+                    <h3 class="text-center p-3 pt-5">Kandidati prijavljeni na posao</h3>
+                    <div class="container p-0">
+                        <div class="p-2 pb-0">
+                            <div class="d-flex flex-wrap flex-column">
+                                <app-applicant-list-card class="" *ngFor="let ap of applicants" [data]="ap">
+                                </app-applicant-list-card>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Placeholder za praznu listu -->
-            <div *ngIf="applicants.length == 0" class="border border-secondary rounded-3">
-                <div class="d-flex flex-column align-items-center">
-                    <h5 class="p-4">Nema prijavljenih kandidata</h5>
+    
+                <!-- Placeholder za praznu listu -->
+                <div *ngIf="applicants.length == 0" class="border border-secondary rounded-3">
+                    <div class="d-flex flex-column align-items-center">
+                        <h5 class="p-4">Nema prijavljenih kandidata</h5>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Lista komentara -->
-        <div class="col d-flex justify-content-center">
-            <app-job-comments-list [jobID]="jobID"></app-job-comments-list>
+    
+            <!-- Lista komentara -->
+            <div class="col d-flex justify-content-center">
+                <app-job-comments-list [jobID]="jobID"></app-job-comments-list>
+            </div>
         </div>
     </div>
-</div>
+    
+    <app-footer></app-footer>
 
-<app-footer></app-footer>
+</div>

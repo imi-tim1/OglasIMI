@@ -1,24 +1,31 @@
-<app-navbar></app-navbar>
-<div class="container-fluid bg-light p-5">
-    <div class="container bg-white border rounded-3 shadow-sm">
-        <div class="row">
-            <div class="col-6 p-4">
-                <input class="form-control" type="text" placeholder="Ime">
+<div style="min-height: 100vh; position: relative;">
+    
+    <app-navbar></app-navbar>
+
+    <div class="container-fluid bg-light p-5">
+        <div class="container bg-white border rounded-3 shadow-sm">
+            <div class="row">
+                <div class="col-6 p-4">
+                    <input class="form-control" type="text" placeholder="Ime">
+                </div>
+                <div class="col-6 p-4">
+                    <input class="form-control" type="text" placeholder="Prezime">
+                </div>
             </div>
-            <div class="col-6 p-4">
-                <input class="form-control" type="text" placeholder="Prezime">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-7 p-4">
-                <label for="f"></label>
-                <input class="form-control" type="file" placeholder="Ime" name="f" id="fajl"
-                    (input)="onFileInput()"
-                >
-            </div>
-            <div class="col-7 p-4">
-                <button (click)="printConvertedPicture()">STAMPAJ</button>
+            <div class="row">
+                <div class="col-7 p-4">
+                    <label for="f"></label>
+                    <input class="form-control" type="file" placeholder="Ime" name="f" id="fajl"
+                        (input)="onFileInput()"
+                    >
+                </div>
+                <div class="col-7 p-4">
+                    <button (click)="printConvertedPicture()">STAMPAJ</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <app-footer></app-footer>
+
 </div>
