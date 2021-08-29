@@ -169,7 +169,8 @@ public class JobController
     public ResponseEntity<List<Applicant>> getJobApplicants( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                                              @PathVariable("jobId")
                                                              @Min( 1 )
-                                                             @Max( Integer.MAX_VALUE ) int jobId ) {
+                                                             @Max( Integer.MAX_VALUE ) int jobId )
+    {
         ResultPair resultPair = checkAccess( jwt, Role.EMPLOYER, Role.ADMIN );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
@@ -230,7 +231,8 @@ public class JobController
     public ResponseEntity<?> applyForAJob( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                            @PathVariable("jobId")
                                            @Min( 1 )
-                                           @Max( Integer.MAX_VALUE ) int jobId ) {
+                                           @Max( Integer.MAX_VALUE ) int jobId )
+    {
         ResultPair resultPair = checkAccess( jwt, Role.APPLICANT );
         HttpStatus httpStatus = resultPair.getHttpStatus();
 
@@ -349,5 +351,44 @@ public class JobController
         }
 
         return ResponseEntity.status(httpStatus).headers(responseHeaders).body(jobService.getAllComments(jobId));
+    }
+
+    @PostMapping("{id}/comments")
+    public ResponseEntity<?> postComment(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                         @PathVariable("id")
+                                         @Min(1)
+                                         @Max(Integer.MAX_VALUE) int jobId,
+                                         @Valid @RequestBody Comment comment)
+    {
+        ResultPair resultPair = checkAccess(jwt, Role.APPLICANT, Role.EMPLOYER);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        }
+
+        int uid  = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+        String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
+
+        boolean isSuccessful = false;
+
+        if(Role.APPLICANT.equalsTo(role) && comment.getParentId() == 0)
+        {
+            isSuccessful = jobService.postComment(comment,jobId,uid,true);
+        }
+
+        else if(Role.EMPLOYER.equalsTo(role) && comment.getParentId() != 0)
+        {
+            isSuccessful = jobService.postComment(comment,jobId,uid,false);
+        }
+
+        if(isSuccessful) httpStatus = HttpStatus.CREATED;
+        else httpStatus = HttpStatus.CONFLICT;
+
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
     }
 }

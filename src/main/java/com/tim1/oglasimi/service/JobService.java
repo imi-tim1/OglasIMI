@@ -58,4 +58,8 @@ public class JobService
     public List<Comment> getAllComments(int jobId) {
         return jobRepositoryImpl.getAllComments(jobId);
     }
+
+    public boolean postComment(Comment comment, int jobId, int userId, boolean isApplicant) {
+        return jobRepositoryImpl.postComment(comment,jobId,userId,isApplicant);
+    }
 }

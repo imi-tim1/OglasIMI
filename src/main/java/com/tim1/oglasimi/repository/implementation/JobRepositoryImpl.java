@@ -29,7 +29,8 @@ public class JobRepositoryImpl implements JobRepository
     private static final String GET_JOB_STORED_PROCEDURE = "{call get_job(?)}";
     private static final String DELETE_JOB_STORED_PROCEDURE = "{call delete_job(?,?)}";
     private static final String GET_ALL_COMMENTS_STORED_PROCEDURE = "{call get_all_comments(?)}";
-
+    private static final String POST_COMMENT_STORED_PROCEDURE = "{call post_comment(?,?,?,?,?)}";
+    private static final String CHECK_IF_EMPLOYERS_JOB_STORED_PROCEDURE = "{call chec_if_employers_job(?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -477,5 +478,44 @@ public class JobRepositoryImpl implements JobRepository
         }
 
         return commentList;
+    }
+
+    @Override
+    public boolean postComment(Comment comment, int jobId, int userId, boolean isApplicant)
+    {
+        boolean isSuccessful = false;
+
+        try (Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
+             CallableStatement cstmt = con.prepareCall(POST_COMMENT_STORED_PROCEDURE);
+             CallableStatement cstmtCheck = con.prepareCall(CHECK_IF_EMPLOYERS_JOB_STORED_PROCEDURE))
+        {
+
+            if(!isApplicant)
+            {
+                cstmtCheck.setInt("p_job_id", jobId);
+                cstmtCheck.setInt("p_user_id", userId);
+
+                ResultSet rs = cstmtCheck.executeQuery();
+
+                rs.first();
+                if(rs.getInt("count") == 0) return false;
+            }
+
+            cstmt.setInt("p_author_id", userId);
+            cstmt.setInt("p_job_id", jobId);
+            cstmt.setInt("p_parent_id", comment.getParentId());
+            cstmt.setString("p_text", comment.getText());
+            cstmt.registerOutParameter("p_is_posted", Types.BOOLEAN);
+
+            cstmt.executeUpdate();
+
+            isSuccessful = cstmt.getBoolean("p_is_posted");
+        }
+
+        catch ( SQLException e ) {
+            LOGGER.error("postComment | An error occurred while communicating with a database", e );
+        }
+
+        return isSuccessful;
     }
 }
