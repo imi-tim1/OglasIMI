@@ -11,7 +11,7 @@ import { JWTUtil } from '../../_helpers/jwt-util';
   providedIn: 'root'
 })
 
-export class AccessService {
+export class AuthService {
 
   public redirectRoute: string = '';
   // public allowed: boolean = false;

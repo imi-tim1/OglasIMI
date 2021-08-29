@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
-import { AccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
+import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.service';
 
 @Component({
   selector: 'app-home-page',

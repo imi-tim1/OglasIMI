@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
+import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.service';
 
 @Component({
   selector: 'app-search-jobs-page',
@@ -9,7 +9,7 @@ import { AccessService } from 'src/app/_utilities/_middleware/_services/componen
 export class SearchJobsPageComponent implements OnInit {
 
   constructor(
-    public accessService: AccessService,
+    public accessService: AuthService,
     public activatedRoute: ActivatedRoute
   ) { }
 

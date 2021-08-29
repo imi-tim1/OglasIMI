@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
-import { AccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
+import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.service';
 
 @Component({
   selector: 'app-register-page',
@@ -9,7 +9,7 @@ import { AccessService } from 'src/app/_utilities/_middleware/_services/componen
 })
 export class RegisterPageComponent implements OnInit {
 
-  constructor(public accessService: AccessService,
+  constructor(public accessService: AuthService,
               public activatedRoute: ActivatedRoute          
     ) { }
 
