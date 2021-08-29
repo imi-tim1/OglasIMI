@@ -15,6 +15,7 @@ export class ApplicantInfoPageComponent implements OnInit {
   // Page Auth
   public pageLoaded: boolean = false;
 
+  // States
   public appID: number = 0;
   public applicant: Applicant | null = null;
 

@@ -12,6 +12,10 @@ import { JobService } from 'src/app/_utilities/_middleware/_services/job.service
 })
 export class JobInfoPageComponent implements OnInit {
 
+  // Page Auth
+  public pageLoaded: boolean = false;
+
+  // States
   public jobID: number = 0;
   public applicants: Applicant[] | null = null;
 
@@ -21,14 +25,22 @@ export class JobInfoPageComponent implements OnInit {
     public jobService: JobService
   ) { }
 
+  // --- INIT - Auth Success Callback ---
+  cbInit(self: any)
+  {
+    self.pageLoaded = true;
+
+    // Extract and Save appID from route url
+    let p = self.activatedRoute.snapshot.paramMap.get("id");
+    if (p != null) self.jobID = p as unknown as number;
+  
+    // GET Jobs Applicants
+    self.jobService.getJobsApplicants(self.jobID, self, self.cbSuccess);
+  }
+
   ngOnInit(): void {
     // Check access
-    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles);
-
-    let p = this.activatedRoute.snapshot.paramMap.get("id");
-    if (p != null) this.jobID = p as unknown as number;
-
-    this.jobService.getJobsApplicants(this.jobID, this, this.cbSuccess);
+    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles, this, this.cbInit);
   }
 
   // API Callbacks
