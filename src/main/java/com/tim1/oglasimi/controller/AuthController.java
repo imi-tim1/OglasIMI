@@ -15,8 +15,8 @@ import static com.tim1.oglasimi.security.SecurityConfig.checkAccess;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
-
+public class AuthController
+{
     @GetMapping
     public ResponseEntity<?> checkAuth( @RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt ) {
 

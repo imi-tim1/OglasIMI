@@ -475,7 +475,6 @@ public class JobController
         return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
     }
 
-
     @DeleteMapping("{id}/likes")
     public ResponseEntity<?> recallLike(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
                                            @PathVariable("id")

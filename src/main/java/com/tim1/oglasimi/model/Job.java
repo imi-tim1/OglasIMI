@@ -30,7 +30,7 @@ public class Job
     @Size(min = 10, max = 10000, message = "The length of description must be between 10 and 10000 characters")
     private String description;
 
-    @Size(min = 0, max = 50)
+    @Size(max = 50)
     private String salary;
 
     private boolean workFromHome;
@@ -140,5 +140,4 @@ public class Job
     public void setWorkFromHome(boolean workFromHome) {
         this.workFromHome = workFromHome;
     }
-
 }

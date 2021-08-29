@@ -12,10 +12,10 @@ import java.util.Arrays;
 import static com.tim1.oglasimi.security.SecurityConfig.JWT_CUSTOM_HTTP_HEADER;
 
 @SpringBootApplication
-public class OglasimiApplication {
-
-
-	public static void main(String[] args) {
+public class OglasimiApplication
+{
+	public static void main(String[] args)
+	{
 		SpringApplication.run(OglasimiApplication.class, args);
 	}
 

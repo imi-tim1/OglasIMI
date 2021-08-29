@@ -22,8 +22,8 @@ import static com.tim1.oglasimi.security.SecurityConfig.*;
 @Validated
 @RestController
 @RequestMapping("api/applicants")
-public class ApplicantController {
-
+public class ApplicantController
+{
     private final ApplicantService applicantService;
 
     @Autowired
