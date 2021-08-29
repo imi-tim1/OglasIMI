@@ -494,7 +494,6 @@ CREATE PROCEDURE post_job (
 BEGIN
     INSERT INTO job (employer_id, field_id, city_id, post_date, title, description, salary, work_from_home)
     VALUES (p_employer_id, p_field_id, IF(p_city_id = 0, null, p_city_id), NOW(), p_title, p_description, p_salary, p_work_from_home);
-    SELECT id FROM job WHERE id = LAST_INSERT_ID();
 
     IF ROW_COUNT() != 0
     THEN
@@ -518,7 +517,6 @@ CREATE PROCEDURE insert_tag (
 BEGIN
     INSERT INTO job_tag (job_id, tag_id)
     VALUES (p_job_id, p_tag_id);
-    SELECT id FROM job WHERE id = LAST_INSERT_ID();
 
     IF ROW_COUNT() != 0
     THEN
@@ -709,5 +707,45 @@ BEGIN
     SELECT c.*, a.first_name AS f_name, a.last_name AS l_name, e.name AS name
     FROM comment c LEFT JOIN applicant a ON c.author_id = a.user_id LEFT JOIN employer e on c.author_id = e.user_id
     WHERE p_job_id = job_id;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for comment posting
+DELIMITER // ;
+CREATE PROCEDURE post_comment (
+    IN p_author_id int,
+    IN p_job_id int,
+    IN p_parent_id int,
+    IN p_text varchar(200),
+    OUT p_is_posted boolean
+)
+BEGIN
+    INSERT INTO comment (author_id, job_id, parent_id, text, post_date)
+    VALUES (p_author_id, p_job_id, IF(p_parent_id = 0, null, p_parent_id), p_text, NOW());
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_is_posted = TRUE;
+    END IF;
+
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Check if it is employers job
+DELIMITER // ;
+CREATE PROCEDURE chec_if_employers_job (
+    IN p_job_id int,
+    IN p_user_id int
+)
+BEGIN
+    SELECT COUNT(*) AS count FROM job WHERE p_job_id = id AND p_user_id = employer_id;
 END //
 DELIMITER ;
