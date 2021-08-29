@@ -15,22 +15,30 @@ import { TestingPageComponent } from './_components/_pages/testing-page/testing-
 import { UserRole } from './_utilities/_api/_data-types/enums';
 import { DashboardApplicantComponent } from './_components/_elements/dashboard-applicant/dashboard-applicant.component';
 import { SearchJobsPageComponent } from './_components/_pages/search-jobs-page/search-jobs-page.component';
+import { AlertPageComponent } from './_components/_pages/alert-page/alert-page.component';
 
 // data - Niz uloga koje imaju pristup ruti/stranici, prazan niz daje dozvolu svim ulogama
 const routes: Routes = [
+  { path: 'alert/:cause/:param', component: AlertPageComponent,          data: { allowedRoles: [] }},
+  { path: 'alert/:cause', component: AlertPageComponent,          data: { allowedRoles: [] }},
+  
   { path: 'new-job', component: CreateJobPageComponent,           data: { allowedRoles: [UserRole.Employer] }},
   { path: 'my-jobs', component: DashboardApplicantComponent,      data: { allowedRoles: [UserRole.Applicant] }},
+  
   { path: 'applicant/:id', component: ApplicantInfoPageComponent, data: { allowedRoles: [UserRole.Admin, UserRole.Employer, UserRole.Applicant] }},
   { path: 'applicants', component: ApplicantsPageComponent,       data: { allowedRoles: [UserRole.Admin] }},
   { path: 'employer/:id', component: EmployerInfoPageComponent,   data: { allowedRoles: [] }},
   { path: 'employers', component: EmployersPageComponent,         data: { allowedRoles: [] }},
   { path: 'job/:id', component: JobInfoPageComponent,             data: { allowedRoles: [] }},
   { path: 'jobs-feed', component: SearchJobsPageComponent,        data: { allowedRoles: [UserRole.Admin, UserRole.Employer] }},
-  { path: 'testing', component: TestingPageComponent,             data: { allowedRoles: [] }},
+  
   { path: 'logout', component: LogoutPageComponent,               data: { allowedRoles: [UserRole.Admin, UserRole.Employer, UserRole.Applicant] }},
   { path: 'login', component: LoginPageComponent,                 data: { allowedRoles: [UserRole.Visitor] }},
   { path: 'register', component: RegisterPageComponent,           data: { allowedRoles: [UserRole.Visitor] }},
-  { path: '', component: HomePageComponent,                       data: { allowedRoles: [] }}
+  
+  { path: 'testing', component: TestingPageComponent,             data: { allowedRoles: [] }},
+  { path: '', component: HomePageComponent,                       data: { allowedRoles: [] }},
+  { path: '**', component: HomePageComponent,                       data: { allowedRoles: [] }}
 ];
 
 @NgModule({

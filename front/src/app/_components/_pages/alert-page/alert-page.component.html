@@ -1,0 +1,17 @@
+<div *ngIf="true" style="min-height: 100vh; position: relative;">
+
+    <app-navbar></app-navbar>
+
+    <!-- Uspesna prijava na posao -->
+    <div class="container text-center">
+        <div *ngIf="checkCause('apply-to-job-successful')">
+            <h1><b class="text-success">Uspešno ste se prijavili na oglas!</b></h1>
+            <br><br>
+            <h3>Pošaljite poslodavcu Vaš CV</h3>
+            <a class="btn btn-success" href="mailto:{{(param)? param : ''}}?Subject=Prijava%20za%20posao" target="_top">Pošalji mejl</a>
+        </div>
+    </div>
+
+    <app-footer></app-footer>
+
+</div>

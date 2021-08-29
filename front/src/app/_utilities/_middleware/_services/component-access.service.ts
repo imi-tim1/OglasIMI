@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { UserRole } from '../../_api/_data-types/enums';
 import { JWT_HEADER_NAME } from '../../_api/_data-types/vars';
 import { IdentityApiService } from '../../_api/_services/identity-api.service';
-import { RedirectRoute } from '../../_constants/routing.properties';
+import { RedirectRoutes } from '../../_constants/routing.properties';
 import { JWTUtil } from '../../_helpers/jwt-util';
 
 @Injectable({
@@ -13,7 +13,7 @@ import { JWTUtil } from '../../_helpers/jwt-util';
 
 export class ComponentAccessService {
 
-  public redirectRoute: string = RedirectRoute.DEFAULT;
+  public redirectRoute: string = '';
   // public allowed: boolean = false;
   // public role: UserRole = UserRole.Visitor;
 

@@ -57,6 +57,13 @@ export class ApplicantService {
         // Callback
         if(response.body)
           if(self && successCallback) successCallback(self, response.body);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        if(error.status == HttpStatusCode.NotFound) {
+          if(self && successCallback) successCallback(self, []);
+        }
       }
     );
   }

@@ -125,21 +125,22 @@ export class JobService {
     );
   }
 
-  applyToJob(id: number) 
+  applyToJob(id: number, self?: any, successCallback?: Function) 
   {
     this.api.applyToJob(id).subscribe(
       // Success
       (response) => {
         console.log('----- Apply Successful!');
-        switch (response.status) {
-          // 204 No Content
-          case HttpStatusCode.NoContent:
-            // Sta !!??
-            break;
-          default:
-            break;
-        }
+        if(self && successCallback) successCallback(self);
 
+        // switch (response.status) {
+        //   // 204 No Content
+        //   case HttpStatusCode.NoContent:
+        //     // Sta !!??
+        //     break;
+        //   default:
+        //     break;
+        // }
       },
       (error: HttpErrorResponse) => {
         console.log('ERORORORO')

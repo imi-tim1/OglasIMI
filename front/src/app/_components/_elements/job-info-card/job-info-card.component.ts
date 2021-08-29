@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Job } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
+import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 
 @Component({
   selector: 'app-job-info-card',
@@ -36,8 +37,11 @@ export class JobInfoCardComponent implements OnInit {
   // --- Actions ---
 
   applyMe() {
-    //console.log(this.employerService.employer?.email);
-    this.jobService.applyToJob(this.id);
+    this.jobService.applyToJob(this.id, this, 
+      (self: any) => {
+        self.router.navigate(RedirectRoutes.ON_APPLY_TO_JOB_SUCCESSFUL.concat([self.job.employer.email]));
+      }
+    );
   }
 
   deleteThisJob() {

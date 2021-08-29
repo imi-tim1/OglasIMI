@@ -40,9 +40,7 @@
           {{job.postDate.toString().substr(0,10)}}</small>
 
         <!-- Applicant - Apply Btn -->
-        <a *ngIf="canApply()" class="btn btn-success btn-lg shadow"
-          href="mailto:{{(job)? job.employer.email : ''}}?Subject=Prijava%20za%20posao" target="_top"
-          (click)="applyMe()">
+        <a *ngIf="canApply()" class="btn btn-success btn-lg shadow" (click)="applyMe()">
           PRIJAVI SE
         </a>
 

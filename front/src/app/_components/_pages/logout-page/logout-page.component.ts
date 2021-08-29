@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { RedirectRoute } from 'src/app/_utilities/_constants/routing.properties';
+import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 
 @Component({
@@ -13,7 +13,7 @@ export class LogoutPageComponent implements OnInit {
 
   ngOnInit(): void {
     JWTUtil.delete();
-    this.router.navigate([RedirectRoute.DEFAULT]);
+    this.router.navigate(['']);
   }
 
 }

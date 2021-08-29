@@ -1,5 +1,13 @@
-export namespace RedirectRoute {
-    export const DEFAULT: string = '';
-    export const ON_FORBIDDEN: string = '';
-    export const ON_UNAUTHORIZED: string = '/login';
+export const RedirectRoutes = {
+    DEFAULT: [''],
+    HOME: [''],
+
+    ON_FORBIDDEN: [''],
+    ON_UNAUTHORIZED: ['login'],
+    ON_SESSION_EXPIRED: ['alert','session-expired'],
+    
+    ON_LOGOUT: [''],
+    ON_LOGIN: [''],
+    
+    ON_APPLY_TO_JOB_SUCCESSFUL: ['alert', 'apply-to-job-successful']
 }

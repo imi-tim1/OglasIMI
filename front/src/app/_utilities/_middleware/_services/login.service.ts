@@ -7,7 +7,7 @@ import { JWT_HEADER_NAME } from '../../_api/_data-types/vars';
 import { LoginApiService } from '../../_api/_services/login-api.service';
 import { PasswdHash } from '../../_helpers/hash-util';
 import { JWTUtil } from '../../_helpers/jwt-util';
-import { RedirectRoute } from '../../_constants/routing.properties';
+import { RedirectRoutes } from '../../_constants/routing.properties';
 import { ComponentAccessService } from './component-access.service';
 
 @Injectable({
@@ -53,7 +53,7 @@ export class LoginService {
           // Forbidden
           case HttpStatusCode.Forbidden:
             if(JWTUtil.exists()) {
-              this.router.navigate([RedirectRoute.DEFAULT]);
+              this.router.navigate(['']);
             }
             else {
               // Not Approved
@@ -65,7 +65,7 @@ export class LoginService {
           // Bad Request
           case HttpStatusCode.BadRequest:
             JWTUtil.delete();
-            this.router.navigate([RedirectRoute.DEFAULT]);
+            this.router.navigate(['']);
             break;
         }
       }

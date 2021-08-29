@@ -39,6 +39,7 @@ import { ApplicantListCardComponent } from './_components/_elements/applicant-li
 import { SearchJobsPageComponent } from './_components/_pages/search-jobs-page/search-jobs-page.component';
 import { JobCommentCardComponent } from './_components/_elements/job-comment-card/job-comment-card.component';
 import { JobCommentsListComponent } from './_components/_elements/job-comments-list/job-comments-list.component';
+import { AlertPageComponent } from './_components/_pages/alert-page/alert-page.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { JobCommentsListComponent } from './_components/_elements/job-comments-l
     ApplicantListCardComponent,
     SearchJobsPageComponent,
     JobCommentCardComponent,
-    JobCommentsListComponent
+    JobCommentsListComponent,
+    AlertPageComponent
   ],
   imports: [
     BrowserModule,
