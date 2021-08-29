@@ -40,14 +40,14 @@
           {{job.postDate.toString().substr(0,10)}}</small>
 
         <!-- Applicant - Apply Btn -->
-        <a *ngIf="isApplicant()" class="btn btn-success btn-lg shadow"
+        <a *ngIf="canApply()" class="btn btn-success btn-lg shadow"
           href="mailto:{{(job)? job.employer.email : ''}}?Subject=Prijava%20za%20posao" target="_top"
           (click)="applyMe()">
           PRIJAVI SE
         </a>
 
         <!-- Admin - Delete Btn -->
-        <button *ngIf="isAdmin()" type="submit" class="btn btn-danger btn-lg mb-1" (click)="deleteThisJob()">
+        <button *ngIf="canDelete()" type="submit" class="btn btn-danger btn-lg mb-1" (click)="deleteThisJob()">
           OBRIŠI OGLAS
         </button>
 

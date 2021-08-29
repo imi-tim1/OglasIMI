@@ -5,6 +5,7 @@ import { JobService } from 'src/app/_utilities/_middleware/_services/job.service
 import { Router } from '@angular/router';
 import { Job } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
+import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 
 @Component({
   selector: 'app-job-info-card',
@@ -17,9 +18,15 @@ export class JobInfoCardComponent implements OnInit {
   @Input() id: number = 0;
   public job: Job | null = null;
 
+  // Auth
+  allreadyApplied: boolean = true;
+
   // --- Dependencies ---
-  constructor(public jobService: JobService,
-              public router: Router) { }
+  constructor(
+    public jobService: JobService,
+    public applicantService: ApplicantService,
+    public router: Router
+  ) { }
 
   // --- Start ---
   ngOnInit(): void {
@@ -39,17 +46,18 @@ export class JobInfoCardComponent implements OnInit {
 
   // --- Auth ---
 
-  isApplicant() {
-    return JWTUtil.getUserRole() == UserRole.Applicant;
+  canApply() {
+    return JWTUtil.getUserRole() == UserRole.Applicant && !this.allreadyApplied;
   }
 
-  isAdmin() {
+  canDelete() {
     return JWTUtil.getUserRole() == UserRole.Admin;
   }
 
   // --- API Callbacks ---
 
-  cbSuccessApply(self: any) {
+  cbSuccessApply(self: any) 
+  {
     alert('Uspešno ste obrisali oglas!');
     self.router.navigate(['']); //redirekt na home-page
   }
@@ -57,5 +65,15 @@ export class JobInfoCardComponent implements OnInit {
   cbSuccessGetJob(self: any, job: Job | null) 
   {
     self.job = job;
+
+    // Da li sam vec prijavljen na ovaj oglas?
+    let myID = JWTUtil.getID();
+    if(myID == 0 || JWTUtil.getUserRole() != UserRole.Applicant) return;
+    
+    self.applicantService.getApplicantsJobs(myID, self, 
+      (self: any, jobs: Job[]) => {
+        self.allreadyApplied = jobs.find(j => j.id == self.id) != undefined;
+      }
+    );
   }
 }
