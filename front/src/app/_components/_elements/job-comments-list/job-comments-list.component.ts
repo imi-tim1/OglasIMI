@@ -110,7 +110,9 @@ export class JobCommentsListComponent implements OnInit {
     console.log(self.comments);
 
     // Auth - Da li je trenutni korisnik vlasnik oglasa?
-    self.employerService.getEmployersJobs(JWTUtil.getID(), self, 
+    let myID = JWTUtil.getID();
+    if(myID == 0) return;
+    self.employerService.getEmployersJobs(myID, self, 
     (self: any, jobs: Job[]) => {
       let ok = jobs.find(j => j.id == self.jobID) != undefined;
       console.log('>>>>> Ownership: ' + ok);
