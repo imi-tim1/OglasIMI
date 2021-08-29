@@ -36,6 +36,8 @@ public class JobRepositoryImpl implements JobRepository
     private static final String DELETE_COMMENT_STORED_PROCEDURE = "{call delete_comment(?,?)}";
     private static final String COUNT_LIKES_STORED_PROCEDURE = "{call count_likes(?)}";
     private static final String CHECK_IF_ALREADY_LIKED_STORED_PROCEDURE = "{call check_if_already_liked(?,?)}";
+    private static final String LIKE_JOB_STORED_PROCEDURE = "{call like_job(?,?,?)}";
+    private static final String RECALL_LIKE_STORED_PROCEDURE = "{call recall_like(?,?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -581,5 +583,62 @@ public class JobRepositoryImpl implements JobRepository
         }
 
         return likeResponse;
+    }
+
+    @Override
+    public boolean likeJob(int jobId, int applicantId)
+    {
+        boolean isSuccessful = false;
+
+        try (Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
+             CallableStatement cstmt = con.prepareCall(LIKE_JOB_STORED_PROCEDURE);
+             CallableStatement cstmtCheck = con.prepareCall(CHECK_IF_ALREADY_LIKED_STORED_PROCEDURE))
+        {
+            cstmtCheck.setInt("p_job_id", jobId);
+            cstmtCheck.setInt("p_applicant_id", applicantId);
+
+            ResultSet rs = cstmtCheck.executeQuery();
+
+            rs.first();
+            if(rs.getInt("count") != 0) return false;
+
+
+            cstmt.setInt("p_job_id", jobId);
+            cstmt.setInt("p_applicant_id", applicantId);
+            cstmt.registerOutParameter("p_is_liked", Types.BOOLEAN);
+
+            cstmt.executeUpdate();
+
+            isSuccessful = cstmt.getBoolean("p_is_liked");
+        }
+
+        catch ( SQLException e ) {
+            LOGGER.error("postComment | An error occurred while communicating with a database", e );
+        }
+
+        return isSuccessful;
+    }
+
+    public boolean recallLike(int jobId, int applicantId)
+    {
+        boolean isSuccessfullyDeleted = false;
+
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
+             CallableStatement cstmt = con.prepareCall(RECALL_LIKE_STORED_PROCEDURE))
+        {
+            cstmt.setInt("p_job_id", jobId);
+            cstmt.setInt("p_applicant_id", applicantId);
+            cstmt.registerOutParameter("p_is_deleted", Types.BOOLEAN);
+
+            cstmt.execute();
+
+            isSuccessfullyDeleted = cstmt.getBoolean("p_is_deleted");
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return isSuccessfullyDeleted;
     }
 }

@@ -798,3 +798,47 @@ BEGIN
     SELECT COUNT(*) AS count FROM t_like WHERE p_job_id = job_id AND p_applicant_id = applicant_id;
 END //
 DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for job like
+DELIMITER // ;
+CREATE PROCEDURE like_job (
+    IN p_job_id int,
+    IN p_applicant_id int,
+    OUT p_is_liked boolean
+)
+BEGIN
+    INSERT INTO t_like(applicant_id,job_id)
+    VALUES (p_applicant_id,p_job_id);
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_is_liked = TRUE;
+    END IF;
+
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for like recall
+DELIMITER // ;
+CREATE PROCEDURE recall_like (
+    IN p_job_id int,
+    IN p_applicant_id int,
+    OUT p_is_deleted boolean
+)
+BEGIN
+    DELETE FROM t_like WHERE p_job_id = job_id AND p_applicant_id = applicant_id;
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_is_deleted = TRUE;
+    END IF;
+END //
+DELIMITER ;

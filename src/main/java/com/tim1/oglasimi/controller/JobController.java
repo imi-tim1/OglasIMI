@@ -447,4 +447,57 @@ public class JobController
 
         return ResponseEntity.status(httpStatus).headers(responseHeaders).body(jobService.getJobLikes(jobId,applicantId,isApplicant));
     }
+
+    @PostMapping("{id}/likes")
+    public ResponseEntity<?> likeJob(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                         @PathVariable("id")
+                                         @Min(1)
+                                         @Max(Integer.MAX_VALUE) int jobId)
+    {
+        ResultPair resultPair = checkAccess(jwt,Role.APPLICANT);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        }
+
+        int applicantId  = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+
+        boolean isSuccessful = jobService.likeJob(jobId,applicantId);
+
+        if(isSuccessful) httpStatus = HttpStatus.CREATED;
+        else httpStatus = HttpStatus.CONFLICT;
+
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+    }
+
+
+    @DeleteMapping("{id}/likes")
+    public ResponseEntity<?> recallLike(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                           @PathVariable("id")
+                                           @Min(1)
+                                           @Max(Integer.MAX_VALUE) int jobId)
+    {
+        ResultPair resultPair = checkAccess(jwt,Role.APPLICANT);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        }
+
+        int applicantId = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+
+        boolean isSuccessful = jobService.recallLike(jobId,applicantId);
+
+        if(isSuccessful) return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(responseHeaders).body(null);
+        return ResponseEntity.status(HttpStatus.CONFLICT).headers(responseHeaders).body(null);
+    }
 }
