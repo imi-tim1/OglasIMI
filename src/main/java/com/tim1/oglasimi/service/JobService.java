@@ -75,4 +75,9 @@ public class JobService
     {
         return jobRepositoryImpl.getJobLikes(jobId,applicantId,isApplicant);
     }
+
+    public boolean likeJob(int jobId, int applicantId)
+    {
+        return jobRepositoryImpl.likeJob(jobId,applicantId);
+    }
 }
