@@ -7,6 +7,7 @@ import { Job } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
+import { AlertPageUtil } from 'src/app/_utilities/_helpers/alert-util';
 
 @Component({
   selector: 'app-job-info-card',
@@ -39,7 +40,14 @@ export class JobInfoCardComponent implements OnInit {
   applyMe() {
     this.jobService.applyToJob(this.id, this, 
       (self: any) => {
-        self.router.navigate(RedirectRoutes.ON_APPLY_TO_JOB_SUCCESSFUL.concat([self.job.employer.email]));
+        let param = {
+          employerEmail: self.job.employer.email,
+          employerName: self.job.employer.name,
+          jobID: self.job.id,
+          jobTitle: self.job.title
+        }
+        AlertPageUtil.allowAccess();
+        self.router.navigate(RedirectRoutes.ON_APPLY_TO_JOB_SUCCESSFUL.concat([JSON.stringify(param)]));
       }
     );
   }

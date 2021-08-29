@@ -17,7 +17,8 @@ export class JWTUtil
     }
 
     static delete() {
-        this.store('');
+        // this.store('');
+        window.localStorage.removeItem(this.localStorageKey);
     }
 
     static decodePayload(jwt: string | null): JWT | null {

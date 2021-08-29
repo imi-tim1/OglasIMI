@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Employer, Job, NewEmployer, RatingResponse } from '../../_api/_data-types/interfaces';
 import { EmployerApiService } from '../../_api/_services/employer-api.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class EmployerService {
   public employer: Employer | null = null;
   public employersJobs: Job[] = []
 
-  constructor(private api: EmployerApiService) { }
+  constructor(private api: EmployerApiService, private authService: AuthService) { }
 
   getEmployers(notApproved?: boolean, self?: any, successCallback?: Function) {
     this.api.getEmployers((notApproved == undefined) ? false : notApproved).subscribe(
@@ -27,6 +28,11 @@ export class EmployerService {
         // Callback
         if (response.body)
           if (self && successCallback) { successCallback(self, response.body) };
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }
@@ -41,6 +47,11 @@ export class EmployerService {
 
         // Callback
         if (self && successCallback) { successCallback(self, response.body) };
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }
@@ -57,6 +68,11 @@ export class EmployerService {
           console.log('get emps jobs, body OK')
           if (self && successCallback) { console.log('get emps jobs, OK'); successCallback(self, response.body) };
         }
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }
@@ -69,7 +85,11 @@ export class EmployerService {
         console.log('New Employer Added, status: ' + response.status);
         if (self && successCallback) successCallback(self);
       },
+
+      // Error
       (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
+
         if (error.status == HttpStatusCode.Conflict) {
           if (self && conflictCallback) conflictCallback(self);
         }
@@ -84,6 +104,11 @@ export class EmployerService {
         console.log('Deleted Employer, status: ' + response.status);
         // Callback
         if (self && successCallback) successCallback(self);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }
@@ -95,6 +120,11 @@ export class EmployerService {
         console.log('Approve Employer, status: ' + response.status);
         // Callback
         if (self && successCallback) successCallback(self);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }
@@ -106,6 +136,11 @@ export class EmployerService {
         // Callback
         if (response.body)
           if (self && successCallback) successCallback(self, response.body);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }
@@ -116,6 +151,11 @@ export class EmployerService {
       (response) => {
         // Callback
         if (self && successCallback) successCallback(self);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.service';
@@ -9,9 +10,13 @@ import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.servi
 })
 export class HomePageComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
+    this.authService.checkAccess(this.activatedRoute);
   }
 
   isVisitor() {

@@ -15,7 +15,11 @@ import { AuthService } from './auth.service';
 })
 export class LoginService {
 
-  constructor(private api: LoginApiService, private router: Router) { }
+  constructor(
+    private api: LoginApiService, 
+    private router: Router,
+    private authService: AuthService
+  ) { }
 
   login(email: string, password: string, self?: any, 
         callbackSuccess?: Function, callbackWrongCredentials?: Function, callbackNotApproved?: Function) {
@@ -31,20 +35,21 @@ export class LoginService {
     console.log(body);
 
     this.api.login(body).subscribe(
-      // Login Success
+      // Success
       (response: HttpResponse<null>) => {
         JWTUtil.store(response.headers.get(JWT_HEADER_NAME));
         if(self && callbackSuccess) callbackSuccess(self);
       },
-      // Login Failed
+
+      // Error
       (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
+
         switch (error.status) {
-          
           // Unauthorized
           case HttpStatusCode.Unauthorized:
             // Wrong Credentials
             if(JWTUtil.get() == '') {
-              console.log('pogresna sifra ili email');
               if(self && callbackWrongCredentials) callbackWrongCredentials(self);
             }
             JWTUtil.delete();
@@ -53,11 +58,10 @@ export class LoginService {
           // Forbidden
           case HttpStatusCode.Forbidden:
             if(JWTUtil.exists()) {
-              this.router.navigate(['']);
+              this.router.navigate(RedirectRoutes.ON_FORBIDDEN);
             }
             else {
               // Not Approved
-              console.log('Nalog jos nije potvrdjen');
               if(self && callbackNotApproved) callbackNotApproved(self);
             }
             break;

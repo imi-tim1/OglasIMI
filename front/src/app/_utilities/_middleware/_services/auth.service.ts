@@ -5,6 +5,7 @@ import { UserRole } from '../../_api/_data-types/enums';
 import { JWT_HEADER_NAME } from '../../_api/_data-types/vars';
 import { IdentityApiService } from '../../_api/_services/identity-api.service';
 import { RedirectRoutes } from '../../_constants/routing.properties';
+import { AlertPageUtil } from '../../_helpers/alert-util';
 import { JWTUtil } from '../../_helpers/jwt-util';
 
 @Injectable({
@@ -74,12 +75,11 @@ export class AuthService {
         if (error.status == HttpStatusCode.Unauthorized) JWTUtil.delete();
 
         // Callback (Unauthorized/Forbidden) / Navigate
-        if(self)
-          if(callbackUnauthorized) callbackUnauthorized(self);
-          else if(callbackForbidden) callbackForbidden(self);
+        if(self && callbackUnauthorized) callbackUnauthorized(self);
           
           // default action
         else {
+          AlertPageUtil.allowAccess();
           this.router.navigate(RedirectRoutes.ON_SESSION_EXPIRED);
         } 
       }
@@ -90,8 +90,18 @@ export class AuthService {
   //   this.redirectRoute = route;
   // }
 
+  // Session
+
   checkSessionExpired(status: HttpStatusCode) {
     return status == HttpStatusCode.Unauthorized && JWTUtil.get() != '';
+  }
+
+  redirectIfSessionExpired(status: HttpStatusCode) {
+    if (this.checkSessionExpired(status)) {
+      JWTUtil.delete();
+      AlertPageUtil.allowAccess();
+      this.router.navigate(RedirectRoutes.ON_SESSION_EXPIRED);
+    }
   }
 
 }
