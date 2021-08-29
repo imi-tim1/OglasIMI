@@ -739,7 +739,7 @@ DELIMITER ;
 
 
 -- #######################################################################
--- Check if it is employers job
+-- Procedure for checking if it is employers job
 DELIMITER // ;
 CREATE PROCEDURE chec_if_employers_job (
     IN p_job_id int,
@@ -747,5 +747,25 @@ CREATE PROCEDURE chec_if_employers_job (
 )
 BEGIN
     SELECT COUNT(*) AS count FROM job WHERE p_job_id = id AND p_user_id = employer_id;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for comments deleting
+DELIMITER // ;
+CREATE PROCEDURE delete_comment (
+    IN p_id int,
+    OUT p_is_deleted boolean
+)
+BEGIN
+    DELETE FROM comment WHERE p_id = id;
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_is_deleted = TRUE;
+    END IF;
 END //
 DELIMITER ;
