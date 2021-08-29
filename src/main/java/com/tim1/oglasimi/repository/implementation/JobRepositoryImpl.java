@@ -37,6 +37,7 @@ public class JobRepositoryImpl implements JobRepository
     private static final String COUNT_LIKES_STORED_PROCEDURE = "{call count_likes(?)}";
     private static final String CHECK_IF_ALREADY_LIKED_STORED_PROCEDURE = "{call check_if_already_liked(?,?)}";
     private static final String LIKE_JOB_STORED_PROCEDURE = "{call like_job(?,?,?)}";
+    private static final String RECALL_LIKE_STORED_PROCEDURE = "{call recall_like(?,?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -616,5 +617,28 @@ public class JobRepositoryImpl implements JobRepository
         }
 
         return isSuccessful;
+    }
+
+    public boolean recallLike(int jobId, int applicantId)
+    {
+        boolean isSuccessfullyDeleted = false;
+
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
+             CallableStatement cstmt = con.prepareCall(RECALL_LIKE_STORED_PROCEDURE))
+        {
+            cstmt.setInt("p_job_id", jobId);
+            cstmt.setInt("p_applicant_id", applicantId);
+            cstmt.registerOutParameter("p_is_deleted", Types.BOOLEAN);
+
+            cstmt.execute();
+
+            isSuccessfullyDeleted = cstmt.getBoolean("p_is_deleted");
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return isSuccessfullyDeleted;
     }
 }

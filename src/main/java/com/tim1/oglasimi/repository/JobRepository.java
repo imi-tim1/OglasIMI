@@ -19,4 +19,5 @@ public interface JobRepository extends CRUDRepository<Job, Integer>
     boolean deleteComment(int id);
     LikeResponse getJobLikes(int jobId, int applicantId, boolean isApplicant);
     boolean likeJob(int jobId, int applicantId);
+    boolean recallLike(int jobId, int applicantId);
 }

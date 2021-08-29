@@ -80,4 +80,9 @@ public class JobService
     {
         return jobRepositoryImpl.likeJob(jobId,applicantId);
     }
+
+    public boolean recallLike(int jobId, int applicantId)
+    {
+        return jobRepositoryImpl.recallLike(jobId,applicantId);
+    }
 }
