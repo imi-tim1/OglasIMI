@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Applicant, Job, NewApplicant } from '../../_api/_data-types/interfaces';
 import { ApplicantApiService } from '../../_api/_services/applicant-api.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,10 @@ export class ApplicantService {
   public applicant: Applicant | null = null;
   public applicantsJobs: Job[] = []
 
-  constructor(private api: ApplicantApiService) { }
+  constructor(
+    private api: ApplicantApiService,
+    private authService: AuthService
+  ) { }
 
   // Potrebno TESTIRANJE !!!
   getApplicants(notApproved?: boolean, self?: any, successCallback?: Function) {
@@ -28,6 +32,11 @@ export class ApplicantService {
         // Callback
         if(response.body)
           if(self && successCallback) successCallback(self, response.body);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }
@@ -43,6 +52,11 @@ export class ApplicantService {
         console.log(this.applicant)
         // Callback
         if(self && successCallback) successCallback(self, response.body);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }
@@ -61,6 +75,8 @@ export class ApplicantService {
 
       // Error
       (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
+
         if(error.status == HttpStatusCode.NotFound) {
           if(self && successCallback) successCallback(self, []);
         }
@@ -76,7 +92,11 @@ export class ApplicantService {
         console.log('New Applicant Added, status: ' + response.status);
         if(self && successCallback) successCallback(self);
       },
+
+      // Error
       (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
+
         if(error.status == HttpStatusCode.Conflict) {
           if(self && conflictCallback) conflictCallback(self);
         }
@@ -90,6 +110,11 @@ export class ApplicantService {
       (response) => {
         console.log('Deleted Employer, status: ' + response.status);
         if(self && successCallback) successCallback(self);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }
@@ -100,6 +125,11 @@ export class ApplicantService {
       (response) => {
         console.log('Deleted Employer, status: ' + response.status);
         if(self && successCallback) successCallback(self);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }

@@ -74,6 +74,7 @@ export class EmployerInfoCardComponent implements OnInit {
     self.rating = data.rating;
     self.allreadyRated = data.alreadyRated;
 
+    if (JWTUtil.getID() == 0 || JWTUtil.getUserRole() != UserRole.Applicant) return;
     self.applicantService.getApplicantsJobs(JWTUtil.getID(), self,
       (self: any, data: Job[]) => {
         self.rateDissabled = !(data.find(j => j.employer.id == self.emp.id) != undefined);

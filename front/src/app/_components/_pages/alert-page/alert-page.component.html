@@ -2,14 +2,25 @@
 
     <app-navbar></app-navbar>
 
-    <!-- Uspesna prijava na posao -->
     <div class="container text-center">
-        <div *ngIf="checkCause('apply-to-job-successful')">
+        <br><br><br><br>
+        
+        <!-- Uspesna prijava na posao -->
+        <div *ngIf="checkApplyToJobSuccessful()">
             <h1><b class="text-success">Uspešno ste se prijavili na oglas!</b></h1>
             <br><br>
             <h3>Pošaljite poslodavcu Vaš CV</h3>
             <a class="btn btn-success" href="mailto:{{(param)? param : ''}}?Subject=Prijava%20za%20posao" target="_top">Pošalji mejl</a>
         </div>
+
+        <!-- Sesija je istekla -->
+        <div *ngIf="checkSessionExpired()">
+            <h1><b class="text-warning">Vaša sesija je istekla!</b></h1>
+            <br><br>
+            <h3>Prijavite se ponovo</h3>
+            <a class="btn btn-success" routerLink="/login">Prijava</a>
+        </div>
+
     </div>
 
     <app-footer></app-footer>

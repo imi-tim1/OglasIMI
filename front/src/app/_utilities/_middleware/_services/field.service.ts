@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Field } from '../../_api/_data-types/interfaces';
 import { Tag } from '../../_api/_data-types/interfaces';
 import { FieldApiService } from '../../_api/_services/field-api.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,10 @@ export class FieldService {
   public fields: Field[] = [];
   public tags: Tag[] = [];
 
-  constructor(private api: FieldApiService) { }
+  constructor(
+    private api: FieldApiService,
+    private authService: AuthService
+  ) { }
 
   getFields() 
   {
@@ -23,6 +28,11 @@ export class FieldService {
         this.fields = (response.body == null)? [] : response.body;
         console.log('Fields: ')
         console.log(this.fields)
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }
@@ -36,6 +46,11 @@ export class FieldService {
         this.tags = (response.body == null)? [] : response.body;
         console.log('Tags: ')
         console.log(this.tags)
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }

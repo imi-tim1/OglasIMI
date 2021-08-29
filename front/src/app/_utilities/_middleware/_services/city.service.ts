@@ -1,6 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { City } from '../../_api/_data-types/interfaces';
 import { CityApiService } from '../../_api/_services/city-api.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,10 @@ export class CityService {
 
   public cities: City[] = [];
 
-  constructor(private api: CityApiService) { }
+  constructor(
+    private api: CityApiService,
+    private authService: AuthService
+  ) { }
 
   getCities() {
     this.api.getCities().subscribe(
@@ -20,6 +25,11 @@ export class CityService {
         this.cities = (response.body == null)? [] : response.body;
         console.log('Cities: ')
         console.log(this.cities)
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
       }
     );
   }

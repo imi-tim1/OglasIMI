@@ -19,7 +19,7 @@ import { AlertPageComponent } from './_components/_pages/alert-page/alert-page.c
 
 // data - Niz uloga koje imaju pristup ruti/stranici, prazan niz daje dozvolu svim ulogama
 const routes: Routes = [
-  { path: 'alert/:cause/:param', component: AlertPageComponent,          data: { allowedRoles: [] }},
+  { path: 'alert/:cause/:param', component: AlertPageComponent,   data: { allowedRoles: [] }},
   { path: 'alert/:cause', component: AlertPageComponent,          data: { allowedRoles: [] }},
   
   { path: 'new-job', component: CreateJobPageComponent,           data: { allowedRoles: [UserRole.Employer] }},
