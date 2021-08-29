@@ -31,6 +31,7 @@ public class JobRepositoryImpl implements JobRepository
     private static final String GET_ALL_COMMENTS_STORED_PROCEDURE = "{call get_all_comments(?)}";
     private static final String POST_COMMENT_STORED_PROCEDURE = "{call post_comment(?,?,?,?,?)}";
     private static final String CHECK_IF_EMPLOYERS_JOB_STORED_PROCEDURE = "{call chec_if_employers_job(?,?)}";
+    private static final String DELETE_COMMENT_STORED_PROCEDURE = "{call delete_comment(?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -517,5 +518,28 @@ public class JobRepositoryImpl implements JobRepository
         }
 
         return isSuccessful;
+    }
+
+    @Override
+    public boolean deleteComment(int id)
+    {
+        boolean isSuccessfullyDeleted = false;
+
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
+             CallableStatement cstmt = con.prepareCall(DELETE_COMMENT_STORED_PROCEDURE))
+        {
+            cstmt.setInt("p_id",id);
+            cstmt.registerOutParameter("p_is_deleted", Types.BOOLEAN);
+
+            cstmt.execute();
+
+            isSuccessfullyDeleted = cstmt.getBoolean("p_is_deleted");
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return isSuccessfullyDeleted;
     }
 }

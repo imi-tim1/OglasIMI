@@ -15,4 +15,5 @@ public interface JobRepository extends CRUDRepository<Job, Integer>
     boolean applyForAJob( Integer jobId, Integer uid);
     List<Comment> getAllComments(int jobId);
     boolean postComment(Comment comment, int jobId, int userId, boolean isApplicant);
+    boolean deleteComment(int id);
 }

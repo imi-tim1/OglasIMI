@@ -391,4 +391,27 @@ public class JobController
 
         return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
     }
+
+    @DeleteMapping("{jobId}/comments/{id}")
+    public ResponseEntity<?> deleteComment(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                       @PathVariable("id")
+                                       @Min(1)
+                                       @Max(Integer.MAX_VALUE) int id)
+    {
+        ResultPair resultPair = checkAccess(jwt,Role.ADMIN);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        }
+
+        boolean isSuccessful = jobService.deleteComment(id);
+
+        if(isSuccessful) return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(responseHeaders).body(null);
+        return ResponseEntity.status(HttpStatus.CONFLICT).headers(responseHeaders).body(null);
+    }
 }

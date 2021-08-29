@@ -62,4 +62,9 @@ public class JobService
     public boolean postComment(Comment comment, int jobId, int userId, boolean isApplicant) {
         return jobRepositoryImpl.postComment(comment,jobId,userId,isApplicant);
     }
+
+    public boolean deleteComment(int id)
+    {
+        return jobRepositoryImpl.deleteComment(id);
+    }
 }
