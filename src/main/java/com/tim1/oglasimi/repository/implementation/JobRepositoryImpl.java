@@ -3,6 +3,8 @@ package com.tim1.oglasimi.repository.implementation;
 import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.model.payload.JobFeed;
 import com.tim1.oglasimi.model.payload.JobFilter;
+import com.tim1.oglasimi.model.payload.LikeResponse;
+import com.tim1.oglasimi.model.payload.RatingResponse;
 import com.tim1.oglasimi.repository.JobRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,8 @@ public class JobRepositoryImpl implements JobRepository
     private static final String POST_COMMENT_STORED_PROCEDURE = "{call post_comment(?,?,?,?,?)}";
     private static final String CHECK_IF_EMPLOYERS_JOB_STORED_PROCEDURE = "{call chec_if_employers_job(?,?)}";
     private static final String DELETE_COMMENT_STORED_PROCEDURE = "{call delete_comment(?,?)}";
+    private static final String COUNT_LIKES_STORED_PROCEDURE = "{call count_likes(?)}";
+    private static final String CHECK_IF_ALREADY_LIKED_STORED_PROCEDURE = "{call check_if_already_liked(?,?)}";
 
     @Value("${spring.datasource.url}")
     private String databaseSourceUrl;
@@ -541,5 +545,41 @@ public class JobRepositoryImpl implements JobRepository
         }
 
         return isSuccessfullyDeleted;
+    }
+
+    @Override
+    public LikeResponse getJobLikes(int jobId, int applicantId, boolean isApplicant)
+    {
+        LikeResponse likeResponse = new LikeResponse();
+
+        try ( Connection con = DriverManager.getConnection( databaseSourceUrl, databaseUsername, databasePassword );
+              CallableStatement cstmt = con.prepareCall(COUNT_LIKES_STORED_PROCEDURE);
+              CallableStatement cstmtCheck = con.prepareCall(CHECK_IF_ALREADY_LIKED_STORED_PROCEDURE))
+        {
+            likeResponse.setTotalLikes(0);
+            likeResponse.setAlreadyLiked(false);
+
+            cstmt.setInt("p_job_id", jobId);
+            ResultSet rs = cstmt.executeQuery();
+
+            rs.first();
+            likeResponse.setTotalLikes(rs.getInt("count"));
+
+            if(isApplicant)
+            {
+                cstmtCheck.setInt("p_job_id",jobId);
+                cstmtCheck.setInt("p_applicant_id", applicantId);
+                rs = cstmtCheck.executeQuery();
+
+                rs.first();
+                if(rs.getInt("count") != 0) likeResponse.setAlreadyLiked(true);
+            }
+        }
+
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return likeResponse;
     }
 }

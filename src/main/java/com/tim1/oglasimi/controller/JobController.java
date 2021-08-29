@@ -3,6 +3,7 @@ package com.tim1.oglasimi.controller;
 import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.model.payload.JobFeed;
 import com.tim1.oglasimi.model.payload.JobFilter;
+import com.tim1.oglasimi.model.payload.LikeResponse;
 import com.tim1.oglasimi.security.ResultPair;
 import com.tim1.oglasimi.security.Role;
 import com.tim1.oglasimi.service.JobService;
@@ -394,9 +395,9 @@ public class JobController
 
     @DeleteMapping("{jobId}/comments/{id}")
     public ResponseEntity<?> deleteComment(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
-                                       @PathVariable("id")
-                                       @Min(1)
-                                       @Max(Integer.MAX_VALUE) int id)
+                                           @PathVariable("id")
+                                           @Min(1)
+                                           @Max(Integer.MAX_VALUE) int id)
     {
         ResultPair resultPair = checkAccess(jwt,Role.ADMIN);
         HttpStatus httpStatus = resultPair.getHttpStatus();
@@ -413,5 +414,37 @@ public class JobController
 
         if(isSuccessful) return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(responseHeaders).body(null);
         return ResponseEntity.status(HttpStatus.CONFLICT).headers(responseHeaders).body(null);
+    }
+
+    @GetMapping("{id}/likes")
+    public ResponseEntity<LikeResponse> getJobLikes(@RequestHeader(JWT_CUSTOM_HTTP_HEADER) String jwt,
+                                                    @PathVariable("id")
+                                                    @Min(1)
+                                                    @Max(Integer.MAX_VALUE) int jobId)
+    {
+        ResultPair resultPair = checkAccess(jwt, Role.VISITOR, Role.EMPLOYER, Role.APPLICANT, Role.ADMIN);
+        HttpStatus httpStatus = resultPair.getHttpStatus();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set(JWT_CUSTOM_HTTP_HEADER, jwt);
+
+        if( httpStatus != HttpStatus.OK )
+        {
+            return ResponseEntity.status(httpStatus).headers(responseHeaders).body(null);
+        }
+
+        int applicantId = 0;
+        boolean isApplicant = false;
+
+        if(resultPair.getClaims() != null)
+        {
+            // Ekstraktovanje uid i role iz tokena
+            applicantId = (int) (double) resultPair.getClaims().get(USER_ID_CLAIM_NAME);
+            String role = (String) resultPair.getClaims().get(ROLE_CLAIM_NAME);
+
+            if(Role.APPLICANT.equalsTo(role)) isApplicant = true;
+        }
+
+        return ResponseEntity.status(httpStatus).headers(responseHeaders).body(jobService.getJobLikes(jobId,applicantId,isApplicant));
     }
 }

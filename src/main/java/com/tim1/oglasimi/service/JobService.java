@@ -5,6 +5,7 @@ import com.tim1.oglasimi.model.Comment;
 import com.tim1.oglasimi.model.Job;
 import com.tim1.oglasimi.model.payload.JobFeed;
 import com.tim1.oglasimi.model.payload.JobFilter;
+import com.tim1.oglasimi.model.payload.LikeResponse;
 import com.tim1.oglasimi.repository.implementation.JobRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,16 +56,23 @@ public class JobService
         return jobRepositoryImpl.delete(id);
     }
 
-    public List<Comment> getAllComments(int jobId) {
+    public List<Comment> getAllComments(int jobId)
+    {
         return jobRepositoryImpl.getAllComments(jobId);
     }
 
-    public boolean postComment(Comment comment, int jobId, int userId, boolean isApplicant) {
+    public boolean postComment(Comment comment, int jobId, int userId, boolean isApplicant)
+    {
         return jobRepositoryImpl.postComment(comment,jobId,userId,isApplicant);
     }
 
     public boolean deleteComment(int id)
     {
         return jobRepositoryImpl.deleteComment(id);
+    }
+
+    public LikeResponse getJobLikes(int jobId, int applicantId, boolean isApplicant)
+    {
+        return jobRepositoryImpl.getJobLikes(jobId,applicantId,isApplicant);
     }
 }
