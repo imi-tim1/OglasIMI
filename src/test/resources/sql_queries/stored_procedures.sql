@@ -821,3 +821,24 @@ BEGIN
 
 END //
 DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for like recall
+DELIMITER // ;
+CREATE PROCEDURE recall_like (
+    IN p_job_id int,
+    IN p_applicant_id int,
+    OUT p_is_deleted boolean
+)
+BEGIN
+    DELETE FROM t_like WHERE p_job_id = job_id AND p_applicant_id = applicant_id;
+
+    IF ROW_COUNT() != 0
+    THEN
+        SET p_is_deleted = TRUE;
+    END IF;
+END //
+DELIMITER ;
