@@ -58,8 +58,6 @@ public class EmployerController {
             role = (String) claims.get(ROLE_CLAIM_NAME);
         }
 
-        boolean isAdmin = false;
-
         /* check non-admin user requested list of unapproved users */
         if( ! Role.ADMIN.equalsTo(role) && notApprovedRequested ) {
                 return ResponseEntity

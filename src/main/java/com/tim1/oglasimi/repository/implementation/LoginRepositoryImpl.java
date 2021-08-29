@@ -55,10 +55,8 @@ public class LoginRepositoryImpl implements LoginRepository {
     public LoginResponse checkCredentials(LoginCredentials loginCredentials) {
         LoginResponse loginResponse = null;
 
-        try (
-                Connection con = DriverManager.getConnection(
-                        databaseSourceUrl, databaseUsername, databasePassword );
-                CallableStatement cstmt = con.prepareCall( LOGIN_STORED_PROCEDURE_CALL ) ) {
+        try (Connection con = DriverManager.getConnection(databaseSourceUrl, databaseUsername, databasePassword );
+             CallableStatement cstmt = con.prepareCall( LOGIN_STORED_PROCEDURE_CALL ) ) {
 
             cstmt.setString("p_email", loginCredentials.getEmail() );
             cstmt.setString("p_hashed_password", loginCredentials.getHashedPassword() );
@@ -84,6 +82,4 @@ public class LoginRepositoryImpl implements LoginRepository {
 
         return loginResponse;
     }
-
-
 }

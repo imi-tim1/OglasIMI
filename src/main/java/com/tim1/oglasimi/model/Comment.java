@@ -1,13 +1,27 @@
 package com.tim1.oglasimi.model;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 public class Comment
 {
+    @Min(1)
+    @Max(Integer.MAX_VALUE)
     private int id;
+
+    @Min(0)
+    @Max(Integer.MAX_VALUE)
     private int parentId;
+
     private String authorName;
+
+    @NotBlank
+    @Size(min = 10, max = 1000, message = "The length of comment must be between 10 and 1000 characters")
     private String text;
+
     private LocalDateTime postDate;
 
     public int getId()

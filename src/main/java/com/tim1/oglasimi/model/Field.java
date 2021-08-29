@@ -40,5 +40,4 @@ public class Field
     {
         this.name = name;
     }
-
 }

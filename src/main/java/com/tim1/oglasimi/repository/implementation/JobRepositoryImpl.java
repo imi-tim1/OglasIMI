@@ -222,7 +222,6 @@ public class JobRepositoryImpl implements JobRepository
         return jobApplicants;
     }
 
-
     public Job setJobModel(ResultSet rsMaster, CallableStatement cstmtTag) throws SQLException
     {
         Tag tempTag;
@@ -312,7 +311,6 @@ public class JobRepositoryImpl implements JobRepository
 
         return flag;
     }
-
 
     @Override
     public List<Job> getAll()
