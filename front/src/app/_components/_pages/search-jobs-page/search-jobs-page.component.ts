@@ -15,7 +15,7 @@ export class SearchJobsPageComponent implements OnInit {
 
   ngOnInit(): void {
     // Check access
-    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles);
+    this.accessService.checkAccess(this.activatedRoute);
   }
 
 }

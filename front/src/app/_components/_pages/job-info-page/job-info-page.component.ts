@@ -40,7 +40,7 @@ export class JobInfoPageComponent implements OnInit {
 
   ngOnInit(): void {
     // Check access
-    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles, this, this.cbInit);
+    this.accessService.checkAccess(this.activatedRoute, this, this.cbInit);
   }
 
   // API Callbacks
