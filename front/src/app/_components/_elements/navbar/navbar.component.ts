@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { faHome, faHouseUser } from '@fortawesome/free-solid-svg-icons';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
-import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
+import { AccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 
 @Component({
   selector: 'app-navbar',
@@ -43,7 +43,7 @@ export class NavbarComponent implements OnInit {
   iconHouse = faHome;
   iconHouseUser = faHouseUser;
 
-  constructor(public acc: ComponentAccessService) { }
+  constructor(public acc: AccessService) { }
 
   ngOnInit(): void {
     this.acc.checkAccess([]);

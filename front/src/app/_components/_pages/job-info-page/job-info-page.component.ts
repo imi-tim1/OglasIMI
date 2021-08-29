@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Applicant } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
-import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
+import { AccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 
 
@@ -21,7 +21,7 @@ export class JobInfoPageComponent implements OnInit {
 
   constructor(
     public activatedRoute: ActivatedRoute,
-    public accessService: ComponentAccessService,
+    public accessService: AccessService,
     public jobService: JobService
   ) { }
 

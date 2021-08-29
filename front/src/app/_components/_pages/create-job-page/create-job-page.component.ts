@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
+import { AccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 import { FieldService } from 'src/app/_utilities/_middleware/_services/field.service';
 import { CityService } from 'src/app/_utilities/_middleware/_services/city.service';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
@@ -13,7 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class CreateJobPageComponent implements OnInit {
 
-  constructor(public accessService: ComponentAccessService,
+  constructor(public accessService: AccessService,
               public activatedRoute: ActivatedRoute,
               public fieldService: FieldService,
               public cityService: CityService,

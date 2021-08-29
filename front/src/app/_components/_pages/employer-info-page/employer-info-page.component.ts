@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Employer } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
-import { ComponentAccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
+import { AccessService } from 'src/app/_utilities/_middleware/_services/component-access.service';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 
@@ -17,7 +17,7 @@ export class EmployerInfoPageComponent implements OnInit {
 
   constructor(
     public activatedRoute: ActivatedRoute,
-    public accessService: ComponentAccessService,
+    public accessService: AccessService,
     public empService: EmployerService
   ) { }
 

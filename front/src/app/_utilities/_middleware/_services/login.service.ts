@@ -8,7 +8,7 @@ import { LoginApiService } from '../../_api/_services/login-api.service';
 import { PasswdHash } from '../../_helpers/hash-util';
 import { JWTUtil } from '../../_helpers/jwt-util';
 import { RedirectRoutes } from '../../_constants/routing.properties';
-import { ComponentAccessService } from './component-access.service';
+import { AccessService } from './component-access.service';
 
 @Injectable({
   providedIn: 'root'
