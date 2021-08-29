@@ -100,3 +100,8 @@ VALUES (3,4,null,'Komentar1','2021-05-08 07:36:2.420'),
        (2,4,null,'Kako ide poso?','2021-07-08 07:36:2.420'),
        (5,4,2,'Borba','2021-07-08 08:36:2.420'),
        (3,1,null,'Komentar2','2021-09-08 08:36:2.420');
+
+INSERT INTO t_like (applicant_id, job_id)
+VALUES (2,1),
+       (3,1),
+       (2,4)

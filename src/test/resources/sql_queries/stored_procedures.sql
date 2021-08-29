@@ -769,3 +769,32 @@ BEGIN
     END IF;
 END //
 DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for counting total number of likes on a specific job
+DELIMITER // ;
+CREATE PROCEDURE count_likes (
+    IN p_job_id int
+)
+BEGIN
+    SELECT COUNT(*) AS count FROM t_like WHERE p_job_id = job_id;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
+-- Procedure for checking if applicant alrady liked a job
+DELIMITER // ;
+CREATE PROCEDURE check_if_already_liked (
+    IN p_job_id int,
+    IN p_applicant_id int
+)
+BEGIN
+    SELECT COUNT(*) AS count FROM t_like WHERE p_job_id = job_id AND p_applicant_id = applicant_id;
+END //
+DELIMITER ;
