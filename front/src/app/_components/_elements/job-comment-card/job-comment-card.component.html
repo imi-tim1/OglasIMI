@@ -1,15 +1,23 @@
 <div *ngIf="data" class="pb-2 {{(isReplay())?'ps-5':''}}">
-    <div class="d-flex align-items-start text-start w-100 p-2 bg-white rounded-3 shadow border border-1
-                {{(isReplay())?'border-primary':'border-secondary'}}" >
-        <div class="px-3 py-2  me-auto">
-            <h6>{{data.id}}</h6>
-            <h6>{{data.text}}</h6>
+    <div class="text-start w-100 p-3 bg-white rounded-3 shadow border border-1
+                {{(isReplay())?'border-primary':'border-secondary'}}">
+        <div class="row">
+            <div class="d-flex">
+                <div class="pb-3 flex-fill">{{data.authorName}}</div>
+                <div class="pb-2">{{data.postDate.toString().substr(0,10)}}</div>
+            </div>
         </div>
-        <button *ngIf="canDelete" (click)="onDeleteClick()" class="btn btn-danger border align-self-end"> 
-            <fa-icon [icon]="iconDelete"></fa-icon> 
-        </button>
-        <button *ngIf="canReplay" (click)="onReplayClick()" class="btn border align-self-end"> 
-            <fa-icon [icon]="(!replayState)? iconReplay : iconReplayStop"></fa-icon>
-        </button>
+
+        <div class="row">
+            <div class="d-flex">
+                <h6 class="flex-fill">{{data.text}}</h6>
+                <button *ngIf="canDelete" (click)="onDeleteClick()" class="btn btn-danger border align-self-end">
+                    <fa-icon [icon]="iconDelete"></fa-icon>
+                </button>
+                <button *ngIf="canReplay && data.parentId == 0" (click)="onReplayClick()" class="btn border align-self-end">
+                    <fa-icon [icon]="(!replayState)? iconReplay : iconReplayStop"></fa-icon>
+                </button>
+            </div>
+        </div>
     </div>
 </div>

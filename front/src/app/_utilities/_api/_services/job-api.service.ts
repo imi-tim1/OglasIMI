@@ -119,12 +119,29 @@ export class JobApiService {
     return response;
   }
 
-  postNewJobComment() {
+  postNewJobComment(id: number, comment: JobComment): Observable<HttpResponse<null>>  
+  {
+    let response = this.http.post<null>(
+      this.url + `/${id}/comments`, 
+      comment,
+      { 
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
 
+    return response;
   }
 
-  deleteJobComment() {
-    
+  deleteJobComment(jobID: number, commentID: number): Observable<HttpResponse<null>> 
+  {
+    return this.http.delete<null>(
+      this.url + `/${jobID}/comments/${commentID}`,
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
   }
 
 }

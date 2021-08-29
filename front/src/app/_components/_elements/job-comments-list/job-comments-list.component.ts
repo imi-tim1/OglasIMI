@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Job, JobComment } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { Applicant, Employer, Job, JobComment } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 import { faPaperPlane, faCheck, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 
 @Component({
   selector: 'app-job-comments-list',
@@ -34,7 +35,8 @@ export class JobCommentsListComponent implements OnInit {
 
   constructor(
     private jobService: JobService,
-    public employerService: EmployerService
+    public employerService: EmployerService,
+    public applicantService: ApplicantService
   ) { }
 
   ngOnInit(): void {
@@ -46,53 +48,79 @@ export class JobCommentsListComponent implements OnInit {
 
   toggleNewCommentCard() {
     this.newCommentCardActive = !this.newCommentCardActive;
-    this.replayText = '';
+    this.newCommentText = '';
   }
 
   fetchComments() {
     this.jobService.getJobComments(this.jobID, this, this.cbGetCommentsSuccess);
   }
 
-  sendNewComment() { ///// <<<<<< !!!!!!
-    let c: JobComment = {
-      id: 0,
-      text: this.replayText,
-      parentId: this.activeReplayCommentID,
+  sendNewComment() {
+    let comment: JobComment = {
+      id: 1,
+      authorName: 'ime',
+      text: this.newCommentText,
+      parentId: 0,
       postDate: new Date()
     };
 
-    // TODO: Callback fn za uspesno dodat komentar
+    this.jobService.postNewJobComment(this.jobID, comment, this,
+      (self: any) => {
+        self.fetchComments();
+        self.toggleNewCommentCard();
+      }
+    );
+
   }
 
   // --- Replay ---
 
-  toggleReplayCard(forComment: number) {
-    if (forComment == 0)
+  toggleReplayCard(commentID: number) {
+    if (commentID == 0)
       return;
 
-    if (this.activeReplayCommentID == forComment)
-      forComment = 0;
-    
+    if (this.activeReplayCommentID == commentID)
+      commentID = 0;
+
     this.replayText = '';
-    this.activeReplayCommentID = forComment;
+    this.activeReplayCommentID = commentID;
   }
 
-  sendReplay() { ///// <<<<<< !!!!!!
-    let c: JobComment = {
-      id: 0,
+  sendReplay() {
+    let comment: JobComment = {
+      id: 1,
+      authorName: 'ime',
       text: this.replayText,
       parentId: this.activeReplayCommentID,
       postDate: new Date()
     };
-    // new comment
+
+    this.jobService.postNewJobComment(this.jobID, comment, this,
+      (self: any) => {
+        self.fetchComments();
+        self.toggleReplayCard(self.activeReplayCommentID);
+      }
+    );
+  }
+
+  // --- Delete Comment ---
+
+  deleteComment(commentID: number) {
+    this.jobService.deleteJobComment(this.jobID, commentID, this,
+      (self: any) => {
+        self.fetchComments();
+      }
+    );
   }
 
   // --- API Callbacks ---
-  
+
   cbGetCommentsSuccess(self: any, data: JobComment[]) {
+    // Sortiranje
+
     let c = [], r = [];
     for (let d of data) {
-      if(d.parentId == 0) c.push(d);
+      if (d.parentId == 0) c.push(d);
       else r.push(d);
     }
 
@@ -100,7 +128,7 @@ export class JobCommentsListComponent implements OnInit {
     for (let cd of c) {
       data.push(cd);
       for (let rd of r) {
-        if(rd.parentId == cd.id)
+        if (rd.parentId == cd.id)
           data.push(rd);
       }
     }
@@ -110,14 +138,15 @@ export class JobCommentsListComponent implements OnInit {
     console.log(self.comments);
 
     // Auth - Da li je trenutni korisnik vlasnik oglasa?
+
     let myID = JWTUtil.getID();
-    if(myID == 0) return;
-    self.employerService.getEmployersJobs(myID, self, 
-    (self: any, jobs: Job[]) => {
-      let ok = jobs.find(j => j.id == self.jobID) != undefined;
-      console.log('>>>>> Ownership: ' + ok);
-      self.isOwner = ok;
-    });
+    if (myID == 0) return;
+    self.employerService.getEmployersJobs(myID, self,
+      (self: any, jobs: Job[]) => {
+        let ok = jobs.find(j => j.id == self.jobID) != undefined;
+        console.log('>>>>> Ownership: ' + ok);
+        self.isOwner = ok;
+      });
   }
 
   // --- Auth ---

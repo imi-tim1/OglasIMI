@@ -83,6 +83,7 @@ export interface JobComment
 {
     id: number;
     parentId: number;
+    authorName: string;
     text: string;
     postDate: Date;
 }
