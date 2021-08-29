@@ -46,7 +46,7 @@ export class NavbarComponent implements OnInit {
   constructor(public acc: AuthService) { }
 
   ngOnInit(): void {
-    this.acc.checkAccess([]);
+    // this.acc.checkAccess([]);
   }
 
   check(name: string): boolean {

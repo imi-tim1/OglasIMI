@@ -14,7 +14,7 @@ export class LoginPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles);
+    this.accessService.checkAccess(this.activatedRoute);
   }
 
 }

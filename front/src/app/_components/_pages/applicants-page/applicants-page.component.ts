@@ -32,7 +32,7 @@ export class ApplicantsPageComponent implements OnInit {
 
   ngOnInit(): void {
     // Check Access
-    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles, this, this.cbInit);
+    this.accessService.checkAccess(this.activatedRoute, this, this.cbInit);
   }
 
   // --- API Callbacks ---

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Employer } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 
@@ -11,9 +12,15 @@ export class EmployersPageComponent implements OnInit {
 
   public employers: Employer[] = [];
 
-  constructor(public employerService: EmployerService) { }
+  constructor(
+    public employerService: EmployerService,
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
+    // console.log('>>>>>> !!!!!! >>>>>>>>>');
+    // console.log(this.activatedRoute.snapshot.url);
+    // console.log('>>>>>> !!!!!! >>>>>>>>>');
     this.employerService.getEmployers(undefined , this, this.cbSuccess);
   }
 

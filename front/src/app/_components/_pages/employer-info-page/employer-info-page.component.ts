@@ -23,7 +23,7 @@ export class EmployerInfoPageComponent implements OnInit {
 
   ngOnInit(): void {
     // Check access
-    this.accessService.checkAccess(this.activatedRoute.snapshot.data.allowedRoles);
+    this.accessService.checkAccess(this.activatedRoute);
 
     let p = this.activatedRoute.snapshot.paramMap.get("id");
     if (p != null) this.empID = p as unknown as number;
