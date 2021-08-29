@@ -66,6 +66,10 @@ export class AlertPageComponent implements OnInit {
     return this.checkCause('apply-to-job-successful') && this.appliedToJob;
   }
 
+  checkRegisterSuccessful() {
+    return this.checkCause('register-successful') && JWTUtil.get() == '';
+  }
+
   // API Calls
 
 }
