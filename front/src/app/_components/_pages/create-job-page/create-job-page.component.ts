@@ -13,12 +13,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class CreateJobPageComponent implements OnInit {
 
-  constructor(public accessService: AuthService,
-              public activatedRoute: ActivatedRoute,
-              public fieldService: FieldService,
-              public cityService: CityService,
-              public jobService: JobService,
-              public router: Router) { }
+  // Page Auth
+  public pageLoaded: boolean = false;
+
+  constructor(public authService: AuthService,
+    public activatedRoute: ActivatedRoute,
+    public fieldService: FieldService,
+    public cityService: CityService,
+    public jobService: JobService,
+    public router: Router) { }
 
   selectedCityId: number = 0;
   selectedFieldId: number = 0;
@@ -30,7 +33,7 @@ export class CreateJobPageComponent implements OnInit {
   selectedCurrencyName: string = 'RSD';
   selectedWeekMonthYear: string = 'mesečno';
   wfhCheckBool: boolean = false;
-  
+
   // ---- //
   wrongJobTitleBool: boolean = false;
   wrongFieldIdBool: boolean = false; //nije izabrano nista, 0 je
@@ -46,14 +49,18 @@ export class CreateJobPageComponent implements OnInit {
 
   ngOnInit(): void {
     // Check access
-    this.accessService.checkAccess(this.activatedRoute);
+    this.authService.checkAccess(this.activatedRoute, this,
+      (self: any) => {
+        self.pageLoaded = true;
 
-    this.fieldService.fields = [];
-    this.fieldService.tags = [];
-    this.cityService.cities = [];
-
-    this.fieldService.getFields();
-    this.cityService.getCities();
+        self.fieldService.fields = [];
+        self.fieldService.tags = [];
+        self.cityService.cities = [];
+        
+        self.fieldService.getFields();
+        self.cityService.getCities();
+      }
+    );
   }
 
   toggleTag(tagID: number) {
@@ -67,17 +74,17 @@ export class CreateJobPageComponent implements OnInit {
       {
         let ind: number = this.checkedTags.indexOf(t);
         this.checkedTags.splice(ind, 1);
-        pom = true; 
+        pom = true;
 
         return;
       }
-      if(pom == false) {//tag nije bio cekiran 
-        this.checkedTags.push({id: tagID, name: ''});
-      }
+    if (pom == false) {//tag nije bio cekiran 
+      this.checkedTags.push({ id: tagID, name: '' });
+    }
   }
 
   getNewTags() {
-    if(this.selectedFieldId > 0) {
+    if (this.selectedFieldId > 0) {
       this.checkedTags = [];
       this.fieldService.tags = [];
       this.fieldService.getTags(this.selectedFieldId);
@@ -103,7 +110,7 @@ export class CreateJobPageComponent implements OnInit {
   }
 
   descriptionValidation() {
-    if (this.description.length >= 15) 
+    if (this.description.length >= 15)
       this.wrongDescBool = false;
     else {
       (<HTMLSelectElement>document.getElementById('description')).focus();
@@ -172,28 +179,28 @@ export class CreateJobPageComponent implements OnInit {
     this.salaryValidation();
 
     if (!(this.wrongJobTitleBool || this.wrongFieldIdBool || this.wrongDescBool ||
-          this.wrongSalaryBool)) { //sve ok, postavi oglas
-            
-            let newJob = {
-              title: this.jobTitle,
-              description: this.description,
-              workFromHome: this.wfhCheckBool,
-              field: {
-                id: this.selectedFieldId,
-                name: ''
-              },
-              city: (this.selectedCityId == 0)? null : {
-                id: this.selectedCityId,
-                name: ''
-              },
-              tags: (this.checkedTags.length == 0)? [] : this.checkedTags,
-              salary: this.salary,
-              postDate: null,
-              employer: null
-            }
+      this.wrongSalaryBool)) { //sve ok, postavi oglas
 
-            this.jobService.createJob(newJob, this, this.cbSuccess);
-          }
+      let newJob = {
+        title: this.jobTitle,
+        description: this.description,
+        workFromHome: this.wfhCheckBool,
+        field: {
+          id: this.selectedFieldId,
+          name: ''
+        },
+        city: (this.selectedCityId == 0) ? null : {
+          id: this.selectedCityId,
+          name: ''
+        },
+        tags: (this.checkedTags.length == 0) ? [] : this.checkedTags,
+        salary: this.salary,
+        postDate: null,
+        employer: null
+      }
+
+      this.jobService.createJob(newJob, this, this.cbSuccess);
+    }
   }
 
   stampaj() {

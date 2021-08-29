@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Employer } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.service';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 
 @Component({
@@ -10,18 +11,27 @@ import { EmployerService } from 'src/app/_utilities/_middleware/_services/employ
 })
 export class EmployersPageComponent implements OnInit {
 
+  // Page Auth
+  public pageLoaded: boolean = false;
+
   public employers: Employer[] = [];
 
   constructor(
-    public employerService: EmployerService,
-    private activatedRoute: ActivatedRoute
+    private employerService: EmployerService,
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    // console.log('>>>>>> !!!!!! >>>>>>>>>');
-    // console.log(this.activatedRoute.snapshot.url);
-    // console.log('>>>>>> !!!!!! >>>>>>>>>');
-    this.employerService.getEmployers(undefined , this, this.cbSuccess);
+
+    this.authService.checkAccess(this.activatedRoute, this, 
+      (self: any) =>
+      {
+        self.pageLoaded = true;
+        
+        self.employerService.getEmployers(undefined , self, self.cbSuccess);
+      }
+    );
   }
 
   // API Callbacks

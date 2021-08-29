@@ -9,11 +9,14 @@ import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 })
 export class LogoutPageComponent implements OnInit {
 
+  // Page Auth
+  public pageLoaded: boolean = false;
+
   constructor(private router: Router) { }
 
   ngOnInit(): void {
     JWTUtil.delete();
-    this.router.navigate(['']);
+    this.router.navigate(RedirectRoutes.HOME);
   }
 
 }

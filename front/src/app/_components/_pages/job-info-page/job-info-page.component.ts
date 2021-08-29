@@ -21,26 +21,25 @@ export class JobInfoPageComponent implements OnInit {
 
   constructor(
     public activatedRoute: ActivatedRoute,
-    public accessService: AuthService,
+    public authService: AuthService,
     public jobService: JobService
   ) { }
 
-  // --- INIT - Auth Success Callback ---
-  cbInit(self: any)
-  {
-    self.pageLoaded = true;
-
-    // Extract and Save appID from route url
-    let p = self.activatedRoute.snapshot.paramMap.get("id");
-    if (p != null) self.jobID = p as unknown as number;
-  
-    // GET Jobs Applicants
-    self.jobService.getJobsApplicants(self.jobID, self, self.cbSuccess);
-  }
-
   ngOnInit(): void {
     // Check access
-    this.accessService.checkAccess(this.activatedRoute, this, this.cbInit);
+    this.authService.checkAccess(this.activatedRoute, this,
+      (self: any) => 
+      {
+        self.pageLoaded = true;
+
+        // Extract and Save appID from route url
+        let p = self.activatedRoute.snapshot.paramMap.get("id");
+        if (p != null) self.jobID = p as unknown as number;
+
+        // GET Jobs Applicants
+        self.jobService.getJobsApplicants(self.jobID, self, self.cbSuccess);
+      }
+    );
   }
 
   // API Callbacks

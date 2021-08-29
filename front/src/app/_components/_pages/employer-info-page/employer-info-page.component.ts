@@ -12,23 +12,31 @@ import { JobService } from 'src/app/_utilities/_middleware/_services/job.service
 })
 export class EmployerInfoPageComponent implements OnInit {
 
+  // Page Auth
+  public pageLoaded: boolean = false;
+
   public empID: number = 0;
   public employer: Employer | null = null;
 
   constructor(
     public activatedRoute: ActivatedRoute,
-    public accessService: AuthService,
+    public authService: AuthService,
     public empService: EmployerService
   ) { }
 
   ngOnInit(): void {
     // Check access
-    this.accessService.checkAccess(this.activatedRoute);
+    this.authService.checkAccess(this.activatedRoute, this,
+      (self: any) => 
+      {
+        self.pageLoaded = true;
 
-    let p = this.activatedRoute.snapshot.paramMap.get("id");
-    if (p != null) this.empID = p as unknown as number;
+        let p = self.activatedRoute.snapshot.paramMap.get("id");
+        if (p != null) self.empID = p as unknown as number;
 
-    this.empService.getEmployer(this.empID, this, this.cbSuccess);
+        self.empService.getEmployer(self.empID, self, self.cbSuccess);
+      }
+    );
   }
 
   isMe(): boolean {
@@ -39,7 +47,7 @@ export class EmployerInfoPageComponent implements OnInit {
 
   cbSuccess(self: any, employer: Employer | null) {
     self.employer = employer;
-    self.empID = (employer)? employer.id : 0;
+    self.empID = (employer) ? employer.id : 0;
   }
 
 }

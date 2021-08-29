@@ -8,13 +8,21 @@ import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.servi
 })
 export class LoginPageComponent implements OnInit {
 
+  // Page Auth
+  public pageLoaded: boolean = false;
+
   constructor(
-    public accessService: AuthService,
+    public authService: AuthService,
     public activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.accessService.checkAccess(this.activatedRoute);
+    this.authService.checkAccess(this.activatedRoute, this,
+      (self: any) => 
+      {
+        self.pageLoaded = true;
+      }
+    );
   }
 
 }

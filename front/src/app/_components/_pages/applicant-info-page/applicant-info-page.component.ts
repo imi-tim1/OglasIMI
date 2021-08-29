@@ -21,26 +21,25 @@ export class ApplicantInfoPageComponent implements OnInit {
 
   constructor(
     public activatedRoute: ActivatedRoute,
-    public accessService: AuthService,
+    public authService: AuthService,
     public appService: ApplicantService
   ) { }
 
-  // --- INIT - Auth Success Callback ---
-  cbInit(self: any)
-  {
-    self.pageLoaded = true;
-    
-    // Extract and Save appID from route url
-    let p = self.activatedRoute.snapshot.paramMap.get("id");
-    if (p != null) self.appID = p as unknown as number;
-    
-    // GET Applicant with appID
-    self.appService.getApplicant(self.appID, self, self.cbSuccess);
-  }
-
   ngOnInit(): void {
     // Check access
-    this.accessService.checkAccess(this.activatedRoute, this, this.cbInit);
+    this.authService.checkAccess(this.activatedRoute, this, 
+      (self: any) =>
+      {
+        self.pageLoaded = true;
+        
+        // Extract and Save appID from route url
+        let p = self.activatedRoute.snapshot.paramMap.get("id");
+        if (p != null) self.appID = p as unknown as number;
+        
+        // GET Applicant with appID
+        self.appService.getApplicant(self.appID, self, self.cbSuccess);
+      }
+    );
   }
 
   isMe(): boolean {
