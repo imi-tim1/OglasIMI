@@ -30,7 +30,7 @@ public class SecurityConfig {
     /**
      * Vreme trajanja tokena nakon kojeg nece biti validan
      */
-    public static final long TIME_TO_LIVE_MILLS = 150000L; // 25min
+    public static final long TIME_TO_LIVE_MILLS = 1500000L; // 25min
 
     /**
      * Kljuc za sifrovanje signature JSON Web Token-a (JWT)
