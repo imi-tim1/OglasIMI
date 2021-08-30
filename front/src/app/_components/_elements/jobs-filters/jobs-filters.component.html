@@ -25,9 +25,9 @@
     </div>
 
     <!-- Tagovi -->
-    <div *ngIf="true" class="col-3">
+    <div class="col-2">
       <div *ngIf="fieldService.tags.length > 0" id="list1" class="dropdown-check-list {{(tagsListVisible)? 'visible' : '' }}" tabindex="100">
-        <span class="anchor" (click)="toggleTagsListVisibility()">Ključne reči</span>
+        <span class="anchor rounded-2" (click)="toggleTagsListVisibility()">Ključne reči</span>
         <ul class="items bg-white p-2" style="position: absolute;">
           <!-- Tag -->
           <li *ngFor="let t of fieldService.tags" class="bg-white border rounded-1 me-2 px-2">
@@ -40,7 +40,7 @@
 
     
     <!-- Pretraga -->
-    <div class="col-3">
+    <div class="col">
       <button id="searchBtn" class="btn btn-success shadow w-100" (click)="onSearch();">Pretraga</button>
     </div>
     
@@ -74,9 +74,37 @@
     
     
     <!-- Rad od kuce -->
-    <div class="col-3">
-      <label for="workFromHome">Rad od kuće:&nbsp;&nbsp;</label>
-      <input type="checkbox" id="workFromHome" name="workFromHome" [(ngModel)]="workFromHome"> <!-- (click)="wfh()" -->
+    <!-- <div class="col-2">
+      <div class="bg-white border rounded-1 p-1">
+        <label for="workFromHome">Rad od kuće:&nbsp;&nbsp;</label>
+        <input type="checkbox" id="workFromHome" name="workFromHome" [(ngModel)]="workFromHome">
+      </div>
+    </div> -->
+
+    <div class="col-2">
+      <button class="btn btn-light border w-100" (click)="toggleWorkFromHome()">
+        <span class="pe-2">Samo rad od kuće</span> 
+        <fa-icon *ngIf="workFromHome" [icon]="iconCheck"></fa-icon>
+      </button>
+    </div>
+
+    <div class="col">
+      <div class="row">
+        <div class="col">
+          <select [(ngModel)]="sortDateAscending" class="form-select">
+            <option value="false">Prvo noviji oglasi</option>
+            <option value="true">Prvo stariji oglasi</option>
+          </select>
+        </div>
+        <div class="col">
+          <select [(ngModel)]="jobsPerPage" class="form-select">
+            <option value="5">5 oglasa po strani</option>
+            <option value="10">10 oglasa po strani</option>
+            <option value="15">15 oglasa po strani</option>
+            <option value="20">20 oglasa po strani</option>
+          </select>
+        </div>
+      </div>
     </div>
 
   </div>

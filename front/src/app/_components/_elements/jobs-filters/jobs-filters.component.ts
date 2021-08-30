@@ -6,7 +6,7 @@ import { FieldService } from 'src/app/_utilities/_middleware/_services/field.ser
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 import { Filters } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-jobs-filters',
@@ -17,7 +17,6 @@ import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 export class JobsFiltersComponent implements OnInit {
   
   public jobs: Job[] = [];
-  // @Output() public jobsArrival = new EventEmitter();
 
   public filtersFromPage!: Filters;
 
@@ -25,10 +24,16 @@ export class JobsFiltersComponent implements OnInit {
   public totalJobsNum: number = 0
   public totalPagesNum: number = 0 
   public jobsPerPage: number = 5;
+  public sortDateAscending: boolean = false;
 
   public checkedTags: number[] = [];
   jobName: string = '';
+  
+  // WFH
   workFromHome: boolean = false;
+  toggleWorkFromHome() {
+    this.workFromHome = !this.workFromHome;
+  }
 
   selectedCityId: number = 0;
   selectedFieldId: number = 0;
@@ -39,6 +44,7 @@ export class JobsFiltersComponent implements OnInit {
 
   iconArrowLeft = faArrowLeft;
   iconArrowRight = faArrowRight;
+  iconCheck = faCheck;
 
   // Dropdown Tags List
   tagsListVisible: boolean = false;
@@ -79,7 +85,7 @@ export class JobsFiltersComponent implements OnInit {
       pageNumber: (pageNum)? pageNum : 1,
       jobsPerPage: this.jobsPerPage,
       workFromHome: this.workFromHome,
-      ascendingOrder: false
+      ascendingOrder: this.sortDateAscending
     }
 
     if (this.checkedTags.length > 0)
