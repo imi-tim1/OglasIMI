@@ -9,5 +9,6 @@ export const RedirectRoutes = {
     ON_LOGOUT: [''],
     ON_LOGIN: [''],
     
+    ON_REGISTER_SUCCESSFUL: ['alert','register-successful'],
     ON_APPLY_TO_JOB_SUCCESSFUL: ['alert', 'apply-to-job-successful']
 }

@@ -83,6 +83,7 @@ export interface JobComment
 {
     id: number;
     parentId: number;
+    authorName: string;
     text: string;
     postDate: Date;
 }
@@ -91,6 +92,12 @@ export interface RatingResponse
 {
     rating: number;
     alreadyRated: boolean;
+}
+
+export interface LikeResponse 
+{
+    totalLikes: number;
+    alreadyLiked: boolean;
 }
 
 export interface RegistrationBrief 

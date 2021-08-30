@@ -27,9 +27,11 @@
                 </div>
             </div>
 
-            <!-- Lista komentara -->
-            <div *ngIf="jobID > 0" class="col">
-                <app-job-comments-list [jobID]="jobID"></app-job-comments-list>
+            <div class="col">
+                <!-- Lista komentara -->
+                <div *ngIf="jobID > 0">
+                    <app-job-comments-list [jobID]="jobID"></app-job-comments-list>
+                </div>
             </div>
         </div>
     </div>

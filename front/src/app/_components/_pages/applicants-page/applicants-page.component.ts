@@ -17,22 +17,21 @@ export class ApplicantsPageComponent implements OnInit {
 
   constructor(
     public activatedRoute: ActivatedRoute,
-    public accessService: AuthService,
+    public authService: AuthService,
     public appService: ApplicantService
   ) { }
 
-  // --- INIT - Auth Success Callback ---
-  cbInit(self: any) 
-  {
-    self.pageLoaded = true;
-
-    // GET Applicants
-    self.appService.getApplicants(undefined, self, self.cbSuccessGetApplicants);
-  }
-
   ngOnInit(): void {
     // Check Access
-    this.accessService.checkAccess(this.activatedRoute, this, this.cbInit);
+    this.authService.checkAccess(this.activatedRoute, this, 
+      (self: any) =>
+      {
+        self.pageLoaded = true;
+
+        // GET Applicants
+        self.appService.getApplicants(undefined, self, self.cbSuccessGetApplicants);
+      }
+    );
   }
 
   // --- API Callbacks ---

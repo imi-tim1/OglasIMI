@@ -1,4 +1,4 @@
-<div *ngIf="comments.length > 0" class="container p-0 text-center" style="max-width: 60em;">
+<div class="container p-0 text-center" style="max-width: 60em;">
     <h3 class="text-center p-3 pt-5">Komentari
         <span *ngIf="canComment()" class="ps-4">
             <button (click)="toggleNewCommentCard()" class="btn btn-success shadow-sm align-self-center">
@@ -13,7 +13,7 @@
             <div class="d-flex align-items-start text-start w-100 p-2 bg-white 
                         rounded-3 shadow border border-1 border-success">
                 <div class="px-3 py-2 flex-fill">
-                    <textarea [(ngModel)]="replayText" type="text" class="w-100"></textarea>
+                    <textarea [(ngModel)]="newCommentText" type="text" class="w-100"></textarea>
                 </div>
                 <button (click)="sendNewComment()" class="btn btn-success shadow-sm align-self-center">
                     <fa-icon [icon]="iconSend"></fa-icon>
@@ -22,17 +22,14 @@
         </div>
 
         <!-- Comments List -->
-        <div class="d-flex flex-wrap flex-column">
+        <div *ngIf="comments.length > 0" class="d-flex flex-wrap flex-column">
             <div *ngFor="let c of comments">
                 <!-- Comment -->
-                <app-job-comment-card (replayClick)="toggleReplayCard($event)" 
-                                      [data]="c"
-                                      [replayState]="activeReplayCommentID == c.id"
-                                      [canReplay]="canReplay()"
-                                      [canDelete]="canDelete()"
-                ></app-job-comment-card>
+                <app-job-comment-card (replayClick)="toggleReplayCard($event)" (deleteClick)="deleteComment($event)" [data]="c"
+                    [replayState]="activeReplayCommentID == c.id" [canReplay]="canReplay()" [canDelete]="canDelete()">
+                </app-job-comment-card>
 
-                <!-- Replay Card -->
+                <!-- Replay -->
                 <div *ngIf="activeReplayCommentID == c.id" class="pb-4 ps-4">
                     <div
                         class="d-flex align-items-start text-start w-100 p-3 bg-white rounded-3 shadow border border-1">
@@ -44,6 +41,13 @@
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Placeholder za praznu listu -->
+        <div *ngIf="comments.length == 0" class="container p-0">
+            <div class="border border-secondary rounded-3 d-flex flex-column align-items-center">
+                <h5 class="p-4">Nema postavljenih komentara</h5>
             </div>
         </div>
     </div>

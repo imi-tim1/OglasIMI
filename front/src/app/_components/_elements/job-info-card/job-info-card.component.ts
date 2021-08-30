@@ -3,11 +3,13 @@ import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 import { Router } from '@angular/router';
-import { Job } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { Job, LikeResponse } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { AlertPageUtil } from 'src/app/_utilities/_helpers/alert-util';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp as faThumbsUpEmpty} from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-job-info-card',
@@ -20,8 +22,15 @@ export class JobInfoCardComponent implements OnInit {
   @Input() id: number = 0;
   public job: Job | null = null;
 
+  public totalLikes: number = 0;
+  public alreadyLiked: boolean = false;
+
   // Auth
   allreadyApplied: boolean = true;
+
+  // Fontawesome
+  iconLike = faThumbsUp;
+  iconLikeEmpty = faThumbsUpEmpty;
 
   // --- Dependencies ---
   constructor(
@@ -32,10 +41,24 @@ export class JobInfoCardComponent implements OnInit {
 
   // --- Start ---
   ngOnInit(): void {
-    this.jobService.getJob(this.id, this, this.cbSuccessGetJob);
+    this.fetchJob();
+    this.fetchLikes();
   }
 
   // --- Actions ---
+
+  fetchJob() {
+    this.jobService.getJob(this.id, this, this.cbSuccessGetJob);
+  }
+
+  fetchLikes() {
+    console.log('>>>> LIKES FETCH')
+    this.jobService.getJobLikes(this.id, this, (self: any, data: LikeResponse) => {
+      self.totalLikes = data.totalLikes;
+      self.alreadyLiked = data.alreadyLiked;
+      console.log(self.alreadyLiked + ' | ' + self.totalLikes );
+    });
+  }
 
   applyMe() {
     this.jobService.applyToJob(this.id, this, 
@@ -48,6 +71,22 @@ export class JobInfoCardComponent implements OnInit {
         }
         AlertPageUtil.allowAccess();
         self.router.navigate(RedirectRoutes.ON_APPLY_TO_JOB_SUCCESSFUL.concat([JSON.stringify(param)]));
+      }
+    );
+  }
+
+  likeJob() {
+    this.jobService.likeJob(this.id, this,
+      (self: any) => {
+        self.fetchLikes();
+      }
+    );
+  }
+
+  withdrawLikeJob() {
+    this.jobService.deleteJobLike(this.id, this, 
+      (self: any) => {
+        self.fetchLikes();
       }
     );
   }

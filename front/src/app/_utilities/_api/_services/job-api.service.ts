@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
 import { HeaderUtil, ParamUtil } from '../../_helpers/http-util';
 import { JWTUtil } from '../../_helpers/jwt-util';
-import { Applicant, Filters, Job, JobComment, NewJob, PagedJobs } from '../_data-types/interfaces';
+import { Applicant, Filters, Job, JobComment, LikeResponse, NewJob, PagedJobs } from '../_data-types/interfaces';
 import { StandardHeaders } from '../_data-types/interfaces';
 
 @Injectable({
@@ -119,12 +119,65 @@ export class JobApiService {
     return response;
   }
 
-  postNewJobComment() {
+  postNewJobComment(id: number, comment: JobComment): Observable<HttpResponse<null>>  
+  {
+    let response = this.http.post<null>(
+      this.url + `/${id}/comments`, 
+      comment,
+      { 
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
 
+    return response;
   }
 
-  deleteJobComment() {
-    
+  deleteJobComment(jobID: number, commentID: number): Observable<HttpResponse<null>> 
+  {
+    return this.http.delete<null>(
+      this.url + `/${jobID}/comments/${commentID}`,
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+  }
+
+  // ---- Likes ----
+
+  getJobLikes(jobID: number): Observable<HttpResponse<LikeResponse>>
+  {
+    return this.http.get<LikeResponse>(
+      this.url + `/${jobID}/likes`,
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
+  }
+
+  likeJob(jobID: number): Observable<HttpResponse<null>>
+  {
+    return this.http.post<null>(
+      this.url + `/${jobID}/likes`,
+      {},
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    );
+  }
+
+  deleteJobLike(jobID: number): Observable<HttpResponse<null>> 
+  {
+    return this.http.delete<null>(
+      this.url + `/${jobID}/likes`,
+      {
+        observe: 'response',
+        headers: HeaderUtil.jwtOnlyHeaders()
+      }
+    )
   }
 
 }

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
+import { AlertPageUtil } from 'src/app/_utilities/_helpers/alert-util';
 import { PasswdHash } from 'src/app/_utilities/_helpers/hash-util';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
+import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.service';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 
 
@@ -61,7 +64,8 @@ export class RegisterFormComponent implements OnInit {
 
   constructor(public applicantService: ApplicantService,
               public employerService: EmployerService,
-              public router: Router
+              public router: Router,
+              public authService: AuthService
               ) { }
 
   ngOnInit(): void {
@@ -364,8 +368,8 @@ export class RegisterFormComponent implements OnInit {
   ////////////////////// API Callbacks //////////////////////////////
 
   cbSuccess(self: any) {
-    alert('Uspešno ste registrovani. Moći ćete da se prijavite čim administrator potvrdi Vašu registraciju.');
-    self.router.navigate(['login']);
+    AlertPageUtil.allowAccess();
+    self.router.navigate(RedirectRoutes.ON_REGISTER_SUCCESSFUL);
   }
 
   cbConflict(self: any) {

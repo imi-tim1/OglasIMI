@@ -1,4 +1,4 @@
-/* select:required:invalid {
+select:required:invalid {
     color: #666;
   }
   option[value=""][disabled] {
@@ -15,4 +15,4 @@ input[id="salaryFrom"]
 input[id="salaryTo"]
 {
   width: 145px;
-} */
+}
