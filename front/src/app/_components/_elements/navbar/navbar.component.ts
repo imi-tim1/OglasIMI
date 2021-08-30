@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.servi
 })
 export class NavbarComponent implements OnInit {
 
-  @Input() public activeNav: string = "";
+  @Input() public activeNav: string = '';
 
   public navs: Nav[] = [
     // All
