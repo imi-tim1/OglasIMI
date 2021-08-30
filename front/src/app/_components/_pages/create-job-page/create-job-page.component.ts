@@ -199,6 +199,7 @@ export class CreateJobPageComponent implements OnInit {
         employer: null
       }
 
+      console.log(newJob);
       this.jobService.createJob(newJob, this, this.cbSuccess);
     }
   }
