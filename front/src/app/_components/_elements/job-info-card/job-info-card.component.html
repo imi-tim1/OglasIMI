@@ -31,7 +31,7 @@
       <br><hr>
 
       <!-- Opis -->
-      <div class="pt-4 pb-3">{{job.description}}</div>
+      <div class="pt-4 pb-3" [outerHTML]="job.description"></div>
 
 
       <div class="d-flex align-items-end pt-4">
@@ -41,7 +41,7 @@
 
         <!-- Lajkovi -->
         <div class="px-5">
-          <button class="align-self-center btn" (click)="(!alreadyLiked)? likeJob() : withdrawLikeJob()">
+          <button class="align-self-center btn {{(!canLike()? 'disabled' : '')}}" (click)="(!alreadyLiked)? likeJob() : withdrawLikeJob()">
             <fa-icon [icon]="(alreadyLiked)? iconLike : iconLikeEmpty" [size]="'2x'"></fa-icon>
             <h3 class="ps-2" style="display: inline;"> {{totalLikes}} </h3>
           </button>

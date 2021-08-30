@@ -22,6 +22,7 @@ export class JobInfoCardComponent implements OnInit {
   @Input() id: number = 0;
   public job: Job | null = null;
 
+  // - like
   public totalLikes: number = 0;
   public alreadyLiked: boolean = false;
 
@@ -103,6 +104,10 @@ export class JobInfoCardComponent implements OnInit {
 
   canDelete() {
     return JWTUtil.getUserRole() == UserRole.Admin;
+  }
+
+  canLike() {
+    return JWTUtil.getUserRole() == UserRole.Applicant;
   }
 
   // --- API Callbacks ---
