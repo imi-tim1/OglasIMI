@@ -40,6 +40,12 @@ export class JobsFiltersComponent implements OnInit {
   iconArrowLeft = faArrowLeft;
   iconArrowRight = faArrowRight;
 
+  // Dropdown Tags List
+  tagsListVisible: boolean = false;
+  toggleTagsListVisibility() {
+    this.tagsListVisible = !this.tagsListVisible;
+  }
+
   constructor(public jobService: JobService,
               public fieldService: FieldService,
               public cityService: CityService,
@@ -108,14 +114,13 @@ export class JobsFiltersComponent implements OnInit {
   }
 
   getNewTags() {
+    this.tagsListVisible = false;
     this.checkedTags = [];
+    this.fieldService.tags = [];
 
     if(this.selectedFieldId > 0) {
-      this.fieldService.tags = [];
       this.fieldService.getTags(this.selectedFieldId);
     }
-    else 
-      this.fieldService.tags = [];
   }
 
   loadNextPage() {

@@ -18,6 +18,11 @@ export class CreateJobPageComponent implements OnInit {
   // Page Auth
   public pageLoaded: boolean = false;
 
+  tagsListVisible: boolean = false;
+  toggleTagsListVisibility() {
+    this.tagsListVisible = !this.tagsListVisible;
+  }
+
   constructor(public authService: AuthService,
     public activatedRoute: ActivatedRoute,
     public fieldService: FieldService,
@@ -86,9 +91,10 @@ export class CreateJobPageComponent implements OnInit {
   }
 
   getNewTags() {
+    this.tagsListVisible = false;
+    this.checkedTags = [];
+    this.fieldService.tags = [];
     if (this.selectedFieldId > 0) {
-      this.checkedTags = [];
-      this.fieldService.tags = [];
       this.fieldService.getTags(this.selectedFieldId);
     }
   }

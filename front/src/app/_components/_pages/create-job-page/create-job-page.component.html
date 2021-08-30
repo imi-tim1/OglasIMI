@@ -21,7 +21,7 @@
       <div class="col-3">
         <!-- <label for="fields">Oblast rada:&nbsp;</label> -->
         <select [(ngModel)]="selectedFieldId" class="form-select">
-          <option value="0">Oblast rada</option>
+          <option value="0" (click)="getNewTags()">Oblast rada</option>
           <option *ngFor="let f of fieldService.fields" [ngValue]="f.id" (click)="getNewTags()">
             {{f.name}}
           </option>
@@ -29,15 +29,17 @@
         <p *ngIf="wrongFieldIdBool" class="small fw-bold text-danger">Izaberite oblast rada</p>
       </div>
 
-      <!-- Grad -->
+      <!-- Kljucne reci -->
       <div class="col-3">
-        <label for="tags">Izaberite ključne reči (opciono):&nbsp;</label><br>
-        <div class="border border-dark px-3 py-1"
-          [ngStyle]="{ 'overflow': 'scroll', 'height': '150px', 'width': '230px' }">
-          <div *ngFor="let t of fieldService.tags">
-            <input type="checkbox" value="{{t.id}}" id="{{t.id}}" (click)="toggleTag(t.id)">
-            <label for="{{t.id}}">&nbsp;&nbsp;{{t.name}}</label>
-          </div>
+        <div *ngIf="fieldService.tags.length > 0" id="list1" class="dropdown-check-list {{(tagsListVisible)? 'visible' : '' }}" tabindex="100">
+          <span class="anchor" (click)="toggleTagsListVisibility()">Ključne reči</span>
+          <ul class="items bg-white p-2" style="position: absolute;">
+            <!-- Tag -->
+            <li *ngFor="let t of fieldService.tags" class="bg-white border rounded-1 me-2 px-2">
+              <input type="checkbox" value="{{t.id}}" id="{{t.id}}" (click)="toggleTag(t.id)">
+              <label for="{{t.id}}">&nbsp;&nbsp;{{t.name}}</label>
+            </li>
+          </ul>
         </div>
 
       </div>
