@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.servi
 import { AlertPageUtil } from 'src/app/_utilities/_helpers/alert-util';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { Job } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 
 @Component({
   selector: 'app-alert-page',
@@ -15,16 +16,23 @@ import { Job } from 'src/app/_utilities/_api/_data-types/interfaces';
 export class AlertPageComponent implements OnInit {
 
   public cause: string | null = null;
-  public param: string | null = null;
+  public param: any = null;
 
   public jwtExpired: boolean = true;
-  public appliedToJob: boolean = false; // 
+  
+  // za: apply-to-job-successful
+  public appliedToJob: boolean = false;
+  
+  // za: create-job-successful
+  public createdJob: boolean = false;
+  // public createdJobID: number = 0;
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private applicantService: ApplicantService
+    private applicantService: ApplicantService,
+    private employerService: EmployerService
   ) { }
 
   ngOnInit(): void {
@@ -38,6 +46,10 @@ export class AlertPageComponent implements OnInit {
     let p = this.activatedRoute.snapshot.paramMap.get('param');
     this.param = JSON.parse((p)? p : '{}');
 
+    console.log('>>>>> ALERT LOG <<<<<');
+    console.log(this.cause);
+    console.log(this.param);
+
     // -- Logic --
 
     if (JWTUtil.getUserRole() == UserRole.Applicant) {
@@ -46,6 +58,10 @@ export class AlertPageComponent implements OnInit {
           self.appliedToJob = jobs.find(j => j.id == self.param.jobID) != undefined;
         }
       );
+    }
+
+    if (JWTUtil.getUserRole() == UserRole.Employer) {
+      this.createdJob = true;
     }
 
   }
@@ -68,6 +84,10 @@ export class AlertPageComponent implements OnInit {
 
   checkRegisterSuccessful() {
     return this.checkCause('register-successful') && JWTUtil.get() == '';
+  }
+
+  checkCreateJobSuccessful() {
+    return this.checkCause('create-job-successful') && this.createdJob;
   }
 
   // API Calls

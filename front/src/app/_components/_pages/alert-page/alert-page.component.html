@@ -29,6 +29,14 @@
             <a class="btn btn-success" routerLink="/login">Prijava</a>
         </div>
 
+        <!-- Uspesno kreiran oglas -->
+        <div *ngIf="checkCreateJobSuccessful()">
+            <h1><b class="text-success">Uspešno ste kreirali oglas za posao!</b></h1>
+            <br><br>
+            <h2>Pregledajte Vaše oglase</h2>
+            <a class="btn btn-success" routerLink="/">Moji oglasi</a>
+        </div>
+
     </div>
 
     <app-footer></app-footer>

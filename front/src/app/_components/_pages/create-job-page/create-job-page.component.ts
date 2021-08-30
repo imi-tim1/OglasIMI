@@ -5,6 +5,8 @@ import { CityService } from 'src/app/_utilities/_middleware/_services/city.servi
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 import { Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
+import { AlertPageUtil } from 'src/app/_utilities/_helpers/alert-util';
 
 @Component({
   selector: 'app-create-job-page',
@@ -214,7 +216,7 @@ export class CreateJobPageComponent implements OnInit {
   }
 
   cbSuccess(self: any) {
-    alert('Uspešno ste postavili oglas!');
-    self.router.navigate(['']); //redirekt na home-page
+    AlertPageUtil.allowAccess();
+    self.router.navigate(RedirectRoutes.ON_CREATE_JOB_SUCCESSFUL);
   }
 }
