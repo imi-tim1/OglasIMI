@@ -8,8 +8,8 @@
         </div>
         <br>
         <h3 *ngIf="isMe()" class="text-center pt-5">Moji oglasi</h3>
-        <h3 *ngIf="!isMe()" class="text-center pt-5">Oglasi na koje je kandidat prijavljen</h3>
-        <app-jobs-list [appJobs]='true' [uid]="applicant.id"></app-jobs-list>
+        <h3 *ngIf="!isMe() && isAdmin()" class="text-center pt-5">Oglasi na koje je kandidat prijavljen</h3>
+        <app-jobs-list [appJobs]='true' [showAnything]="isAdmin() || isMe()" [uid]="applicant.id"></app-jobs-list>
     </div>
 
     <app-footer></app-footer>

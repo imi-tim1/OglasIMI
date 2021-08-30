@@ -22,6 +22,8 @@ export class JobsListComponent implements OnInit {
   @Input() public empJobs: boolean = false;
   @Input() public appJobs: boolean = false;
 
+  @Input() showAnything: boolean = true;
+
   constructor(
     public jobService: JobService,
     public appService: ApplicantService,

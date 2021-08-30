@@ -1,5 +1,5 @@
 <div *ngIf="job" class="container p-0">
-  <div class="card rounded-3 shadow border border-secondary">
+  <div class="card rounded-3 shadow-sm border border">
     <div class="card-body p-4 p-md-5">
 
       <!-- Podaci neki -->
@@ -38,6 +38,14 @@
         <!-- Datum -->
         <small class="text-muted me-auto" style="float: right">Oglas postavljen
           {{job.postDate.toString().substr(0,10)}}</small>
+
+        <!-- Lajkovi -->
+        <div class="px-5">
+          <button class="align-self-center btn" (click)="(!alreadyLiked)? likeJob() : withdrawLikeJob()">
+            <fa-icon [icon]="(alreadyLiked)? iconLike : iconLikeEmpty" [size]="'2x'"></fa-icon>
+            <h3 class="ps-2" style="display: inline;"> {{totalLikes}} </h3>
+          </button>
+        </div>
 
         <!-- Applicant - Apply Btn -->
         <a *ngIf="canApply()" class="btn btn-success btn-lg shadow" (click)="applyMe()">

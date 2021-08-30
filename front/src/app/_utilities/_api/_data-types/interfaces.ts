@@ -94,6 +94,12 @@ export interface RatingResponse
     alreadyRated: boolean;
 }
 
+export interface LikeResponse 
+{
+    totalLikes: number;
+    alreadyLiked: boolean;
+}
+
 export interface RegistrationBrief 
 {
     id: number;

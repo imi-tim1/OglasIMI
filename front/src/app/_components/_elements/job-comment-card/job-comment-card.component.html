@@ -1,9 +1,8 @@
 <div *ngIf="data" class="pb-2 {{(isReplay())?'ps-5':''}}">
-    <div class="text-start w-100 p-3 bg-white rounded-3 shadow border border-1
-                {{(isReplay())?'border-primary':'border-secondary'}}">
+    <div class="text-start w-100 p-3 bg-white rounded-3 shadow-sm border border">
         <div class="row">
             <div class="d-flex">
-                <div class="pb-3 flex-fill">{{data.authorName}}</div>
+                <div class="pb-3 flex-fill {{(isReplay())?'text-primary':''}}">{{data.authorName}} {{(isReplay())?'(poslodavac)':''}}</div>
                 <div class="pb-2">{{data.postDate.toString().substr(0,10)}}</div>
             </div>
         </div>

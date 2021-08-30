@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { Applicant } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
@@ -44,6 +45,10 @@ export class ApplicantInfoPageComponent implements OnInit {
 
   isMe(): boolean {
     return JWTUtil.getID() == this.appID;
+  }
+
+  isAdmin(): boolean {
+    return JWTUtil.getUserRole() == UserRole.Admin;
   }
 
   // API Callbacks

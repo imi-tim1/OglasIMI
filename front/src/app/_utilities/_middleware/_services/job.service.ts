@@ -212,4 +212,49 @@ export class JobService {
     );
   }
 
+  // ---- Likes ----
+
+  getJobLikes(jobID: number, self?: any, successCallback?: Function) {
+    this.api.getJobLikes(jobID).subscribe(
+      // Success
+      (response) => {
+        if (self && successCallback) successCallback(self, response.body);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
+      }
+    );
+  }
+
+  likeJob(jobID: number, self?: any, successCallback?: Function) {
+    this.api.likeJob(jobID).subscribe(
+      // Success
+      (response) => {
+        if (self && successCallback) successCallback(self);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
+      }
+    );
+  }
+
+  deleteJobLike(jobID: number, self?: any, successCallback?: Function) {
+    this.api.deleteJobLike(jobID).subscribe(
+      // Success
+      (response) => {
+        if (self && successCallback) successCallback(self);
+      },
+
+      // Error
+      (error: HttpErrorResponse) => {
+        this.authService.redirectIfSessionExpired(error.status);
+      }
+    );
+  }
+
+
 }
