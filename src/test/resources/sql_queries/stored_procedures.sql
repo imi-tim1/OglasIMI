@@ -494,6 +494,7 @@ CREATE PROCEDURE post_job (
 BEGIN
     INSERT INTO job (employer_id, field_id, city_id, post_date, title, description, salary, work_from_home)
     VALUES (p_employer_id, p_field_id, IF(p_city_id = 0, null, p_city_id), NOW(), p_title, p_description, p_salary, p_work_from_home);
+    SELECT id FROM job WHERE id = LAST_INSERT_ID();
 
     IF ROW_COUNT() != 0
     THEN
@@ -517,6 +518,7 @@ CREATE PROCEDURE insert_tag (
 BEGIN
     INSERT INTO job_tag (job_id, tag_id)
     VALUES (p_job_id, p_tag_id);
+    SELECT id FROM job WHERE id = LAST_INSERT_ID();
 
     IF ROW_COUNT() != 0
     THEN
@@ -761,7 +763,7 @@ CREATE PROCEDURE delete_comment (
     OUT p_is_deleted boolean
 )
 BEGIN
-    DELETE FROM comment WHERE p_id = id;
+    DELETE FROM comment WHERE p_id = id OR p_id = parent_id;
 
     IF ROW_COUNT() != 0
     THEN
