@@ -124,6 +124,8 @@ export class JobCommentsListComponent implements OnInit {
       else r.push(d);
     }
 
+    c.sort((a,b)=> b.id - a.id); // sortiranje po datumu novije
+
     data = [];
     for (let cd of c) {
       data.push(cd);

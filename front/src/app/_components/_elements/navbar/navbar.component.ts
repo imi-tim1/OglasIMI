@@ -62,6 +62,13 @@ export class NavbarComponent implements OnInit {
     return name == this.activeNav;
   }
 
+  isAdmin() {
+    return JWTUtil.getUserRole() == UserRole.Admin;
+  }
+
+  isEmployer() {
+    return JWTUtil.getUserRole() == UserRole.Employer;
+  }
 }
 
 interface Nav {
