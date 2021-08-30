@@ -1,20 +1,20 @@
-<div class="p-5 bg-white rounded-3 shadow-sm border" style="margin: auto; width: 85em;">
+<div class="container p-5 bg-white rounded-3 shadow-sm border">
 
   <div id="anchor-top"></div>
 
   <h2 class="text-center pb-5">Pretraži oglase</h2>
 
   <!-- ------- Row 1 ------- -->
-  <div class="row pb-3">
+  <div class="row">
 
     <!-- Naziv oglasa -->
-    <div class="col-3">
+    <div class="col-xxl-3 col-md-6 col-12 pb-3">
       <input type="text" id="jobName" name="jobName" [(ngModel)]="jobName" placeholder="Radno mesto (pozicija)"
         class="form-control">
     </div>
 
     <!-- Oblast rada -->
-    <div class="col-3">
+    <div class="col-xxl-3 col-md-6 col-12 pb-3">
       <!-- <label for="fields">Oblast rada:&nbsp;</label> -->
       <select [(ngModel)]="selectedFieldId" (ngModelChange)="getNewTags()" class="form-select">
         <option value="0">Oblast rada</option>
@@ -24,8 +24,52 @@
       </select>
     </div>
 
+    <!-- Poslodavac -->
+    <div class="col-xxl-3 col-md-6 col-12 pb-3">
+      <!-- <label for="employers">Poslodavac:&nbsp;</label> -->
+      <select [(ngModel)]="selectedEmployerId" class="form-select">
+        <option value="0">Poslodavac</option>
+        <option *ngFor="let e of employerService.employers" [ngValue]="e.id">
+          {{e.name}}
+        </option>
+      </select>
+    </div>
+
+
+    <!-- Grad -->
+    <div class="col-xxl-3 col-md-6 col-12 pb-3">
+      <!-- <label for="cities">Grad:&nbsp;</label> -->
+      <select [(ngModel)]="selectedCityId" class="form-select">
+        <option value="0">Grad</option>
+        <option *ngFor="let c of cityService.cities" [ngValue]="c.id">
+          {{c.name}}
+        </option>
+      </select>
+    </div>
+
+  </div>
+
+  <!-- ------- Row 2 ------- -->
+  <div class="row">
+
+    <!-- Rad od kuce -->
+    <!-- <div class="col-2">
+      <div class="bg-white border rounded-1 p-1">
+        <label for="workFromHome">Rad od kuće:&nbsp;&nbsp;</label>
+        <input type="checkbox" id="workFromHome" name="workFromHome" [(ngModel)]="workFromHome">
+      </div>
+    </div> -->
+
+    <!-- Rad od kuce -->
+    <div class="col-xxl-2 col-lg-3 col-6 pb-3">
+      <button class="btn btn-light border w-100" (click)="toggleWorkFromHome()">
+        <span class="pe-2">Samo rad od kuće</span>
+        <fa-icon class="text-success" *ngIf="workFromHome" [icon]="iconCheck"></fa-icon>
+      </button>
+    </div>
+
     <!-- Tagovi -->
-    <div class="col-2">
+    <div class="col-xxl-2 col-lg-3 col-6 pb-3">
       <div id="list1" class="dropdown-check-list {{(tagsListVisible)? 'visible' : '' }}" tabindex="100">
         <span class="anchor rounded-2" (click)="toggleTagsListVisibility()">Ključne reči</span>
         <ul *ngIf="fieldService.tags.length > 0" class="items bg-white p-2" style="position: absolute;">
@@ -38,58 +82,8 @@
       </div>
     </div>
 
-    
-    <!-- Pretraga -->
-    <div class="col">
-      <button id="searchBtn" class="btn btn-success shadow w-100" (click)="onSearch();">Pretraga</button>
-    </div>
-    
-  </div>
-  
-  <!-- ------- Row 2 ------- -->
-  <div class="row">
-    
-    <!-- Poslodavac -->
-    <div class="col-3">
-      <!-- <label for="employers">Poslodavac:&nbsp;</label> -->
-      <select [(ngModel)]="selectedEmployerId" class="form-select">
-        <option value="0">Poslodavac</option>
-        <option *ngFor="let e of employerService.employers" [ngValue]="e.id">
-          {{e.name}}
-        </option>
-      </select>
-    </div>
-    
-    
-    <!-- Grad -->
-    <div class="col-3">
-      <!-- <label for="cities">Grad:&nbsp;</label> -->
-      <select [(ngModel)]="selectedCityId" class="form-select">
-        <option value="0">Grad</option>
-        <option *ngFor="let c of cityService.cities" [ngValue]="c.id">
-          {{c.name}}
-        </option>
-      </select>
-    </div>
-    
-    
-    <!-- Rad od kuce -->
-    <!-- <div class="col-2">
-      <div class="bg-white border rounded-1 p-1">
-        <label for="workFromHome">Rad od kuće:&nbsp;&nbsp;</label>
-        <input type="checkbox" id="workFromHome" name="workFromHome" [(ngModel)]="workFromHome">
-      </div>
-    </div> -->
-
-    <!-- Rad od kuce -->
-    <div class="col-2">
-      <button class="btn btn-light border w-100" (click)="toggleWorkFromHome()">
-        <span class="pe-2">Samo rad od kuće</span> 
-        <fa-icon class="text-success" *ngIf="workFromHome" [icon]="iconCheck"></fa-icon>
-      </button>
-    </div>
-
-    <div class="col">
+    <!-- Sortiranje -->
+    <div class="col-xxl-4 col-lg-6 col-12 pb-3">
       <div class="row">
         <div class="col">
           <select [(ngModel)]="sortDateAscending" class="form-select">
@@ -108,6 +102,12 @@
       </div>
     </div>
 
+
+    <!-- Pretraga -->
+    <div class="col">
+      <button id="searchBtn" class="btn btn-success shadow w-100" (click)="onSearch();">Pretraga</button>
+    </div>
+
   </div>
 
   <!-- ------- Row 3 ------- -->
@@ -117,7 +117,7 @@
     </button>
   </div> -->
 
-  
+
 
 </div>
 
@@ -127,18 +127,26 @@
 
 <!-- Navigacija za stranicenje -->
 <div *ngIf="totalJobsNum > 0" class="container d-flex justify-content-center">
-  <a class="btn" (click)="loadPreviousPage()"> <fa-icon [icon]="iconArrowLeft"></fa-icon> </a>
-  <span class="text-center p-2" style="width: 50px;"> {{currentPage + ' /  ' + totalPagesNum}} </span>
-  <a class="btn" (click)="loadNextPage()"> <fa-icon [icon]="iconArrowRight"></fa-icon> </a>
+  <a class="btn" (click)="loadPreviousPage()">
+    <fa-icon [icon]="iconArrowLeft"></fa-icon>
+  </a>
+  <span class="text-center p-2" style="width: 50px;"> {{currentPage + ' / ' + totalPagesNum}} </span>
+  <a class="btn" (click)="loadNextPage()">
+    <fa-icon [icon]="iconArrowRight"></fa-icon>
+  </a>
 </div>
 
 <app-jobs-list [jobs]="(jobs)? jobs : []"></app-jobs-list>
 
 <!-- Navigacija za stranicenje -->
 <div *ngIf="totalJobsNum > 0" class="container d-flex justify-content-center">
-  <a class="btn" (click)="loadPreviousPage()" href="#anchor-top"> <fa-icon [icon]="iconArrowLeft"></fa-icon> </a>
-  <span class="text-center p-2" style="width: 50px;"> {{currentPage + ' /  ' + totalPagesNum}} </span>
-  <a class="btn" (click)="loadNextPage()" href="#anchor-top"> <fa-icon [icon]="iconArrowRight"></fa-icon> </a>
+  <a class="btn" (click)="loadPreviousPage()" href="#anchor-top">
+    <fa-icon [icon]="iconArrowLeft"></fa-icon>
+  </a>
+  <span class="text-center p-2" style="width: 50px;"> {{currentPage + ' / ' + totalPagesNum}} </span>
+  <a class="btn" (click)="loadNextPage()" href="#anchor-top">
+    <fa-icon [icon]="iconArrowRight"></fa-icon>
+  </a>
 </div>
 
 <div id="anchor-bottom"></div>
