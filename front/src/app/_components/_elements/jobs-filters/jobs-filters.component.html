@@ -1,5 +1,9 @@
 <div class="container">
 
+  <div id="anchor-top"></div>
+
+  <h2 class="text-center pb-5">Pretraži oglase</h2>
+
   <!-- ------- Row 1 ------- -->
   <div class="row pb-3">
 
@@ -87,10 +91,22 @@
 
 <br><br>
 
-<div class="container d-flex justify-content-center">
-  <button (click)="loadPreviousPage()"> prethodna </button>
-  <span class="text-center p-2" style="width: 50px;"> {{totalPagesNum}} </span>
-  <button (click)="loadNextPage()"> sledeca </button>
+<h2 *ngIf="totalJobsNum > 0" class="text-center pb-5">Pronađeni oglasi ({{totalJobsNum}})</h2>
+
+<!-- Navigacija za stranicenje -->
+<div *ngIf="totalJobsNum > 0" class="container d-flex justify-content-center">
+  <a class="btn" (click)="loadPreviousPage()"> <fa-icon [icon]="iconArrowLeft"></fa-icon> </a>
+  <span class="text-center p-2" style="width: 50px;"> {{currentPage + ' /  ' + totalPagesNum}} </span>
+  <a class="btn" (click)="loadNextPage()"> <fa-icon [icon]="iconArrowRight"></fa-icon> </a>
 </div>
 
 <app-jobs-list [jobs]="(jobs)? jobs : []"></app-jobs-list>
+
+<!-- Navigacija za stranicenje -->
+<div *ngIf="totalJobsNum > 0" class="container d-flex justify-content-center">
+  <a class="btn" (click)="loadPreviousPage()" href="#anchor-top"> <fa-icon [icon]="iconArrowLeft"></fa-icon> </a>
+  <span class="text-center p-2" style="width: 50px;"> {{currentPage + ' /  ' + totalPagesNum}} </span>
+  <a class="btn" (click)="loadNextPage()" href="#anchor-top"> <fa-icon [icon]="iconArrowRight"></fa-icon> </a>
+</div>
+
+<div id="anchor-bottom"></div>

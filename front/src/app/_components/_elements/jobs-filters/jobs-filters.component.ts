@@ -6,6 +6,7 @@ import { FieldService } from 'src/app/_utilities/_middleware/_services/field.ser
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 import { Filters } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-jobs-filters',
@@ -33,6 +34,11 @@ export class JobsFiltersComponent implements OnInit {
   selectedFieldId: number = 0;
   selectedEmployerId: number = 0;
   public showMoreBool: boolean = false;
+
+  // Fontawesome
+
+  iconArrowLeft = faArrowLeft;
+  iconArrowRight = faArrowRight;
 
   constructor(public jobService: JobService,
               public fieldService: FieldService,
