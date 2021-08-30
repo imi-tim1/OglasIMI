@@ -114,6 +114,8 @@ export class JobsFiltersComponent implements OnInit {
   }
 
   getNewTags() {
+    console.log('>>>> GET NEW TAGS');
+    
     this.tagsListVisible = false;
     this.checkedTags = [];
     this.fieldService.tags = [];

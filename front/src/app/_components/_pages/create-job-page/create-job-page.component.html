@@ -20,9 +20,9 @@
       <!-- Oblast rada -->
       <div class="col-3">
         <!-- <label for="fields">Oblast rada:&nbsp;</label> -->
-        <select [(ngModel)]="selectedFieldId" class="form-select">
-          <option value="0" (click)="getNewTags()">Oblast rada</option>
-          <option *ngFor="let f of fieldService.fields" [ngValue]="f.id" (click)="getNewTags()">
+        <select [(ngModel)]="selectedFieldId" (ngModelChange)="getNewTags()" class="form-select">
+          <option value="0">Oblast rada</option>
+          <option *ngFor="let f of fieldService.fields" [ngValue]="f.id">
             {{f.name}}
           </option>
         </select>
