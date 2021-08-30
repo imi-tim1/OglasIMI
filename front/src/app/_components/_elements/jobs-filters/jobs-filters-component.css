@@ -104,3 +104,11 @@ ul.items {
   height: 200px;
   overflow: scroll;
 }
+
+.dropdown-check-list {
+  width: 100%;
+}
+
+.dropdown-check-list > .anchor {
+  width: 100%;
+}
