@@ -486,7 +486,7 @@ CREATE PROCEDURE post_job (
     IN p_field_id int,
     IN p_city_id int,
     IN p_title varchar(30),
-    IN p_description varchar(510),
+    IN p_description text(10000),
     IN p_salary varchar(50),
     IN p_work_from_home boolean,
     OUT p_is_posted boolean
