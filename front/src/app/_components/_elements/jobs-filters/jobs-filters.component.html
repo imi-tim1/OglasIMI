@@ -1,4 +1,4 @@
-<div class="container p-5 bg-white rounded-3 shadow-sm border">
+<div class="p-5 bg-white rounded-3 shadow-sm border" style="margin: auto; width: 85em;">
 
   <div id="anchor-top"></div>
 
@@ -26,9 +26,9 @@
 
     <!-- Tagovi -->
     <div class="col-2">
-      <div *ngIf="fieldService.tags.length > 0" id="list1" class="dropdown-check-list {{(tagsListVisible)? 'visible' : '' }}" tabindex="100">
+      <div id="list1" class="dropdown-check-list {{(tagsListVisible)? 'visible' : '' }}" tabindex="100">
         <span class="anchor rounded-2" (click)="toggleTagsListVisibility()">Ključne reči</span>
-        <ul class="items bg-white p-2" style="position: absolute;">
+        <ul *ngIf="fieldService.tags.length > 0" class="items bg-white p-2" style="position: absolute;">
           <!-- Tag -->
           <li *ngFor="let t of fieldService.tags" class="bg-white border rounded-1 me-2 px-2">
             <input type="checkbox" value="{{t.id}}" id="{{t.id}}" (click)="toggleTag(t.id)">
@@ -81,10 +81,11 @@
       </div>
     </div> -->
 
+    <!-- Rad od kuce -->
     <div class="col-2">
       <button class="btn btn-light border w-100" (click)="toggleWorkFromHome()">
         <span class="pe-2">Samo rad od kuće</span> 
-        <fa-icon *ngIf="workFromHome" [icon]="iconCheck"></fa-icon>
+        <fa-icon class="text-success" *ngIf="workFromHome" [icon]="iconCheck"></fa-icon>
       </button>
     </div>
 
