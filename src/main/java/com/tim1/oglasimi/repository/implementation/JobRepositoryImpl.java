@@ -4,7 +4,6 @@ import com.tim1.oglasimi.model.*;
 import com.tim1.oglasimi.model.payload.JobFeed;
 import com.tim1.oglasimi.model.payload.JobFilter;
 import com.tim1.oglasimi.model.payload.LikeResponse;
-import com.tim1.oglasimi.model.payload.RatingResponse;
 import com.tim1.oglasimi.repository.JobRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,44 +62,43 @@ public class JobRepositoryImpl implements JobRepository
             setStatement(cstmtMaster,jobFilter);
             ResultSet rsMaster = cstmtMaster.executeQuery(); // Glavna tabela sa uobicajenim filterima
 
+            List<Integer> idList = new ArrayList<>();
             int flagPage = jobFilter.getJobsPerPage();
             int pointerPosition = (jobFilter.getPageNumber() - 1) * jobFilter.getJobsPerPage();
+            int count = 0, tempId;
+
+            if(rsMaster.first() && tempTagList != null)
+            {
+                rsMaster.beforeFirst();
+                while(rsMaster.next())
+                {
+                    tempId = rsMaster.getInt("id");
+
+                    boolean flagTag = checkForTag(cstmtTag, jobFilter.getTags(), tempId);
+
+                    if(flagTag) idList.add(tempId);
+                }
+            }
 
             if(jobFilter.isAscendingOrder()) // Filtriranje za rastuce sortiranje
             {
                 rsMaster.afterLast();
-
-                while(pointerPosition != 0) // Pomeranje pointera na zeljeni red
+                while (pointerPosition != 0) // Pomeranje pointera na zeljeni red (prema stranici)
                 {
                     rsMaster.previous();
-                    pointerPosition--;
+
+                    tempId = rsMaster.getInt("id");
+                    if(tempTagList == null || idList.contains(tempId)) pointerPosition--;
                 }
 
-                if(tempTagList == null)
+                while(rsMaster.previous())
                 {
-                    while(rsMaster.previous())
+                    tempId = rsMaster.getInt("id");
+
+                    if(tempTagList == null || idList.contains(tempId))
                     {
                         tempJob = setJobModel(rsMaster,cstmtTag);
                         jobList.add(tempJob);
-
-                        flagPage--;
-                        if(flagPage == 0) break;
-                    }
-                }
-
-                else
-                {
-                    while(rsMaster.previous())
-                    {
-                        int tempId = rsMaster.getInt("id");
-
-                        boolean flagTag = checkForTag(cstmtTag, jobFilter.getTags(), tempId);
-
-                        if(flagTag)
-                        {
-                            tempJob = setJobModel(rsMaster,cstmtTag);
-                            jobList.add(tempJob);
-                        }
 
                         flagPage--;
                         if(flagPage == 0) break;
@@ -110,48 +108,36 @@ public class JobRepositoryImpl implements JobRepository
 
             else // Filtriranje za opadajuce sortiranje
             {
-                while(pointerPosition != 0) // Pomeranje pointera na zeljeni red
+                rsMaster.beforeFirst();
+                while(pointerPosition != 0) // Pomeranje pointera na zeljeni red (prema stranici)
                 {
                     rsMaster.next();
-                    pointerPosition--;
+
+                    tempId = rsMaster.getInt("id");
+                    if(tempTagList == null || idList.contains(tempId)) pointerPosition--;
                 }
 
-                if(tempTagList == null)
+                while(rsMaster.next())
                 {
-                    while(rsMaster.next())
+                    tempId = rsMaster.getInt("id");
+
+                    if(tempTagList == null || idList.contains(tempId))
                     {
-                        tempJob = setJobModel(rsMaster,cstmtTag);
+                        tempJob = setJobModel(rsMaster, cstmtTag);
                         jobList.add(tempJob);
 
                         flagPage--;
-                        if(flagPage == 0) break;
-                    }
-                }
-
-                else
-                {
-                    while(rsMaster.next())
-                    {
-                        int tempId = rsMaster.getInt("id");
-
-                        boolean flagTag = checkForTag(cstmtTag, jobFilter.getTags(), tempId);
-
-                        if(flagTag)
-                        {
-                            tempJob = setJobModel(rsMaster,cstmtTag);
-                            jobList.add(tempJob);
-                        }
-
-                        flagPage--;
-                        if(flagPage == 0) break;
+                        if (flagPage == 0) break;
                     }
                 }
             }
 
-            int count = 0;
-
             rsMaster.beforeFirst();
-            while(rsMaster.next()) count++;
+            while(rsMaster.next()) // Ukupno filtriranih poslova
+            {
+                tempId = rsMaster.getInt("id");
+                if(tempTagList == null || idList.contains(tempId)) count++;
+            }
 
             jobFeed.setJobs(jobList);
             jobFeed.setTotalJobNumber(count);
