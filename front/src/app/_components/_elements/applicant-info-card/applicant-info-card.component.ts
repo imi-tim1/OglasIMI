@@ -1,6 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { Applicant, Employer } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { DEFAULT_PROFILE_PICTURE } from 'src/app/_utilities/_constants/raw-data';
+import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
+import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
+import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 
 @Component({
   selector: 'app-applicant-info-card',
@@ -9,10 +15,32 @@ import { DEFAULT_PROFILE_PICTURE } from 'src/app/_utilities/_constants/raw-data'
 export class ApplicantInfoCardComponent implements OnInit {
 
   @Input() public app: Applicant | null = null;
-
   public defaultPicture: string = DEFAULT_PROFILE_PICTURE;
 
-  constructor() { }
+  // Fontawesome
+  iconDelete = faTimes;
+
+  constructor(
+    private applicantService: ApplicantService,
+    private router: Router
+  ) { }
+
+  // Auth
+  canDelete() {
+    return JWTUtil.getUserRole() == UserRole.Admin;
+  }
+
+  // Actions
+
+  onDeleteClick() {
+    if(!this.app) return;
+    this.applicantService.deleteApplicant(this.app.id, this,
+      (self: any) => {
+        self.router.navigate(['/applicants']);
+      }
+    );
+  }
+
 
   ngOnInit(): void {
   }

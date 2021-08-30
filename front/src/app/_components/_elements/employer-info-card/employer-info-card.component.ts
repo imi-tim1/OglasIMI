@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarReg } from '@fortawesome/free-regular-svg-icons';
 import { Employer, Job, RatingResponse } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { DEFAULT_PROFILE_PICTURE } from 'src/app/_utilities/_constants/raw-data';
@@ -7,6 +7,7 @@ import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employer-info-card',
@@ -27,10 +28,11 @@ export class EmployerInfoCardComponent implements OnInit {
   // Fontawesome
   iconStar = faStar;
   iconStarEmpty = faStarReg;
+  iconDelete = faTimes;
 
   constructor(
     private employerService: EmployerService,
-    private applicantService: ApplicantService
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -62,10 +64,23 @@ export class EmployerInfoCardComponent implements OnInit {
     this.employerService.rateEmployer(this.emp.id, this.myRating, this, this.cbSuccessRate);
   }
 
+  onDeleteClick() {
+    if(!this.emp) return;
+    this.employerService.deleteEmployer(this.emp.id, this,
+      (self: any) => {
+        self.router.navigate(['/employers']);
+      }
+    );
+  }
+
   // --- Auth ---
 
   canRate() {
     return !this.allreadyRated && !this.rateDissabled && JWTUtil.getUserRole() == UserRole.Applicant;
+  }
+
+  canDelete() {
+    return JWTUtil.getUserRole() == UserRole.Admin;
   }
 
   // --- API Callbacks ---

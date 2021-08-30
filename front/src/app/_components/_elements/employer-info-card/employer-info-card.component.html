@@ -55,4 +55,10 @@
             </div>
         </div>
     </div>
+
+    <div class="d-flex px-4 d-flex align-items-end flex-column">
+        <button *ngIf="canDelete()" (click)="onDeleteClick()" class="btn btn-danger border mt-auto">
+            <fa-icon [icon]="iconDelete"></fa-icon>
+        </button>
+    </div>
 </div>
