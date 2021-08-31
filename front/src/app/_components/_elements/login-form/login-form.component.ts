@@ -12,8 +12,11 @@ export class LoginFormComponent implements OnInit {
   @Input() public email: string = '';
   @Input() public password: string = '';
 
+  // Login status
   public wrongCreds: boolean = false;
   public notApproved: boolean = false;
+
+  pattEmail: RegExp = /^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/;
 
   constructor(
     public loginService: LoginService,
@@ -25,7 +28,15 @@ export class LoginFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.loginService.login(this.email, this.password, this, this.cbSuccess, this.cbWrongCreds, this.cbNotApproved);
+    this.wrongCreds = false;
+    this.notApproved = false;
+
+    if (this.pattEmail.test(this.email)) {
+      this.loginService.login(this.email, this.password, this, this.cbSuccess, this.cbWrongCreds, this.cbNotApproved);
+    }
+    else {
+      this.wrongCreds = true;
+    }
   }
 
   // API Callbacks

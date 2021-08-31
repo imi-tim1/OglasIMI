@@ -3,7 +3,9 @@
         <div class="row">
             <div class="d-flex">
                 <div class="pb-3 flex-fill {{(isReplay())?'text-primary':''}}">{{data.authorName}} {{(isReplay())?'(poslodavac)':''}}</div>
-                <div class="pb-2">{{data.postDate.toString().substr(0,10)}}</div>
+                <div class="pb-2"><small class="text-muted" style="float: right">
+                    {{data.postDate.toString().substr(0,10)}}</small>
+                </div>
             </div>
         </div>
 
@@ -20,3 +22,4 @@
         </div>
     </div>
 </div>
+

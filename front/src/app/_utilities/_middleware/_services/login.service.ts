@@ -69,7 +69,7 @@ export class LoginService {
           // Bad Request
           case HttpStatusCode.BadRequest:
             JWTUtil.delete();
-            this.router.navigate(['']);
+            //this.router.navigate(['']);
             break;
         }
       }

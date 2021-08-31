@@ -16,6 +16,8 @@ export class ApplicantInfoCardComponent implements OnInit {
 
   @Input() public app: Applicant | null = null;
   public defaultPicture: string = DEFAULT_PROFILE_PICTURE;
+  
+  @Input() dissableDelete: boolean = false;
 
   // Fontawesome
   iconDelete = faTimes;
@@ -27,7 +29,7 @@ export class ApplicantInfoCardComponent implements OnInit {
 
   // Auth
   canDelete() {
-    return JWTUtil.getUserRole() == UserRole.Admin;
+    return JWTUtil.getUserRole() == UserRole.Admin && !this.dissableDelete;
   }
 
   // Actions
