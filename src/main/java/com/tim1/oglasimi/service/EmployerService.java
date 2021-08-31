@@ -11,10 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class EmployerService {
-
+public class EmployerService
+{
     private final EmployerRepositoryImpl employerRepositoryImpl;
-    private final ApplicantRepositoryImpl applicantRepositoryImpl = new ApplicantRepositoryImpl();
 
     @Autowired
     public EmployerService(EmployerRepositoryImpl employerRepositoryImpl) {
