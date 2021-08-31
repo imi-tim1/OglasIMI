@@ -84,7 +84,7 @@ CREATE PROCEDURE register_employer (
     IN p_hashed_password VARCHAR(300),
     IN p_picture_base64 TEXT(65000),
     IN p_phone_number VARCHAR(30),
-    IN p_name VARCHAR(30),
+    IN p_name VARCHAR(50),
     IN p_address VARCHAR(50),
     IN p_tin VARCHAR(20),
     OUT p_is_added BOOLEAN,
@@ -442,7 +442,7 @@ CREATE PROCEDURE get_filtered_jobs
     IN p_employer_id int,
     IN p_field_id int,
     IN p_city_id int,
-    IN p_title varchar(30),
+    IN p_title varchar(50),
     IN p_work_from_home boolean
 )
 BEGIN
