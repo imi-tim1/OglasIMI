@@ -4,7 +4,6 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { Applicant, Employer } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { DEFAULT_PROFILE_PICTURE } from 'src/app/_utilities/_constants/raw-data';
-import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 
@@ -48,3 +47,4 @@ export class ApplicantInfoCardComponent implements OnInit {
   }
 
 }
+

@@ -33,6 +33,7 @@ export class EmployerInfoCardComponent implements OnInit {
 
   constructor(
     private employerService: EmployerService,
+    private applicantService: ApplicantService,
     private router: Router
   ) { }
 

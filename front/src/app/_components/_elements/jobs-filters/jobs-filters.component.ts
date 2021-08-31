@@ -160,8 +160,6 @@ export class JobsFiltersComponent implements OnInit {
     self.totalPagesNum =  Math.ceil(self.totalJobsNum / self.jobsPerPage);
 
     console.log(`total pages: ${self.totalPagesNum}, total jobs: ${self.totalJobsNum}, jpp: ${self.jobsPerPage}`);
-
-    // self.jobsArrival.emit(self.jobs);
   }
 
   cbSuccessNextPage(self: any, jobs?: Job[], jobsNumber?: number) {

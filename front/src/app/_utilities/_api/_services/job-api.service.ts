@@ -3,9 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiProperties } from '../../_constants/api.properties';
 import { HeaderUtil, ParamUtil } from '../../_helpers/http-util';
-import { JWTUtil } from '../../_helpers/jwt-util';
 import { Applicant, Filters, Job, JobComment, LikeResponse, NewJob, PagedJobs } from '../_data-types/interfaces';
-import { StandardHeaders } from '../_data-types/interfaces';
 
 @Injectable({
   providedIn: 'root'
