@@ -18,6 +18,7 @@ export class EmployerInfoCardComponent implements OnInit {
   @Input() public emp: Employer | null = null;
   @Input() public rating: number = -1;
   @Input() public rateDissabled: boolean = true;
+  @Input() public dissableDelete: boolean = false;
 
   public myRating: number = 0;
   public showRateOption: boolean = false;
@@ -80,7 +81,7 @@ export class EmployerInfoCardComponent implements OnInit {
   }
 
   canDelete() {
-    return JWTUtil.getUserRole() == UserRole.Admin;
+    return JWTUtil.getUserRole() == UserRole.Admin && !this.dissableDelete;
   }
 
   // --- API Callbacks ---

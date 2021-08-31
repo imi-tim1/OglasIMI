@@ -2,7 +2,12 @@
     <button class="bg-white shadow rounded-3 p-4 w-100 border text-start" style="display: block;"
         routerLink="/job/{{job.id}}">
 
-        <h6>{{job.employer!.name}}</h6>
+        <div class="d-flex">
+            <h6 class="me-auto">{{job.employer!.name}}</h6>
+            <small class="text-muted" style="float: right">
+                {{job.postDate.toString().substr(0,10)}}</small>
+        </div>
+
         <h3 class="">{{job.title}}</h3>
         <div class="pt-2 pb-3">{{job.description}}</div>
         <div class="text-primary">{{job.city.name}}</div>
@@ -24,7 +29,7 @@
         <span *ngIf="job.salary" class="" style="color: rgb(46, 194, 149);">
             <strong class="">{{job.salary}}</strong>
         </span>
-        
+
     </button>
 
 </div>

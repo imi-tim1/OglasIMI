@@ -53,12 +53,14 @@
             <div *ngIf="activeEmp || activeApp" class="">
                 
                 <!-- Employer -->
-                <app-employer-info-card class="" 
+                <app-employer-info-card class=""
+                    [dissableDelete]="true"
                     *ngIf="activeEmp" [emp]="activeEmp">
                 </app-employer-info-card>
                 
                 <!-- Applicant -->
                 <app-applicant-info-card class="" 
+                    [dissableDelete]="true"
                     *ngIf="activeApp" [app]="activeApp">
                 </app-applicant-info-card>
                 
