@@ -2,7 +2,6 @@ import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common
 import { Injectable } from '@angular/core';
 import { Applicant, Employer, Field, Filters, Job, JobComment, NewJob, Tag } from '../../_api/_data-types/interfaces';
 import { JobApiService } from '../../_api/_services/job-api.service';
-import { JWTUtil } from '../../_helpers/jwt-util';
 import { AuthService } from './auth.service';
 
 @Injectable({

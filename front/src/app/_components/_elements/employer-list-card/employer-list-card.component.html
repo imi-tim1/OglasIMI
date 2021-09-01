@@ -1,5 +1,7 @@
 <div class="p-2 text-center">
-    <button class="bg-white border shadow rounded-3" routerLink="{{'/employer/' + data.id}}" style="max-width: 220px; padding: 10px">
-        <img [src]="(data.pictureBase64 == null)? defaultPicture : data.pictureBase64" alt="image" width="200px">
+    <button class="bg-white border shadow rounded-3" routerLink="{{'/employer/' + data.id}}" style="width: 220px; height: 220px; padding: 10px">
+        <h5 *ngIf="data.pictureBase64 == null" class="text-center text-break p-2"><b>{{data.name}}</b></h5>
+        <img *ngIf="data.pictureBase64 != null" [src]="data.pictureBase64" alt="image" width="200px">
+        <!-- <img [src]="(data.pictureBase64 == null)? defaultPicture : data.pictureBase64" alt="image" width="200px"> -->
     </button>
 </div>
