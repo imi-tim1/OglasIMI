@@ -14,7 +14,7 @@
       <div class="col-6">
         <input type="text" id="jobTitle" name="jobTitle" [(ngModel)]="jobTitle" placeholder="Radno mesto"
           class="form-control">
-        <p *ngIf="wrongJobTitleBool" class="small fw-bold text-danger">Unesite/korigujte naziv radnog mesta.</p>
+        <p *ngIf="wrongJobTitleBool" class="small fw-bold text-danger">Unesite/korigujte naziv radnog mesta. (minimum 3, maksimum 50 karaktera)</p>
       </div>
 
       <!-- Oblast rada -->

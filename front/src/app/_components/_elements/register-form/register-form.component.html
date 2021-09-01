@@ -32,12 +32,12 @@
             <div class="col-6 p-2">
               <input type="text" id="appFirstName" class="form-control" [(ngModel)]="appFirstName" name="appFirstName">
               <label class="form-label" for="appFirstName">Ime</label>
-              <p *ngIf="wrongAppFirstNameBool" class="small fw-bold text-danger">Unesite ispravno ime. (maksimum 30 karaktera)</p>
+              <p *ngIf="wrongAppFirstNameBool" class="small fw-bold text-danger">Unesite ispravno ime. (minimum 1, maksimum 30 karaktera)</p>
             </div>
             <div class="col-6 p-2">
               <input type="text" id="appLastName" class="form-control" [(ngModel)]="appLastName" name="appLastName" />
               <label class="form-label" for="appLastName">Prezime</label>
-              <p *ngIf="wrongAppLastNameBool" class="small fw-bold text-danger">Unesite ispravno prezime. (maksimum 30 karaktera)</p>
+              <p *ngIf="wrongAppLastNameBool" class="small fw-bold text-danger">Unesite ispravno prezime. (minimum 1, maksimum 30 karaktera)</p>
             </div>
           </div>
 

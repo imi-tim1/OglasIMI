@@ -49,7 +49,7 @@ export class CreateJobPageComponent implements OnInit {
 
   salary: string = '';
 
-  pattTitle: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\ \/\\\(\)\[\]\-\*\.\,\'\"\#\+\%\?\!]+$/;
+  pattTitle: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\ \/\\\(\)\[\]\-\*\.\,\'\"\#\+\%\?\!]{3,50}$/;
   pattTwoSpaces: RegExp = /  /;
   pattMoney: RegExp = /^[0-9]+$/;
 
@@ -144,6 +144,10 @@ export class CreateJobPageComponent implements OnInit {
       }
       this.wrongSalaryBool = false; //hteo samo pocetnu da unese i uneo ispravno, salji
       this.salary = this.salaryFrom + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
+      if (this.salary.length > 50) {
+        (<HTMLSelectElement>document.getElementById('salaryFrom')).focus();
+        this.wrongSalaryBool = true;
+      }
     }
     else if (this.salaryFrom == '' && this.salaryTo != '' && this.pattMoney.test(this.salaryTo)) { //uneo samo krajnju
       if (this.salaryTo[0] == '0') { //greska
@@ -153,6 +157,10 @@ export class CreateJobPageComponent implements OnInit {
       }
       this.wrongSalaryBool = false; //hteo samo krajnu da unese i uneo ispravno, salji
       this.salary = this.salaryTo + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
+      if (this.salary.length > 50) {
+        (<HTMLSelectElement>document.getElementById('salaryTo')).focus();
+        this.wrongSalaryBool = true;
+      }
     }
     else {//obe vrednosti su ukucane -> proveri ispravnost
       if (!(this.pattMoney.test(this.salaryFrom)) || this.salaryFrom[0] == '0') { //greska
@@ -173,6 +181,10 @@ export class CreateJobPageComponent implements OnInit {
       //sve ok znaci
       this.wrongSalaryBool = false;
       this.salary = this.salaryFrom + " - " + this.salaryTo + " " + this.selectedCurrencyName + " (" + this.selectedWeekMonthYear + ")";
+      if (this.salary.length > 50) {
+        (<HTMLSelectElement>document.getElementById('salaryFrom')).focus();
+        this.wrongSalaryBool = true;
+      }
     }
   }
 
