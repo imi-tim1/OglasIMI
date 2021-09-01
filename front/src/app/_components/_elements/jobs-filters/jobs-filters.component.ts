@@ -142,7 +142,6 @@ export class JobsFiltersComponent implements OnInit {
     
     this.tagsListVisible = false;
     this.checkedTags = [];
-    this.fieldService.tags = [];
 
     if(this.selectedFieldId > 0) {
       this.fieldService.getTags(this.selectedFieldId, this, (self: any, data: Tag[]) => {

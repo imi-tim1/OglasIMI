@@ -9,9 +9,9 @@ import { AuthService } from './auth.service';
 })
 export class EmployerService {
 
-  public employers: Employer[] = [];
-  public employer: Employer | null = null;
-  public employersJobs: Job[] = []
+  // public employers: Employer[] = [];
+  // public employer: Employer | null = null;
+  // public employersJobs: Job[] = []
 
   constructor(private api: EmployerApiService, private authService: AuthService) { }
 
@@ -19,11 +19,11 @@ export class EmployerService {
     this.api.getEmployers((notApproved == undefined) ? false : notApproved).subscribe(
       // Success
       (response) => {
-        console.log('Get Employers (Success), Body: ')
-        console.log(response.body)
-        this.employers = (response.body == null) ? [] : response.body;
-        console.log('Employers: ')
-        console.log(this.employers)
+        // console.log('Get Employers (Success), Body: ')
+        // console.log(response.body)
+        // this.employers = (response.body == null) ? [] : response.body;
+        // console.log('Employers: ')
+        // console.log(this.employers)
 
         // Callback
         if (response.body)
@@ -41,9 +41,9 @@ export class EmployerService {
     this.api.getEmployer(id).subscribe(
       // Success
       (response) => {
-        this.employer = response.body;
-        console.log('Employer: ')
-        console.log(this.employer)
+        // this.employer = response.body;
+        // console.log('Employer: ')
+        // console.log(this.employer)
 
         // Callback
         if (self && successCallback) { successCallback(self, response.body) };
@@ -64,9 +64,9 @@ export class EmployerService {
     this.api.getEmployersJobs(id).subscribe(
       // Success
       (response) => {
-        this.employersJobs = (response.body == null) ? [] : response.body;
-        console.log('Employers Jobs: ')
-        console.log(this.employersJobs)
+        // this.employersJobs = (response.body == null) ? [] : response.body;
+        // console.log('Employers Jobs: ')
+        // console.log(this.employersJobs)
         // Callback
         if (response.body) {
           console.log('get emps jobs, body OK')

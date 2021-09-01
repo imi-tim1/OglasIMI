@@ -9,8 +9,6 @@ import { AuthService } from './auth.service';
 })
 export class CityService {
 
-  public cities: City[] = [];
-
   constructor(
     private api: CityApiService,
     private authService: AuthService
