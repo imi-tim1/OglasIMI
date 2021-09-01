@@ -145,7 +145,7 @@ CREATE TABLE rating
 (
     employer_id INT NOT NULL,
     applicant_id INT NOT NULL,
-    feedback_value LONG NOT NULL,
+    feedback_value TINYINT NOT NULL,
     CONSTRAINT PRIMARY KEY (applicant_id, employer_id),
     CONSTRAINT FOREIGN KEY (applicant_id) REFERENCES applicant (user_id)
         ON DELETE CASCADE

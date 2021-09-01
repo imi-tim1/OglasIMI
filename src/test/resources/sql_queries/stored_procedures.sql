@@ -682,7 +682,7 @@ DELIMITER // ;
 CREATE PROCEDURE rate_employer (
     IN p_employer_id INT,
     IN p_applicant_id INT,
-    IN p_feedback_value DOUBLE,
+    IN p_feedback_value TINYINT,
     OUT p_is_rated BOOLEAN
 )
 BEGIN

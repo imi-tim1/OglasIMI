@@ -273,7 +273,7 @@ public class EmployerController {
                                   @PathVariable("id")
                                   @Min(1)
                                   @Max(Integer.MAX_VALUE ) int employerId,
-                                  @RequestParam @Min(0) @Max(5) double feedbackValue)
+                                  @RequestParam @Min(0) @Max(5) byte feedbackValue)
     {
         ResultPair resultPair = checkAccess(jwt,Role.APPLICANT);
         HttpStatus httpStatus = resultPair.getHttpStatus();

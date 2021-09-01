@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -299,7 +298,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
                 while(rs.next())
                 {
                     counter++;
-                    tmpSum += rs.getDouble("feedback_value");
+                    tmpSum += rs.getByte("feedback_value");
                 }
 
                 ratingResponse.setRating(tmpSum/counter);
@@ -328,7 +327,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
     }
 
     @Override
-    public boolean rate(int employerId, int applicantId, double feedbackValue)
+    public boolean rate(int employerId, int applicantId, byte feedbackValue)
     {
         boolean isSuccessfullyRated = false;
 
@@ -340,7 +339,7 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 
             cstmt.setInt("p_applicant_id",applicantId);
             cstmt.setInt("p_employer_id",employerId);
-            cstmt.setDouble("p_feedback_value",feedbackValue);
+            cstmt.setByte("p_feedback_value",feedbackValue);
             cstmt.registerOutParameter("p_is_rated", Types.BOOLEAN);
 
             cstmt.executeUpdate();
