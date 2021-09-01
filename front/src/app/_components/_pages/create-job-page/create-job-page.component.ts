@@ -3,7 +3,7 @@ import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.servi
 import { FieldService } from 'src/app/_utilities/_middleware/_services/field.service';
 import { CityService } from 'src/app/_utilities/_middleware/_services/city.service';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
-import { Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { City, Employer, Field, Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { AlertPageUtil } from 'src/app/_utilities/_helpers/alert-util';
@@ -14,6 +14,10 @@ import { AlertPageUtil } from 'src/app/_utilities/_helpers/alert-util';
   styleUrls: ['./create-job-page.component.css']
 })
 export class CreateJobPageComponent implements OnInit {
+
+  public fields: Field[] = [];
+  public tags: Tag[] = [];
+  public cities: City[] = [];
 
   // Page Auth
   public pageLoaded: boolean = false;
@@ -60,12 +64,17 @@ export class CreateJobPageComponent implements OnInit {
       (self: any) => {
         self.pageLoaded = true;
 
-        self.fieldService.fields = [];
-        self.fieldService.tags = [];
-        self.cityService.cities = [];
+        // self.fieldService.fields = [];
+        // self.fieldService.tags = [];
+        // self.cityService.cities = [];
         
-        self.fieldService.getFields();
-        self.cityService.getCities();
+        self.fieldService.getFields(self, (self: any, data: Field[]) => {
+          self.fields = data;
+        });
+    
+        self.cityService.getCities(self, (self: any, data: City[]) => {
+          self.cities = data;
+        });
       }
     );
   }
@@ -95,9 +104,11 @@ export class CreateJobPageComponent implements OnInit {
 
     this.tagsListVisible = false;
     this.checkedTags = [];
-    this.fieldService.tags = [];
+    // this.fieldService.tags = [];
     if (this.selectedFieldId > 0) {
-      this.fieldService.getTags(this.selectedFieldId);
+      this.fieldService.getTags(this.selectedFieldId, this, (self: any, data: Tag[]) => {
+        self.tags = data;
+      });
     }
   }
 
