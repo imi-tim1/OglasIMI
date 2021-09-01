@@ -1,11 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { City, Job } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { City, Field, Job, Tag, Filters, Employer } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { JobService } from 'src/app/_utilities/_middleware/_services/job.service';
 import { CityService } from 'src/app/_utilities/_middleware/_services/city.service';
 import { FieldService } from 'src/app/_utilities/_middleware/_services/field.service';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
-import { Filters } from 'src/app/_utilities/_api/_data-types/interfaces';
-import { Tag } from 'src/app/_utilities/_api/_data-types/interfaces';
 import { faArrowLeft, faArrowRight, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -17,6 +15,11 @@ import { faArrowLeft, faArrowRight, faCheck } from '@fortawesome/free-solid-svg-
 export class JobsFiltersComponent implements OnInit {
   
   public jobs: Job[] = [];
+  public employers: Employer[] = []
+  public fields: Field[] = [];
+  public tags: Tag[] = [];
+  public cities: City[] = [];
+
 
   public filtersFromPage!: Filters;
 
@@ -57,10 +60,19 @@ export class JobsFiltersComponent implements OnInit {
               public cityService: CityService,
               public employerService: EmployerService) { }
 
-  ngOnInit(): void {
-    this.fieldService.getFields();
-    this.cityService.getCities();
-    this.employerService.getEmployers();
+  ngOnInit(): void 
+  {
+    this.fieldService.getFields(this, (self: any, data: Field[]) => {
+      self.fields = data;
+    });
+
+    this.cityService.getCities(this, (self: any, data: City[]) => {
+      self.cities = data;
+    });
+
+    this.employerService.getEmployers(undefined, this, (self: any, data: Employer[]) => {
+      self.employers = data;
+    });
 
     this.jobService.getJobs(this, this.cbSuccessGetJobs);
   }
@@ -78,7 +90,7 @@ export class JobsFiltersComponent implements OnInit {
 
   packFilters(pageNum?: number) {
     this.filtersFromPage = {
-      title: this.jobName.trim(),
+      title: this.jobName,
       employerId: this.selectedEmployerId,
       fieldId: this.selectedFieldId,
       cityId: this.selectedCityId,
@@ -96,6 +108,12 @@ export class JobsFiltersComponent implements OnInit {
   }
 
   onSearch() {
+    this.jobName = this.jobName.trim();
+    if (this.jobName.length > 50) {
+      (<HTMLSelectElement>document.getElementById('jobName')).focus();
+      return;
+    }
+
     this.packFilters();
     this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessGetJobs);
   }
@@ -124,10 +142,11 @@ export class JobsFiltersComponent implements OnInit {
     
     this.tagsListVisible = false;
     this.checkedTags = [];
-    this.fieldService.tags = [];
 
     if(this.selectedFieldId > 0) {
-      this.fieldService.getTags(this.selectedFieldId);
+      this.fieldService.getTags(this.selectedFieldId, this, (self: any, data: Tag[]) => {
+        self.tags = data;
+      });
     }
   }
 

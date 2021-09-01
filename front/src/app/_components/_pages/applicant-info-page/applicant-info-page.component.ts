@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserRole } from 'src/app/_utilities/_api/_data-types/enums';
 import { Applicant } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
 import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.service';
@@ -23,7 +24,8 @@ export class ApplicantInfoPageComponent implements OnInit {
   constructor(
     public activatedRoute: ActivatedRoute,
     public authService: AuthService,
-    public appService: ApplicantService
+    public appService: ApplicantService,
+    public router: Router
   ) { }
 
   ngOnInit(): void {
@@ -38,7 +40,7 @@ export class ApplicantInfoPageComponent implements OnInit {
         if (p != null) self.appID = p as unknown as number;
         
         // GET Applicant with appID
-        self.appService.getApplicant(self.appID, self, self.cbSuccess);
+        self.appService.getApplicant(self.appID, self, self.cbSuccess, self.cbNotFound);
       }
     );
   }
@@ -56,6 +58,10 @@ export class ApplicantInfoPageComponent implements OnInit {
   cbSuccess(self: any, applicant: Applicant | null) {
     self.applicant = applicant;
     self.appID = (applicant)? applicant.id : 0;
+  }
+
+  cbNotFound(self: any) {
+    self.router.navigate(RedirectRoutes.HOME);
   }
 
 }

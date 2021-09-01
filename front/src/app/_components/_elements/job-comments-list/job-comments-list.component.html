@@ -10,14 +10,17 @@
     <div class="container p-2 pb-0">
         <!-- New Comment -->
         <div *ngIf="canComment() && newCommentCardActive" class="pb-4">
-            <div class="d-flex align-items-start text-start w-100 p-2 bg-white 
-                        rounded-3 shadow border border-1 border-success">
-                <div class="px-3 py-2 flex-fill">
-                    <textarea [(ngModel)]="newCommentText" type="text" class="w-100"></textarea>
+            <div class="w-100 p-2 bg-white rounded-3 shadow border border-1 border-success">
+                <div class="d-flex align-items-start text-start">
+                    <div class="px-3 py-2 flex-fill">
+                        <textarea [(ngModel)]="newCommentText" type="text" class="w-100"></textarea>
+                    </div>
+                    <button (click)="sendNewComment()" class="btn btn-success shadow-sm align-self-center">
+                        <fa-icon [icon]="iconSend"></fa-icon>
+                    </button>
                 </div>
-                <button (click)="sendNewComment()" class="btn btn-success shadow-sm align-self-center">
-                    <fa-icon [icon]="iconSend"></fa-icon>
-                </button>
+                <p *ngIf="!newCommentValid" class="small fw-bold text-danger">Minimalna duzina komentara je 10
+                    karaktera, a maksimalna 1000.</p>
             </div>
         </div>
 
@@ -25,20 +28,24 @@
         <div *ngIf="comments.length > 0" class="d-flex flex-wrap flex-column">
             <div *ngFor="let c of comments">
                 <!-- Comment -->
-                <app-job-comment-card (replayClick)="toggleReplayCard($event)" (deleteClick)="deleteComment($event)" [data]="c"
-                    [replayState]="activeReplayCommentID == c.id" [canReplay]="canReplay()" [canDelete]="canDelete()">
+                <app-job-comment-card (replayClick)="toggleReplayCard($event)" (deleteClick)="deleteComment($event)"
+                    [data]="c" [replayState]="activeReplayCommentID == c.id" [canReplay]="canReplay()"
+                    [canDelete]="canDelete()">
                 </app-job-comment-card>
 
                 <!-- Replay -->
                 <div *ngIf="activeReplayCommentID == c.id" class="pb-4 ps-4">
-                    <div
-                        class="d-flex align-items-start text-start w-100 p-3 bg-white rounded-3 shadow border border-1">
-                        <div class="pe-3 flex-fill">
-                            <textarea [(ngModel)]="replayText" type="text" class="w-100"></textarea>
+                    <div class="w-100 p-3 bg-white rounded-3 shadow border border-1">
+                        <div class="d-flex align-items-start text-start">
+                            <div class="pe-3 flex-fill">
+                                <textarea [(ngModel)]="replayText" type="text" class="w-100"></textarea>
+                            </div>
+                            <button (click)="sendReplay()" class="btn btn-warning shadow-sm align-self-center">
+                                <fa-icon [icon]="iconReplaySend"></fa-icon>
+                            </button>
                         </div>
-                        <button (click)="sendReplay()" class="btn btn-warning shadow-sm align-self-center">
-                            <fa-icon [icon]="iconReplaySend"></fa-icon>
-                        </button>
+                        <p *ngIf="!replayValid" class="small fw-bold text-danger">Minimalna duzina komentara je 10
+                            karaktera, a maksimalna 1000.</p>
                     </div>
                 </div>
             </div>

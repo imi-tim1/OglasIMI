@@ -9,22 +9,24 @@ import { AuthService } from './auth.service';
 })
 export class CityService {
 
-  public cities: City[] = [];
-
   constructor(
     private api: CityApiService,
     private authService: AuthService
   ) { }
 
-  getCities() {
+  getCities(self?: any, successCallback?: Function) {
     this.api.getCities().subscribe(
       // Success
       (response) => {
-        console.log('Get Cities (Success), Body: ')
-        console.log(response.body)
-        this.cities = (response.body == null)? [] : response.body;
-        console.log('Cities: ')
-        console.log(this.cities)
+        // Callback
+        if (response.body)
+          if (self && successCallback) { successCallback(self, response.body) };
+
+        // console.log('Get Cities (Success), Body: ')
+        // console.log(response.body)
+        // this.cities = (response.body == null)? [] : response.body;
+        // console.log('Cities: ')
+        // console.log(this.cities)
       },
 
       // Error

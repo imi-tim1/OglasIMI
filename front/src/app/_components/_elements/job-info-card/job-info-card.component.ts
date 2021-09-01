@@ -115,7 +115,7 @@ export class JobInfoCardComponent implements OnInit {
   cbSuccessApply(self: any) 
   {
     alert('Uspešno ste obrisali oglas!');
-    self.router.navigate(['']); //redirekt na home-page
+    self.router.navigate(['/jobs-feed']); //redirekt na jobs-feed
   }
 
   cbSuccessGetJob(self: any, job: Job | null) 

@@ -10,24 +10,25 @@ import { AuthService } from './auth.service';
 })
 export class FieldService {
 
-  public fields: Field[] = [];
-  public tags: Tag[] = [];
-
   constructor(
     private api: FieldApiService,
     private authService: AuthService
   ) { }
 
-  getFields() 
+  getFields(self?: any, successCallback?: Function) 
   {
     this.api.getFields().subscribe(
       // Success
       (response) => {
-        console.log('Get Fields (Success), Body: ')
-        console.log(response.body)
-        this.fields = (response.body == null)? [] : response.body;
-        console.log('Fields: ')
-        console.log(this.fields)
+        // Callback
+        if (response.body)
+          if (self && successCallback) { successCallback(self, response.body) };
+
+        // console.log('Get Fields (Success), Body: ')
+        // console.log(response.body)
+        // this.fields = (response.body == null)? [] : response.body;
+        // console.log('Fields: ')
+        // console.log(this.fields)
       },
 
       // Error
@@ -37,15 +38,19 @@ export class FieldService {
     );
   }
 
-  getTags(fieldId: number) {
+  getTags(fieldId: number, self?: any, successCallback?: Function) {
     this.api.getTags(fieldId).subscribe(
       // Success
       (response) => {
-        console.log('Get Tags (Success), Body: ')
-        console.log(response.body)
-        this.tags = (response.body == null)? [] : response.body;
-        console.log('Tags: ')
-        console.log(this.tags)
+        // Callback
+        if (response.body)
+          if (self && successCallback) { successCallback(self, response.body) };
+
+        // console.log('Get Tags (Success), Body: ')
+        // console.log(response.body)
+        // this.tags = (response.body == null)? [] : response.body;
+        // console.log('Tags: ')
+        // console.log(this.tags)
       },
 
       // Error

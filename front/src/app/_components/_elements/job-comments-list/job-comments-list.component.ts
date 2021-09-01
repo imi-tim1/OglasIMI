@@ -19,10 +19,12 @@ export class JobCommentsListComponent implements OnInit {
   // State - New Comment
   public newCommentCardActive: boolean = false;
   public newCommentText: string = '';
+  public newCommentValid: boolean = true;
 
   // State - Replay
   public activeReplayCommentID: number = 0;
   public replayText: string = '';
+  public replayValid: boolean = true;
 
   // Auth
   isOwner: boolean = false;
@@ -44,6 +46,21 @@ export class JobCommentsListComponent implements OnInit {
   }
 
 
+  validateComment() {
+    if(this.newCommentCardActive && (this.newCommentText.length < 10 || this.newCommentText.length > 1000)) {
+      this.newCommentValid = false;  
+      return false;
+    }
+    else if (this.activeReplayCommentID > 0 && (this.replayText.length < 10 || this.replayText.length > 1000)) {
+      this.replayValid = false;
+      return false;
+    }
+
+    this.newCommentValid = true;
+    this.replayValid = true;
+    return true;
+  }
+
   // --- New Comment ---
 
   toggleNewCommentCard() {
@@ -57,6 +74,8 @@ export class JobCommentsListComponent implements OnInit {
   }
 
   sendNewComment() {
+    if (!this.validateComment()) return;
+
     let comment: JobComment = {
       id: 1,
       authorName: 'ime',
@@ -88,6 +107,8 @@ export class JobCommentsListComponent implements OnInit {
   }
 
   sendReplay() {
+    if (!this.validateComment()) return;
+
     let comment: JobComment = {
       id: 1,
       authorName: 'ime',

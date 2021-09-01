@@ -89,7 +89,6 @@ export class JobService {
         this.authService.redirectIfSessionExpired(error.status);
 
         if(error.status == HttpStatusCode.NotFound) {
-          console.log('>>>>>>>> Not Found Job');
           if (self && notFoundCallback) notFoundCallback(self);
         }
       }

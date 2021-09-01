@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Employer } from 'src/app/_utilities/_api/_data-types/interfaces';
+import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
 import { JWTUtil } from 'src/app/_utilities/_helpers/jwt-util';
 import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.service';
 import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
@@ -21,7 +22,8 @@ export class EmployerInfoPageComponent implements OnInit {
   constructor(
     public activatedRoute: ActivatedRoute,
     public authService: AuthService,
-    public empService: EmployerService
+    public empService: EmployerService,
+    public router: Router
   ) { }
 
   ngOnInit(): void {
@@ -34,7 +36,7 @@ export class EmployerInfoPageComponent implements OnInit {
         let p = self.activatedRoute.snapshot.paramMap.get("id");
         if (p != null) self.empID = p as unknown as number;
 
-        self.empService.getEmployer(self.empID, self, self.cbSuccess);
+        self.empService.getEmployer(self.empID, self, self.cbSuccess, self.cbNotFound);
       }
     );
   }
@@ -48,6 +50,10 @@ export class EmployerInfoPageComponent implements OnInit {
   cbSuccess(self: any, employer: Employer | null) {
     self.employer = employer;
     self.empID = (employer) ? employer.id : 0;
+  }
+
+  cbNotFound(self: any) {
+    self.router.navigate(RedirectRoutes.HOME);
   }
 
 }

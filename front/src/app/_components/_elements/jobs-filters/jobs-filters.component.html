@@ -18,7 +18,7 @@
       <!-- <label for="fields">Oblast rada:&nbsp;</label> -->
       <select [(ngModel)]="selectedFieldId" (ngModelChange)="getNewTags()" class="form-select">
         <option value="0">Oblast rada</option>
-        <option *ngFor="let f of fieldService.fields" [ngValue]="f.id">
+        <option *ngFor="let f of fields" [ngValue]="f.id">
           {{f.name}}
         </option>
       </select>
@@ -29,7 +29,7 @@
       <!-- <label for="employers">Poslodavac:&nbsp;</label> -->
       <select [(ngModel)]="selectedEmployerId" class="form-select">
         <option value="0">Poslodavac</option>
-        <option *ngFor="let e of employerService.employers" [ngValue]="e.id">
+        <option *ngFor="let e of employers" [ngValue]="e.id">
           {{e.name}}
         </option>
       </select>
@@ -41,7 +41,7 @@
       <!-- <label for="cities">Grad:&nbsp;</label> -->
       <select [(ngModel)]="selectedCityId" class="form-select">
         <option value="0">Grad</option>
-        <option *ngFor="let c of cityService.cities" [ngValue]="c.id">
+        <option *ngFor="let c of cities" [ngValue]="c.id">
           {{c.name}}
         </option>
       </select>
@@ -72,9 +72,9 @@
     <div class="col-xxl-2 col-lg-3 col-6 pb-3">
       <div id="list1" class="dropdown-check-list {{(tagsListVisible)? 'visible' : '' }}" tabindex="100">
         <span class="anchor rounded-2" (click)="toggleTagsListVisibility()">Ključne reči</span>
-        <ul *ngIf="fieldService.tags.length > 0" class="items bg-white p-2" style="position: absolute;">
+        <ul *ngIf="tags.length > 0" class="items bg-white p-2" style="position: absolute;">
           <!-- Tag -->
-          <li *ngFor="let t of fieldService.tags" class="bg-white border rounded-1 me-2 px-2">
+          <li *ngFor="let t of tags" class="bg-white border rounded-1 me-2 px-2">
             <input type="checkbox" value="{{t.id}}" id="{{t.id}}" (click)="toggleTag(t.id)">
             <label class="text-nowrap" for="{{t.id}}">&nbsp;&nbsp;{{t.name}}</label>
           </li>
@@ -130,7 +130,9 @@
   <a class="btn" (click)="loadPreviousPage()">
     <fa-icon [icon]="iconArrowLeft"></fa-icon>
   </a>
-  <span class="text-center p-2" style="width: 50px;"> {{currentPage + ' / ' + totalPagesNum}} </span>
+  <span class="text-center p-2"> {{currentPage}} </span>
+  <span class="text-center p-2">/</span>
+  <span class="text-center p-2"> {{totalPagesNum}} </span>
   <a class="btn" (click)="loadNextPage()">
     <fa-icon [icon]="iconArrowRight"></fa-icon>
   </a>
@@ -143,7 +145,9 @@
   <a class="btn" (click)="loadPreviousPage()">
     <fa-icon [icon]="iconArrowLeft"></fa-icon>
   </a>
-  <span class="text-center p-2" style="width: 50px;"> {{currentPage + ' / ' + totalPagesNum}} </span>
+  <span class="text-center p-2"> {{currentPage}} </span>
+  <span class="text-center p-2">/</span>
+  <span class="text-center p-2"> {{totalPagesNum}} </span>
   <a class="btn" (click)="loadNextPage()">
     <fa-icon [icon]="iconArrowRight"></fa-icon>
   </a>
