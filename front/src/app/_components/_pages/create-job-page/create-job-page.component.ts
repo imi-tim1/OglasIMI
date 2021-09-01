@@ -63,10 +63,6 @@ export class CreateJobPageComponent implements OnInit {
     this.authService.checkAccess(this.activatedRoute, this,
       (self: any) => {
         self.pageLoaded = true;
-
-        // self.fieldService.fields = [];
-        // self.fieldService.tags = [];
-        // self.cityService.cities = [];
         
         self.fieldService.getFields(self, (self: any, data: Field[]) => {
           self.fields = data;
@@ -104,7 +100,7 @@ export class CreateJobPageComponent implements OnInit {
 
     this.tagsListVisible = false;
     this.checkedTags = [];
-    // this.fieldService.tags = [];
+    
     if (this.selectedFieldId > 0) {
       this.fieldService.getTags(this.selectedFieldId, this, (self: any, data: Tag[]) => {
         self.tags = data;

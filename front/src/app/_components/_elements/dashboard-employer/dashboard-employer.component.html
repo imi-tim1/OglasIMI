@@ -1,8 +1,8 @@
-<div *ngIf="empService.employer" class="container">
+<div *ngIf="employer" class="container">
     <div class="container" style="width: 60em;">
-        <app-employer-info-card [emp]="empService.employer" [rateDissabled]="true"></app-employer-info-card>
+        <app-employer-info-card [emp]="employer" [rateDissabled]="true"></app-employer-info-card>
     </div>
     <br>
     <h3 class="text-center pt-5">Moji oglasi</h3>
-    <app-jobs-list [empJobs]='true' [uid]="empService.employer.id"></app-jobs-list>
+    <app-jobs-list [empJobs]='true' [uid]="employer.id"></app-jobs-list>
 </div>

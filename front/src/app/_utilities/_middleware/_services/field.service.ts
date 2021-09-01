@@ -10,9 +10,6 @@ import { AuthService } from './auth.service';
 })
 export class FieldService {
 
-  public fields: Field[] = [];
-  public tags: Tag[] = [];
-
   constructor(
     private api: FieldApiService,
     private authService: AuthService
