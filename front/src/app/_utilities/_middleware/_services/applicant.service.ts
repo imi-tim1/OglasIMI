@@ -43,7 +43,7 @@ export class ApplicantService {
 
 
   // Radi, Ostalo da se ispravi na backu da vraca Error kod admina umesto Success i null
-  getApplicant(id: number, self?: any, successCallback?: Function) {
+  getApplicant(id: number, self?: any, successCallback?: Function, notFoundCallback?: Function) {
     this.api.getApplicant(id).subscribe(
       // Success
       (response) => {
@@ -57,6 +57,10 @@ export class ApplicantService {
       // Error
       (error: HttpErrorResponse) => {
         this.authService.redirectIfSessionExpired(error.status);
+
+        if(error.status == HttpStatusCode.NotFound) {
+          if (self && notFoundCallback) notFoundCallback(self);
+        }
       }
     );
   }
