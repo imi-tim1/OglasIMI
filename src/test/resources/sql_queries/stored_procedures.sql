@@ -43,7 +43,8 @@ DELIMITER ;
 DELIMITER // ;
 CREATE PROCEDURE get_all_fields ()
 BEGIN
-    SELECT * FROM field;
+    SELECT *
+    FROM field;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -56,7 +57,8 @@ DELIMITER ;
 DELIMITER // ;
 CREATE PROCEDURE get_all_cities ()
 BEGIN
-    SELECT * FROM city;
+    SELECT *
+    FROM city;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -69,7 +71,9 @@ DELIMITER ;
 DELIMITER // ;
 CREATE PROCEDURE get_tag_list (IN id INT)
 BEGIN
-    SELECT * FROM tag WHERE field_id = id;
+    SELECT *
+    FROM tag
+    WHERE field_id = id;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -358,8 +362,8 @@ CREATE PROCEDURE get_job_applicants(
 BEGIN
     SELECT a.*, c.email, c.hashed_password
     FROM applicant a
-             JOIN job_application ja on a.user_id = ja.applicant_id
-             JOIN credentials c on a.user_id = c.user_id
+        JOIN job_application ja on a.user_id = ja.applicant_id
+        JOIN credentials c on a.user_id = c.user_id
     WHERE p_job_id = job_id;
 END //
 DELIMITER ;
@@ -439,11 +443,11 @@ DELIMITER ;
 DELIMITER // ;
 CREATE PROCEDURE get_filtered_jobs
 (
-    IN p_employer_id int,
-    IN p_field_id int,
-    IN p_city_id int,
-    IN p_title varchar(50),
-    IN p_work_from_home boolean
+    IN p_employer_id INT,
+    IN p_field_id INT,
+    IN p_city_id INT,
+    IN p_title VARCHAR(50),
+    IN p_work_from_home BOOLEAN
 )
 BEGIN
     SELECT j.*,
@@ -471,7 +475,8 @@ DELIMITER ;
 DELIMITER // ;
 CREATE PROCEDURE count_jobs()
 BEGIN
-    SELECT COUNT(*) AS job_num FROM job;
+    SELECT COUNT(*) AS job_num
+    FROM job;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -482,18 +487,19 @@ DELIMITER ;
 -- Procedure for job posting
 DELIMITER // ;
 CREATE PROCEDURE post_job (
-    IN p_employer_id int,
-    IN p_field_id int,
-    IN p_city_id int,
-    IN p_title varchar(50),
-    IN p_description text(10000),
-    IN p_salary varchar(50),
-    IN p_work_from_home boolean,
-    OUT p_is_posted boolean
+    IN p_employer_id INT,
+    IN p_field_id INT,
+    IN p_city_id INT,
+    IN p_title VARCHAR(50),
+    IN p_description TEXT(10000),
+    IN p_salary VARCHAR(50),
+    IN p_work_from_home BOOLEAN,
+    OUT p_is_posted BOOLEAN
 )
 BEGIN
     INSERT INTO job (employer_id, field_id, city_id, post_date, title, description, salary, work_from_home)
-    VALUES (p_employer_id, p_field_id, IF(p_city_id = 0, null, p_city_id), NOW(), p_title, p_description, p_salary, p_work_from_home);
+    VALUES (p_employer_id, p_field_id,
+            IF(p_city_id = 0, null, p_city_id), NOW(), p_title, p_description, p_salary, p_work_from_home);
     SELECT id FROM job WHERE id = LAST_INSERT_ID();
 
     IF ROW_COUNT() != 0
@@ -511,9 +517,9 @@ DELIMITER ;
 -- Procedure for tag inserting
 DELIMITER // ;
 CREATE PROCEDURE insert_tag (
-    IN p_job_id int,
-    IN p_tag_id int,
-    OUT p_is_inserted boolean
+    IN p_job_id INT,
+    IN p_tag_id INT,
+    OUT p_is_inserted BOOLEAN
 )
 BEGIN
     INSERT INTO job_tag (job_id, tag_id)
@@ -533,19 +539,19 @@ DELIMITER ;
 -- #######################################################################
 -- Procedure for getting specific job by id
 DELIMITER // ;
-CREATE PROCEDURE get_job(IN p_id int)
+CREATE PROCEDURE get_job(IN p_id INT)
 BEGIN
     SELECT t2.*, t1.email FROM credentials t1 JOIN (SELECT j.*,
            f.id f_id, f.name f_name,
            c.id c_id, c.name c_name,
            e.user_id, e.name e_name, e.tin, e.address, e.picture_base64,e.phone_number
-    FROM job j LEFT JOIN field f ON j.field_id = f.id
-               LEFT JOIN city c ON c.id = j.city_id
-               LEFT JOIN employer e ON e.user_id = j.employer_id
+    FROM job j
+        LEFT JOIN field f ON j.field_id = f.id
+        LEFT JOIN city c ON c.id = j.city_id
+        LEFT JOIN employer e ON e.user_id = j.employer_id
     WHERE p_id = j.id) t2 ON t1.user_id = t2.user_id;
 END //
 DELIMITER ;
-select * from job;
 -- #######################################################################
 
 
@@ -574,9 +580,11 @@ DELIMITER ;
 -- #######################################################################
 -- Procedure for getting applicants
 DELIMITER // ;
-CREATE PROCEDURE get_applicant (IN p_id int)
+CREATE PROCEDURE get_applicant (IN p_id INT)
 BEGIN
-    SELECT a.*, c.email FROM applicant a JOIN credentials c on a.user_id = c.user_id
+    SELECT a.*, c.email
+    FROM applicant a
+        JOIN credentials c ON a.user_id = c.user_id
     WHERE p_id = a.user_id;
 END //
 DELIMITER ;
@@ -587,7 +595,7 @@ DELIMITER ;
 -- #######################################################################
 -- Procedure for checking if user is approved
 DELIMITER // ;
-CREATE PROCEDURE check_if_approved (IN p_id int)
+CREATE PROCEDURE check_if_approved (IN p_id INT)
 BEGIN
     SELECT approved FROM user
     WHERE p_id = id;
@@ -601,11 +609,13 @@ DELIMITER ;
 -- Procedure for checking if applicant applied on some of specific employer jobs
 DELIMITER // ;
 CREATE PROCEDURE check_application (
-    IN p_employer_id int,
-    IN p_applicant_id int
+    IN p_employer_id INT,
+    IN p_applicant_id INT
 )
 BEGIN
-    SELECT COUNT(*) AS count FROM job j JOIN job_application ja ON j.id = ja.job_id
+    SELECT COUNT(*) AS count
+    FROM job j
+        JOIN job_application ja ON j.id = ja.job_id
     WHERE employer_id = p_employer_id AND applicant_id = p_applicant_id;
 END //
 DELIMITER ;
@@ -616,9 +626,12 @@ DELIMITER ;
 -- #######################################################################
 -- Procedure for selecting all applicants approved or not approved
 DELIMITER // ;
-CREATE PROCEDURE get_all_applicants (IN p_approved boolean)
+CREATE PROCEDURE get_all_applicants (IN p_approved BOOLEAN)
 BEGIN
-    SELECT a.*, c.email, u.approved  FROM applicant a JOIN user u on u.id = a.user_id JOIN credentials c on a.user_id = c.user_id
+    SELECT a.*, c.email, u.approved
+    FROM applicant a
+        JOIN user u ON u.id = a.user_id
+        JOIN credentials c ON a.user_id = c.user_id
     WHERE u.approved = p_approved;
 END //
 DELIMITER ;
@@ -629,17 +642,21 @@ DELIMITER ;
 -- #######################################################################
 -- Procedure for getting all jobs that applicant applied on
 DELIMITER // ;
-CREATE PROCEDURE get_jobs_applicant_applied_on (IN p_id int)
+CREATE PROCEDURE get_jobs_applicant_applied_on (IN p_id INT)
 BEGIN
-    SELECT t2.*, t1.email FROM credentials t1 JOIN (SELECT j.*,
-           f.id f_id, f.name f_name,
-           c.id c_id, c.name c_name,
-           e.user_id, e.name e_name, e.tin, e.address, e.picture_base64,e.phone_number
-    FROM job_application a JOIN job j ON a.job_id = j.id
+    SELECT t2.*, t1.email
+    FROM credentials t1
+        JOIN (
+            SELECT j.*,
+            f.id f_id, f.name f_name,
+            c.id c_id, c.name c_name,
+            e.user_id, e.name e_name, e.tin, e.address, e.picture_base64,e.phone_number
+            FROM job_application a JOIN job j ON a.job_id = j.id
                            LEFT JOIN field f ON j.field_id = f.id
                            LEFT JOIN city c ON c.id = j.city_id
                            LEFT JOIN employer e ON e.user_id = j.employer_id
-    WHERE applicant_id = p_id) t2 ON t1.user_id = t2.user_id;
+            WHERE applicant_id = p_id
+            ) t2 ON t1.user_id = t2.user_id;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -649,7 +666,7 @@ DELIMITER ;
 -- #######################################################################
 -- Procedure for getting feedback values
 DELIMITER // ;
-CREATE PROCEDURE get_feedback_values (IN p_id int)
+CREATE PROCEDURE get_feedback_values (IN p_id INT)
 BEGIN
     SELECT * FROM rating
     WHERE p_id = employer_id;
@@ -663,10 +680,10 @@ DELIMITER ;
 -- Procedure for employer rating
 DELIMITER // ;
 CREATE PROCEDURE rate_employer (
-    IN p_employer_id int,
-    IN p_applicant_id int,
-    IN p_feedback_value double,
-    OUT p_is_rated boolean
+    IN p_employer_id INT,
+    IN p_applicant_id INT,
+    IN p_feedback_value DOUBLE,
+    OUT p_is_rated BOOLEAN
 )
 BEGIN
     INSERT INTO rating (employer_id,applicant_id,feedback_value)
@@ -687,11 +704,12 @@ DELIMITER ;
 -- Procedure for checking if appliacant already rated employer
 DELIMITER // ;
 CREATE PROCEDURE check_if_rated (
-    IN p_employer_id int,
-    IN p_applicant_id int
+    IN p_employer_id INT,
+    IN p_applicant_id INT
 )
 BEGIN
-    SELECT COUNT(*) AS count from rating
+    SELECT COUNT(*) AS count
+    FROM rating
     WHERE p_employer_id = employer_id AND p_applicant_id = applicant_id;
 END //
 DELIMITER ;
@@ -703,11 +721,13 @@ DELIMITER ;
 -- Procedure for getting all comments on a specific job
 DELIMITER // ;
 CREATE PROCEDURE get_all_comments (
-    IN p_job_id int
+    IN p_job_id INT
 )
 BEGIN
     SELECT c.*, a.first_name AS f_name, a.last_name AS l_name, e.name AS name
-    FROM comment c LEFT JOIN applicant a ON c.author_id = a.user_id LEFT JOIN employer e on c.author_id = e.user_id
+    FROM comment c
+        LEFT JOIN applicant a ON c.author_id = a.user_id
+        LEFT JOIN employer e ON c.author_id = e.user_id
     WHERE p_job_id = job_id;
 END //
 DELIMITER ;
@@ -719,11 +739,11 @@ DELIMITER ;
 -- Procedure for comment posting
 DELIMITER // ;
 CREATE PROCEDURE post_comment (
-    IN p_author_id int,
-    IN p_job_id int,
-    IN p_parent_id int,
-    IN p_text varchar(1000),
-    OUT p_is_posted boolean
+    IN p_author_id INT,
+    IN p_job_id INT,
+    IN p_parent_id INT,
+    IN p_text VARCHAR(1000),
+    OUT p_is_posted BOOLEAN
 )
 BEGIN
     INSERT INTO comment (author_id, job_id, parent_id, text, post_date)
@@ -744,11 +764,13 @@ DELIMITER ;
 -- Procedure for checking if it is employers job
 DELIMITER // ;
 CREATE PROCEDURE chec_if_employers_job (
-    IN p_job_id int,
-    IN p_user_id int
+    IN p_job_id INT,
+    IN p_user_id INT
 )
 BEGIN
-    SELECT COUNT(*) AS count FROM job WHERE p_job_id = id AND p_user_id = employer_id;
+    SELECT COUNT(*) AS count
+    FROM job
+    WHERE p_job_id = id AND p_user_id = employer_id;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -759,8 +781,8 @@ DELIMITER ;
 -- Procedure for comments deleting
 DELIMITER // ;
 CREATE PROCEDURE delete_comment (
-    IN p_id int,
-    OUT p_is_deleted boolean
+    IN p_id INT,
+    OUT p_is_deleted BOOLEAN
 )
 BEGIN
     DELETE FROM comment WHERE p_id = id OR p_id = parent_id;
@@ -779,10 +801,12 @@ DELIMITER ;
 -- Procedure for counting total number of likes on a specific job
 DELIMITER // ;
 CREATE PROCEDURE count_likes (
-    IN p_job_id int
+    IN p_job_id INT
 )
 BEGIN
-    SELECT COUNT(*) AS count FROM t_like WHERE p_job_id = job_id;
+    SELECT COUNT(*) AS count
+    FROM t_like
+    WHERE p_job_id = job_id;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -793,11 +817,13 @@ DELIMITER ;
 -- Procedure for checking if applicant alrady liked a job
 DELIMITER // ;
 CREATE PROCEDURE check_if_already_liked (
-    IN p_job_id int,
-    IN p_applicant_id int
+    IN p_job_id INT,
+    IN p_applicant_id INT
 )
 BEGIN
-    SELECT COUNT(*) AS count FROM t_like WHERE p_job_id = job_id AND p_applicant_id = applicant_id;
+    SELECT COUNT(*) AS count
+    FROM t_like
+    WHERE p_job_id = job_id AND p_applicant_id = applicant_id;
 END //
 DELIMITER ;
 -- #######################################################################
@@ -808,9 +834,9 @@ DELIMITER ;
 -- Procedure for job like
 DELIMITER // ;
 CREATE PROCEDURE like_job (
-    IN p_job_id int,
-    IN p_applicant_id int,
-    OUT p_is_liked boolean
+    IN p_job_id INT,
+    IN p_applicant_id INT,
+    OUT p_is_liked BOOLEAN
 )
 BEGIN
     INSERT INTO t_like(applicant_id,job_id)
@@ -831,12 +857,13 @@ DELIMITER ;
 -- Procedure for like recall
 DELIMITER // ;
 CREATE PROCEDURE recall_like (
-    IN p_job_id int,
-    IN p_applicant_id int,
-    OUT p_is_deleted boolean
+    IN p_job_id INT,
+    IN p_applicant_id INT,
+    OUT p_is_deleted BOOLEAN
 )
 BEGIN
-    DELETE FROM t_like WHERE p_job_id = job_id AND p_applicant_id = applicant_id;
+    DELETE FROM t_like
+    WHERE p_job_id = job_id AND p_applicant_id = applicant_id;
 
     IF ROW_COUNT() != 0
     THEN

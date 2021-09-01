@@ -174,7 +174,7 @@ CREATE TABLE comment
     author_id INT NOT NULL,
     job_id INT NOT NULL,
     parent_id INT,
-    text varchar(1000),
+    text VARCHAR(1000),
     post_date DATETIME,
     CONSTRAINT PRIMARY KEY (id),
     CONSTRAINT FOREIGN KEY (author_id) REFERENCES user (id)
