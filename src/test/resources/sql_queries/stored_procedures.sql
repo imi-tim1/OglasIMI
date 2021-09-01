@@ -90,7 +90,7 @@ CREATE PROCEDURE register_employer (
     IN p_phone_number VARCHAR(30),
     IN p_name VARCHAR(50),
     IN p_address VARCHAR(80),
-    IN p_tin VARCHAR(20),
+    IN p_tin VARCHAR(9),
     OUT p_is_added BOOLEAN,
     OUT p_already_exists BOOLEAN
 )

@@ -82,7 +82,7 @@ CREATE TABLE employer
 (
     user_id INT,
     name VARCHAR(50) NOT NULL,
-    tin VARCHAR(13) NOT NULL,
+    tin VARCHAR(9) NOT NULL,
     address VARCHAR(80) NOT NULL,
     picture_base64 TEXT(65000),
     phone_number VARCHAR(30) NOT NULL,
@@ -174,8 +174,8 @@ CREATE TABLE comment
     author_id INT NOT NULL,
     job_id INT NOT NULL,
     parent_id INT,
-    text VARCHAR(1000),
-    post_date DATETIME,
+    text VARCHAR(1000) NOT NULL,
+    post_date DATETIME NOT NULL,
     CONSTRAINT PRIMARY KEY (id),
     CONSTRAINT FOREIGN KEY (author_id) REFERENCES user (id)
         ON DELETE CASCADE
