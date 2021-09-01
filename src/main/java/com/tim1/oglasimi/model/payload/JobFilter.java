@@ -2,11 +2,24 @@ package com.tim1.oglasimi.model.payload;
 
 import com.tim1.oglasimi.model.Job;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 public class JobFilter extends Job
 {
+    @Min(0)
+    @Max(Integer.MAX_VALUE)
     private int pageNumber;
+
+    @Min(5)
+    @Max(Integer.MAX_VALUE)
     private int jobsPerPage;
+
     private boolean ascendingOrder;
+
+    public JobFilter() {
+        this.jobsPerPage = 5;
+    }
 
     public int getPageNumber() {
         return pageNumber;

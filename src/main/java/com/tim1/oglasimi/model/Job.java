@@ -30,6 +30,7 @@ public class Job
     @Size(min = 10, max = 10000, message = "The length of description must be between 10 and 10000 characters")
     private String description;
 
+    @Pattern( regexp = "^[0-9]+( - [0-9]+)? [A-Z]{3} \\((nedeljno|mesečno|godišnje)\\)$")
     @Size(max = 50)
     private String salary;
 

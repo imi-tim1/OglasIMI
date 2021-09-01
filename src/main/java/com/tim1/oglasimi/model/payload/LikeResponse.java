@@ -1,8 +1,14 @@
 package com.tim1.oglasimi.model.payload;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 public class LikeResponse
 {
+    @Min(0)
+    @Max(Integer.MAX_VALUE)
     int totalLikes;
+
     boolean alreadyLiked;
 
     public int getTotalLikes() {

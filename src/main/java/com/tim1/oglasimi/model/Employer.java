@@ -18,7 +18,6 @@ public class Employer extends EndUser {
 
     @NotBlank
     @Pattern(regexp = "^[0-9]{9}$")
-    @Size(max = 9)
     private String tin;
 
     public Employer() {

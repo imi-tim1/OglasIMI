@@ -12,8 +12,7 @@ public class LoginCredentials {
     private String email;
 
     @NotBlank
-    @Pattern(regexp = "^[0-9a-f]+$")
-    @Size( max = 300, message = "Hashed password length exceeded maximum allowed length" )
+    @Pattern(regexp = "^[0-9a-f]{128}$")
     private String hashedPassword;
 
     public LoginCredentials(String email, String hashedPassword) {

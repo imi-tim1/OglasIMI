@@ -2,11 +2,16 @@ package com.tim1.oglasimi.model.payload;
 
 import com.tim1.oglasimi.model.Job;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 public class JobFeed
 {
+    @Min(0)
+    @Max(Integer.MAX_VALUE)
     private int totalJobNumber;
+
     private List<Job> jobs;
 
     public int getTotalJobNumber() {
