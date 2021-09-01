@@ -22,6 +22,8 @@ export class CreateJobPageComponent implements OnInit {
   // Page Auth
   public pageLoaded: boolean = false;
 
+  public requestSentBool: boolean = false;
+
   tagsListVisible: boolean = false;
   toggleTagsListVisibility() {
     this.tagsListVisible = !this.tagsListVisible;
@@ -197,6 +199,8 @@ export class CreateJobPageComponent implements OnInit {
   }
 
   validation() {
+    if (this.requestSentBool)
+      return;
     // obavezno za popunjavanje
     this.jobTitle = this.jobTitle.trim();
     this.description = this.description.trim();
@@ -232,6 +236,7 @@ export class CreateJobPageComponent implements OnInit {
 
       console.log(newJob);
       this.jobService.createJob(newJob, this, this.cbSuccess);
+      this.requestSentBool = true;
     }
   }
 
