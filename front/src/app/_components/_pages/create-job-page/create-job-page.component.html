@@ -32,7 +32,7 @@
       <!-- Kljucne reci -->
       <div class="col-3">
         <div *ngIf="tags.length > 0" id="list1" class="dropdown-check-list {{(tagsListVisible)? 'visible' : '' }}" tabindex="100">
-          <span class="anchor" (click)="toggleTagsListVisibility()">Ključne reči</span>
+          <span class="anchor rounded-2" (click)="toggleTagsListVisibility()">Ključne reči</span>
           <ul class="items bg-white p-2" style="position: absolute;">
             <!-- Tag -->
             <li *ngFor="let t of tags" class="bg-white border rounded-1 me-2 px-2">
