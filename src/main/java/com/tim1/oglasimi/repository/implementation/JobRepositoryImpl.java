@@ -429,7 +429,7 @@ public class JobRepositoryImpl implements JobRepository
     @Override
     public List<Comment> getAllComments(int jobId)
     {
-        List<Comment> commentList = null;
+        List<Comment> commentList = new ArrayList<>();
 
         try (Connection con = DriverManager.getConnection(databaseSourceUrl,databaseUsername,databasePassword);
              CallableStatement cstmt = con.prepareCall(GET_ALL_COMMENTS_STORED_PROCEDURE))
@@ -439,8 +439,6 @@ public class JobRepositoryImpl implements JobRepository
 
             if(rs.first())
             {
-                commentList = new ArrayList<>();
-
                 rs.beforeFirst();
                 while(rs.next())
                 {
