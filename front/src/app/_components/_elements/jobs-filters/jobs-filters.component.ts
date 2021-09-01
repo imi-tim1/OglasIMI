@@ -90,7 +90,7 @@ export class JobsFiltersComponent implements OnInit {
 
   packFilters(pageNum?: number) {
     this.filtersFromPage = {
-      title: this.jobName.trim(),
+      title: this.jobName,
       employerId: this.selectedEmployerId,
       fieldId: this.selectedFieldId,
       cityId: this.selectedCityId,
@@ -108,6 +108,12 @@ export class JobsFiltersComponent implements OnInit {
   }
 
   onSearch() {
+    this.jobName = this.jobName.trim();
+    if (this.jobName.length > 50) {
+      (<HTMLSelectElement>document.getElementById('jobName')).focus();
+      return;
+    }
+
     this.packFilters();
     this.jobService.getFilteredJobs(this.filtersFromPage, this, this.cbSuccessGetJobs);
   }

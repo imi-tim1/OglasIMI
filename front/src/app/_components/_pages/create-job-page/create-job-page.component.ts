@@ -121,7 +121,7 @@ export class CreateJobPageComponent implements OnInit {
   }
 
   descriptionValidation() {
-    if (this.description.length >= 15)
+    if (this.description.length >= 15 && this.description.length <= 10000)
       this.wrongDescBool = false;
     else {
       (<HTMLSelectElement>document.getElementById('description')).focus();
