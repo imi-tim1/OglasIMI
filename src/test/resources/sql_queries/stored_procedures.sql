@@ -4,8 +4,8 @@ USE oglasimi_db;
 -- Procedure for checking login credentials
 DELIMITER // ;
 CREATE PROCEDURE check_credentials (
-    IN p_email VARCHAR(190),
-    IN p_hashed_password VARCHAR(300),
+    IN p_email VARCHAR(320),
+    IN p_hashed_password VARCHAR(128),
     OUT p_user_id INT,
     OUT p_valid_creds BOOLEAN,
     OUT p_approved BOOLEAN,
@@ -80,12 +80,12 @@ DELIMITER ;
 -- Procedure for employer registration
 DELIMITER // ;
 CREATE PROCEDURE register_employer (
-    IN p_email VARCHAR(190),
-    IN p_hashed_password VARCHAR(300),
+    IN p_email VARCHAR(320),
+    IN p_hashed_password VARCHAR(128),
     IN p_picture_base64 TEXT(65000),
     IN p_phone_number VARCHAR(30),
     IN p_name VARCHAR(50),
-    IN p_address VARCHAR(50),
+    IN p_address VARCHAR(80),
     IN p_tin VARCHAR(20),
     OUT p_is_added BOOLEAN,
     OUT p_already_exists BOOLEAN
@@ -174,8 +174,8 @@ DELIMITER ;
 -- Procedure for applicant registration
 DELIMITER // ;
 CREATE PROCEDURE register_applicant (
-    IN p_email VARCHAR(190),
-    IN p_hashed_password VARCHAR(300),
+    IN p_email VARCHAR(320),
+    IN p_hashed_password VARCHAR(128),
     IN p_first_name VARCHAR(30),
     IN p_last_name VARCHAR(30),
     IN p_picture_base64 TEXT(65000),
@@ -722,7 +722,7 @@ CREATE PROCEDURE post_comment (
     IN p_author_id int,
     IN p_job_id int,
     IN p_parent_id int,
-    IN p_text varchar(200),
+    IN p_text varchar(1000),
     OUT p_is_posted boolean
 )
 BEGIN

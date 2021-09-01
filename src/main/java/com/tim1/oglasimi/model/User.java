@@ -18,7 +18,7 @@ public class User
 
     @NotBlank
     @Pattern(regexp = "^[0-9a-f]+$")
-    @Size( max = 300, message = "Hashed password length exceeded maximum allowed length" )
+    @Size( max = 128, message = "Hashed password length exceeded maximum allowed length" )
     private String hashedPassword;
 
     public User() {

@@ -8,16 +8,17 @@ public class Employer extends EndUser {
 
     @NotBlank
     @Pattern(regexp = "^[0-9a-zA-ZšŠđĐčČćĆžŽ/ \\-,.\"'()+&]+$")
-    @Size( min = 1, max = 50)
+    @Size(min = 1, max = 50)
     private String name;
 
     @NotBlank
     @Pattern(regexp = "^[0-9a-zA-ZšŠđĐčČćĆžŽ/ \\-,.'()&]+$")
-    @Size( min = 1, max = 50 )
+    @Size(min = 1, max = 80)
     private String address;
 
     @NotBlank
     @Pattern(regexp = "^[0-9]{9}$")
+    @Size(max = 9)
     private String tin;
 
     public Employer() {

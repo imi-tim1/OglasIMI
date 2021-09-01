@@ -21,8 +21,8 @@ CREATE TABLE user
 CREATE TABLE credentials
 (
     user_id INT NOT NULL,
-    email VARCHAR(190) NOT NULL,
-    hashed_password VARCHAR(300) NOT NULL,
+    email VARCHAR(320) NOT NULL,
+    hashed_password VARCHAR(128) NOT NULL,
     CONSTRAINT PRIMARY KEY (user_id),
     CONSTRAINT FOREIGN KEY (user_id) REFERENCES user (id)
         ON DELETE CASCADE
@@ -83,7 +83,7 @@ CREATE TABLE employer
     user_id INT,
     name VARCHAR(50) NOT NULL,
     tin VARCHAR(13) NOT NULL,
-    address VARCHAR(50) NOT NULL,
+    address VARCHAR(80) NOT NULL,
     picture_base64 TEXT(65000),
     phone_number VARCHAR(30) NOT NULL,
     CONSTRAINT PRIMARY KEY (user_id),
@@ -174,7 +174,7 @@ CREATE TABLE comment
     author_id INT NOT NULL,
     job_id INT NOT NULL,
     parent_id INT,
-    text varchar(200),
+    text varchar(1000),
     post_date DATETIME,
     CONSTRAINT PRIMARY KEY (id),
     CONSTRAINT FOREIGN KEY (author_id) REFERENCES user (id)
