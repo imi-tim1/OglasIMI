@@ -37,7 +37,7 @@ export class EmployerService {
     );
   }
 
-  getEmployer(id: number, self?: any, successCallback?: Function) {
+  getEmployer(id: number, self?: any, successCallback?: Function, notFoundCallback?: Function) {
     this.api.getEmployer(id).subscribe(
       // Success
       (response) => {
@@ -52,6 +52,10 @@ export class EmployerService {
       // Error
       (error: HttpErrorResponse) => {
         this.authService.redirectIfSessionExpired(error.status);
+
+        if(error.status == HttpStatusCode.NotFound) {
+          if (self && notFoundCallback) notFoundCallback(self);
+        }
       }
     );
   }
