@@ -111,6 +111,7 @@ export class CreateJobPageComponent implements OnInit {
   }
 
   fieldIdValidation() {
+    console.log('STAMPAJ FIELD ID:' + this.selectedFieldId);
     if (this.selectedFieldId > 0)
       this.wrongFieldIdBool = false;
     else {
