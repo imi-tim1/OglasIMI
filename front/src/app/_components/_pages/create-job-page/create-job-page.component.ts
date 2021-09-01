@@ -100,7 +100,8 @@ export class CreateJobPageComponent implements OnInit {
 
     this.tagsListVisible = false;
     this.checkedTags = [];
-    
+    this.tags = [];
+
     if (this.selectedFieldId > 0) {
       this.fieldService.getTags(this.selectedFieldId, this, (self: any, data: Tag[]) => {
         self.tags = data;
