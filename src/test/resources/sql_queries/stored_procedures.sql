@@ -305,6 +305,24 @@ DELIMITER ;
 
 
 -- #######################################################################
+-- Procedure for getting an user
+DELIMITER // ;
+CREATE PROCEDURE get_user(
+    IN p_id INT
+)
+BEGIN
+    SELECT c.user_id, c.email, c.hashed_password
+    FROM credentials c
+        JOIN user u on c.user_id = u.id
+    WHERE c.user_id = p_id
+      AND u.approved = TRUE;
+END //
+DELIMITER ;
+-- #######################################################################
+
+
+
+-- #######################################################################
 -- Procedure for approving user registration
 DELIMITER // ;
 CREATE PROCEDURE approve_user(

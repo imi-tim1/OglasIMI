@@ -2,19 +2,27 @@ package com.tim1.oglasimi.security;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.MalformedJsonException;
+import com.tim1.oglasimi.model.User;
+import com.tim1.oglasimi.repository.implementation.UserRepositoryImpl;
+import com.tim1.oglasimi.service.UserService;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 
-
-public class SecurityConfig {
+@Component
+public class SecurityConfig implements ApplicationContextAware {
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 
     /**
@@ -39,6 +47,7 @@ public class SecurityConfig {
 
     public static final String ROLE_CLAIM_NAME = "rol";
     public static final String USER_ID_CLAIM_NAME = "uid";
+    private static ApplicationContext applicationContext;
 
     /**
      * Proverava da li je token ispravak pozivom funkcije {@link SecurityConfig#decodeJWT(String)} koja ga dekodira
@@ -95,11 +104,41 @@ public class SecurityConfig {
                 try {
                     String roleString = (String) roleClaim;
                     role = Role.valueOf( roleString.toUpperCase() );
-                    LOGGER.info("checkAccess | found role inside JWT token: " + role);
+                    LOGGER.info("checkAccess | found role inside JWT token: {}", role);
                 }
                 catch ( IllegalArgumentException | NullPointerException e ) {
                     LOGGER.error("checkAccess | an error occurred while extracting role from the token" );
                     throw e;
+                }
+
+                Object uidClaim = claims.get(USER_ID_CLAIM_NAME);
+                LOGGER.debug("checkAccess | extracted uid claim: {}", uidClaim);
+
+                /* check if token contains claim for user id */
+                if (uidClaim == null) {
+                    throw new UnsupportedJwtException("missing uid claim");
+                }
+
+                /* extract uid from the token */
+                int uid = -1;
+                try {
+                    uid = (int)(double) uidClaim;
+                    LOGGER.info("checkAccess | found uid inside JWT token: {}", uid);
+                }
+                catch ( IllegalArgumentException | NullPointerException e ) {
+                    LOGGER.error("checkAccess | an error occurred while extracting role from the token" );
+                    throw e;
+                }
+
+                /* find user whose id corresponds to token uid */
+                UserRepositoryImpl userRepositoryImpl = applicationContext.getBean(UserRepositoryImpl.class);
+                UserService userService =  applicationContext.getBean(UserService.class, userRepositoryImpl);
+                User user = userService.getUser(uid);
+
+                /* check if user exists in the database */
+                if( user == null ) {
+                    throw new UserNotFoundException(
+                            "checkAccess | user with id " + uid + " found in the token doesn't exist in the database" );
                 }
 
                 resultPair.setClaims( claims );
@@ -107,8 +146,9 @@ public class SecurityConfig {
 
             resultPair.setHttpStatus( role.checkAuthorization(authorizedRoles) );
         }
-        catch ( ExpiredJwtException | SignatureException e ) {
-            LOGGER.warn("checkAccess | received JWT is invalid", e );
+        catch ( UserNotFoundException | ExpiredJwtException | SignatureException e ) {
+            LOGGER.warn("checkAccess | received JWT is invalid" );
+            LOGGER.warn("checkAccess | {}", e.getMessage() );
             resultPair.setHttpStatus( HttpStatus.UNAUTHORIZED );
         }
         catch ( MalformedJsonException
@@ -199,4 +239,9 @@ public class SecurityConfig {
                 .parseClaimsJws(jwt).getBody();
     }
 
+    @Override
+    @Autowired
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }
