@@ -34,9 +34,9 @@
             </div>
             <!-- Rating + Show RateOpt Button -->
             <div class="row">
-                <div *ngIf="rating >= 0" class="col">
-                    <h4 class="py-3 m-0">
-                        <fa-icon [icon]="(allreadyRated)? iconStar : iconStarEmpty"></fa-icon>
+                <div class="col">
+                    <h4 *ngIf="rating >= 0" class="py-3 m-0">
+                        <fa-icon [icon]="(alreadyRated)? iconStar : iconStarEmpty"></fa-icon>
                         {{rating}}
                     </h4>
                 </div>

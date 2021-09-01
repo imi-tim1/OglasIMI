@@ -138,8 +138,7 @@ export class EmployerService {
       // Success
       (response) => {
         // Callback
-        if (response.body)
-          if (self && successCallback) successCallback(self, response.body);
+        if (self && successCallback) successCallback(self, response.body);
       },
 
       // Error

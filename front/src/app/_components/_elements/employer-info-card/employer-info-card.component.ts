@@ -22,7 +22,7 @@ export class EmployerInfoCardComponent implements OnInit {
 
   public myRating: number = 0;
   public showRateOption: boolean = false;
-  allreadyRated: boolean = false;
+  alreadyRated: boolean = false;
 
   public defaultPicture: string = DEFAULT_PROFILE_PICTURE;
 
@@ -47,6 +47,7 @@ export class EmployerInfoCardComponent implements OnInit {
     if (!this.emp)
       return;
 
+    console.log('Sad ce GET Ratings');
     this.employerService.getEmployersRating(this.emp.id, this, this.cbSuccessGetRating);
   }
 
@@ -78,7 +79,7 @@ export class EmployerInfoCardComponent implements OnInit {
   // --- Auth ---
 
   canRate() {
-    return !this.allreadyRated && !this.rateDissabled && JWTUtil.getUserRole() == UserRole.Applicant;
+    return !this.alreadyRated && !this.rateDissabled && JWTUtil.getUserRole() == UserRole.Applicant;
   }
 
   canDelete() {
@@ -87,17 +88,28 @@ export class EmployerInfoCardComponent implements OnInit {
 
   // --- API Callbacks ---
 
-  cbSuccessGetRating(self: any, data: RatingResponse) {
-    self.rating = data.rating;
-    self.allreadyRated = data.alreadyRated;
+  cbSuccessGetRating(self: any, data: RatingResponse | null) {
+    console.log('CB Success');
+
+    if (data) {
+      self.rating = data.rating;
+      self.alreadyRated = data.alreadyRated;
+    }
+    else {
+      self.rating = -1;  
+      self.alreadyRated = false;
+    }
+    
+    console.log('RATING: ' + self.rating);
+    console.log(' RATED: ' + self.alreadyRated);
 
     if (JWTUtil.getID() == 0 || JWTUtil.getUserRole() != UserRole.Applicant) return;
     self.applicantService.getApplicantsJobs(JWTUtil.getID(), self,
       (self: any, data: Job[]) => {
         self.rateDissabled = !(data.find(j => j.employer.id == self.emp.id) != undefined);
-        console.log(self.allreadyRated);
-        console.log(self.rateDissabled);
-        console.log(self.canRate());
+        console.log('Allready rated: ' + self.alreadyRated);
+        console.log('Rate dissabled: ' + self.rateDissabled);
+        console.log('Can rate: ' + self.canRate());
       }
     );
   }
