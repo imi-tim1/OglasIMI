@@ -52,14 +52,14 @@ export class RegisterFormComponent implements OnInit {
   wrongEmpPass2Bool: boolean = false;
   wrongEmpPictureBool: boolean = false;
 
-  pattAlphaWithSpaces: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ]+([ \-][a-zA-ZšŠđĐčČćĆžŽ]+)*$/;
+  pattName: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ]+([ \-][a-zA-ZšŠđĐčČćĆžŽ]+)*$/;
   pattTwoSpaces: RegExp = /  /;
   pattEmail: RegExp = /^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/;
   pattPhone: RegExp = /^((\+[0-9]{1,3})|0)[1-9][0-9][0-9]{6,7}$/;
   pattPassword: RegExp = /.{6,}$/;
   pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\"\'\(\)\+\&]{1,50}$/; //i da ne bude vise od 2 spejsa uzastopno
   pattPIB: RegExp = /^[0-9]{9}$/;
-  pattAddr: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\'\(\)\&]+$/; //i da ne bude vise od 2 spejsa uzastopno
+  pattAddr: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\'\(\)\&]{1,80}}$/; //i da ne bude vise od 2 spejsa uzastopno
 
 
   constructor(public applicantService: ApplicantService,
@@ -85,14 +85,14 @@ export class RegisterFormComponent implements OnInit {
     }
   }
 
-  isAlphaWithoutMultipleSpaces(element: string): boolean {
-    if (this.pattAlphaWithSpaces.test(element) && !(this.pattTwoSpaces.test(element)))
+  isName(element: string): boolean {
+    if (this.pattName.test(element) && !(this.pattTwoSpaces.test(element)) && element.length <= 30)
       return true;
     return false;
   }
 
   isCorrectEmail(element: string): boolean {
-    if (this.pattEmail.test(element.toLowerCase()))
+    if (this.pattEmail.test(element.toLowerCase()) && element.length <= 320)
       return true;
     return false;
   }
@@ -131,7 +131,7 @@ export class RegisterFormComponent implements OnInit {
   //////////////////////       APPLICANT           ////////////////////
 
   firstNameValidation() {
-    if (this.isAlphaWithoutMultipleSpaces(this.appFirstName) == true) {
+    if (this.isName(this.appFirstName) == true) {
       this.wrongAppFirstNameBool = false;
       return;
     }
@@ -140,7 +140,7 @@ export class RegisterFormComponent implements OnInit {
   }
 
   lastNameValidation() {
-    if (this.isAlphaWithoutMultipleSpaces(this.appLastName) == true) {
+    if (this.isName(this.appLastName) == true) {
       this.wrongAppLastNameBool = false;
       return;
     }

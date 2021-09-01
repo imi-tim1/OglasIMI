@@ -52,6 +52,7 @@ export class JobCommentsListComponent implements OnInit {
   }
 
   fetchComments() {
+    console.log('>>>>>> Fetch Comments');
     this.jobService.getJobComments(this.jobID, this, this.cbGetCommentsSuccess);
   }
 
@@ -117,6 +118,9 @@ export class JobCommentsListComponent implements OnInit {
 
   cbGetCommentsSuccess(self: any, data: JobComment[]) {
     // Sortiranje
+    console.log('>>>>>> cb Get Comments');
+
+    self.comments = [];
 
     let c = [], r = [];
     for (let d of data) {

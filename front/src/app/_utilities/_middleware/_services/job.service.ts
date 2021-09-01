@@ -74,7 +74,7 @@ export class JobService {
     this.getFilteredJobs(filters, self, successCallback);
   }
 
-  getJob(id: number, self?: any, successCallback?: Function) {
+  getJob(id: number, self?: any, successCallback?: Function, notFoundCallback?: Function) {
     this.api.getJob(id).subscribe(
       // Success
       (response) => {
@@ -87,6 +87,11 @@ export class JobService {
       // Error
       (error: HttpErrorResponse) => {
         this.authService.redirectIfSessionExpired(error.status);
+
+        if(error.status == HttpStatusCode.NotFound) {
+          console.log('>>>>>>>> Not Found Job');
+          if (self && notFoundCallback) notFoundCallback(self);
+        }
       }
     );
   }
@@ -172,8 +177,7 @@ export class JobService {
       (response) => {
         console.log('>>>> Pristigli komentari !!!');
         console.log(response.body);
-        if (response.body)
-          if (self && successCallback) successCallback(self, response.body);
+        if (self && successCallback) successCallback(self, response.body);
       },
 
       // Error
@@ -201,6 +205,7 @@ export class JobService {
     this.api.deleteJobComment(jobID, commentID).subscribe(
       // Success
       (response) => {
+        console.log('>>>>> Delete Comment Status Code: ' + response.status);
         if (self && successCallback) successCallback(self);
       },
 

@@ -140,11 +140,11 @@
 
 <!-- Navigacija za stranicenje -->
 <div *ngIf="totalJobsNum > 0" class="container d-flex justify-content-center">
-  <a class="btn" (click)="loadPreviousPage()" href="#anchor-top">
+  <a class="btn" (click)="loadPreviousPage()">
     <fa-icon [icon]="iconArrowLeft"></fa-icon>
   </a>
   <span class="text-center p-2" style="width: 50px;"> {{currentPage + ' / ' + totalPagesNum}} </span>
-  <a class="btn" (click)="loadNextPage()" href="#anchor-top">
+  <a class="btn" (click)="loadNextPage()">
     <fa-icon [icon]="iconArrowRight"></fa-icon>
   </a>
 </div>

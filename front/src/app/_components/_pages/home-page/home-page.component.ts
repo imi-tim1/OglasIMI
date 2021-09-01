@@ -13,6 +13,12 @@ export class HomePageComponent implements OnInit {
   // Page Auth
   public pageLoaded: boolean = false;
 
+  // State
+  public oglasImiVisible: boolean = true;
+  toggleOglasImiVisible() {
+    this.oglasImiVisible = !this.oglasImiVisible;
+  }
+
   constructor(
     private authService: AuthService,
     private activatedRoute: ActivatedRoute

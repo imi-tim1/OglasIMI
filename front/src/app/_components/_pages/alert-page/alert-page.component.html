@@ -18,7 +18,7 @@
             <h1><b class="text-success">Uspešno ste se prijavili na oglas!</b></h1>
             <br><br>
             <h3>Pošaljite poslodavcu Vaš CV</h3>
-            <a class="btn btn-success" href="mailto:{{(param)? param : ''}}?Subject=Prijava%20za%20posao" target="_top">Pošalji mejl</a>
+            <a class="btn btn-success" href="mailto:{{(param)? param.employerEmail : ''}}?Subject=Prijava za posao - {{(param)? param.jobTitle : ''}}" target="_top">Pošalji mejl</a>
         </div>
 
         <!-- Uspesna registracija -->

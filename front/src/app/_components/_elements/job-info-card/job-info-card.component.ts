@@ -49,7 +49,7 @@ export class JobInfoCardComponent implements OnInit {
   // --- Actions ---
 
   fetchJob() {
-    this.jobService.getJob(this.id, this, this.cbSuccessGetJob);
+    this.jobService.getJob(this.id, this, this.cbSuccessGetJob, this.cbNotFoundGetJob);
   }
 
   fetchLikes() {
@@ -131,5 +131,9 @@ export class JobInfoCardComponent implements OnInit {
         self.allreadyApplied = jobs.find(j => j.id == self.id) != undefined;
       }
     );
+  }
+
+  cbNotFoundGetJob(self: any) {
+    self.router.navigate(RedirectRoutes.HOME);
   }
 }
