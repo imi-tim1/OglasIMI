@@ -14,7 +14,7 @@ export class ApplicantApiService {
 
   constructor(private http: HttpClient) { }
 
-  // Potrebno TESTIRANJE !!!
+  
   getApplicants(notApprovedRequested: boolean): Observable<HttpResponse<Applicant[]>> {
     let par: HttpParams = new HttpParams();
     par = par.set('notApprovedRequested', notApprovedRequested);
@@ -29,7 +29,7 @@ export class ApplicantApiService {
     );
   }
 
-  // Potrebno TESTIRANJE !!!
+  
   getApplicant(id: number): Observable<HttpResponse<Applicant>> {
     return this.http.get<Applicant>(
       this.url + `/${id}`,
@@ -40,7 +40,7 @@ export class ApplicantApiService {
     );
   }
 
-  // Potrebno TESTIRANJE !!!
+  
   getApplicantsJobs(id: number): Observable<HttpResponse<Job[]>> {
     return this.http.get<Job[]>(
       this.url + `/${id}/jobs`,
@@ -51,7 +51,7 @@ export class ApplicantApiService {
     );
   }
 
-  // Potrebno TESTIRANJE !!!
+  
   createApplicant(applicantData: NewApplicant): Observable<HttpResponse<null>> {
     return this.http.post<null>(
       this.url, // api url

@@ -18,7 +18,7 @@ export class ApplicantService {
     private authService: AuthService
   ) { }
 
-  // Potrebno TESTIRANJE !!!
+  
   getApplicants(notApproved?: boolean, self?: any, successCallback?: Function) {
     this.api.getApplicants((notApproved == undefined)? false : notApproved).subscribe(
       // Success
