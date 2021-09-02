@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { RedirectRoutes } from 'src/app/_utilities/_constants/routing.properties';
-import { AlertPageUtil } from 'src/app/_utilities/_helpers/alert-util';
-import { PasswdHash } from 'src/app/_utilities/_helpers/hash-util';
-import { ApplicantService } from 'src/app/_utilities/_middleware/_services/applicant.service';
-import { AuthService } from 'src/app/_utilities/_middleware/_services/auth.service';
-import { EmployerService } from 'src/app/_utilities/_middleware/_services/employer.service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {RedirectRoutes} from 'src/app/_utilities/_constants/routing.properties';
+import {AlertPageUtil} from 'src/app/_utilities/_helpers/alert-util';
+import {PasswdHash} from 'src/app/_utilities/_helpers/hash-util';
+import {ApplicantService} from 'src/app/_utilities/_middleware/_services/applicant.service';
+import {AuthService} from 'src/app/_utilities/_middleware/_services/auth.service';
+import {EmployerService} from 'src/app/_utilities/_middleware/_services/employer.service';
 
 
 @Component({
@@ -55,7 +55,7 @@ export class RegisterFormComponent implements OnInit {
   pattName: RegExp = /^[a-zA-ZšŠđĐčČćĆžŽ]+([ \-][a-zA-ZšŠđĐčČćĆžŽ]+)*$/;
   pattTwoSpaces: RegExp = /  /;
   pattEmail: RegExp = /^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/;
-  pattPhone: RegExp = /^((\+[0-9]{1,3})|0)[1-9][0-9][0-9]{6,7}$/;
+  pattPhone: RegExp = /^(0|(\+[1-9][0-9]{0,2}))[1-9][0-9][0-9]{6,7}$/;
   pattPassword: RegExp = /.{6,30}$/;
   pattCompanyName: RegExp = /^[0-9a-zA-ZšŠđĐčČćĆžŽ\/ \-\,\.\"\'\(\)\+\&]{1,50}$/; //i da ne bude vise od 2 spejsa uzastopno
   pattPIB: RegExp = /^[0-9]{9}$/;
